@@ -1,0 +1,22 @@
+{
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "oxc.fixKind": "dangerous_fix_or_suggestion",
+  "oxc.lint.run": "onSave",
+  "oxc.typeAware": true,
+  "oxc.path.tsgolint": "./node_modules/.bin/tsgolint",
+  "json.schemaDownload.enable": true,
+  "oxc.requireConfig": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "typescript.experimental.useTsgo": true,
+  "typescript.preferences.importModuleSpecifierEnding": "js"
+}

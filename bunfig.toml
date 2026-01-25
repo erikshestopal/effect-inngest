@@ -1,0 +1,15 @@
+[install]
+peer = true
+
+[test]
+coverage = true
+coverageSkipTestFiles = true
+root = "test"
+coveragePathIgnorePatterns = ["test/**"]
+# Exclude E2E tests from regular test runs (they require Docker)
+testPathIgnorePatterns = ["test/e2e/**"]
+
+# E2E tests with testcontainers (run separately: bun test:e2e)
+[test.e2e]
+root = "test/e2e"
+timeout = 120000

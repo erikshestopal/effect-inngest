@@ -1,0 +1,123 @@
+{
+  "name": "effect-inngest",
+  "version": "0.1.0",
+  "description": "Native Effect client library for Inngest - build durable, type-safe workflows",
+  "keywords": [
+    "background-jobs",
+    "durable",
+    "effect",
+    "event-driven",
+    "inngest",
+    "queue",
+    "serverless",
+    "typescript",
+    "workflow"
+  ],
+  "homepage": "https://github.com/erikshestopal/effect-inngest#readme",
+  "bugs": {
+    "url": "https://github.com/erikshestopal/effect-inngest/issues"
+  },
+  "license": "MIT",
+  "author": "Erik Shestopal",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikshestopal/effect-inngest.git"
+  },
+  "files": [
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "src/**/*.ts"
+  ],
+  "type": "module",
+  "sideEffects": [],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./src/index.ts"
+    },
+    "./Client": {
+      "types": "./dist/Client.d.ts",
+      "import": "./src/Client.ts"
+    },
+    "./Events": {
+      "types": "./dist/Events.d.ts",
+      "import": "./src/Events.ts"
+    },
+    "./Function": {
+      "types": "./dist/Function.d.ts",
+      "import": "./src/Function.ts"
+    },
+    "./Group": {
+      "types": "./dist/Group.d.ts",
+      "import": "./src/Group.ts"
+    },
+    "./HttpApi": {
+      "types": "./dist/HttpApi.d.ts",
+      "import": "./src/HttpApi.ts"
+    },
+    "./internal/*": null
+  },
+  "publishConfig": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./Client": {
+        "types": "./dist/Client.d.ts",
+        "import": "./dist/Client.js"
+      },
+      "./Events": {
+        "types": "./dist/Events.d.ts",
+        "import": "./dist/Events.js"
+      },
+      "./Function": {
+        "types": "./dist/Function.d.ts",
+        "import": "./dist/Function.js"
+      },
+      "./Group": {
+        "types": "./dist/Group.d.ts",
+        "import": "./dist/Group.js"
+      },
+      "./HttpApi": {
+        "types": "./dist/HttpApi.d.ts",
+        "import": "./dist/HttpApi.js"
+      },
+      "./internal/*": null
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "format": "oxfmt",
+    "lint": "oxlint --fix --type-aware --type-check --promise-plugin",
+    "typecheck": "tsgo --noEmit",
+    "prepare": "effect-language-service patch",
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "bun run build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/changelog-github": "^0.5.2",
+    "@changesets/cli": "^2.29.8",
+    "@effect/cluster": "^0.56.1",
+    "@effect/language-service": "0.72.0",
+    "@effect/platform": "^0.94.2",
+    "@effect/platform-bun": "^0.87.0",
+    "@types/bun": "1.3.6",
+    "@typescript/native-preview": "^7.0.0-dev.20260124.1",
+    "effect": "^3.15.0",
+    "oxfmt": "0.26.0",
+    "oxlint": "1.41.0",
+    "oxlint-tsgolint": "0.11.1",
+    "tsdown": "0.20.1",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@effect/platform": ">=0.87.0",
+    "effect": ">=3.15.0"
+  }
+}
