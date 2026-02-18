@@ -331,7 +331,11 @@ interface RegistrationConfig {
 interface FunctionRegistration {
   readonly id: string;
   readonly name: string;
-  readonly triggers: ReadonlyArray<{ event?: string; cron?: string; expression?: string }>;
+  readonly triggers: ReadonlyArray<{
+    event?: string;
+    cron?: string;
+    expression?: string;
+  }>;
   readonly steps: {
     readonly step: {
       readonly id: string;
@@ -340,8 +344,41 @@ interface FunctionRegistration {
       readonly retries?: { readonly attempts: number };
     };
   };
-  readonly cancel?: ReadonlyArray<{ event: string; if?: string; timeout?: string }>;
+  readonly cancel?: ReadonlyArray<{
+    event: string;
+    if?: string;
+    timeout?: string;
+  }>;
   readonly timeouts?: { start?: string; finish?: string };
+  readonly rateLimit?: {
+    readonly key?: string;
+    readonly limit: number;
+    readonly period: string;
+  };
+  readonly throttle?: {
+    readonly key?: string;
+    readonly limit: number;
+    readonly period: string;
+    readonly burst?: number;
+  };
+  readonly debounce?: {
+    readonly key?: string;
+    readonly period: string;
+    readonly timeout?: string;
+  };
+  readonly concurrency?: ReadonlyArray<{
+    readonly key?: string;
+    readonly limit: number;
+    readonly scope?: string;
+  }>;
+  readonly priority?: { readonly run?: string };
+  readonly singleton?: { readonly key?: string; readonly mode: string };
+  readonly batchEvents?: {
+    readonly maxSize: number;
+    readonly timeout: string;
+    readonly key?: string;
+  };
+  readonly idempotency?: string;
 }
 
 /**
@@ -392,7 +429,11 @@ const Proto = {
   [TypeId]: TypeId,
 
   toRegistration(this: InngestFunction.Any, config: RegistrationConfig): FunctionRegistration {
-    const triggers: Array<{ event?: string; cron?: string; expression?: string }> = [];
+    const triggers: Array<{
+      event?: string;
+      cron?: string;
+      expression?: string;
+    }> = [];
 
     for (const t of this.triggers) {
       if (isEventTrigger(t)) {
@@ -416,6 +457,54 @@ const Proto = {
           }
         : undefined;
 
+    const rateLimit = opts.rateLimit
+      ? {
+          key: opts.rateLimit.key,
+          limit: opts.rateLimit.limit,
+          period: timeStr(opts.rateLimit.period),
+        }
+      : undefined;
+
+    const throttle = opts.throttle
+      ? {
+          key: opts.throttle.key,
+          limit: opts.throttle.limit,
+          period: timeStr(opts.throttle.period),
+          burst: opts.throttle.burst,
+        }
+      : undefined;
+
+    const debounce = opts.debounce
+      ? {
+          key: opts.debounce.key,
+          period: timeStr(opts.debounce.period),
+          timeout: opts.debounce.timeout ? timeStr(opts.debounce.timeout) : undefined,
+        }
+      : undefined;
+
+    const concurrency =
+      opts.concurrency != null
+        ? typeof opts.concurrency === "number"
+          ? [{ limit: opts.concurrency }]
+          : Arr.ensure(opts.concurrency).map((c) => ({
+              key: c.key,
+              limit: c.limit,
+              scope: c.scope,
+            }))
+        : undefined;
+
+    const priority = opts.priority ? { run: opts.priority.run } : undefined;
+    const singleton = opts.singleton ? { key: opts.singleton.key, mode: opts.singleton.mode } : undefined;
+    const batchEvents = opts.batchEvents
+      ? {
+          maxSize: opts.batchEvents.maxSize,
+          timeout: timeStr(opts.batchEvents.timeout),
+          key: opts.batchEvents.key,
+        }
+      : undefined;
+
+    const idempotency = opts.idempotency;
+
     const fnId = `${config.appId}-${this._tag}`;
     const stepUrl = new URL(config.url);
     stepUrl.searchParams.set("fnId", fnId);
@@ -435,6 +524,14 @@ const Proto = {
       },
       cancel: cancel && cancel.length > 0 ? cancel : undefined,
       timeouts,
+      rateLimit,
+      throttle,
+      debounce,
+      concurrency,
+      priority,
+      singleton,
+      batchEvents,
+      idempotency,
     };
   },
 };
