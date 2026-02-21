@@ -353,6 +353,7 @@ describe("Regression: step.invoke payload must be event data directly", () => {
                 "function_id": "test-app-child-fn",
                 "payload": {
                   "data": {
+                    "_tag": "test/child",
                     "value": 42,
                   },
                   "user": {},
@@ -371,15 +372,13 @@ describe("Regression: step.invoke payload must be event data directly", () => {
         expect(invokeOp).toBeDefined();
         expect(invokeOp!.name).toBe("call-child");
 
-        // Key assertion: payload MUST follow Inngest protocol with { data, user, v }
-        // This format matches inngest-js and is required for Inngest to properly route the invocation
-        expect(invokeOp!.opts?.payload).toEqual({ data: { value: 42 }, user: {}, v: "1" });
+        expect(invokeOp!.opts?.payload).toEqual({ data: { _tag: "test/child", value: 42 }, user: {}, v: "1" });
 
-        // Should have data property, NOT raw event data at top level
         expect(invokeOp!.opts?.payload).toHaveProperty("data");
         expect(invokeOp!.opts?.payload).toMatchInlineSnapshot(`
           {
             "data": {
+              "_tag": "test/child",
               "value": 42,
             },
             "user": {},

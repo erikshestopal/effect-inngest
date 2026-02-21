@@ -734,6 +734,65 @@ describe("Protocol coverage", () => {
     );
   });
 
+  describe("stripTags regression (issue #2)", () => {
+    it.effect("preserves nested _tag required for Schema.Union discrimination", () =>
+      Effect.gen(function* () {
+        const opcode = Protocol.GeneratorOpcode.make({
+          op: Protocol.Opcode.InvokeFunction,
+          id: "invoke-hash",
+          name: "append-snapshot",
+          mode: "async",
+          opts: {
+            function_id: "app-append-turn",
+            payload: {
+              data: {
+                _tag: "cxdb/turn.append",
+                contextId: "ctx-1",
+                type: {
+                  _tag: "VisualFeedbackSnapshotV1",
+                  screenshot: "base64data",
+                },
+              },
+              user: {},
+              v: "1",
+            },
+            timeout: "365d",
+          },
+        });
+
+        const encoded = yield* Schema.encode(Protocol.GeneratorOpcode)(opcode);
+        const opts = encoded.opts as {
+          function_id: string;
+          payload: { data: Record<string, unknown> };
+        };
+        const nestedType = opts.payload.data.type as Record<string, unknown>;
+        expect(nestedType._tag).toBe("VisualFeedbackSnapshotV1");
+      }),
+    );
+
+    it.effect("preserves _tag inside arrays of nested objects", () =>
+      Effect.gen(function* () {
+        const opcode = Protocol.GeneratorOpcode.make({
+          op: Protocol.Opcode.StepRun,
+          id: "step-hash",
+          name: "process",
+          data: {
+            items: [
+              { _tag: "TypeA", value: 1 },
+              { _tag: "TypeB", value: 2 },
+            ],
+          },
+        });
+
+        const encoded = yield* Schema.encode(Protocol.GeneratorOpcode)(opcode);
+        const data = encoded.data as { items: Array<Record<string, unknown>> };
+
+        expect(data.items[0]!._tag).toBe("TypeA");
+        expect(data.items[1]!._tag).toBe("TypeB");
+      }),
+    );
+  });
+
   describe("Schema.Class pipe and annotations", () => {
     it("UserError can be piped", () => {
       const annotated = Protocol.UserError.pipe(Schema.annotations({ title: "UserError" }));

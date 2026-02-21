@@ -81,9 +81,8 @@ describe("TB-005: Invoke Function", () => {
         expect(opcode.mode).toBe("async"); // Required for Inngest to process invoke
         // function_id format: "{app-id}-{fn-tag}"
         expect(opcode.opts.function_id).toBe("test-app-process-payment");
-        expect(opcode.opts.payload.data).toEqual({ amount: 100, orderId: "order_123" });
+        expect(opcode.opts.payload.data).toEqual({ _tag: "payment/process", amount: 100, orderId: "order_123" });
 
-        // Snapshot for documentation - shows full response structure
         expect(body).toMatchInlineSnapshot(`
           [
             {
@@ -96,6 +95,7 @@ describe("TB-005: Invoke Function", () => {
                 "function_id": "test-app-process-payment",
                 "payload": {
                   "data": {
+                    "_tag": "payment/process",
                     "amount": 100,
                     "orderId": "order_123",
                   },

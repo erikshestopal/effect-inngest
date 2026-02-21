@@ -86,6 +86,16 @@ type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F
 type EventSchema = Schema.Schema.Any & { readonly _tag: string };
 type TaggedEvent = { readonly _tag: string };
 
+const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never> => {
+  const ctor = event.constructor;
+  if (Schema.isSchema(ctor)) {
+    return Schema.encode(ctor as unknown as Schema.Schema.AnyNoContext)(event).pipe(
+      Effect.orElseSucceed(() => event),
+    );
+  }
+  return Effect.succeed(event);
+};
+
 interface StepTools {
   readonly run: <A, Err, R>(
     id: StepOptionsOrId,
@@ -226,20 +236,24 @@ export const createStepTools = (
         ),
         Match.tag("MemoTimeout", () => stepError(info.id, "Invoke timed out", { noRetry: true })),
         Match.tag("MemoInput", () => Effect.succeed(undefined as InngestFunction.Success<F>)),
-        Match.tag("MemoNone", () =>
-          Effect.fail(
-            invokeInterrupt({
-              info,
-              functionId: `${appName}-${options.function._tag}`,
-              payload: {
-                data: Predicate.hasProperty(options, "data") ? options.data : undefined,
-                user: options.user ?? {},
-                v: options.v ?? "1",
-              },
-              timeout: options.timeout ? timeStr(options.timeout) : "365d",
-            }),
-          ),
-        ),
+        Match.tag("MemoNone", () => {
+          const rawData = Predicate.hasProperty(options, "data") ? (options.data as TaggedEvent) : undefined;
+          const encodeData = rawData ? encodeTaggedEvent(rawData) : Effect.succeed(undefined);
+          return Effect.flatMap(encodeData, (encodedData) =>
+            Effect.fail(
+              invokeInterrupt({
+                info,
+                functionId: `${appName}-${options.function._tag}`,
+                payload: {
+                  data: encodedData,
+                  user: options.user ?? {},
+                  v: options.v ?? "1",
+                },
+                timeout: options.timeout ? timeStr(options.timeout) : "365d",
+              }),
+            ),
+          );
+        }),
         Match.exhaustive,
       ),
     );
@@ -311,15 +325,20 @@ export const createStepTools = (
             return Effect.fail(plannedInterrupt({ info }));
           }
 
-          const eventPayloads = Arr.map(Arr.ensure(payload), (e) => ({ name: e._tag, data: e }));
-
-          return Effect.flatMap(InngestClient, (client) =>
-            client.sendEvent(eventPayloads).pipe(
-              Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
-                attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
-              }),
-              Effect.flatMap((result) => Effect.fail(runInterrupt({ info, data: result }))),
+          const events = Arr.ensure(payload);
+          return Effect.flatMap(
+            Effect.forEach(events, (e) =>
+              Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
             ),
+            (eventPayloads) =>
+              Effect.flatMap(InngestClient, (client) =>
+                client.sendEvent(eventPayloads).pipe(
+                  Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
+                    attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
+                  }),
+                  Effect.flatMap((result) => Effect.fail(runInterrupt({ info, data: result }))),
+                ),
+              ),
           );
         }),
         Match.exhaustive,

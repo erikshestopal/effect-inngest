@@ -5,13 +5,9 @@
 import { Predicate, Struct } from "effect";
 import * as Schema from "effect/Schema";
 
-const stripTags = (value: unknown): unknown => {
+const stripTopLevelTag = (value: unknown): unknown => {
   if (Predicate.isRecord(value)) {
-    const stripped = Struct.omit(value as Record<string, unknown>, "_tag");
-    return Object.fromEntries(Object.entries(stripped).map(([k, v]) => [k, stripTags(v)]));
-  }
-  if (Array.isArray(value)) {
-    return value.map(stripTags);
+    return Struct.omit(value as Record<string, unknown>, "_tag");
   }
   return value;
 };
@@ -19,7 +15,7 @@ const stripTags = (value: unknown): unknown => {
 const WireUnknown = Schema.transform(Schema.Unknown, Schema.Unknown, {
   strict: true,
   decode: (value) => value,
-  encode: (value) => stripTags(value),
+  encode: (value) => stripTopLevelTag(value),
 });
 
 export const Opcode = {
