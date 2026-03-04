@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.1.3
+
+### Patch Changes
+
+- [`551ca9a`](https://github.com/erikshestopal/effect-inngest/commit/551ca9a0a0e316162d3c6f347ba15f54c04cc064) Thanks [@erikshestopal](https://github.com/erikshestopal)! - Fix: Wrap handler invocation with Effect.scoped in driver.ts so that Effect.acquireRelease finalizers run after each handler completes, instead of leaking onto the application-level scope and only running at server shutdown.
+
 ## 0.1.2
 
 ### Patch Changes
