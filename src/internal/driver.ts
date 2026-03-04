@@ -79,7 +79,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     const context = buildHandlerContext<F>(fn, step, request);
     const headers = baseHeaders();
 
-    const result = yield* handler(context).pipe(
+    const result = yield* Effect.scoped(handler(context)).pipe(
       Effect.provideService(Step, step),
       Effect.map((value) => ExecutionResult.make({ status: 200, body: value, headers })),
       Effect.catchAll((error) => {

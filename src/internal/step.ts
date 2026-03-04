@@ -89,9 +89,7 @@ type TaggedEvent = { readonly _tag: string };
 const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never> => {
   const ctor = event.constructor;
   if (Schema.isSchema(ctor)) {
-    return Schema.encode(ctor as unknown as Schema.Schema.AnyNoContext)(event).pipe(
-      Effect.orElseSucceed(() => event),
-    );
+    return Schema.encode(ctor as unknown as Schema.Schema.AnyNoContext)(event).pipe(Effect.orElseSucceed(() => event));
   }
   return Effect.succeed(event);
 };
