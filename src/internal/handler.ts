@@ -2,10 +2,10 @@
  * Internal handler implementation.
  * @internal
  */
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
-import * as HttpServerRequest from "@effect/platform/HttpServerRequest";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
@@ -19,7 +19,7 @@ export { SignatureError } from "./signature.js";
 import { execute, type TraceHeaders } from "./driver.js";
 export type { TraceHeaders } from "./driver.js";
 
-export class InvalidRequestError extends Schema.TaggedError<InvalidRequestError>()("InvalidRequestError", {
+export class InvalidRequestError extends Schema.TaggedErrorClass<InvalidRequestError>()("InvalidRequestError", {
   message: Schema.String,
 }) {}
 
@@ -73,7 +73,7 @@ export const verifyAndParseRequestBody = (
       isDev,
     });
 
-    return yield* Schema.decodeUnknown(Schema.parseJson(Protocol.SDKRequestBody))(bodyText).pipe(
+    return yield* Schema.decodeUnknownEffect(Schema.fromJsonString(Protocol.SDKRequestBody))(bodyText).pipe(
       Effect.mapError((error) => new InvalidRequestError({ message: `Invalid request body: ${String(error)}` })),
     );
   });
@@ -99,16 +99,6 @@ export const handleIntrospection = (
     return { status: 200, headers: baseHeaders(), body };
   });
 
-const RegisterRequest = Schema.Struct({
-  url: Schema.String,
-  v: Schema.String,
-  deployType: Schema.Literal("ping"),
-  sdk: Schema.String,
-  appName: Schema.String,
-  framework: Schema.String,
-  functions: Schema.Array(Schema.Unknown),
-});
-
 export const handleRegistration = (
   group: InngestGroup.Any,
   requestUrl: string,
@@ -133,7 +123,7 @@ export const handleRegistration = (
         ...baseHeaders(),
         Authorization: `Bearer ${config.signingKey ?? ""}`,
       }),
-      HttpClientRequest.schemaBodyJson(RegisterRequest)({
+      HttpClientRequest.bodyJsonUnsafe({
         url: url.href,
         v: "0.1",
         deployType: "ping" as const,
@@ -144,11 +134,10 @@ export const handleRegistration = (
       }),
     );
 
-    const response = yield* request.pipe(
-      Effect.flatMap(httpClient.execute),
+    const response = yield* httpClient.execute(request).pipe(
       Effect.flatMap(HttpClientResponse.schemaBodyJson(Protocol.RegisterResponse)),
       Effect.scoped,
-      Effect.catchAll((error) =>
+      Effect.catch((error) =>
         Effect.succeed({
           message: `Registration failed: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
         }),
@@ -184,7 +173,7 @@ export const handleExecution = (
     const fnTag = fnId.startsWith(prefix) ? fnId.slice(prefix.length) : fnId;
 
     const fn = group.functions.get(fnTag) as InngestFunction.Any | undefined;
-    const entry = fn ? (context.unsafeMap.get(fn.key) as Handler<string> | undefined) : undefined;
+    const entry = fn ? (context.mapUnsafe.get(fn.key) as Handler<string> | undefined) : undefined;
 
     if (!fn || !entry) {
       return {
@@ -207,12 +196,16 @@ export const handleExecution = (
             ctx: Protocol.SDKRequestContext.make({
               fn_id: body.ctx.fn_id,
               run_id: body.ctx.run_id,
+              env: body.ctx.env,
               step_id: urlStepId,
               attempt: body.ctx.attempt,
+              max_attempts: body.ctx.max_attempts,
+              qi_id: body.ctx.qi_id,
               disable_immediate_execution: body.ctx.disable_immediate_execution,
               use_api: body.ctx.use_api,
               stack: body.ctx.stack,
             }),
+            version: body.version,
             use_api: body.use_api,
           })
         : body;

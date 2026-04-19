@@ -33,55 +33,41 @@
  * ```
  */
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, test } from "bun:test";
-import { Effect, TestServices } from "effect";
+import { Effect } from "effect";
 import type { Scope } from "effect";
 
 export { afterAll, afterEach, beforeAll, beforeEach, describe, expect };
 
 type TestOptions = { timeout?: number };
 
-const runTest = <E, A>(effect: Effect.Effect<A, E, TestServices.TestServices>) =>
-  Effect.runPromise(effect.pipe(Effect.provide(TestServices.liveServices)));
+const runTest = <E, A>(effect: Effect.Effect<A, E>) => Effect.runPromise(effect);
 
-const runTestScoped = <E, A>(effect: Effect.Effect<A, E, TestServices.TestServices | Scope.Scope>) =>
-  Effect.runPromise(effect.pipe(Effect.scoped, Effect.provide(TestServices.liveServices)));
+const runTestScoped = <E, A>(effect: Effect.Effect<A, E, Scope.Scope>) => Effect.runPromise(Effect.scoped(effect));
 
 type EffectFn<A, E, R> = () => Effect.Effect<A, E, R>;
 
 type EffectTester = {
-  <A, E>(name: string, fn: EffectFn<A, E, TestServices.TestServices>, options?: number | TestOptions): void;
-  skip: <A, E>(name: string, fn: EffectFn<A, E, TestServices.TestServices>, options?: number | TestOptions) => void;
-  only: <A, E>(name: string, fn: EffectFn<A, E, TestServices.TestServices>, options?: number | TestOptions) => void;
+  <A, E>(name: string, fn: EffectFn<A, E, never>, options?: number | TestOptions): void;
+  skip: <A, E>(name: string, fn: EffectFn<A, E, never>, options?: number | TestOptions) => void;
+  only: <A, E>(name: string, fn: EffectFn<A, E, never>, options?: number | TestOptions) => void;
 };
 
 type ScopedTester = {
-  <A, E>(
-    name: string,
-    fn: EffectFn<A, E, TestServices.TestServices | Scope.Scope>,
-    options?: number | TestOptions,
-  ): void;
-  skip: <A, E>(
-    name: string,
-    fn: EffectFn<A, E, TestServices.TestServices | Scope.Scope>,
-    options?: number | TestOptions,
-  ) => void;
-  only: <A, E>(
-    name: string,
-    fn: EffectFn<A, E, TestServices.TestServices | Scope.Scope>,
-    options?: number | TestOptions,
-  ) => void;
+  <A, E>(name: string, fn: EffectFn<A, E, Scope.Scope>, options?: number | TestOptions): void;
+  skip: <A, E>(name: string, fn: EffectFn<A, E, Scope.Scope>, options?: number | TestOptions) => void;
+  only: <A, E>(name: string, fn: EffectFn<A, E, Scope.Scope>, options?: number | TestOptions) => void;
 };
 
 const makeEffectTest =
   (runner: typeof test) =>
-  <A, E>(name: string, fn: EffectFn<A, E, TestServices.TestServices>, options?: number | TestOptions) => {
+  <A, E>(name: string, fn: EffectFn<A, E, never>, options?: number | TestOptions) => {
     const timeout = typeof options === "number" ? options : options?.timeout;
     runner(name, () => runTest(fn()), timeout ? { timeout } : undefined);
   };
 
 const makeScopedTest =
   (runner: typeof test) =>
-  <A, E>(name: string, fn: EffectFn<A, E, TestServices.TestServices | Scope.Scope>, options?: number | TestOptions) => {
+  <A, E>(name: string, fn: EffectFn<A, E, Scope.Scope>, options?: number | TestOptions) => {
     const timeout = typeof options === "number" ? options : options?.timeout;
     runner(name, () => runTestScoped(fn()), timeout ? { timeout } : undefined);
   };

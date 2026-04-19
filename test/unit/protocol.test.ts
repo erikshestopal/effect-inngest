@@ -237,7 +237,7 @@ describe("Protocol coverage", () => {
     });
 
     it("creates InngestEvent with minimal fields", () => {
-      const evt = Protocol.InngestEvent.make({ name: "test/event" });
+      const evt = Protocol.InngestEvent.make({ name: "test/event", data: {} });
       expect(evt.name).toBe("test/event");
       expect(evt.data).toEqual({});
     });
@@ -276,10 +276,18 @@ describe("Protocol coverage", () => {
       expect(ctx.disable_immediate_execution).toBe(true);
     });
 
-    it("creates SDKRequestContext with defaults", () => {
+    it("creates SDKRequestContext with all required fields", () => {
       const ctx = Protocol.SDKRequestContext.make({
         fn_id: "fn",
         run_id: "run",
+        env: "dev",
+        step_id: "step",
+        attempt: 0,
+        max_attempts: 4,
+        stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+        qi_id: "",
+        disable_immediate_execution: false,
+        use_api: false,
       });
       expect(ctx.env).toBe("dev");
       expect(ctx.attempt).toBe(0);
@@ -308,11 +316,24 @@ describe("Protocol coverage", () => {
     });
 
     it("creates SDKRequestBody with .make()", () => {
+      const makeCtx = () =>
+        Protocol.SDKRequestContext.make({
+          fn_id: "fn",
+          run_id: "run",
+          env: "dev",
+          step_id: "step",
+          attempt: 0,
+          max_attempts: 4,
+          stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+          qi_id: "",
+          disable_immediate_execution: false,
+          use_api: false,
+        });
       const body = Protocol.SDKRequestBody.make({
-        event: Protocol.InngestEvent.make({ name: "test/event", id: "e1", ts: 1234 }),
-        events: [Protocol.InngestEvent.make({ name: "test/event", id: "e1", ts: 1234 })],
+        event: Protocol.InngestEvent.make({ name: "test/event", data: {}, id: "e1", ts: 1234 }),
+        events: [Protocol.InngestEvent.make({ name: "test/event", data: {}, id: "e1", ts: 1234 })],
         steps: { hash1: { data: "memoized" } },
-        ctx: Protocol.SDKRequestContext.make({ fn_id: "fn", run_id: "run" }),
+        ctx: makeCtx(),
         version: 1,
         use_api: false,
       });
@@ -341,21 +362,21 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes null step result", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.StepResult)(null);
+        const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)(null);
         expect(result).toBe(null);
       }),
     );
 
     it.effect("decodes step result with data", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.StepResult)({ data: "value" });
+        const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)({ data: "value" });
         expect(result).toEqual({ data: "value" });
       }),
     );
 
     it.effect("decodes step result with error", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.StepResult)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)({
           error: { name: "Error", message: "fail" },
         });
         expect(result).toEqual({ error: { name: "Error", message: "fail" } });
@@ -364,7 +385,7 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes StepResult with input field", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.StepResult)({ input: { arg: "value" } });
+        const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)({ input: { arg: "value" } });
         expect(result).toEqual({ input: { arg: "value" } });
       }),
     );
@@ -373,7 +394,7 @@ describe("Protocol coverage", () => {
   describe("IntrospectionUnauthenticated schema", () => {
     it.effect("decodes unauthenticated introspection response", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionUnauthenticated)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionUnauthenticated)({
           function_count: 3,
           has_event_key: true,
           has_signing_key: true,
@@ -389,7 +410,7 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes unauthenticated with null auth and functions array", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionUnauthenticated)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionUnauthenticated)({
           function_count: 2,
           has_event_key: false,
           has_signing_key: false,
@@ -408,7 +429,7 @@ describe("Protocol coverage", () => {
   describe("IntrospectionAuthenticated schema", () => {
     it.effect("decodes authenticated introspection response", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionAuthenticated)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionAuthenticated)({
           function_count: 5,
           has_event_key: true,
           has_signing_key: true,
@@ -437,7 +458,7 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes authenticated with null optional fields", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionAuthenticated)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionAuthenticated)({
           function_count: 1,
           has_event_key: true,
           has_signing_key: true,
@@ -467,7 +488,7 @@ describe("Protocol coverage", () => {
   describe("IntrospectionResponse schema", () => {
     it.effect("decodes authenticated response via union", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionResponse)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionResponse)({
           function_count: 1,
           has_event_key: true,
           has_signing_key: true,
@@ -494,7 +515,7 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes unauthenticated response via union", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.IntrospectionResponse)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionResponse)({
           function_count: 0,
           has_event_key: false,
           has_signing_key: false,
@@ -511,7 +532,7 @@ describe("Protocol coverage", () => {
   describe("RegisterResponse schema", () => {
     it.effect("decodes register response with message", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.RegisterResponse)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)({
           message: "Successfully synced 3 functions",
         });
         expect(result.message).toBe("Successfully synced 3 functions");
@@ -520,7 +541,7 @@ describe("Protocol coverage", () => {
 
     it.effect("decodes register response without message", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.RegisterResponse)({});
+        const result = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)({});
         expect(result.message).toBeUndefined();
       }),
     );
@@ -530,7 +551,7 @@ describe("Protocol coverage", () => {
     it.effect("encodes UserError", () =>
       Effect.gen(function* () {
         const err = Protocol.UserError.make({ name: "Error", message: "test" });
-        const encoded = yield* Schema.encode(Protocol.UserError)(err);
+        const encoded = yield* Schema.encodeEffect(Protocol.UserError)(err);
         expect(encoded.name).toBe("Error");
       }),
     );
@@ -542,7 +563,7 @@ describe("Protocol coverage", () => {
           id: "h1",
           name: "s1",
         });
-        const encoded = yield* Schema.encode(Protocol.GeneratorOpcode)(op);
+        const encoded = yield* Schema.encodeEffect(Protocol.GeneratorOpcode)(op);
         expect(encoded.op).toBe("Step");
       }),
     );
@@ -550,35 +571,61 @@ describe("Protocol coverage", () => {
     it.effect("encodes FunctionStack", () =>
       Effect.gen(function* () {
         const stack = Protocol.FunctionStack.make({ stack: ["a", "b"], current: 1 });
-        const encoded = yield* Schema.encode(Protocol.FunctionStack)(stack);
+        const encoded = yield* Schema.encodeEffect(Protocol.FunctionStack)(stack);
         expect(encoded.stack).toEqual(["a", "b"]);
       }),
     );
 
     it.effect("encodes InngestEvent", () =>
       Effect.gen(function* () {
-        const event = Protocol.InngestEvent.make({ name: "test/event", id: "e1", ts: 1000 });
-        const encoded = yield* Schema.encode(Protocol.InngestEvent)(event);
+        const event = Protocol.InngestEvent.make({ name: "test/event", data: {}, id: "e1", ts: 1000 });
+        const encoded = yield* Schema.encodeEffect(Protocol.InngestEvent)(event);
         expect(encoded.name).toBe("test/event");
       }),
     );
 
     it.effect("encodes SDKRequestContext", () =>
       Effect.gen(function* () {
-        const ctx = Protocol.SDKRequestContext.make({ fn_id: "fn", run_id: "run" });
-        const encoded = yield* Schema.encode(Protocol.SDKRequestContext)(ctx);
+        const ctx = Protocol.SDKRequestContext.make({
+          fn_id: "fn",
+          run_id: "run",
+          env: "dev",
+          step_id: "step",
+          attempt: 0,
+          max_attempts: 4,
+          stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+          qi_id: "",
+          disable_immediate_execution: false,
+          use_api: false,
+        });
+        const encoded = yield* Schema.encodeEffect(Protocol.SDKRequestContext)(ctx);
         expect(encoded.fn_id).toBe("fn");
       }),
     );
 
     it.effect("encodes SDKRequestBody", () =>
       Effect.gen(function* () {
-        const body = Protocol.SDKRequestBody.make({
-          event: Protocol.InngestEvent.make({ name: "test/event" }),
-          events: [],
-          ctx: Protocol.SDKRequestContext.make({ fn_id: "fn", run_id: "run" }),
+        const ctx = Protocol.SDKRequestContext.make({
+          fn_id: "fn",
+          run_id: "run",
+          env: "dev",
+          step_id: "step",
+          attempt: 0,
+          max_attempts: 4,
+          stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+          qi_id: "",
+          disable_immediate_execution: false,
+          use_api: false,
         });
-        const encoded = yield* Schema.encode(Protocol.SDKRequestBody)(body);
+        const body = Protocol.SDKRequestBody.make({
+          event: Protocol.InngestEvent.make({ name: "test/event", data: {} }),
+          events: [],
+          ctx,
+          steps: {},
+          version: 1,
+          use_api: false,
+        });
+        const encoded = yield* Schema.encodeEffect(Protocol.SDKRequestBody)(body);
         expect(encoded.event.name).toBe("test/event");
       }),
     );
@@ -613,20 +660,46 @@ describe("Protocol coverage", () => {
     });
 
     it("InngestEvent.is returns true for valid instance", () => {
-      const event = Protocol.InngestEvent.make({ name: "test/event" });
+      const event = Protocol.InngestEvent.make({ name: "test/event", data: {} });
       expect(Schema.is(Protocol.InngestEvent)(event)).toBe(true);
     });
 
     it("SDKRequestContext.is returns true for valid instance", () => {
-      const ctx = Protocol.SDKRequestContext.make({ fn_id: "fn", run_id: "run" });
+      const ctx = Protocol.SDKRequestContext.make({
+        fn_id: "fn",
+        run_id: "run",
+        env: "dev",
+        step_id: "step",
+        attempt: 0,
+        max_attempts: 4,
+        stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+        qi_id: "",
+        disable_immediate_execution: false,
+        use_api: false,
+      });
       expect(Schema.is(Protocol.SDKRequestContext)(ctx)).toBe(true);
     });
 
     it("SDKRequestBody.is returns true for valid instance", () => {
+      const ctx = Protocol.SDKRequestContext.make({
+        fn_id: "fn",
+        run_id: "run",
+        env: "dev",
+        step_id: "step",
+        attempt: 0,
+        max_attempts: 4,
+        stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+        qi_id: "",
+        disable_immediate_execution: false,
+        use_api: false,
+      });
       const body = Protocol.SDKRequestBody.make({
-        event: Protocol.InngestEvent.make({ name: "test/event" }),
+        event: Protocol.InngestEvent.make({ name: "test/event", data: {} }),
         events: [],
-        ctx: Protocol.SDKRequestContext.make({ fn_id: "fn", run_id: "run" }),
+        ctx,
+        steps: {},
+        version: 1,
+        use_api: false,
       });
       expect(Schema.is(Protocol.SDKRequestBody)(body)).toBe(true);
     });
@@ -663,8 +736,8 @@ describe("Protocol coverage", () => {
           schema_version: "2024-05-24" as const,
           authentication_succeeded: false as const,
         };
-        const decoded = yield* Schema.decodeUnknown(Protocol.IntrospectionUnauthenticated)(data);
-        const encoded = yield* Schema.encode(Protocol.IntrospectionUnauthenticated)(decoded);
+        const decoded = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionUnauthenticated)(data);
+        const encoded = yield* Schema.encodeEffect(Protocol.IntrospectionUnauthenticated)(decoded);
         expect(encoded.function_count).toBe(1);
       }),
     );
@@ -692,8 +765,8 @@ describe("Protocol coverage", () => {
           signing_key_fallback_hash: null,
           signing_key_hash: "key",
         };
-        const decoded = yield* Schema.decodeUnknown(Protocol.IntrospectionAuthenticated)(data);
-        const encoded = yield* Schema.encode(Protocol.IntrospectionAuthenticated)(decoded);
+        const decoded = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionAuthenticated)(data);
+        const encoded = yield* Schema.encodeEffect(Protocol.IntrospectionAuthenticated)(decoded);
         expect(encoded.app_id).toBe("app");
       }),
     );
@@ -701,8 +774,8 @@ describe("Protocol coverage", () => {
     it.effect("encodes RegisterResponse", () =>
       Effect.gen(function* () {
         const data = { message: "Synced" };
-        const decoded = yield* Schema.decodeUnknown(Protocol.RegisterResponse)(data);
-        const encoded = yield* Schema.encode(Protocol.RegisterResponse)(decoded);
+        const decoded = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)(data);
+        const encoded = yield* Schema.encodeEffect(Protocol.RegisterResponse)(decoded);
         expect(encoded.message).toBe("Synced");
       }),
     );
@@ -710,8 +783,8 @@ describe("Protocol coverage", () => {
     it.effect("encodes StepResult", () =>
       Effect.gen(function* () {
         const data = { data: "value" };
-        const decoded = yield* Schema.decodeUnknown(Protocol.StepResult)(data);
-        const encoded = yield* Schema.encode(Protocol.StepResult)(decoded);
+        const decoded = yield* Schema.decodeUnknownEffect(Protocol.StepResult)(data);
+        const encoded = yield* Schema.encodeEffect(Protocol.StepResult)(decoded);
         expect(encoded).toEqual({ data: "value" });
       }),
     );
@@ -727,8 +800,8 @@ describe("Protocol coverage", () => {
           schema_version: "2024-05-24" as const,
           authentication_succeeded: false as const,
         };
-        const decoded = yield* Schema.decodeUnknown(Protocol.IntrospectionResponse)(unauthData);
-        const encoded = yield* Schema.encode(Protocol.IntrospectionResponse)(decoded);
+        const decoded = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionResponse)(unauthData);
+        const encoded = yield* Schema.encodeEffect(Protocol.IntrospectionResponse)(decoded);
         expect(encoded.function_count).toBe(0);
       }),
     );
@@ -760,7 +833,7 @@ describe("Protocol coverage", () => {
           },
         });
 
-        const encoded = yield* Schema.encode(Protocol.GeneratorOpcode)(opcode);
+        const encoded = yield* Schema.encodeEffect(Protocol.GeneratorOpcode)(opcode);
         const opts = encoded.opts as {
           function_id: string;
           payload: { data: Record<string, unknown> };
@@ -784,7 +857,7 @@ describe("Protocol coverage", () => {
           },
         });
 
-        const encoded = yield* Schema.encode(Protocol.GeneratorOpcode)(opcode);
+        const encoded = yield* Schema.encodeEffect(Protocol.GeneratorOpcode)(opcode);
         const data = encoded.data as { items: Array<Record<string, unknown>> };
 
         expect(data.items[0]!._tag).toBe("TypeA");
@@ -795,32 +868,32 @@ describe("Protocol coverage", () => {
 
   describe("Schema.Class pipe and annotations", () => {
     it("UserError can be piped", () => {
-      const annotated = Protocol.UserError.pipe(Schema.annotations({ title: "UserError" }));
+      const annotated = Protocol.UserError.pipe(Schema.annotate({ title: "UserError" }));
       expect(annotated).toBeDefined();
     });
 
     it("GeneratorOpcode can be piped", () => {
-      const annotated = Protocol.GeneratorOpcode.pipe(Schema.annotations({ title: "GeneratorOpcode" }));
+      const annotated = Protocol.GeneratorOpcode.pipe(Schema.annotate({ title: "GeneratorOpcode" }));
       expect(annotated).toBeDefined();
     });
 
     it("FunctionStack can be piped", () => {
-      const annotated = Protocol.FunctionStack.pipe(Schema.annotations({ title: "FunctionStack" }));
+      const annotated = Protocol.FunctionStack.pipe(Schema.annotate({ title: "FunctionStack" }));
       expect(annotated).toBeDefined();
     });
 
     it("InngestEvent can be piped", () => {
-      const annotated = Protocol.InngestEvent.pipe(Schema.annotations({ title: "InngestEvent" }));
+      const annotated = Protocol.InngestEvent.pipe(Schema.annotate({ title: "InngestEvent" }));
       expect(annotated).toBeDefined();
     });
 
     it("SDKRequestContext can be piped", () => {
-      const annotated = Protocol.SDKRequestContext.pipe(Schema.annotations({ title: "SDKRequestContext" }));
+      const annotated = Protocol.SDKRequestContext.pipe(Schema.annotate({ title: "SDKRequestContext" }));
       expect(annotated).toBeDefined();
     });
 
     it("SDKRequestBody can be piped", () => {
-      const annotated = Protocol.SDKRequestBody.pipe(Schema.annotations({ title: "SDKRequestBody" }));
+      const annotated = Protocol.SDKRequestBody.pipe(Schema.annotate({ title: "SDKRequestBody" }));
       expect(annotated).toBeDefined();
     });
   });
@@ -828,7 +901,7 @@ describe("Protocol coverage", () => {
   describe("Schema default factory functions", () => {
     it.effect("triggers SDKRequestContext defaults during decode", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.SDKRequestContext)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.SDKRequestContext)({
           fn_id: "fn",
           run_id: "run",
         });
@@ -846,7 +919,7 @@ describe("Protocol coverage", () => {
 
     it.effect("triggers SDKRequestBody defaults during decode", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.SDKRequestBody)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.SDKRequestBody)({
           event: { name: "test/event" },
           events: [],
           ctx: { fn_id: "fn", run_id: "run" },
@@ -859,20 +932,21 @@ describe("Protocol coverage", () => {
 
     it.effect("triggers InngestEvent data default during decode", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.InngestEvent)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.InngestEvent)({
           name: "test/event",
         });
         expect(result.data).toEqual({});
       }),
     );
 
-    it.effect("triggers InngestEvent data default with null", () =>
+    it.effect("preserves InngestEvent data null value", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknown(Protocol.InngestEvent)({
+        const result = yield* Schema.decodeUnknownEffect(Protocol.InngestEvent)({
           name: "test/event",
           data: null,
         });
-        expect(result.data).toEqual({});
+        // v4: NullOr preserves null; withDecodingDefaultType only applies to missing/undefined
+        expect(result.data).toEqual(null);
       }),
     );
   });

@@ -8,13 +8,14 @@ import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
+import * as SchemaTransformation from "effect/SchemaTransformation";
 import * as Protocol from "./protocol.js";
 
 /**
  * @internal
  */
-export class SignatureError extends Schema.TaggedError<SignatureError>()("SignatureError", {
-  reason: Schema.Literal("missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"),
+export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {
+  reason: Schema.Literals(["missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"]),
   message: Schema.String,
 }) {}
 
@@ -40,20 +41,23 @@ export interface SignatureService {
 /**
  * @internal
  */
-export class Signature extends Context.Tag("effect-inngest/Signature")<Signature, SignatureService>() {}
+export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature") {}
 
 // ─────────────────────────────────────────────────────────────
 // Schemas (internal)
 // ─────────────────────────────────────────────────────────────
 
-const TimestampSeconds = Schema.NumberFromString.pipe(Schema.int(), Schema.positive());
+const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(), Schema.isGreaterThan(0)));
 // Case-insensitive hex, normalized to lowercase in parseSignatureHeader
 const SignatureHex = Schema.String.pipe(
-  Schema.pattern(/^[a-fA-F0-9]{64}$/),
-  Schema.transform(Schema.String, {
-    decode: (s) => s.toLowerCase(),
-    encode: (s) => s,
-  }),
+  Schema.check(Schema.isPattern(/^[a-fA-F0-9]{64}$/)),
+  Schema.decodeTo(
+    Schema.String,
+    SchemaTransformation.transform({
+      decode: (s) => s.toLowerCase(),
+      encode: (s) => s,
+    }),
+  ),
 );
 const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: SignatureHex });
 
@@ -66,7 +70,7 @@ const SIGNATURE_VALIDITY_WINDOW_MS = 5 * 60 * 1000;
 const parseSignatureHeader = (header: string) => {
   const params = new URLSearchParams(header);
   const raw = { t: params.get("t") ?? "", s: params.get("s") ?? "" };
-  return Schema.decodeUnknown(SignatureParams)(raw).pipe(
+  return Schema.decodeUnknownEffect(SignatureParams)(raw).pipe(
     Effect.mapError(
       () =>
         new SignatureError({
@@ -131,7 +135,7 @@ export const SignatureLive: Layer.Layer<Signature> = Layer.effect(
         const timestampMs = timestampSeconds * 1000;
         const now = yield* DateTime.now;
 
-        if (Math.abs(now.epochMillis - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
+        if (Math.abs(now.epochMilliseconds - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
           return yield* new SignatureError({
             reason: "expired",
             message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
@@ -150,7 +154,7 @@ export const SignatureLive: Layer.Layer<Signature> = Layer.effect(
     sign: (body, signingKey) =>
       DateTime.now.pipe(
         Effect.map((now) => {
-          const ts = Math.floor(now.epochMillis / 1000);
+          const ts = Math.floor(now.epochMilliseconds / 1000);
           return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
         }),
       ),

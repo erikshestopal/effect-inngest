@@ -4,7 +4,7 @@
  */
 
 import * as Crypto from "node:crypto";
-import { Effect } from "effect";
+import { Effect, Result } from "effect";
 import { describe, expect, it } from "../bun-effect.js";
 import { Signature, SignatureError, SignatureLive } from "../../src/internal/signature.js";
 
@@ -94,11 +94,11 @@ describe("Signature.verify", () => {
             signingKey: undefined,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("missing_signing_key");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("missing_signing_key");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -113,11 +113,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("missing_header");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("missing_header");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -132,11 +132,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -151,11 +151,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -174,11 +174,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("expired");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("expired");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -197,11 +197,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("expired");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("expired");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -219,11 +219,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -241,11 +241,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -264,11 +264,11 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -307,11 +307,11 @@ describe("Signature.verify", () => {
             signingKeyFallback: TEST_SIGNING_KEY_FALLBACK,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );

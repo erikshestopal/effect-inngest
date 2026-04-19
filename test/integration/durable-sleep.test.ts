@@ -45,7 +45,7 @@ describe("TB-003: Durable Sleep", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(SleepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(SleepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -125,7 +125,7 @@ describe("TB-003: Durable Sleep", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(SleepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(SleepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -172,7 +172,7 @@ describe("TB-003: Durable Sleep", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(SleepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(SleepOpcodeResponse)),
         );
 
         expect(body[0]!.name).toBe("2025-06-15T12:00:00.000Z");
@@ -200,7 +200,7 @@ describe("TB-003: Durable Sleep", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(SleepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(SleepOpcodeResponse)),
         );
 
         expect(body[0]!.name).toBe("2025-03-15T09:30:00.000Z");
@@ -228,7 +228,7 @@ describe("TB-003: Durable Sleep", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(SleepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(SleepOpcodeResponse)),
         );
 
         expect(body[0]!.name).toBe("1h");

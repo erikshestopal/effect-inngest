@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -14,7 +14,7 @@ class DemoOrchestrate extends Schema.TaggedClass<DemoOrchestrate>()("demo/orches
 
 class DemoWorkerTask extends Schema.TaggedClass<DemoWorkerTask>()("demo/worker-task", {
   taskId: Schema.String,
-  priority: Schema.optionalWith(Schema.Literal("low", "normal", "high"), { default: () => "normal" as const }),
+  priority: Schema.optional(Schema.Literals(["low", "normal", "high"])),
 }) {}
 
 const WorkerFn = InngestFunction.make("worker-task", {
@@ -37,7 +37,7 @@ const Group = InngestGroup.make(WorkerFn, OrchestratorFn);
 const HandlersLive = Group.toLayer({
   "worker-task": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Worker processing task: ${event.taskId}, priority: ${event.priority}`);
+      yield* Effect.log(`Worker processing task: ${event.taskId}, priority: ${event.priority ?? "normal"}`);
       yield* Effect.sleep(Duration.millis(100));
       return { completed: true, taskId: event.taskId };
     }),

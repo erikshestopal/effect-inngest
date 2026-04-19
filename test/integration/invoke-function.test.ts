@@ -69,7 +69,7 @@ describe("TB-005: Invoke Function", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(InvokeFunctionResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(InvokeFunctionResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -237,7 +237,7 @@ describe("TB-005: Invoke Function", () => {
 
         expect(response.status).toBe(206);
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(InvokeFunctionResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(InvokeFunctionResponse)),
         );
         const opcode = body[0]!;
 

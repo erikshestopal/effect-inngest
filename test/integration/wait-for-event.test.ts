@@ -20,10 +20,10 @@ class OrderApproved extends Schema.TaggedClass<OrderApproved>()("order/approved"
 describe("TB-004: Wait For Event", () => {
   const ApprovalFlow = InngestFunction.make("approval-flow", {
     trigger: { event: OrderPending },
-    success: Schema.Union(
+    success: Schema.Union([
       Schema.Struct({ status: Schema.Literal("timeout"), orderId: Schema.String }),
       Schema.Struct({ status: Schema.Literal("approved"), approvedBy: Schema.String }),
-    ),
+    ]),
   });
 
   const Group = InngestGroup.make(ApprovalFlow);
@@ -61,7 +61,7 @@ describe("TB-004: Wait For Event", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(WaitForEventOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(WaitForEventOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -207,7 +207,7 @@ describe("TB-004: Wait For Event", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(WaitForEventOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(WaitForEventOpcodeResponse)),
         );
 
         const opcode = body[0]!;
@@ -244,7 +244,7 @@ describe("TB-004: Wait For Event", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(WaitForEventOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(WaitForEventOpcodeResponse)),
         );
 
         expect(body[0]!.opts.timeout).toBe("1w");

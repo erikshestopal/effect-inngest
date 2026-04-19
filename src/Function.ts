@@ -16,7 +16,7 @@ export const TypeId: unique symbol = Symbol.for("effect-inngest/Function");
  */
 export type TypeId = typeof TypeId;
 
-type EventSchema = Schema.Schema.Any & { readonly _tag: string };
+type EventSchema = Schema.Top & { readonly identifier: string };
 
 /**
  * An event-based trigger configuration.
@@ -98,7 +98,7 @@ interface RateLimitOption {
   /**
    * The period of time to allow the function to run `limit` times.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 }
 
 interface ThrottleOption {
@@ -119,7 +119,7 @@ interface ThrottleOption {
    * The period of time for the rate limit. Run starts are evenly spaced through
    * the given period. The minimum granularity is 1 second.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 
   /**
    * The number of runs allowed to start in the given window in a single burst.
@@ -138,14 +138,14 @@ interface DebounceOption {
   /**
    * The period of time to delay after receiving the last trigger to run the function.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 
   /**
    * The maximum time that a debounce can be extended before running.
    * If events are continually received within the given period, a function
    * will always run after the given timeout period.
    */
-  readonly timeout?: Duration.DurationInput;
+  readonly timeout?: Duration.Input;
 }
 
 interface BatchEventsOption {
@@ -159,7 +159,7 @@ interface BatchEventsOption {
    * If timeout is reached, the function will be invoked with a batch
    * even if it's not filled up to `maxSize`.
    */
-  readonly timeout: Duration.DurationInput;
+  readonly timeout: Duration.Input;
 
   /**
    * An optional key to use for batching.
@@ -192,14 +192,14 @@ interface TimeoutsOption {
    * This is, essentially, the amount of time that a function sits in the
    * queue before starting.
    */
-  readonly start?: Duration.DurationInput;
+  readonly start?: Duration.Input;
 
   /**
    * Finish represents the time between a function starting and the function
    * finishing. If a function takes longer than this time to finish, the
    * function is marked as cancelled.
    */
-  readonly finish?: Duration.DurationInput;
+  readonly finish?: Duration.Input;
 }
 
 interface SingletonOption {
@@ -237,7 +237,7 @@ interface CancellationOption {
    * specified, cancellation triggers are valid for up to a year or until the
    * function ends.
    */
-  readonly timeout?: Duration.DurationInput;
+  readonly timeout?: Duration.Input;
 }
 
 type Retries = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
@@ -390,7 +390,7 @@ interface FunctionRegistration {
 export interface InngestFunction<
   Tag extends string,
   Triggers extends Trigger,
-  Success extends Schema.Schema.Any,
+  Success extends Schema.Top,
   Options extends FunctionOptions = FunctionOptions,
 > {
   readonly [TypeId]: TypeId;
@@ -407,7 +407,7 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, Schema.Schema.Any, FunctionOptions>;
+  export type Any = InngestFunction<string, Trigger, Schema.Top, FunctionOptions>;
   export type Tag<F> = F extends InngestFunction<infer T, any, any, any> ? T : never;
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =
@@ -437,7 +437,7 @@ const Proto = {
 
     for (const t of this.triggers) {
       if (isEventTrigger(t)) {
-        triggers.push({ event: t.event._tag, expression: t.if });
+        triggers.push({ event: t.event.identifier, expression: t.if });
       } else {
         triggers.push({ cron: t.cron });
       }
@@ -574,7 +574,7 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
 export function make<
   const Tag extends string,
   T extends TriggerInput,
-  S extends Schema.Schema.Any,
+  S extends Schema.Top,
   const O extends FunctionOptions = {},
 >(
   tag: Tag,

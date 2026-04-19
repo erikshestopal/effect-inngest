@@ -51,14 +51,14 @@ describe("Regression: StepResult accepts null (sleep results)", () => {
    */
   it.effect("StepResult schema accepts null", () =>
     Effect.gen(function* () {
-      const result = yield* Schema.decodeUnknown(Protocol.StepResult)(null);
+      const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)(null);
       expect(result).toBe(null);
     }),
   );
 
   it.effect("StepResult schema still accepts data objects", () =>
     Effect.gen(function* () {
-      const result = yield* Schema.decodeUnknown(Protocol.StepResult)({ data: "hello" });
+      const result = yield* Schema.decodeUnknownEffect(Protocol.StepResult)({ data: "hello" });
       expect(result).toEqual({ data: "hello" });
     }),
   );
@@ -76,7 +76,7 @@ describe("Regression: StepResult accepts null (sleep results)", () => {
       });
 
       const rawBody = yield* Effect.tryPromise(() => request.text().then(JSON.parse));
-      const body = yield* Schema.decodeUnknown(Protocol.SDKRequestBody)(rawBody);
+      const body = yield* Schema.decodeUnknownEffect(Protocol.SDKRequestBody)(rawBody);
 
       expect(body.steps["step-hash-1"]).toEqual({ data: "some data" });
       expect(body.steps["step-hash-2"]).toBe(null);
@@ -121,7 +121,7 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
           Effect.gen(function* () {
             const [data, _] = yield* Effect.all(
               [step.run("fetch-data", Effect.succeed(`Data: ${event.taskId}`)), step.sleep("wait", "5 seconds")],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { data, sleepCompleted: true };
           }),

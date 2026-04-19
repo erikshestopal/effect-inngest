@@ -85,7 +85,7 @@ describe("RetryAfterError Behavior", () => {
           expect(response.status).toBe(206);
 
           const body = yield* Effect.tryPromise(() => response.json()).pipe(
-            Effect.flatMap(Schema.decodeUnknown(StepErrorResponse)),
+            Effect.flatMap(Schema.decodeUnknownEffect(StepErrorResponse)),
           );
 
           expect(body).toHaveLength(1);

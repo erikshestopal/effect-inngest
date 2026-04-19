@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Logger from "effect/Logger";
@@ -40,7 +40,7 @@ const ClientLive = InngestClient.layer({
 
 HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
   HttpServer.withLogAddress,
-  Layer.provide(Logger.pretty),
+  Layer.provide(Logger.layer([Logger.consolePretty()])),
   Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
   Layer.provide(HelloFnHandler),
   Layer.provide(ClientLive),

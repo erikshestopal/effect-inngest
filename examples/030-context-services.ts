@@ -1,19 +1,19 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
 
-class EmailService extends Context.Tag("EmailService")<
+class EmailService extends Context.Service<
   EmailService,
   {
     readonly send: (to: string, subject: string, body: string) => Effect.Effect<void>;
   }
->() {}
+>()("EmailService") {}
 
 const EmailServiceLive = Layer.succeed(EmailService, {
   send: (to, subject, body) =>

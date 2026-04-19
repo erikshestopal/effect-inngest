@@ -1,11 +1,10 @@
 /**
  * @since 0.1.0
  */
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
 import * as Config from "effect/Config";
-import type * as ConfigError from "effect/ConfigError";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -122,14 +121,14 @@ export const EventPayload = Schema.Struct({
 });
 
 const SendEventResponse = Schema.Struct({
-  ids: Schema.optionalWith(Schema.Array(Schema.String), { default: () => [] }),
+  ids: Schema.Array(Schema.String).pipe(Schema.withDecodingDefaultType(Effect.succeed([]))),
   status: Schema.optional(Schema.Number),
 });
 
 type EventPayload = typeof EventPayload.Type;
 type SendEventResponse = typeof SendEventResponse.Type;
 
-class SendEventError extends Schema.TaggedError<SendEventError>()("SendEventError", {
+class SendEventError extends Schema.TaggedErrorClass<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
 }) {}
@@ -149,7 +148,9 @@ interface InngestClientService {
  * @since 0.1.0
  * @category context
  */
-export class InngestClient extends Context.Tag("effect-inngest/InngestClient")<InngestClient, InngestClientService>() {}
+export class InngestClient extends Context.Service<InngestClient, InngestClientService>()(
+  "effect-inngest/InngestClient",
+) {}
 
 const resolveMode = (config: ClientConfig): ClientMode => config.mode ?? "dev";
 
@@ -166,10 +167,12 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): In
 
   const sendEvent = (events: ReadonlyArray<EventPayload>): Effect.Effect<SendEventResponse, SendEventError> => {
     if (!config.eventKey && mode === "cloud") {
-      return new SendEventError({
-        message: "Event key is required to send events in cloud mode",
-        events: events.map((e) => e.name),
-      });
+      return Effect.fail(
+        new SendEventError({
+          message: "Event key is required to send events in cloud mode",
+          events: events.map((e) => e.name),
+        }),
+      );
     }
 
     const key = config.eventKey ?? "local";
@@ -198,12 +201,13 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): In
       Effect.flatMap(HttpClientResponse.schemaBodyJson(SendEventResponse)),
       Effect.map((response) => ({ ids: response.ids, status: response.status })),
       Effect.scoped,
-      Effect.catchAll(
-        (error) =>
+      Effect.catch((error) =>
+        Effect.fail(
           new SendEventError({
             message: `Failed to send events: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
             events: eventNames,
           }),
+        ),
       ),
     );
   };
@@ -234,7 +238,10 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): In
 export const layer = (config: ClientConfig): Layer.Layer<InngestClient, never, HttpClient.HttpClient> =>
   Layer.effect(
     InngestClient,
-    Effect.map(HttpClient.HttpClient, (httpClient) => makeClient(config, httpClient)),
+    Effect.gen(function* () {
+      const httpClient = yield* HttpClient.HttpClient;
+      return makeClient(config, httpClient);
+    }),
   );
 
 /**
@@ -244,13 +251,15 @@ export const layer = (config: ClientConfig): Layer.Layer<InngestClient, never, H
  * @category layers
  */
 export const layerConfig = (
-  config: Config.Config.Wrap<ClientConfig>,
-): Layer.Layer<InngestClient, ConfigError.ConfigError, HttpClient.HttpClient> =>
+  config: Config.Wrap<ClientConfig>,
+): Layer.Layer<InngestClient, Config.ConfigError, HttpClient.HttpClient> =>
   Layer.effect(
     InngestClient,
-    Effect.flatMap(Config.unwrap(config), (resolvedConfig) =>
-      Effect.map(HttpClient.HttpClient, (httpClient) => makeClient(resolvedConfig, httpClient)),
-    ),
+    Effect.gen(function* () {
+      const resolvedConfig = yield* Config.unwrap(config);
+      const httpClient = yield* HttpClient.HttpClient;
+      return makeClient(resolvedConfig, httpClient);
+    }),
   );
 
 /**
@@ -266,7 +275,7 @@ export const layerConfig = (
  * @since 0.1.0
  * @category layers
  */
-export const layerFromEnv: Layer.Layer<InngestClient, ConfigError.ConfigError, HttpClient.HttpClient> = layerConfig(
+export const layerFromEnv: Layer.Layer<InngestClient, Config.ConfigError, HttpClient.HttpClient> = layerConfig(
   Config.all({
     id: Config.string("INNGEST_APP_ID").pipe(Config.withDefault("app")),
     eventKey: Config.string("INNGEST_EVENT_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),

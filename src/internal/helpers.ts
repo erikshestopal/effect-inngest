@@ -25,8 +25,8 @@ const periods = [
  * Supports weeks, days, hours, minutes, and seconds. Years/months are converted
  * to their equivalent in weeks/days.
  */
-export const timeStr = (input: Duration.DurationInput): string => {
-  let ms = Duration.toMillis(Duration.decode(input));
+export const timeStr = (input: Duration.Input): string => {
+  let ms = Duration.toMillis(Duration.fromInputUnsafe(input));
 
   const [, result] = periods.reduce<[number, string]>(
     ([num, str], [suffix, period]) => {

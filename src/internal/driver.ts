@@ -2,9 +2,23 @@
  * Driver execution logic.
  * @internal
  */
-import * as Headers from "@effect/platform/Headers";
-import * as HttpTraceContext from "@effect/platform/HttpTraceContext";
-import { Array as Arr, Chunk, Context, Duration, Effect, HashMap, Option, pipe, Predicate, Ref, Schema } from "effect";
+import * as Headers from "effect/unstable/http/Headers";
+import * as HttpTraceContext from "effect/unstable/http/HttpTraceContext";
+import {
+  Array as Arr,
+  Cause,
+  Chunk,
+  Context,
+  Duration,
+  Effect,
+  HashMap,
+  Option,
+  pipe,
+  Predicate,
+  Ref,
+  Result,
+  Schema,
+} from "effect";
 import type { InngestFunction } from "../Function.js";
 import { InngestClient } from "../Client.js";
 import { isRetryAfterError, isNonRetriableError, isStepError, type RetryAfterError, type StepError } from "./errors.js";
@@ -22,15 +36,15 @@ export interface TraceHeaders {
 const SDK_VERSION = "2.0.0";
 
 export class ExecutionResult extends Schema.Class<ExecutionResult>("ExecutionResult")({
-  status: Schema.Literal(200, 206, 500),
+  status: Schema.Literals([200, 206, 500]),
   body: Schema.Unknown,
-  headers: Schema.Record({ key: Schema.String, value: Schema.String }),
+  headers: Schema.Record(Schema.String, Schema.String),
 }) {}
 
 const isStepInterrupt = Schema.is(StepInterrupt);
 
 const isSomeWithValue = (v: unknown): v is { _tag: "Some"; value: unknown } =>
-  Predicate.isRecord(v) && Predicate.hasProperty(v, "_tag") && v._tag === "Some" && Predicate.hasProperty(v, "value");
+  Predicate.isObject(v) && Predicate.hasProperty(v, "_tag") && v._tag === "Some" && Predicate.hasProperty(v, "value");
 
 const extractStepInterrupt = (value: unknown): Option.Option<StepInterrupt> =>
   pipe(
@@ -43,15 +57,18 @@ const extractStepInterrupt = (value: unknown): Option.Option<StepInterrupt> =>
     ),
   );
 
-const collectStepInterruptsFromError = (error: unknown): Chunk.Chunk<StepInterrupt> =>
-  pipe(
-    extractStepInterrupt(error),
-    Option.match({
-      onSome: Chunk.of,
-      onNone: () =>
-        Array.isArray(error) ? Chunk.fromIterable(Arr.filterMap(error, extractStepInterrupt)) : Chunk.empty(),
-    }),
-  );
+const collectStepInterruptsFromCause = <E>(cause: Cause.Cause<E>): Chunk.Chunk<StepInterrupt> => {
+  const interrupts: Array<StepInterrupt> = [];
+  for (const reason of cause.reasons) {
+    if (Cause.isFailReason(reason)) {
+      const interrupt = extractStepInterrupt(reason.error);
+      if (Option.isSome(interrupt)) {
+        interrupts.push(interrupt.value);
+      }
+    }
+  }
+  return Chunk.fromIterable(interrupts);
+};
 
 const toUserError = (error: unknown): typeof Protocol.UserError.Type =>
   Protocol.UserError.make({
@@ -82,8 +99,9 @@ export const execute = <F extends InngestFunction.Any, R>(
     const result = yield* Effect.scoped(handler(context)).pipe(
       Effect.provideService(Step, step),
       Effect.map((value) => ExecutionResult.make({ status: 200, body: value, headers })),
-      Effect.catchAll((error) => {
-        const interrupts = collectStepInterruptsFromError(error);
+      Effect.catchCause((cause) => {
+        // Collect all step interrupts from the cause (handles parallel failures)
+        const interrupts = collectStepInterruptsFromCause(cause);
 
         if (!Chunk.isEmpty(interrupts)) {
           const interruptArray = Chunk.toReadonlyArray(interrupts);
@@ -92,7 +110,7 @@ export const execute = <F extends InngestFunction.Any, R>(
           const hasNonRetriableError = opcodes.some(
             (op) =>
               op.op === Protocol.Opcode.StepError &&
-              Predicate.isRecord(op.error) &&
+              Predicate.isObject(op.error) &&
               Predicate.hasProperty(op.error, "noRetry") &&
               op.error.noRetry === true,
           );
@@ -107,6 +125,25 @@ export const execute = <F extends InngestFunction.Any, R>(
           const encodedOpcodes = Schema.encodeSync(Schema.Array(Protocol.GeneratorOpcode))(opcodes);
           return Effect.succeed(ExecutionResult.make({ status: 206, body: encodedOpcodes, headers: responseHeaders }));
         }
+
+        // Extract the first error from cause for non-interrupt error handling.
+        // `findErrorOption` only matches typed failures; fall back to the first
+        // defect (Effect.die, unchecked throws) so we surface the original error.
+        const errorOpt = Option.orElse(Cause.findErrorOption(cause), () => {
+          const dieReason = cause.reasons.find(Cause.isDieReason);
+          return dieReason ? Option.some(dieReason.defect) : Option.none();
+        });
+        if (Option.isNone(errorOpt)) {
+          // No error in cause - shouldn't happen, but handle gracefully
+          return Effect.succeed(
+            ExecutionResult.make({
+              status: 500,
+              body: { error: { name: "Error", message: "Unknown error" } },
+              headers: { ...headers, [Protocol.Headers.NoRetry]: "false" },
+            }),
+          );
+        }
+        const error = errorOpt.value;
 
         // Check for RetryAfterError - use type guard and direct access
         if (isRetryAfterError(error)) {
@@ -138,7 +175,7 @@ export const execute = <F extends InngestFunction.Any, R>(
         );
       }),
 
-      Effect.catchAllDefect((defect) =>
+      Effect.catchDefect((defect) =>
         Effect.succeed(
           ExecutionResult.make({
             status: 500,
@@ -182,7 +219,7 @@ export interface DriverService {
   ) => Effect.Effect<ExecutionResult, never, R | InngestClient>;
 }
 
-export class Driver extends Context.Tag("effect-inngest/Driver")<Driver, DriverService>() {}
+export class Driver extends Context.Service<Driver, DriverService>()("effect-inngest/Driver") {}
 
 export const layer = (options: { readonly appName: string }) =>
   Effect.succeed({

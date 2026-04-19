@@ -3,10 +3,10 @@
  * @description Unit tests for Handler module.
  */
 
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
-import * as HttpClientError from "@effect/platform/HttpClientError";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpClientError from "effect/unstable/http/HttpClientError";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -96,12 +96,13 @@ describe("Handler.buildServeUrl coverage", () => {
 
   it.effect("handles registration HTTP error", () =>
     Effect.gen(function* () {
-      const mockHttpClient = HttpClient.make((_req) =>
+      const mockHttpClient = HttpClient.make((req) =>
         Effect.fail(
-          new HttpClientError.RequestError({
-            request: HttpClientRequest.get("http://localhost"),
-            reason: "Transport",
-            cause: new Error("Network error"),
+          new HttpClientError.HttpClientError({
+            reason: new HttpClientError.TransportError({
+              request: req,
+              cause: new Error("Network error"),
+            }),
           }),
         ),
       );

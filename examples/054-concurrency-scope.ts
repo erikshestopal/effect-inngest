@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -15,7 +15,7 @@ class DemoProcessItem extends Schema.TaggedClass<DemoProcessItem>()("demo/proces
 
 class DemoSendNotification extends Schema.TaggedClass<DemoSendNotification>()("demo/send-notification", {
   userId: Schema.String,
-  channel: Schema.Literal("email", "sms", "push"),
+  channel: Schema.Literals(["email", "sms", "push"]),
 }) {}
 
 const ProcessItemFn = InngestFunction.make("process-item", {

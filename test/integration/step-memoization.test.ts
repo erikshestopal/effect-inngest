@@ -48,7 +48,7 @@ describe("TB-002: Step Memoization", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -99,7 +99,7 @@ describe("TB-002: Step Memoization", () => {
 
         expect(response.status).toBe(200);
         const result = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(ProcessOrderResult)),
+          Effect.flatMap(Schema.decodeUnknownEffect(ProcessOrderResult)),
         );
         expect(result).toEqual({ orderId: "order_123", total: 50 });
       } finally {

@@ -1,17 +1,16 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
 
 class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
   orderId: Schema.String,
   amount: Schema.Number,
-  customerId: Schema.optionalWith(Schema.String, { as: "Option" }),
+  customerId: Schema.optional(Schema.String),
 }) {}
 
 const HighValueOrderFn = InngestFunction.make("process-high-value-order", {
@@ -41,7 +40,7 @@ const HandlersLive = Group.toLayer({
 
   "process-vip-order": ({ event }) =>
     Effect.gen(function* () {
-      const customerId = Option.isSome(event.customerId) ? event.customerId.value : "unknown";
+      const customerId = event.customerId ?? "unknown";
       yield* Effect.log(`VIP order: ${event.orderId} for customer ${customerId}`);
       return { vip: true };
     }),

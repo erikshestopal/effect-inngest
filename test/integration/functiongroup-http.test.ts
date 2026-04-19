@@ -4,7 +4,7 @@
  */
 
 import { Effect, Layer, Schema } from "effect";
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { describe, expect, it } from "../bun-effect.js";
 
 import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";

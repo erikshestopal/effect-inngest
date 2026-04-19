@@ -1,5 +1,4 @@
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
+import { HttpClient, HttpClientResponse } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -62,7 +61,7 @@ const makeMockHttpClient = (
   );
 
 /** Network error type for testing failure scenarios */
-class TestNetworkError extends Schema.TaggedError<TestNetworkError>()("TestNetworkError", {
+class TestNetworkError extends Schema.TaggedErrorClass<TestNetworkError>()("TestNetworkError", {
   message: Schema.String,
 }) {}
 

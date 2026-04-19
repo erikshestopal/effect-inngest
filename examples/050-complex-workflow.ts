@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -42,7 +42,7 @@ const OrderWorkflowFn = InngestFunction.make("process-order", {
   trigger: { event: OrderPlaced },
   success: Schema.Struct({
     orderId: Schema.String,
-    status: Schema.Literal("completed", "payment-timeout", "validation-failed"),
+    status: Schema.Literals(["completed", "payment-timeout", "validation-failed"]),
     transactionId: Schema.NullOr(Schema.String),
     deliveryDate: Schema.NullOr(Schema.String),
   }),

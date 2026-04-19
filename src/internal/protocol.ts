@@ -2,21 +2,25 @@
  * Wire protocol schemas and opcode factories for Inngest communication.
  * @internal
  */
-import { Predicate, Struct } from "effect";
+import { Effect, Predicate, SchemaTransformation, Struct } from "effect";
 import * as Schema from "effect/Schema";
 
 const stripTopLevelTag = (value: unknown): unknown => {
-  if (Predicate.isRecord(value)) {
-    return Struct.omit(value as Record<string, unknown>, "_tag");
+  if (Predicate.isObject(value)) {
+    return Struct.omit(value as Record<string, unknown>, ["_tag"]);
   }
   return value;
 };
 
-const WireUnknown = Schema.transform(Schema.Unknown, Schema.Unknown, {
-  strict: true,
-  decode: (value) => value,
-  encode: (value) => stripTopLevelTag(value),
-});
+const WireUnknown = Schema.Unknown.pipe(
+  Schema.decodeTo(
+    Schema.Unknown,
+    SchemaTransformation.transform({
+      decode: (value) => value,
+      encode: (value) => stripTopLevelTag(value),
+    }),
+  ),
+);
 
 export const Opcode = {
   None: "None",
@@ -48,9 +52,7 @@ export class UserError extends Schema.Class<UserError>("UserError")({
 }) {}
 
 export const StepResult = Schema.NullOr(
-  Schema.Record({ key: Schema.String, value: Schema.Unknown }).pipe(
-    Schema.annotations({ identifier: "StepResultObject" }),
-  ),
+  Schema.Record(Schema.String, Schema.Unknown).pipe(Schema.annotate({ identifier: "StepResultObject" })),
 );
 
 export class FunctionStack extends Schema.Class<FunctionStack>("FunctionStack")({
@@ -61,36 +63,37 @@ export class FunctionStack extends Schema.Class<FunctionStack>("FunctionStack")(
 export class InngestEvent extends Schema.Class<InngestEvent>("InngestEvent")({
   id: Schema.optional(Schema.String),
   name: Schema.String,
-  data: Schema.optionalWith(Schema.Record({ key: Schema.String, value: Schema.Unknown }), {
-    default: () => ({}),
-    nullable: true,
-  }),
+  data: Schema.NullOr(Schema.Record(Schema.String, Schema.Unknown)).pipe(
+    Schema.withDecodingDefaultType(Effect.succeed({})),
+  ),
 
   ts: Schema.optional(Schema.Number),
-  user: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
+  user: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
   v: Schema.optional(Schema.String),
 }) {}
 
 export class SDKRequestContext extends Schema.Class<SDKRequestContext>("SDKRequestContext")({
   fn_id: Schema.String,
   run_id: Schema.String,
-  env: Schema.optionalWith(Schema.String, { default: () => "dev" }),
-  step_id: Schema.optionalWith(Schema.String, { default: () => "step" }),
-  attempt: Schema.optionalWith(Schema.Number, { default: () => 0 }),
-  max_attempts: Schema.optionalWith(Schema.Number, { default: () => 4 }),
-  stack: Schema.optionalWith(FunctionStack, { default: () => FunctionStack.make({ stack: [], current: 0 }) }),
-  qi_id: Schema.optionalWith(Schema.String, { default: () => "" }),
-  disable_immediate_execution: Schema.optionalWith(Schema.Boolean, { default: () => false }),
-  use_api: Schema.optionalWith(Schema.Boolean, { default: () => false }),
+  env: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed("dev"))),
+  step_id: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed("step"))),
+  attempt: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(0))),
+  max_attempts: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(4))),
+  stack: FunctionStack.pipe(
+    Schema.withDecodingDefaultType(Effect.succeed(FunctionStack.make({ stack: [], current: 0 }))),
+  ),
+  qi_id: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed(""))),
+  disable_immediate_execution: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
+  use_api: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
 }) {}
 
 export class SDKRequestBody extends Schema.Class<SDKRequestBody>("SDKRequestBody")({
   event: InngestEvent,
   events: Schema.Array(InngestEvent),
-  steps: Schema.optionalWith(Schema.Record({ key: Schema.String, value: StepResult }), { default: () => ({}) }),
+  steps: Schema.Record(Schema.String, StepResult).pipe(Schema.withDecodingDefaultType(Effect.succeed({}))),
   ctx: SDKRequestContext,
-  version: Schema.optionalWith(Schema.Number, { default: () => 1 }),
-  use_api: Schema.optionalWith(Schema.Boolean, { default: () => false }),
+  version: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(1))),
+  use_api: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
 }) {}
 
 export const Headers = {
@@ -108,7 +111,7 @@ export const Headers = {
 } as const;
 
 export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpcode")({
-  op: Schema.Literal(
+  op: Schema.Literals([
     Opcode.None,
     Opcode.Step,
     Opcode.StepRun,
@@ -124,10 +127,10 @@ export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpc
     Opcode.StepFailed,
     Opcode.SyncRunComplete,
     Opcode.DiscoveryRequest,
-  ),
+  ]),
   id: Schema.String,
   name: Schema.String,
-  mode: Schema.optional(Schema.Literal("sync", "async")),
+  mode: Schema.optional(Schema.Literals(["sync", "async"])),
   opts: Schema.optional(WireUnknown),
   data: Schema.optional(WireUnknown),
   error: Schema.optional(UserError),
@@ -175,22 +178,20 @@ const IntrospectionBase = Schema.Struct({
   has_event_key: Schema.Boolean,
   has_signing_key: Schema.Boolean,
   has_signing_key_fallback: Schema.Boolean,
-  mode: Schema.Literal("cloud", "dev"),
+  mode: Schema.Literals(["cloud", "dev"]),
   schema_version: Schema.Literal("2024-05-24"),
-  extra: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
+  extra: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
 });
 
-export const IntrospectionUnauthenticated = Schema.extend(
-  IntrospectionBase,
-  Schema.Struct({
-    authentication_succeeded: Schema.Union(Schema.Literal(false), Schema.Null),
-    functions: Schema.optionalWith(Schema.Array(Schema.Unknown), { exact: true }),
+export const IntrospectionUnauthenticated = IntrospectionBase.pipe(
+  Schema.fieldsAssign({
+    authentication_succeeded: Schema.Union([Schema.Literal(false), Schema.Null]),
+    functions: Schema.optionalKey(Schema.Array(Schema.Unknown)),
   }),
 );
 
-export const IntrospectionAuthenticated = Schema.extend(
-  IntrospectionBase,
-  Schema.Struct({
+export const IntrospectionAuthenticated = IntrospectionBase.pipe(
+  Schema.fieldsAssign({
     authentication_succeeded: Schema.Literal(true),
     api_origin: Schema.String,
     app_id: Schema.String,
@@ -207,7 +208,7 @@ export const IntrospectionAuthenticated = Schema.extend(
   }),
 );
 
-export const IntrospectionResponse = Schema.Union(IntrospectionAuthenticated, IntrospectionUnauthenticated);
+export const IntrospectionResponse = Schema.Union([IntrospectionAuthenticated, IntrospectionUnauthenticated]);
 
 export const RegisterResponse = Schema.Struct({
   message: Schema.optional(Schema.String),

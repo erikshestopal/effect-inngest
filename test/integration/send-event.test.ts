@@ -1,6 +1,4 @@
-import { FetchHttpClient } from "@effect/platform";
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
+import { FetchHttpClient, HttpClient, HttpClientResponse } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -149,7 +147,7 @@ describe("TB-006: Send Event", () => {
         expect(response1.status).toBe(206);
 
         const opcodes1 = yield* Effect.tryPromise(() => response1.json());
-        const steps1 = yield* Schema.decodeUnknown(StepOpcodesSchema)(opcodes1);
+        const steps1 = yield* Schema.decodeUnknownEffect(StepOpcodesSchema)(opcodes1);
         expect(steps1).toHaveLength(1);
         const stepRunHash = steps1[0]!.id;
 
@@ -158,7 +156,7 @@ describe("TB-006: Send Event", () => {
         expect(response2.status).toBe(206);
 
         const opcodes2 = yield* Effect.tryPromise(() => response2.json());
-        const steps2 = yield* Schema.decodeUnknown(StepOpcodesSchema)(opcodes2);
+        const steps2 = yield* Schema.decodeUnknownEffect(StepOpcodesSchema)(opcodes2);
         expect(steps2).toHaveLength(1);
         const sendEventHash = steps2[0]!.id;
 
@@ -220,7 +218,7 @@ describe("TB-006: Send Event", () => {
         expect(response.status).toBe(206);
 
         const opcodes = yield* Effect.tryPromise(() => response.json());
-        const steps = yield* Schema.decodeUnknown(StepOpcodesSchema)(opcodes);
+        const steps = yield* Schema.decodeUnknownEffect(StepOpcodesSchema)(opcodes);
         expect(steps).toHaveLength(1);
         expect(steps[0]!.id.length).toBe(40); // SHA1 hash
       } finally {
