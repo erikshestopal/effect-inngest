@@ -43,6 +43,7 @@ const ExternalApiCallFn = InngestFunction.make("external-api-call", {
   concurrency: {
     limit: 2,
     scope: "account",
+    key: "event.data.userId",
   },
   success: Schema.Struct({ apiCallComplete: Schema.Boolean }),
 });

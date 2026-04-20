@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { RetryAfterError } from "../../src/index.js";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
@@ -183,10 +183,11 @@ describe("RetryAfterError Behavior", () => {
           expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("false");
 
           const body = (yield* Effect.tryPromise(() => response.json())) as {
-            error: { name: string; message: string };
+            name: string;
+            message: string;
           };
-          expect(body.error.name).toBe("RetryAfterError");
-          expect(body.error.message).toBe("Function rate limited");
+          expect(body.name).toBe("RetryAfterError");
+          expect(body.message).toBe("Function rate limited");
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }

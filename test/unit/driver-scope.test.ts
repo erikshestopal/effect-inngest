@@ -11,7 +11,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestFunction, InngestClient } from "../../src/index.js";
 import { execute } from "../../src/internal/driver.js";
@@ -60,7 +60,7 @@ const clientLayer = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(La
 // --- Tests ---
 
 describe("Issue #3: acquireRelease finalizers should run after handler completes", () => {
-  it.scoped("finalizer runs after step.run completes successfully", () =>
+  it.effect("finalizer runs after step.run completes successfully", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -83,7 +83,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs after step.run fails", () =>
+  it.effect("finalizer runs after step.run fails", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -107,7 +107,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs after step.run dies (defect)", () =>
+  it.effect("finalizer runs after step.run dies (defect)", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -131,7 +131,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs for acquireRelease at handler level (outside steps)", () =>
+  it.effect("finalizer runs for acquireRelease at handler level (outside steps)", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -158,7 +158,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("multiple finalizers all run after handler completes", () =>
+  it.effect("multiple finalizers all run after handler completes", () =>
     Effect.gen(function* () {
       const finalizer1Ran = yield* Ref.make(false);
       const finalizer2Ran = yield* Ref.make(false);

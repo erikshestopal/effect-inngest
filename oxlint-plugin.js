@@ -1,6 +1,4 @@
-import { definePlugin, defineRule } from "oxlint";
-
-const preferOptionFromNullable = defineRule({
+const preferOptionFromNullable = {
   meta: {
     type: "suggestion",
     docs: {
@@ -158,9 +156,9 @@ const preferOptionFromNullable = defineRule({
       },
     };
   },
-});
+};
 
-const noGlobalErrorInEffectFail = defineRule({
+const noGlobalErrorInEffectFail = {
   meta: {
     type: "problem",
     docs: {
@@ -201,9 +199,9 @@ const noGlobalErrorInEffectFail = defineRule({
       },
     };
   },
-});
+};
 
-const preferPredicateHasProperty = defineRule({
+const preferPredicateHasProperty = {
   meta: {
     type: "suggestion",
     docs: {
@@ -245,9 +243,9 @@ const preferPredicateHasProperty = defineRule({
       },
     };
   },
-});
+};
 
-const noGlobalFetch = defineRule({
+const noGlobalFetch = {
   meta: {
     type: "problem",
     docs: {
@@ -270,9 +268,9 @@ const noGlobalFetch = defineRule({
       },
     };
   },
-});
+};
 
-const plugin = definePlugin({
+const plugin = {
   meta: {
     name: "effect-inngest",
   },
@@ -282,6 +280,6 @@ const plugin = definePlugin({
     "no-global-fetch": noGlobalFetch,
     "prefer-predicate-has-property": preferPredicateHasProperty,
   },
-});
+};
 
 export default plugin;

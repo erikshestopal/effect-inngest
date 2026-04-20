@@ -2,7 +2,12 @@
  * @since 0.1.0
  */
 import { Array as Arr, Duration, Predicate, Schema } from "effect";
+import { pipeArguments, type Pipeable } from "effect/Pipeable";
+import * as Checkpoint from "./internal/checkpoint.js";
+import type { CheckpointingOption } from "./internal/checkpoint.js";
 import { timeStr } from "./internal/helpers.js";
+
+export type { CheckpointingOption } from "./internal/checkpoint.js";
 
 /**
  * @since 0.1.0
@@ -321,6 +326,20 @@ export interface FunctionOptions {
    * Batch events configuration.
    */
   readonly batchEvents?: BatchEventsOption;
+
+  /**
+   * Whether to use checkpointing for executions of this function. Overrides
+   * the client-level `checkpointing` setting.
+   *
+   * - `false` disables checkpointing for this function.
+   * - `true` enables checkpointing with safe defaults
+   *   (`bufferedSteps: 1`, `maxInterval: 0`, `maxRuntime: 10s`).
+   * - An object lets you tune `bufferedSteps`, `maxInterval`, `maxRuntime`.
+   *
+   * Defaults to inheriting from the client-level setting (which itself
+   * defaults to enabled with safe defaults).
+   */
+  readonly checkpointing?: CheckpointingOption;
 }
 
 interface RegistrationConfig {
@@ -379,6 +398,11 @@ interface FunctionRegistration {
     readonly key?: string;
   };
   readonly idempotency?: string;
+  readonly checkpoint?: {
+    readonly batch_steps: number;
+    readonly batch_interval: string;
+    readonly max_runtime: string;
+  };
 }
 
 /**
@@ -392,7 +416,7 @@ export interface InngestFunction<
   Triggers extends Trigger,
   Success extends Schema.Top,
   Options extends FunctionOptions = FunctionOptions,
-> {
+> extends Pipeable {
   readonly [TypeId]: TypeId;
   readonly _tag: Tag;
   readonly key: string;
@@ -427,6 +451,11 @@ const isEventTrigger = (t: Trigger): t is EventTrigger => Predicate.hasProperty(
 
 const Proto = {
   [TypeId]: TypeId,
+
+  pipe() {
+    // eslint-disable-next-line prefer-rest-params
+    return pipeArguments(this, arguments);
+  },
 
   toRegistration(this: InngestFunction.Any, config: RegistrationConfig): FunctionRegistration {
     const triggers: Array<{
@@ -484,7 +513,7 @@ const Proto = {
 
     const concurrency =
       opts.concurrency != null
-        ? typeof opts.concurrency === "number"
+        ? Predicate.isNumber(opts.concurrency)
           ? [{ limit: opts.concurrency }]
           : Arr.ensure(opts.concurrency).map((c) => ({
               key: c.key,
@@ -504,6 +533,13 @@ const Proto = {
       : undefined;
 
     const idempotency = opts.idempotency;
+
+    // Function-level checkpoint config only — client-level default is
+    // applied at runtime by the handler. Mirrors how other client defaults
+    // (e.g. retries) interact with registration.
+    const resolvedCheckpoint =
+      opts.checkpointing !== undefined ? Checkpoint.resolveConfig(opts.checkpointing, undefined) : undefined;
+    const checkpoint = resolvedCheckpoint ? Checkpoint.toRegistration(resolvedCheckpoint) : undefined;
 
     const fnId = `${config.appId}-${this._tag}`;
     const stepUrl = new URL(config.url);
@@ -532,6 +568,7 @@ const Proto = {
       singleton,
       batchEvents,
       idempotency,
+      checkpoint,
     };
   },
 };

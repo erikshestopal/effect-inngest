@@ -1,8 +1,8 @@
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
-import { it } from "../bun-effect.js";
+import { it } from "@effect/vitest";
 import { Effect, Layer, Option } from "effect";
-import { describe, expect } from "../bun-effect";
+import { describe, expect } from "@effect/vitest";
 import * as Protocol from "../../src/internal/protocol.js";
 
 // Note: UseApi module uses internal API - test Protocol types instead

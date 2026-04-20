@@ -91,30 +91,38 @@
     }
   },
   "scripts": {
-    "build": "tsdown",
-    "format": "oxfmt",
-    "lint": "oxlint --fix --type-aware --type-check --promise-plugin",
+    "build": "vp pack",
+    "test": "vp test run",
+    "test:watch": "vp test",
+    "format": "vp fmt",
+    "lint": "vp lint --fix --type-aware --type-check --promise-plugin",
     "typecheck": "tsgo --noEmit",
-    "prepare": "effect-language-service patch",
+    "prepare": "vp config && effect-language-service patch && effect-tsgo patch",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "bun run build && changeset publish"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.2",
-    "@changesets/cli": "^2.29.8",
-    "@effect/language-service": "0.72.0",
-    "@effect/platform-bun": "4.0.0-beta.48",
-    "@types/bun": "1.3.6",
-    "@typescript/native-preview": "^7.0.0-dev.20260124.1",
-    "effect": "^4.0.0-beta.48",
-    "oxfmt": "0.26.0",
-    "oxlint": "1.41.0",
-    "oxlint-tsgolint": "0.11.1",
-    "tsdown": "0.20.1",
-    "typescript": "^5.9.3"
+    "@changesets/changelog-github": "^0.6.0",
+    "@changesets/cli": "^2.31.0",
+    "@effect/platform-bun": "4.0.0-beta.59",
+    "@effect/tsgo": "0.5.2",
+    "@effect/vitest": "4.0.0-beta.59",
+    "@types/bun": "1.3.12",
+    "@typescript/native-preview": "^7.0.0-dev.20260420.1",
+    "typescript": "^5.9.3",
+    "vite-plus": "latest"
   },
   "peerDependencies": {
-    "effect": ">=4.0.0"
+    "effect": ">=4.0.0-beta.44",
+    "typescript": ">=5.9"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+  },
+  "packageManager": "bun@1.3.13",
+  "patchedDependencies": {
+    "@effect/vitest@4.0.0-beta.59": "patches/@effect%2Fvitest@4.0.0-beta.59.patch"
   }
 }

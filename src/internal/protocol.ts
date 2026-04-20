@@ -75,25 +75,25 @@ export class InngestEvent extends Schema.Class<InngestEvent>("InngestEvent")({
 export class SDKRequestContext extends Schema.Class<SDKRequestContext>("SDKRequestContext")({
   fn_id: Schema.String,
   run_id: Schema.String,
-  env: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed("dev"))),
-  step_id: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed("step"))),
-  attempt: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(0))),
-  max_attempts: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(4))),
+  env: Schema.String.pipe(Schema.withDecodingDefault(Effect.succeed("dev"))),
+  step_id: Schema.String.pipe(Schema.withDecodingDefault(Effect.succeed("step"))),
+  attempt: Schema.Number.pipe(Schema.withDecodingDefault(Effect.succeed(0))),
+  max_attempts: Schema.Number.pipe(Schema.withDecodingDefault(Effect.succeed(4))),
   stack: FunctionStack.pipe(
     Schema.withDecodingDefaultType(Effect.succeed(FunctionStack.make({ stack: [], current: 0 }))),
   ),
-  qi_id: Schema.String.pipe(Schema.withDecodingDefaultType(Effect.succeed(""))),
-  disable_immediate_execution: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
-  use_api: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
+  qi_id: Schema.String.pipe(Schema.withDecodingDefault(Effect.succeed(""))),
+  disable_immediate_execution: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
+  use_api: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
 }) {}
 
 export class SDKRequestBody extends Schema.Class<SDKRequestBody>("SDKRequestBody")({
   event: InngestEvent,
   events: Schema.Array(InngestEvent),
-  steps: Schema.Record(Schema.String, StepResult).pipe(Schema.withDecodingDefaultType(Effect.succeed({}))),
+  steps: Schema.Record(Schema.String, StepResult).pipe(Schema.withDecodingDefault(Effect.succeed({}))),
   ctx: SDKRequestContext,
-  version: Schema.Number.pipe(Schema.withDecodingDefaultType(Effect.succeed(1))),
-  use_api: Schema.Boolean.pipe(Schema.withDecodingDefaultType(Effect.succeed(false))),
+  version: Schema.Number.pipe(Schema.withDecodingDefault(Effect.succeed(1))),
+  use_api: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
 }) {}
 
 export const Headers = {
@@ -161,9 +161,17 @@ export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): 
 };
 
 export const sleep = (info: StepInfo, duration: string): GeneratorOpcode =>
-  // Official SDK puts duration/timestamp in `name` field, not opts.duration
-  // mode: "async" is required per the Op type definition
-  GeneratorOpcode.make({ op: Opcode.Sleep, id: info.hash, name: duration, displayName: info.name, mode: "async" });
+  // Spec §5.3.2 requires `opts.duration`. The Inngest executor also accepts
+  // `name: duration` (de facto inngest-js behavior); we emit both so both
+  // the spec-strict path and the official-SDK-lenient path see a value.
+  GeneratorOpcode.make({
+    op: Opcode.Sleep,
+    id: info.hash,
+    name: duration,
+    displayName: info.name,
+    mode: "async",
+    opts: { duration },
+  });
 
 export const waitForEvent = (info: StepInfo, opts: { event: string; timeout: string; if?: string }): GeneratorOpcode =>
   mkOpcode(info, Opcode.WaitForEvent, { mode: "async", opts });
@@ -172,6 +180,22 @@ export const invokeFunction = (
   info: StepInfo,
   opts: { function_id: string; payload: unknown; timeout: string },
 ): GeneratorOpcode => mkOpcode(info, Opcode.InvokeFunction, { mode: "async", opts, userland: { id: info.id } });
+
+/**
+ * Terminal opcode emitted by the SDK in checkpoint mode when the function
+ * completes successfully. The executor uses this to correlate run completion
+ * (spec §10.4.1).
+ */
+export const runComplete = (data: unknown): GeneratorOpcode =>
+  GeneratorOpcode.make({ op: Opcode.RunComplete, id: "step", name: "step", data });
+
+/**
+ * Yield opcode emitted by the SDK in checkpoint mode when `maxRuntime` is
+ * exceeded. Tells the executor to schedule a new Call Request to continue
+ * execution (spec §10.4.1).
+ */
+export const discoveryRequest = (): GeneratorOpcode =>
+  GeneratorOpcode.make({ op: Opcode.DiscoveryRequest, id: "step", name: "step" });
 
 const IntrospectionBase = Schema.Struct({
   function_count: Schema.Number,
@@ -210,6 +234,25 @@ export const IntrospectionAuthenticated = IntrospectionBase.pipe(
 
 export const IntrospectionResponse = Schema.Union([IntrospectionAuthenticated, IntrospectionUnauthenticated]);
 
+/**
+ * SDK → executor response shape for PUT sync requests per spec §4.3.1.
+ */
 export const RegisterResponse = Schema.Struct({
-  message: Schema.optional(Schema.String),
+  message: Schema.String,
+  modified: Schema.Boolean,
 });
+
+/**
+ * Executor → SDK response shape from `POST /fn/register` per spec §4.3.4.
+ * On success the body has `{ ok: true, modified?: boolean }`; on failure
+ * the body may carry an `error` string.
+ */
+export const RegisterServerResponse = Schema.Union([
+  Schema.Struct({
+    ok: Schema.Literal(true),
+    modified: Schema.optional(Schema.Boolean),
+  }),
+  Schema.Struct({
+    error: Schema.optional(Schema.String),
+  }),
+]);

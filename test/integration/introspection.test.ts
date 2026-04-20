@@ -2,7 +2,7 @@ import { FetchHttpClient } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
 
 // Type for introspection response body

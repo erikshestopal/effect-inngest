@@ -27,7 +27,7 @@ export const StepErrorResponse = Schema.Array(
   }),
 );
 
-/** Sleep opcode response */
+/** Sleep opcode response — spec §5.3.2 requires `opts.duration` */
 export const SleepOpcodeResponse = Schema.Array(
   Schema.Struct({
     op: Schema.String,
@@ -35,6 +35,7 @@ export const SleepOpcodeResponse = Schema.Array(
     name: Schema.String,
     displayName: Schema.String,
     mode: Schema.Literal("async"),
+    opts: Schema.Struct({ duration: Schema.String }),
   }),
 );
 

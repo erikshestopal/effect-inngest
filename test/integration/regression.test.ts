@@ -4,7 +4,7 @@
  * Each test documents a specific bug that was found and fixed,
  * ensuring we don't regress on these issues.
  */
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { Duration, Effect, Option, Schema } from "effect";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
@@ -431,7 +431,8 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
 
         const response = yield* Effect.tryPromise(() => handler(request));
 
-        expect(response.status).toBe(500);
+        // Spec §4.4.3: non-retriable function errors MUST return 400
+        expect(response.status).toBe(400);
 
         // CRITICAL: X-Inngest-No-Retry must be "true" for NonRetriableError
         // BUG: Currently returns "false" causing infinite retries

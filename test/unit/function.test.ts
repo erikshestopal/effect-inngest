@@ -5,7 +5,7 @@
 
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestFunction } from "../../src/index.js";
 

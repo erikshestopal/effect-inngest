@@ -3,7 +3,7 @@
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import * as Protocol from "../../src/internal/protocol.js";
 
 describe("Protocol coverage", () => {
@@ -529,20 +529,22 @@ describe("Protocol coverage", () => {
     );
   });
 
-  describe("RegisterResponse schema", () => {
-    it.effect("decodes register response with message", () =>
+  describe("RegisterResponse schema (spec §4.3.1)", () => {
+    it.effect("decodes { message, modified } shape", () =>
       Effect.gen(function* () {
         const result = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)({
           message: "Successfully synced 3 functions",
+          modified: true,
         });
         expect(result.message).toBe("Successfully synced 3 functions");
+        expect(result.modified).toBe(true);
       }),
     );
 
-    it.effect("decodes register response without message", () =>
+    it.effect("rejects missing modified field", () =>
       Effect.gen(function* () {
-        const result = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)({});
-        expect(result.message).toBeUndefined();
+        const result = yield* Effect.exit(Schema.decodeUnknownEffect(Protocol.RegisterResponse)({ message: "ok" }));
+        expect(result._tag).toBe("Failure");
       }),
     );
   });
@@ -773,10 +775,11 @@ describe("Protocol coverage", () => {
 
     it.effect("encodes RegisterResponse", () =>
       Effect.gen(function* () {
-        const data = { message: "Synced" };
+        const data = { message: "Synced", modified: true };
         const decoded = yield* Schema.decodeUnknownEffect(Protocol.RegisterResponse)(data);
         const encoded = yield* Schema.encodeEffect(Protocol.RegisterResponse)(decoded);
         expect(encoded.message).toBe("Synced");
+        expect(encoded.modified).toBe(true);
       }),
     );
 

@@ -20,9 +20,14 @@ export const extractBodyJson = (body: {
   return Option.none();
 };
 
-export const TestClient = InngestClient.layer({ id: "test-app", eventKey: "test-key", mode: "dev" }).pipe(
-  Layer.provide(FetchHttpClient.layer),
-);
+// `checkpointing: false` keeps existing tests on the classic 1-op-per-206
+// path. Checkpoint-specific tests build their own clients with the option on.
+export const TestClient = InngestClient.layer({
+  id: "test-app",
+  eventKey: "test-key",
+  mode: "dev",
+  checkpointing: false,
+}).pipe(Layer.provide(FetchHttpClient.layer));
 
 // Request Builder
 

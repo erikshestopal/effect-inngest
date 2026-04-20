@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -66,6 +66,9 @@ describe("TB-003: Durable Sleep", () => {
               "mode": "async",
               "name": "5s",
               "op": "Sleep",
+              "opts": {
+                "duration": "5s",
+              },
             },
           ]
         `);
@@ -144,6 +147,9 @@ describe("TB-003: Durable Sleep", () => {
               "mode": "async",
               "name": "2025-12-31T23:59:59.000Z",
               "op": "Sleep",
+              "opts": {
+                "duration": "2025-12-31T23:59:59.000Z",
+              },
             },
           ]
         `);

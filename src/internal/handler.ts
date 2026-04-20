@@ -2,17 +2,21 @@
  * Internal handler implementation.
  * @internal
  */
+import * as Headers from "effect/unstable/http/Headers";
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as Cause from "effect/Cause";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
+import * as Option from "effect/Option";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
 import type { InngestGroup } from "../Group.js";
+import * as Checkpoint from "./checkpoint.js";
 import { Signature, SignatureError } from "./signature.js";
 import * as Protocol from "./protocol.js";
 export { SignatureError } from "./signature.js";
@@ -28,7 +32,7 @@ const SDK_VERSION = "2.0.0";
 const baseHeaders = (): Record<string, string> => ({
   "Content-Type": "application/json",
   [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
-  [Protocol.Headers.RequestVersion]: "1",
+  [Protocol.Headers.RequestVersion]: "2",
 });
 
 const buildServeUrl = (requestUrl: string, serveHost?: string, servePath?: string): URL => {
@@ -48,108 +52,140 @@ export interface HandlerResponse<T> {
   readonly body: T;
 }
 
-export const verifyAndParseRequestBody = (
+export const verifyAndParseRequestBody = Effect.fn("effect-inngest/handler/verifyAndParseRequestBody")(function* (
   request: HttpServerRequest.HttpServerRequest,
-): Effect.Effect<
-  typeof Protocol.SDKRequestBody.Type,
-  SignatureError | InvalidRequestError,
-  InngestClient | Signature
-> =>
-  Effect.gen(function* () {
-    const client = yield* InngestClient;
-    const sig = yield* Signature;
-    const config = client.config;
-    const isDev = client.mode === "dev";
+) {
+  const client = yield* InngestClient;
+  const sig = yield* Signature;
+  const config = client.config;
+  const isDev = client.mode === "dev";
 
-    const bodyText = yield* request.text.pipe(
-      Effect.mapError((error) => new InvalidRequestError({ message: `Failed to read request body: ${String(error)}` })),
-    );
+  const bodyText = yield* request.text.pipe(
+    Effect.mapError((error) => {
+      const msg =
+        Predicate.hasProperty(error, "message") && typeof error.message === "string" ? error.message : "unknown";
+      return new InvalidRequestError({ message: `Failed to read request body: ${msg}` });
+    }),
+  );
 
-    yield* sig.verify({
-      body: new TextEncoder().encode(bodyText),
-      signatureHeader: request.headers[Protocol.Headers.Signature.toLowerCase()],
-      signingKey: config.signingKey,
-      signingKeyFallback: config.signingKeyFallback,
-      isDev,
-    });
-
-    return yield* Schema.decodeUnknownEffect(Schema.fromJsonString(Protocol.SDKRequestBody))(bodyText).pipe(
-      Effect.mapError((error) => new InvalidRequestError({ message: `Invalid request body: ${String(error)}` })),
-    );
+  yield* sig.verify({
+    body: new TextEncoder().encode(bodyText),
+    signatureHeader: Option.getOrUndefined(Headers.get(request.headers, Protocol.Headers.Signature)),
+    signingKey: config.signingKey,
+    signingKeyFallback: config.signingKeyFallback,
+    isDev,
   });
 
-export const handleIntrospection = (
+  return yield* Schema.decodeUnknownEffect(Schema.fromJsonString(Protocol.SDKRequestBody))(bodyText).pipe(
+    Effect.mapError((error) => new InvalidRequestError({ message: `Invalid request body: ${String(error)}` })),
+  );
+});
+
+export const handleIntrospection = Effect.fn("effect-inngest/handler/handleIntrospection")(function* (
   group: InngestGroup.Any,
   _requestUrl: string,
-): Effect.Effect<HandlerResponse<typeof Protocol.IntrospectionResponse.Type>, never, InngestClient> =>
-  Effect.gen(function* () {
-    const client = yield* InngestClient;
-    const config = client.config;
+) {
+  const client = yield* InngestClient;
+  const config = client.config;
 
-    const body: typeof Protocol.IntrospectionResponse.Type = {
-      function_count: group.functions.size,
-      has_event_key: config.eventKey !== undefined,
-      has_signing_key: config.signingKey !== undefined,
-      has_signing_key_fallback: config.signingKeyFallback !== undefined,
-      mode: client.mode === "dev" ? "dev" : "cloud",
-      schema_version: "2024-05-24",
-      authentication_succeeded: null,
-    };
+  const body: typeof Protocol.IntrospectionResponse.Type = {
+    function_count: group.functions.size,
+    has_event_key: config.eventKey !== undefined,
+    has_signing_key: config.signingKey !== undefined,
+    has_signing_key_fallback: config.signingKeyFallback !== undefined,
+    mode: client.mode === "dev" ? "dev" : "cloud",
+    schema_version: "2024-05-24",
+    authentication_succeeded: null,
+  };
 
-    return { status: 200, headers: baseHeaders(), body };
-  });
+  return { status: 200, headers: baseHeaders(), body } as HandlerResponse<typeof Protocol.IntrospectionResponse.Type>;
+});
 
-export const handleRegistration = (
+export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegistration")(function* (
   group: InngestGroup.Any,
   requestUrl: string,
-): Effect.Effect<
-  HandlerResponse<typeof Protocol.RegisterResponse.Type>,
-  never,
-  InngestClient | HttpClient.HttpClient
-> =>
-  Effect.gen(function* () {
-    const client = yield* InngestClient;
-    const httpClient = yield* HttpClient.HttpClient;
-    const config = client.config;
-    const url = buildServeUrl(requestUrl, config.serveHost, config.servePath);
+) {
+  const client = yield* InngestClient;
+  const httpClient = yield* HttpClient.HttpClient;
+  const config = client.config;
+  const url = buildServeUrl(requestUrl, config.serveHost, config.servePath);
 
-    const functions = Array.from(group.functions.values()).map((fn) =>
-      fn.toRegistration({ appId: config.id, url: url.href }),
+  const functions = Array.from(group.functions.values()).map((fn) =>
+    fn.toRegistration({ appId: config.id, url: url.href }),
+  );
+
+  const registerUrl = new URL("fn/register", client.apiBaseUrl).toString();
+  const request = HttpClientRequest.post(registerUrl).pipe(
+    HttpClientRequest.setHeaders({
+      ...baseHeaders(),
+      Authorization: `Bearer ${config.signingKey ?? ""}`,
+    }),
+    HttpClientRequest.bodyJsonUnsafe({
+      url: url.href,
+      v: "0.1",
+      deployType: "ping" as const,
+      sdk: `effect-inngest:v${SDK_VERSION}`,
+      appName: config.id,
+      framework: "effect",
+      functions,
+    }),
+  );
+
+  // Spec §4.3.1: PUT sync responds with `{ message: string; modified: boolean }`.
+  // Spec §4.3.3 / §4.3.4: 500 on failure with `modified: false`; 200 on success
+  // with the executor-supplied `modified` value (or `false` if omitted).
+  return yield* Effect.gen(function* () {
+    const response = yield* httpClient.execute(request).pipe(Effect.scoped);
+    const responseBody = yield* HttpClientResponse.schemaBodyJson(Protocol.RegisterServerResponse)(response).pipe(
+      Effect.catch(() => Effect.succeed({ error: "Unknown registration response" } as const)),
     );
 
-    const registerUrl = new URL("fn/register", client.apiBaseUrl).toString();
-    const request = HttpClientRequest.post(registerUrl).pipe(
-      HttpClientRequest.setHeaders({
-        ...baseHeaders(),
-        Authorization: `Bearer ${config.signingKey ?? ""}`,
-      }),
-      HttpClientRequest.bodyJsonUnsafe({
-        url: url.href,
-        v: "0.1",
-        deployType: "ping" as const,
-        sdk: `effect-inngest:v${SDK_VERSION}`,
-        appName: config.id,
-        framework: "effect",
-        functions,
-      }),
-    );
-
-    const response = yield* httpClient.execute(request).pipe(
-      Effect.flatMap(HttpClientResponse.schemaBodyJson(Protocol.RegisterResponse)),
-      Effect.scoped,
-      Effect.catch((error) =>
-        Effect.succeed({
-          message: `Registration failed: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
-        }),
-      ),
-    );
+    if (response.status !== 200 || !Predicate.hasProperty(responseBody, "ok")) {
+      return {
+        status: 500,
+        headers: baseHeaders(),
+        body: {
+          message:
+            Predicate.hasProperty(responseBody, "error") && responseBody.error
+              ? responseBody.error
+              : `Registration failed with status ${response.status}`,
+          modified: false,
+        },
+      } as HandlerResponse<typeof Protocol.RegisterResponse.Type>;
+    }
 
     return {
       status: 200,
       headers: baseHeaders(),
-      body: response,
-    };
-  });
+      body: {
+        message: "Successfully synced.",
+        modified: responseBody.modified ?? false,
+      },
+    } as HandlerResponse<typeof Protocol.RegisterResponse.Type>;
+  }).pipe(
+    Effect.catchCause((cause) => {
+      // Network/transport failure (e.g. die from HttpClient mock). Per
+      // §4.3.3 SHOULD return 500 with the body shape; never let the
+      // toWebHandler default 500 wrapper escape.
+      const errorOpt = Cause.findErrorOption(cause);
+      const dieReason = cause.reasons.find(Cause.isDieReason);
+      const message = Option.isSome(errorOpt)
+        ? Predicate.hasProperty(errorOpt.value, "message") && typeof errorOpt.value.message === "string"
+          ? errorOpt.value.message
+          : "Registration failed"
+        : dieReason
+          ? Predicate.hasProperty(dieReason.defect, "message") && typeof dieReason.defect.message === "string"
+            ? dieReason.defect.message
+            : "Registration failed"
+          : "Registration failed";
+      return Effect.succeed({
+        status: 500,
+        headers: baseHeaders(),
+        body: { message, modified: false },
+      } as HandlerResponse<typeof Protocol.RegisterResponse.Type>);
+    }),
+  );
+});
 
 export interface Handler<Tag extends string> {
   readonly tag: Tag;
@@ -157,59 +193,73 @@ export interface Handler<Tag extends string> {
   readonly context: Context.Context<any>;
 }
 
-export const handleExecution = (
+export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution")(function* (
   group: InngestGroup.Any,
   fnId: string,
   urlStepId: string | undefined,
   body: typeof Protocol.SDKRequestBody.Type,
   traceHeaders: TraceHeaders = {},
-): Effect.Effect<HandlerResponse<unknown>, never, InngestClient> =>
-  Effect.gen(function* () {
-    const client = yield* InngestClient;
-    const context = yield* Effect.context<never>();
+) {
+  const client = yield* InngestClient;
+  const context = yield* Effect.context<never>();
 
-    const appId = client.config.id;
-    const prefix = `${appId}-`;
-    const fnTag = fnId.startsWith(prefix) ? fnId.slice(prefix.length) : fnId;
+  const appId = client.config.id;
+  const prefix = `${appId}-`;
+  const fnTag = fnId.startsWith(prefix) ? fnId.slice(prefix.length) : fnId;
 
-    const fn = group.functions.get(fnTag) as InngestFunction.Any | undefined;
-    const entry = fn ? (context.mapUnsafe.get(fn.key) as Handler<string> | undefined) : undefined;
+  const fn = group.functions.get(fnTag) as InngestFunction.Any | undefined;
+  const entry = fn ? (context.mapUnsafe.get(fn.key) as Handler<string> | undefined) : undefined;
 
-    if (!fn || !entry) {
-      return {
-        status: 404 as const,
-        headers: { ...baseHeaders(), [Protocol.Headers.NoRetry]: "true" },
-        body: {
-          error: Protocol.UserError.make({ name: "FunctionNotFoundError", message: `Unknown function: ${fnId}` }),
-        },
-      };
-    }
+  if (!fn || !entry) {
+    // Spec §4.4.1: unknown function MUST return 500 with the error payload
+    // at the response root (no { error: ... } envelope).
+    // Spec §4.4.3 pair rule: 500 MUST pair with X-Inngest-No-Retry: false.
+    return {
+      status: 500 as const,
+      headers: { ...baseHeaders(), [Protocol.Headers.NoRetry]: "false" },
+      body: Protocol.UserError.make({ name: "FunctionNotFoundError", message: `Unknown function: ${fnId}` }),
+    };
+  }
 
-    // URL stepId takes precedence over body.ctx.step_id
-    // This is how Inngest requests execution of a specific step
-    const effectiveBody =
-      urlStepId && urlStepId !== body.ctx.step_id
-        ? Protocol.SDKRequestBody.make({
-            event: body.event,
-            events: body.events,
-            steps: body.steps,
-            ctx: Protocol.SDKRequestContext.make({
-              fn_id: body.ctx.fn_id,
-              run_id: body.ctx.run_id,
-              env: body.ctx.env,
-              step_id: urlStepId,
-              attempt: body.ctx.attempt,
-              max_attempts: body.ctx.max_attempts,
-              qi_id: body.ctx.qi_id,
-              disable_immediate_execution: body.ctx.disable_immediate_execution,
-              use_api: body.ctx.use_api,
-              stack: body.ctx.stack,
-            }),
-            version: body.version,
-            use_api: body.use_api,
-          })
-        : body;
+  // URL stepId takes precedence over body.ctx.step_id
+  // This is how Inngest requests execution of a specific step
+  const effectiveBody =
+    urlStepId && urlStepId !== body.ctx.step_id
+      ? Protocol.SDKRequestBody.make({
+          event: body.event,
+          events: body.events,
+          steps: body.steps,
+          ctx: Protocol.SDKRequestContext.make({
+            fn_id: body.ctx.fn_id,
+            run_id: body.ctx.run_id,
+            env: body.ctx.env,
+            step_id: urlStepId,
+            attempt: body.ctx.attempt,
+            max_attempts: body.ctx.max_attempts,
+            qi_id: body.ctx.qi_id,
+            disable_immediate_execution: body.ctx.disable_immediate_execution,
+            use_api: body.ctx.use_api,
+            stack: body.ctx.stack,
+          }),
+          version: body.version,
+          use_api: body.use_api,
+        })
+      : body;
 
-    const result = yield* Effect.provide(execute(fn, entry.handler, effectiveBody, appId, traceHeaders), entry.context);
-    return { status: result.status, headers: result.headers, body: result.body };
-  });
+  // Checkpoint mode entry decision (spec §10):
+  //   - URL stepId NOT set (we are not running a targeted step)
+  //   - ctx.fn_id present (executor knows the function)
+  //   - ctx.disable_immediate_execution false (executor allowed it)
+  //   - resolved per-fn or per-client config not opted out
+  const enterCheckpoint =
+    !urlStepId && effectiveBody.ctx.fn_id !== "" && !effectiveBody.ctx.disable_immediate_execution;
+  const checkpointConfig = enterCheckpoint
+    ? Option.fromNullishOr(Checkpoint.resolveConfig(fn.options.checkpointing, client.config.checkpointing))
+    : Option.none<Checkpoint.CheckpointConfig>();
+
+  const result = yield* Effect.provide(
+    execute(fn, entry.handler, effectiveBody, appId, traceHeaders, checkpointConfig),
+    entry.context,
+  );
+  return { status: result.status, headers: result.headers, body: result.body } as HandlerResponse<unknown>;
+});

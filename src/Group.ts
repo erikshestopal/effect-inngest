@@ -199,14 +199,8 @@ export const make = <Fns extends ReadonlyArray<InngestFunction.Any>>(...fns: Fns
  * )
  * ```
  */
-export const toHttpApp = (
-  group: InngestGroup.Any,
-): Effect.Effect<
-  HttpServerResponse.HttpServerResponse,
-  never,
-  HttpServerRequest.HttpServerRequest | InngestClient | HttpClient.HttpClient
-> =>
-  Effect.gen(function* () {
+export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(
+  function* (group: InngestGroup.Any) {
     const request = yield* HttpServerRequest.HttpServerRequest;
     const method = request.method;
     const requestUrl = Option.match(HttpServerRequest.toURL(request), {
@@ -231,7 +225,16 @@ export const toHttpApp = (
     }
 
     if (method === "POST") {
-      const url = Option.getOrThrow(HttpServerRequest.toURL(request));
+      const url = yield* Option.match(HttpServerRequest.toURL(request), {
+        onNone: () =>
+          Effect.fail(
+            HttpServerResponse.jsonUnsafe(
+              { error: "Unable to parse request URL" },
+              { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
+            ),
+          ),
+        onSome: (u) => Effect.succeed(u),
+      });
 
       const ExecuteParamsSchema = UrlParams.schemaRecord.pipe(
         Schema.decodeTo(
@@ -277,13 +280,13 @@ export const toHttpApp = (
     }
 
     return yield* HttpServerResponse.json({ error: `Method ${method} not allowed` }, { status: 405 });
-  }).pipe(
-    Effect.catchCause((cause) =>
-      HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
-        Effect.orDie,
-      ),
+  },
+  Effect.catchCause((cause) =>
+    HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
+      Effect.orDie,
     ),
-  );
+  ),
+);
 
 /**
  * Create a standalone web handler from an InngestGroup.

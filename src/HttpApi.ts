@@ -46,10 +46,10 @@ const ExecuteEndpoint = HttpApiEndpoint.post("execute", "/", {
  * @since 0.1.0
  * @category api
  */
-export const InngestApiGroup = HttpApiGroup.make("inngest")
+export class InngestApiGroup extends HttpApiGroup.make("inngest")
   .add(IntrospectEndpoint)
   .add(RegisterEndpoint)
-  .add(ExecuteEndpoint);
+  .add(ExecuteEndpoint) {}
 
 type InngestApiGroupType = typeof InngestApiGroup;
 
@@ -67,20 +67,27 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
       onSome: (url) => url.toString(),
     });
 
-  return HttpApiBuilder.group(api as unknown as HttpApi.HttpApi<ApiId, InngestApiGroupType>, "inngest", (handlers) =>
-    handlers
-      .handle("introspect", ({ request }) =>
-        InternalHandler.handleIntrospection(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
-      )
-      .handle("register", ({ request }) =>
-        InternalHandler.handleRegistration(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
-      )
-      .handleRaw("execute", ({ query, request }) =>
-        InternalHandler.verifyAndParseRequestBody(request).pipe(
-          Effect.provide(SignatureLive),
-          Effect.flatMap((payload) => InternalHandler.handleExecution(group, query.fnId, query.stepId, payload)),
-          Effect.map((r) => r.body),
-        ),
-      ),
-  ) as unknown as Layer.Layer<HttpApiGroup.ApiGroup<ApiId, "inngest">, never, InngestClient | HttpClient.HttpClient>;
+  return HttpApiBuilder.group(
+    api as unknown as HttpApi.HttpApi<ApiId, InngestApiGroupType>,
+    "inngest",
+    Effect.fn(function* (handlers) {
+      return handlers
+        .handle("introspect", ({ request }) =>
+          InternalHandler.handleIntrospection(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
+        )
+        .handle("register", ({ request }) =>
+          InternalHandler.handleRegistration(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
+        )
+        .handleRaw("execute", ({ query, request }) =>
+          InternalHandler.verifyAndParseRequestBody(request).pipe(
+            Effect.flatMap((payload) => InternalHandler.handleExecution(group, query.fnId, query.stepId, payload)),
+            Effect.map((r) => r.body),
+          ),
+        );
+    }),
+  ).pipe(Layer.provide(SignatureLive)) as unknown as Layer.Layer<
+    HttpApiGroup.ApiGroup<ApiId, "inngest">,
+    never,
+    InngestClient | HttpClient.HttpClient
+  >;
 };

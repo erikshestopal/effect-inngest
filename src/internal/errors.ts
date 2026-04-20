@@ -2,6 +2,7 @@
  * Internal error types for the Effect Inngest SDK.
  * @internal
  */
+import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 
 /**
@@ -42,7 +43,7 @@ export class UseApiFetchError extends Schema.TaggedErrorClass<UseApiFetchError>(
   message: Schema.String,
   endpoint: Schema.Literals(["batch", "actions"]),
   runId: Schema.String,
-  statusCode: Schema.OptionFromOptionalKey(Schema.Number),
+  statusCode: Schema.optional(Schema.Number),
 }) {}
 
 /**
@@ -58,7 +59,9 @@ export class StepError extends Schema.TaggedErrorClass<StepError>()("StepError",
 /**
  * @internal
  */
-export const isStepError = Schema.is(StepError);
+export const isStepError: (u: unknown) => u is StepError = Predicate.isTagged("StepError") as (
+  u: unknown,
+) => u is StepError;
 
 /**
  * @internal
@@ -84,7 +87,9 @@ export class NonRetriableError extends Schema.TaggedErrorClass<NonRetriableError
 /**
  * @internal
  */
-export const isNonRetriableError = Schema.is(NonRetriableError);
+export const isNonRetriableError: (u: unknown) => u is NonRetriableError = Predicate.isTagged("NonRetriableError") as (
+  u: unknown,
+) => u is NonRetriableError;
 
 /**
  * Thrown to indicate that the operation should be retried after a specific delay.
@@ -102,7 +107,9 @@ export class RetryAfterError extends Schema.TaggedErrorClass<RetryAfterError>()(
 /**
  * @internal
  */
-export const isRetryAfterError = Schema.is(RetryAfterError);
+export const isRetryAfterError: (u: unknown) => u is RetryAfterError = Predicate.isTagged("RetryAfterError") as (
+  u: unknown,
+) => u is RetryAfterError;
 
 /**
  * @internal

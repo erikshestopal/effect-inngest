@@ -2,6 +2,7 @@
  * Step memoization schemas for decoding cached step results.
  * @internal
  */
+import * as Option from "effect/Option";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import * as SchemaTransformation from "effect/SchemaTransformation";
@@ -83,11 +84,5 @@ export type Memo = Schema.Schema.Type<typeof MemoSchema>;
  * Decode a step result into a Memo type.
  * Order matters: error > input > data (more specific properties first).
  */
-export const decodeMemo = (value: unknown): Memo => {
-  const result = Schema.decodeUnknownOption(MemoSchema)(value);
-  if (result._tag === "Some") {
-    return result.value;
-  }
-
-  return MemoNoneSchema.make({});
-};
+export const decodeMemo = (value: unknown): Memo =>
+  Option.getOrElse(Schema.decodeUnknownOption(MemoSchema)(value), () => MemoNoneSchema.make({}));

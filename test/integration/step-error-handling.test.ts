@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { failWith, makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -86,17 +86,21 @@ describe("TB-010: Step Error Handling", () => {
             ),
           );
 
-          // Memoized error causes function to fail with StepError (not StepInterrupt)
-          // which gets caught and returns 500
-          expect(response.status).toBe(500);
+          // Spec §5.2.2: "If an error ... and the Developer has not either
+          // swallowed the error or returned/thrown/raised a new error, the
+          // SDK MUST mark the request as non-retriable." → 400 + NoRetry:true
+          expect(response.status).toBe(400);
+          expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
 
           const body = (yield* Effect.tryPromise(() => response.json())) as {
-            error: { name: string; message: string; stack?: string };
+            name: string;
+            message: string;
+            stack?: string;
           };
-          expect(body.error.name).toBe("StepError");
-          expect(body.error.message).toBe("Previously failed");
+          expect(body.name).toBe("StepError");
+          expect(body.message).toBe("Previously failed");
           // Stack is present (generated from the StepError creation point)
-          expect(body.error.stack).toBeDefined();
+          expect(body.stack).toBeDefined();
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }
@@ -277,12 +281,14 @@ describe("TB-010: Step Error Handling", () => {
           expect(response.status).toBe(500);
 
           const body = (yield* Effect.tryPromise(() => response.json())) as {
-            error: { name: string; message: string; stack?: string };
+            name: string;
+            message: string;
+            stack?: string;
           };
-          expect(body.error.name).toBe("StepError");
-          expect(body.error.message).toBe("Target function failed");
+          expect(body.name).toBe("StepError");
+          expect(body.message).toBe("Target function failed");
           // Stack is present (generated from the StepError creation point)
-          expect(body.error.stack).toBeDefined();
+          expect(body.stack).toBeDefined();
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }
@@ -310,9 +316,9 @@ describe("TB-010: Step Error Handling", () => {
           expect(response.status).toBe(500);
 
           const body = (yield* Effect.tryPromise(() => response.json())) as {
-            error: { message: string };
+            message: string;
           };
-          expect(body.error.message).toBe("Unexpected bug in handler");
+          expect(body.message).toBe("Unexpected bug in handler");
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }
@@ -334,11 +340,12 @@ describe("TB-010: Step Error Handling", () => {
           expect(response.status).toBe(500);
 
           const body = (yield* Effect.tryPromise(() => response.json())) as {
-            error: { name: string; message: string };
+            name: string;
+            message: string;
           };
           // TypeError should be captured
-          expect(body.error.name).toBe("TypeError");
-          expect(body.error.message).toBe("Cannot read property 'x' of undefined");
+          expect(body.name).toBe("TypeError");
+          expect(body.message).toBe("Cannot read property 'x' of undefined");
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }

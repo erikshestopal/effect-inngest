@@ -86,6 +86,18 @@ const extractKeyBytes = (signingKey: string): Buffer => {
   return Buffer.from(keyWithoutPrefix, "hex");
 };
 
+/**
+ * SHA-256 hex of the signing key with the `signkey-{prefix}-` prefix stripped.
+ * Used as the Bearer token for outbound requests to the Inngest API per spec
+ * §4.1.1.
+ *
+ * @internal
+ */
+export const hashSigningKey = (signingKey: string): string => {
+  const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
+  return Crypto.createHash("sha256").update(keyWithoutPrefix).digest("hex");
+};
+
 const computeSignature = (keyBytes: Buffer, body: Uint8Array, timestamp: string): string =>
   Crypto.createHmac("sha256", keyBytes).update(body).update(timestamp).digest("hex");
 
@@ -111,52 +123,54 @@ const checkSignature = (signature: string, body: Uint8Array, timestamp: string, 
 /**
  * @internal
  */
-export const SignatureLive: Layer.Layer<Signature> = Layer.effect(
-  Signature,
-  Effect.succeed({
-    verify: ({ body, signatureHeader, signingKey, signingKeyFallback, isDev }) =>
-      Effect.gen(function* () {
-        if (isDev) return true;
-        if (!signingKey) {
-          return yield* new SignatureError({
-            reason: "missing_signing_key",
-            message: "No signing key configured for production mode",
-          });
-        }
+export const SignatureLive: Layer.Layer<Signature> = Layer.succeed(Signature, {
+  verify: Effect.fn("Signature.verify")(function* ({
+    body,
+    signatureHeader,
+    signingKey,
+    signingKeyFallback,
+    isDev,
+  }: VerifyOptions) {
+    if (isDev) return true;
+    if (!signingKey) {
+      return yield* new SignatureError({
+        reason: "missing_signing_key",
+        message: "No signing key configured for production mode",
+      });
+    }
 
-        if (!signatureHeader) {
-          return yield* new SignatureError({
-            reason: "missing_header",
-            message: `Missing ${Protocol.Headers.Signature} header`,
-          });
-        }
+    if (!signatureHeader) {
+      return yield* new SignatureError({
+        reason: "missing_header",
+        message: `Missing ${Protocol.Headers.Signature} header`,
+      });
+    }
 
-        const { t: timestampSeconds, s: signature } = yield* parseSignatureHeader(signatureHeader);
-        const timestampMs = timestampSeconds * 1000;
-        const now = yield* DateTime.now;
+    const { t: timestampSeconds, s: signature } = yield* parseSignatureHeader(signatureHeader);
+    const timestampMs = timestampSeconds * 1000;
+    const now = yield* DateTime.now;
 
-        if (Math.abs(now.epochMilliseconds - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
-          return yield* new SignatureError({
-            reason: "expired",
-            message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
-          });
-        }
+    if (Math.abs(now.epochMilliseconds - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
+      return yield* new SignatureError({
+        reason: "expired",
+        message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
+      });
+    }
 
-        const timestamp = String(timestampSeconds);
-        const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
-        const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
+    const timestamp = String(timestampSeconds);
+    const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
+    const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
 
-        if (valid) return true;
+    if (valid) return true;
 
-        return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
-      }),
-
-    sign: (body, signingKey) =>
-      DateTime.now.pipe(
-        Effect.map((now) => {
-          const ts = Math.floor(now.epochMilliseconds / 1000);
-          return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
-        }),
-      ),
+    return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
   }),
-);
+
+  sign: (body, signingKey) =>
+    DateTime.now.pipe(
+      Effect.map((now) => {
+        const ts = Math.floor(now.epochMilliseconds / 1000);
+        return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
+      }),
+    ),
+});
