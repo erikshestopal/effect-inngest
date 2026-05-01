@@ -8,13 +8,14 @@ import * as DateTime from "effect/DateTime";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
+import * as SchemaTransformation from "effect/SchemaTransformation";
 import * as Protocol from "./protocol.js";
 
 /**
  * @internal
  */
-export class SignatureError extends Schema.TaggedError<SignatureError>()("SignatureError", {
-  reason: Schema.Literal("missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"),
+export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {
+  reason: Schema.Literals(["missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"]),
   message: Schema.String,
 }) {}
 
@@ -40,20 +41,23 @@ export interface SignatureService {
 /**
  * @internal
  */
-export class Signature extends Context.Tag("effect-inngest/Signature")<Signature, SignatureService>() {}
+export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature") {}
 
 // ─────────────────────────────────────────────────────────────
 // Schemas (internal)
 // ─────────────────────────────────────────────────────────────
 
-const TimestampSeconds = Schema.NumberFromString.pipe(Schema.int(), Schema.positive());
+const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(), Schema.isGreaterThan(0)));
 // Case-insensitive hex, normalized to lowercase in parseSignatureHeader
 const SignatureHex = Schema.String.pipe(
-  Schema.pattern(/^[a-fA-F0-9]{64}$/),
-  Schema.transform(Schema.String, {
-    decode: (s) => s.toLowerCase(),
-    encode: (s) => s,
-  }),
+  Schema.check(Schema.isPattern(/^[a-fA-F0-9]{64}$/)),
+  Schema.decodeTo(
+    Schema.String,
+    SchemaTransformation.transform({
+      decode: (s) => s.toLowerCase(),
+      encode: (s) => s,
+    }),
+  ),
 );
 const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: SignatureHex });
 
@@ -66,7 +70,7 @@ const SIGNATURE_VALIDITY_WINDOW_MS = 5 * 60 * 1000;
 const parseSignatureHeader = (header: string) => {
   const params = new URLSearchParams(header);
   const raw = { t: params.get("t") ?? "", s: params.get("s") ?? "" };
-  return Schema.decodeUnknown(SignatureParams)(raw).pipe(
+  return Schema.decodeUnknownEffect(SignatureParams)(raw).pipe(
     Effect.mapError(
       () =>
         new SignatureError({
@@ -80,6 +84,18 @@ const parseSignatureHeader = (header: string) => {
 const extractKeyBytes = (signingKey: string): Buffer => {
   const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
   return Buffer.from(keyWithoutPrefix, "hex");
+};
+
+/**
+ * SHA-256 hex of the signing key with the `signkey-{prefix}-` prefix stripped.
+ * Used as the Bearer token for outbound requests to the Inngest API per spec
+ * §4.1.1.
+ *
+ * @internal
+ */
+export const hashSigningKey = (signingKey: string): string => {
+  const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
+  return Crypto.createHash("sha256").update(keyWithoutPrefix).digest("hex");
 };
 
 const computeSignature = (keyBytes: Buffer, body: Uint8Array, timestamp: string): string =>
@@ -107,52 +123,54 @@ const checkSignature = (signature: string, body: Uint8Array, timestamp: string, 
 /**
  * @internal
  */
-export const SignatureLive: Layer.Layer<Signature> = Layer.effect(
-  Signature,
-  Effect.succeed({
-    verify: ({ body, signatureHeader, signingKey, signingKeyFallback, isDev }) =>
-      Effect.gen(function* () {
-        if (isDev) return true;
-        if (!signingKey) {
-          return yield* new SignatureError({
-            reason: "missing_signing_key",
-            message: "No signing key configured for production mode",
-          });
-        }
+export const SignatureLive: Layer.Layer<Signature> = Layer.succeed(Signature, {
+  verify: Effect.fn("Signature.verify")(function* ({
+    body,
+    signatureHeader,
+    signingKey,
+    signingKeyFallback,
+    isDev,
+  }: VerifyOptions) {
+    if (isDev) return true;
+    if (!signingKey) {
+      return yield* new SignatureError({
+        reason: "missing_signing_key",
+        message: "No signing key configured for production mode",
+      });
+    }
 
-        if (!signatureHeader) {
-          return yield* new SignatureError({
-            reason: "missing_header",
-            message: `Missing ${Protocol.Headers.Signature} header`,
-          });
-        }
+    if (!signatureHeader) {
+      return yield* new SignatureError({
+        reason: "missing_header",
+        message: `Missing ${Protocol.Headers.Signature} header`,
+      });
+    }
 
-        const { t: timestampSeconds, s: signature } = yield* parseSignatureHeader(signatureHeader);
-        const timestampMs = timestampSeconds * 1000;
-        const now = yield* DateTime.now;
+    const { t: timestampSeconds, s: signature } = yield* parseSignatureHeader(signatureHeader);
+    const timestampMs = timestampSeconds * 1000;
+    const now = yield* DateTime.now;
 
-        if (Math.abs(now.epochMillis - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
-          return yield* new SignatureError({
-            reason: "expired",
-            message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
-          });
-        }
+    if (Math.abs(now.epochMilliseconds - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
+      return yield* new SignatureError({
+        reason: "expired",
+        message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
+      });
+    }
 
-        const timestamp = String(timestampSeconds);
-        const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
-        const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
+    const timestamp = String(timestampSeconds);
+    const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
+    const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
 
-        if (valid) return true;
+    if (valid) return true;
 
-        return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
-      }),
-
-    sign: (body, signingKey) =>
-      DateTime.now.pipe(
-        Effect.map((now) => {
-          const ts = Math.floor(now.epochMillis / 1000);
-          return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
-        }),
-      ),
+    return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
   }),
-);
+
+  sign: (body, signingKey) =>
+    DateTime.now.pipe(
+      Effect.map((now) => {
+        const ts = Math.floor(now.epochMilliseconds / 1000);
+        return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
+      }),
+    ),
+});

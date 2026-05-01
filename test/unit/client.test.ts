@@ -3,18 +3,18 @@
  * @description Unit tests for InngestClient module.
  */
 
-import * as FetchHttpClient from "@effect/platform/FetchHttpClient";
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
-import * as HttpClientError from "@effect/platform/HttpClientError";
+import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpClientError from "effect/unstable/http/HttpClientError";
 import * as Config from "effect/Config";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Effect from "effect/Effect";
 import * as Exit from "effect/Exit";
 import * as Layer from "effect/Layer";
-import * as Either from "effect/Either";
-import { describe, expect, it } from "../bun-effect.js";
+import * as Result from "effect/Result";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestClient } from "../../src/index.js";
 
@@ -36,7 +36,7 @@ describe("InngestClient coverage", () => {
 
   describe("layerConfig", () => {
     it("creates layer from Config", async () => {
-      const configProvider = ConfigProvider.fromMap(new Map([["TEST_APP_ID", "config-app"]]));
+      const configProvider = ConfigProvider.fromEnv({ env: { TEST_APP_ID: "config-app" } });
 
       const layer = InngestClient.layerConfig(
         Config.all({
@@ -48,7 +48,7 @@ describe("InngestClient coverage", () => {
         Effect.gen(function* () {
           const client = yield* InngestClient.InngestClient;
           return client.config.id;
-        }).pipe(Effect.provide(layer), Effect.withConfigProvider(configProvider)),
+        }).pipe(Effect.provide(layer), Effect.provide(ConfigProvider.layer(configProvider))),
       );
 
       expect(result).toBe("config-app");
@@ -57,7 +57,7 @@ describe("InngestClient coverage", () => {
 
   describe("layerFromEnv", () => {
     it("creates layer from environment", async () => {
-      const configProvider = ConfigProvider.fromMap(new Map([["INNGEST_APP_ID", "env-app"]]));
+      const configProvider = ConfigProvider.fromEnv({ env: { INNGEST_APP_ID: "env-app" } });
 
       const result = await Effect.runPromise(
         Effect.gen(function* () {
@@ -66,7 +66,7 @@ describe("InngestClient coverage", () => {
         }).pipe(
           Effect.provide(InngestClient.layerFromEnv),
           Effect.provide(FetchHttpClient.layer),
-          Effect.withConfigProvider(configProvider),
+          Effect.provide(ConfigProvider.layer(configProvider)),
         ),
       );
 
@@ -123,13 +123,14 @@ describe("InngestClient coverage", () => {
 
     it.effect("handles HTTP error in sendEvent", () =>
       Effect.gen(function* () {
-        // Mock HttpClient that fails
-        const mockHttpClient = HttpClient.make((_req) =>
+        // Mock HttpClient that fails with a transport error
+        const mockHttpClient = HttpClient.make((req) =>
           Effect.fail(
-            new HttpClientError.RequestError({
-              request: HttpClientRequest.get("http://localhost"),
-              reason: "Transport",
-              cause: new Error("Network error"),
+            new HttpClientError.HttpClientError({
+              reason: new HttpClientError.TransportError({
+                request: req,
+                cause: new Error("Network error"),
+              }),
             }),
           ),
         );
@@ -141,11 +142,11 @@ describe("InngestClient coverage", () => {
         const result = yield* Effect.gen(function* () {
           const client = yield* InngestClient.InngestClient;
           return yield* client.sendEvent([{ name: "test/event", data: {} }]);
-        }).pipe(Effect.provide(layer), Effect.either);
+        }).pipe(Effect.provide(layer), Effect.result);
 
-        expect(Either.isLeft(result)).toBe(true);
-        if (Either.isLeft(result)) {
-          expect(result.left._tag).toBe("SendEventError");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure._tag).toBe("SendEventError");
         }
       }),
     );

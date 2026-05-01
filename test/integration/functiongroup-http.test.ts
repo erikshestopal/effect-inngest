@@ -4,8 +4,8 @@
  */
 
 import { Effect, Layer, Schema } from "effect";
-import { FetchHttpClient } from "@effect/platform";
-import { describe, expect, it } from "../bun-effect.js";
+import { FetchHttpClient, HttpClient } from "effect/unstable/http";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
@@ -39,10 +39,15 @@ const HandlersLayer = testGroup.toLayer({
   "test-fn-2": ({ event }) => Effect.succeed({ received: event.orderId }),
 });
 
-// Dev mode client for tests that need to check dev-specific behavior
-const DevTestClient = InngestClient.layer({ id: "test-app", eventKey: "test-key", mode: "dev" }).pipe(
-  Layer.provide(FetchHttpClient.layer),
-);
+// Dev mode client for tests that need to check dev-specific behavior.
+// Checkpointing disabled so existing assertions about classic-mode wire
+// shape (200 + raw body) remain valid; checkpointing has dedicated tests.
+const DevTestClient = InngestClient.layer({
+  id: "test-app",
+  eventKey: "test-key",
+  mode: "dev",
+  checkpointing: false,
+}).pipe(Layer.provide(FetchHttpClient.layer));
 
 // Combined test layer with both handlers and dev mode client
 const TestLayer = Layer.mergeAll(HandlersLayer, DevTestClient, FetchHttpClient.layer);
@@ -141,14 +146,31 @@ describe("InngestGroup.toWebHandler GET /", () => {
 // PUT / - Registration Tests
 
 describe("InngestGroup.toWebHandler PUT /", () => {
-  it.effect("triggers registration and returns success", () =>
+  it.effect("triggers registration and returns failure body on transport error", () =>
     Effect.gen(function* () {
-      const { handler, dispose } = InngestGroup.toWebHandler(testGroup, { layer: TestLayer });
+      // Inject a failing HttpClient so this test is deterministic regardless
+      // of whether a real Inngest dev server is running locally.
+      const FailingHttp = Layer.effect(
+        HttpClient.HttpClient,
+        Effect.sync(() => HttpClient.make(() => Effect.die("transport-down"))),
+      );
+      const FailingClient = InngestClient.layer({
+        id: "test-app",
+        eventKey: "test-key",
+        mode: "dev",
+        checkpointing: false,
+      }).pipe(Layer.provide(FailingHttp));
+      const FailingLayer = Layer.mergeAll(HandlersLayer, FailingClient, FailingHttp);
+
+      const { handler, dispose } = InngestGroup.toWebHandler(testGroup, { layer: FailingLayer });
       try {
         const response = yield* Effect.tryPromise(() => handler(makeRequest("PUT")));
 
-        // Registration returns 200 with empty or registration result
-        expect(response.status).toBe(200);
+        // Transport failure → handler returns spec-compliant §4.3.3 body
+        // `{ message, modified: false }` with 500.
+        expect(response.status).toBe(500);
+        const body = (yield* Effect.tryPromise(() => response.json())) as { modified?: boolean };
+        expect(body.modified).toBe(false);
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
@@ -173,7 +195,6 @@ describe("InngestGroup.toWebHandler POST /", () => {
           handler(makeRequest("POST", "http://localhost:9999/", JSON.stringify(requestBody))),
         );
 
-        // v2 API returns 400 for missing fnId
         expect([400, 500]).toContain(response.status);
         const body = yield* Effect.tryPromise(() => response.json() as Promise<{ error?: string }>);
         expect(body.error).toBeDefined();
@@ -197,7 +218,6 @@ describe("InngestGroup.toWebHandler POST /", () => {
           handler(makeRequest("POST", "http://localhost:9999/?fnId=unknown-fn", JSON.stringify(requestBody))),
         );
 
-        // v2 API returns 404 for function not found
         expect([404, 500]).toContain(response.status);
       } finally {
         yield* Effect.tryPromise(() => dispose());
@@ -232,7 +252,6 @@ describe("InngestGroup.toWebHandler POST /", () => {
           handler(makeRequest("POST", "http://localhost:9999/?fnId=no-handler-fn", JSON.stringify(requestBody))),
         );
 
-        // v2 API returns 404 for handler not found
         expect([404, 500]).toContain(response.status);
       } finally {
         yield* Effect.tryPromise(() => dispose());

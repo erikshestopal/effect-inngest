@@ -1,7 +1,0 @@
-{
-  "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "printWidth": 120,
-  "ignorePatterns": ["node_modules", "dist", "repos", "**/routeTree.gen.ts", "signoz/**", ".context/**/*"],
-  "singleQuote": false,
-  "experimentalSortPackageJson": true
-}

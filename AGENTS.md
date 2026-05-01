@@ -7,8 +7,9 @@ Native Effect client library for Inngest - durable, type-safe workflows.
 - **Typecheck**: `bun run typecheck` (uses tsgo)
 - **Lint**: `bun run lint` (oxlint with type-aware checking)
 - **Build**: `bun run build` (tsdown)
-- **Test all**: `bun test`
-- **Single test**: `bun test test/unit/memo.test.ts`
+- **Test all**: `vp test run`
+- **Single test**: `vp test run test/unit/memo.test.ts`
+- **Watch mode**: `vp test`
 - **E2E tests**: `bun run test:e2e`
 
 ## Architecture
@@ -32,7 +33,7 @@ src/
     ├── signature.ts  # HMAC signature verification for Inngest requests
     └── step.ts       # Step tools: step.run, step.sleep, step.waitForEvent, step.invoke
 test/
-├── unit/             # Unit tests (bun:test)
+├── unit/             # Unit tests (@effect/vitest)
 ├── integration/      # Integration tests
 └── e2e/              # End-to-end tests with Inngest dev server
 ```

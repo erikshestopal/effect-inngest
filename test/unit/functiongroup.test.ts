@@ -2,8 +2,8 @@ import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { FetchHttpClient } from "@effect/platform";
-import { describe, expect, it } from "../bun-effect.js";
+import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestClient, InngestFunction, InngestGroup } from "../../src/index.js";
 
 // Test Event Schemas (TaggedClass)
@@ -138,7 +138,7 @@ describe("InngestGroup.make", () => {
     });
 
     it("toWebHandler returns handler and dispose functions", async () => {
-      const { FetchHttpClient } = await import("@effect/platform");
+      const FetchHttpClient = await import("effect/unstable/http/FetchHttpClient");
       const { InngestClient } = await import("../../src/index.js");
       const group = InngestGroup.make(ProcessUser);
       // Create a minimal layer for testing
@@ -178,7 +178,7 @@ describe("InngestGroup.make", () => {
   });
 
   describe("toLayer with requirements", () => {
-    class TestService extends Context.Tag("TestService")<TestService, { readonly value: string }>() {}
+    const TestService = Context.Service<{ readonly value: string }>("TestService");
 
     it.effect("captures context when layer is provided", () =>
       Effect.gen(function* () {

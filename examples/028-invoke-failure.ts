@@ -1,7 +1,7 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { Predicate } from "effect";
@@ -32,7 +32,7 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       const result = yield* step.invoke("call-child", { function: FailingChildFn, data: {} as never }).pipe(
         Effect.map(() => ({ status: "success" as const })),
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.succeed({
             status: "caught-error" as const,
             error:

@@ -1,13 +1,13 @@
-import { FetchHttpClient } from "@effect/platform";
+import { FetchHttpClient } from "effect/unstable/http";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
-import * as HttpServer from "@effect/platform/HttpServer";
+import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
+import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
 
-class StepError extends Schema.TaggedError<StepError>()("StepError", {
+class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
   message: Schema.String,
 }) {}
 
@@ -26,7 +26,7 @@ const HandlersLive = Group.toLayer({
       const result = yield* step
         .run("risky-step", Effect.fail(new StepError({ message: "Something went wrong" })))
         .pipe(
-          Effect.catchAll((error) =>
+          Effect.catch((error) =>
             Effect.succeed(`Caught error: ${error instanceof Error ? error.message : "unknown"}`),
           ),
         );

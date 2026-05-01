@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "@effect/vitest";
 import { decodeMemo } from "../../src/internal/memo.js";
 
 describe("decodeMemo", () => {

@@ -3,15 +3,15 @@
  * @description Unit tests for Handler module.
  */
 
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
-import * as HttpClientError from "@effect/platform/HttpClientError";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpClientError from "effect/unstable/http/HttpClientError";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
 import * as Driver from "../../src/internal/driver.js";
@@ -32,12 +32,10 @@ const coverageTestGroup = InngestGroup.make(coverageTestFn);
 describe("Driver.layer coverage", () => {
   it.effect("creates driver layer", () =>
     Effect.gen(function* () {
-      const driverContext = yield* Driver.layer({ appName: "test-app" });
-      const driver = Context.get(driverContext, Driver.Driver);
-
+      const driver = yield* Driver.Driver;
       expect(driver.execute).toBeDefined();
       expect(typeof driver.execute).toBe("function");
-    }),
+    }).pipe(Effect.provide(Driver.layer({ appName: "test-app" }))),
   );
 });
 
@@ -96,12 +94,13 @@ describe("Handler.buildServeUrl coverage", () => {
 
   it.effect("handles registration HTTP error", () =>
     Effect.gen(function* () {
-      const mockHttpClient = HttpClient.make((_req) =>
+      const mockHttpClient = HttpClient.make((req) =>
         Effect.fail(
-          new HttpClientError.RequestError({
-            request: HttpClientRequest.get("http://localhost"),
-            reason: "Transport",
-            cause: new Error("Network error"),
+          new HttpClientError.HttpClientError({
+            reason: new HttpClientError.TransportError({
+              request: req,
+              cause: new Error("Network error"),
+            }),
           }),
         ),
       );
@@ -114,7 +113,9 @@ describe("Handler.buildServeUrl coverage", () => {
         Effect.provide(httpLayer),
       );
 
-      expect(result.body.message).toContain("Registration failed");
+      expect(result.status).toBe(500);
+      expect(result.body.modified).toBe(false);
+      expect(typeof result.body.message).toBe("string");
     }),
   );
 });

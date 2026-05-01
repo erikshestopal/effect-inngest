@@ -6,16 +6,16 @@
  * @see https://github.com/erikshestopal/effect-inngest/issues/3
  */
 
-import * as FetchHttpClient from "@effect/platform/FetchHttpClient";
+import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 
 import { InngestFunction, InngestClient } from "../../src/index.js";
 import { execute } from "../../src/internal/driver.js";
-import { SDKRequestBody, InngestEvent, SDKRequestContext } from "../../src/internal/protocol.js";
+import { SDKRequestBody, InngestEvent, SDKRequestContext, FunctionStack } from "../../src/internal/protocol.js";
 
 // --- Fixtures ---
 
@@ -31,18 +31,28 @@ const testFn = InngestFunction.make("scope-test-fn", {
 const makeEvent = () =>
   InngestEvent.make({ name: "test/scope-event", data: { _tag: "test/scope-event", userId: "u1" }, id: "evt-1" });
 
+const makeCtx = () =>
+  SDKRequestContext.make({
+    fn_id: "test-app-scope-test-fn",
+    run_id: "run-1",
+    env: "dev",
+    step_id: "step",
+    attempt: 0,
+    max_attempts: 3,
+    stack: FunctionStack.make({ stack: [], current: 0 }),
+    qi_id: "",
+    disable_immediate_execution: false,
+    use_api: false,
+  });
+
 const makeRequest = () =>
   SDKRequestBody.make({
     event: makeEvent(),
     events: [makeEvent()],
-    ctx: SDKRequestContext.make({
-      fn_id: "test-app-scope-test-fn",
-      run_id: "run-1",
-      step_id: "step",
-      attempt: 0,
-      max_attempts: 3,
-      disable_immediate_execution: false,
-    }),
+    ctx: makeCtx(),
+    steps: {},
+    version: 1,
+    use_api: false,
   });
 
 const clientLayer = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(Layer.provide(FetchHttpClient.layer));
@@ -50,7 +60,7 @@ const clientLayer = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(La
 // --- Tests ---
 
 describe("Issue #3: acquireRelease finalizers should run after handler completes", () => {
-  it.scoped("finalizer runs after step.run completes successfully", () =>
+  it.effect("finalizer runs after step.run completes successfully", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -73,7 +83,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs after step.run fails", () =>
+  it.effect("finalizer runs after step.run fails", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -97,7 +107,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs after step.run dies (defect)", () =>
+  it.effect("finalizer runs after step.run dies (defect)", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -121,7 +131,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("finalizer runs for acquireRelease at handler level (outside steps)", () =>
+  it.effect("finalizer runs for acquireRelease at handler level (outside steps)", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
@@ -148,7 +158,7 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.scoped("multiple finalizers all run after handler completes", () =>
+  it.effect("multiple finalizers all run after handler completes", () =>
     Effect.gen(function* () {
       const finalizer1Ran = yield* Ref.make(false);
       const finalizer2Ran = yield* Ref.make(false);

@@ -2,7 +2,12 @@
  * @since 0.1.0
  */
 import { Array as Arr, Duration, Predicate, Schema } from "effect";
+import { pipeArguments, type Pipeable } from "effect/Pipeable";
+import * as Checkpoint from "./internal/checkpoint.js";
+import type { CheckpointingOption } from "./internal/checkpoint.js";
 import { timeStr } from "./internal/helpers.js";
+
+export type { CheckpointingOption } from "./internal/checkpoint.js";
 
 /**
  * @since 0.1.0
@@ -16,7 +21,7 @@ export const TypeId: unique symbol = Symbol.for("effect-inngest/Function");
  */
 export type TypeId = typeof TypeId;
 
-type EventSchema = Schema.Schema.Any & { readonly _tag: string };
+type EventSchema = Schema.Top & { readonly identifier: string };
 
 /**
  * An event-based trigger configuration.
@@ -98,7 +103,7 @@ interface RateLimitOption {
   /**
    * The period of time to allow the function to run `limit` times.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 }
 
 interface ThrottleOption {
@@ -119,7 +124,7 @@ interface ThrottleOption {
    * The period of time for the rate limit. Run starts are evenly spaced through
    * the given period. The minimum granularity is 1 second.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 
   /**
    * The number of runs allowed to start in the given window in a single burst.
@@ -138,14 +143,14 @@ interface DebounceOption {
   /**
    * The period of time to delay after receiving the last trigger to run the function.
    */
-  readonly period: Duration.DurationInput;
+  readonly period: Duration.Input;
 
   /**
    * The maximum time that a debounce can be extended before running.
    * If events are continually received within the given period, a function
    * will always run after the given timeout period.
    */
-  readonly timeout?: Duration.DurationInput;
+  readonly timeout?: Duration.Input;
 }
 
 interface BatchEventsOption {
@@ -159,7 +164,7 @@ interface BatchEventsOption {
    * If timeout is reached, the function will be invoked with a batch
    * even if it's not filled up to `maxSize`.
    */
-  readonly timeout: Duration.DurationInput;
+  readonly timeout: Duration.Input;
 
   /**
    * An optional key to use for batching.
@@ -192,14 +197,14 @@ interface TimeoutsOption {
    * This is, essentially, the amount of time that a function sits in the
    * queue before starting.
    */
-  readonly start?: Duration.DurationInput;
+  readonly start?: Duration.Input;
 
   /**
    * Finish represents the time between a function starting and the function
    * finishing. If a function takes longer than this time to finish, the
    * function is marked as cancelled.
    */
-  readonly finish?: Duration.DurationInput;
+  readonly finish?: Duration.Input;
 }
 
 interface SingletonOption {
@@ -237,7 +242,7 @@ interface CancellationOption {
    * specified, cancellation triggers are valid for up to a year or until the
    * function ends.
    */
-  readonly timeout?: Duration.DurationInput;
+  readonly timeout?: Duration.Input;
 }
 
 type Retries = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
@@ -321,6 +326,20 @@ export interface FunctionOptions {
    * Batch events configuration.
    */
   readonly batchEvents?: BatchEventsOption;
+
+  /**
+   * Whether to use checkpointing for executions of this function. Overrides
+   * the client-level `checkpointing` setting.
+   *
+   * - `false` disables checkpointing for this function.
+   * - `true` enables checkpointing with safe defaults
+   *   (`bufferedSteps: 1`, `maxInterval: 0`, `maxRuntime: 10s`).
+   * - An object lets you tune `bufferedSteps`, `maxInterval`, `maxRuntime`.
+   *
+   * Defaults to inheriting from the client-level setting (which itself
+   * defaults to enabled with safe defaults).
+   */
+  readonly checkpointing?: CheckpointingOption;
 }
 
 interface RegistrationConfig {
@@ -379,6 +398,11 @@ interface FunctionRegistration {
     readonly key?: string;
   };
   readonly idempotency?: string;
+  readonly checkpoint?: {
+    readonly batch_steps: number;
+    readonly batch_interval: string;
+    readonly max_runtime: string;
+  };
 }
 
 /**
@@ -390,9 +414,9 @@ interface FunctionRegistration {
 export interface InngestFunction<
   Tag extends string,
   Triggers extends Trigger,
-  Success extends Schema.Schema.Any,
+  Success extends Schema.Top,
   Options extends FunctionOptions = FunctionOptions,
-> {
+> extends Pipeable {
   readonly [TypeId]: TypeId;
   readonly _tag: Tag;
   readonly key: string;
@@ -407,7 +431,7 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, Schema.Schema.Any, FunctionOptions>;
+  export type Any = InngestFunction<string, Trigger, Schema.Top, FunctionOptions>;
   export type Tag<F> = F extends InngestFunction<infer T, any, any, any> ? T : never;
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =
@@ -428,6 +452,11 @@ const isEventTrigger = (t: Trigger): t is EventTrigger => Predicate.hasProperty(
 const Proto = {
   [TypeId]: TypeId,
 
+  pipe() {
+    // eslint-disable-next-line prefer-rest-params
+    return pipeArguments(this, arguments);
+  },
+
   toRegistration(this: InngestFunction.Any, config: RegistrationConfig): FunctionRegistration {
     const triggers: Array<{
       event?: string;
@@ -437,7 +466,7 @@ const Proto = {
 
     for (const t of this.triggers) {
       if (isEventTrigger(t)) {
-        triggers.push({ event: t.event._tag, expression: t.if });
+        triggers.push({ event: t.event.identifier, expression: t.if });
       } else {
         triggers.push({ cron: t.cron });
       }
@@ -484,7 +513,7 @@ const Proto = {
 
     const concurrency =
       opts.concurrency != null
-        ? typeof opts.concurrency === "number"
+        ? Predicate.isNumber(opts.concurrency)
           ? [{ limit: opts.concurrency }]
           : Arr.ensure(opts.concurrency).map((c) => ({
               key: c.key,
@@ -504,6 +533,13 @@ const Proto = {
       : undefined;
 
     const idempotency = opts.idempotency;
+
+    // Function-level checkpoint config only — client-level default is
+    // applied at runtime by the handler. Mirrors how other client defaults
+    // (e.g. retries) interact with registration.
+    const resolvedCheckpoint =
+      opts.checkpointing !== undefined ? Checkpoint.resolveConfig(opts.checkpointing, undefined) : undefined;
+    const checkpoint = resolvedCheckpoint ? Checkpoint.toRegistration(resolvedCheckpoint) : undefined;
 
     const fnId = `${config.appId}-${this._tag}`;
     const stepUrl = new URL(config.url);
@@ -532,6 +568,7 @@ const Proto = {
       singleton,
       batchEvents,
       idempotency,
+      checkpoint,
     };
   },
 };
@@ -574,7 +611,7 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
 export function make<
   const Tag extends string,
   T extends TriggerInput,
-  S extends Schema.Schema.Any,
+  S extends Schema.Top,
   const O extends FunctionOptions = {},
 >(
   tag: Tag,

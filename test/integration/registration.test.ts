@@ -1,10 +1,9 @@
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
+import { HttpClient, HttpClientResponse } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
 
 // TB-007: Registration
@@ -39,7 +38,9 @@ const extractBodyJson = (body: { readonly _tag: string; readonly body?: Uint8Arr
  */
 const makeMockHttpClient = (
   captureRequest: (method: string, url: string, body: Option.Option<unknown>) => void,
-  responseBody: { skipped?: boolean; modified?: boolean; message?: string } = { skipped: false, modified: true },
+  // Match the wire shape from the Inngest executor per spec §4.3.4:
+  // success → `{ ok: true, modified?: boolean }`, failure → `{ error?: string }`.
+  responseBody: { ok?: boolean; modified?: boolean; error?: string } = { ok: true, modified: true },
 ) =>
   Layer.effect(
     HttpClient.HttpClient,
@@ -62,7 +63,7 @@ const makeMockHttpClient = (
   );
 
 /** Network error type for testing failure scenarios */
-class TestNetworkError extends Schema.TaggedError<TestNetworkError>()("TestNetworkError", {
+class TestNetworkError extends Schema.TaggedErrorClass<TestNetworkError>()("TestNetworkError", {
   message: Schema.String,
 }) {}
 
@@ -182,7 +183,8 @@ describe("TB-007: Registration", () => {
     const capturedRequests: Array<{ body: Option.Option<unknown> }> = [];
 
     const mockHttpClient = makeMockHttpClient((_method, _url, body) => capturedRequests.push({ body }), {
-      skipped: false,
+      ok: true,
+      modified: true,
     });
 
     const clientLayer = InngestClient.layer({
@@ -258,6 +260,139 @@ describe("TB-007: Registration", () => {
     }
   });
 
+  it("includes checkpoint block for function with checkpointing: true (spec §10.1.1)", async () => {
+    const CheckpointedFn = InngestFunction.make("checkpointed-fn", {
+      trigger: { event: UserCreated },
+      success: Schema.Void,
+      checkpointing: true,
+    });
+    const CheckpointedGroup = InngestGroup.make(CheckpointedFn);
+    const CheckpointedHandlers = CheckpointedGroup.toLayer({
+      "checkpointed-fn": () => Effect.succeed({ processed: true }),
+    });
+
+    const capturedRequests: Array<{ body: Option.Option<unknown> }> = [];
+    const mockHttpClient = makeMockHttpClient((_method, _url, body) => capturedRequests.push({ body }));
+
+    const clientLayer = InngestClient.layer({
+      id: "ckpt-app",
+      eventKey: "test-key",
+    }).pipe(Layer.provide(mockHttpClient));
+
+    const fullLayer = Layer.mergeAll(CheckpointedHandlers, clientLayer, mockHttpClient);
+    const { handler, dispose } = InngestGroup.toWebHandler(CheckpointedGroup, { layer: fullLayer });
+
+    try {
+      await handler(
+        new Request("http://localhost:3000/api/inngest", {
+          method: "PUT",
+          headers: { host: "localhost:3000" },
+        }),
+      );
+
+      const body = Option.getOrNull(capturedRequests[0]!.body) as {
+        functions: Array<{
+          checkpoint?: { batch_steps: number; batch_interval: string; max_runtime: string };
+        }>;
+      } | null;
+      expect(body).toBeTruthy();
+      expect(body!.functions[0]!.checkpoint).toEqual({
+        batch_steps: 1,
+        batch_interval: "0s",
+        max_runtime: "10s",
+      });
+    } finally {
+      await dispose();
+    }
+  });
+
+  it("includes custom checkpoint block for function with tuned options", async () => {
+    const CheckpointedFn = InngestFunction.make("tuned-ckpt-fn", {
+      trigger: { event: UserCreated },
+      success: Schema.Void,
+      checkpointing: { bufferedSteps: 5, maxInterval: "2 seconds", maxRuntime: "1 minute" },
+    });
+    const CheckpointedGroup = InngestGroup.make(CheckpointedFn);
+    const CheckpointedHandlers = CheckpointedGroup.toLayer({
+      "tuned-ckpt-fn": () => Effect.succeed({ processed: true }),
+    });
+
+    const capturedRequests: Array<{ body: Option.Option<unknown> }> = [];
+    const mockHttpClient = makeMockHttpClient((_method, _url, body) => capturedRequests.push({ body }));
+
+    const clientLayer = InngestClient.layer({
+      id: "ckpt-app",
+      eventKey: "test-key",
+    }).pipe(Layer.provide(mockHttpClient));
+
+    const fullLayer = Layer.mergeAll(CheckpointedHandlers, clientLayer, mockHttpClient);
+    const { handler, dispose } = InngestGroup.toWebHandler(CheckpointedGroup, { layer: fullLayer });
+
+    try {
+      await handler(
+        new Request("http://localhost:3000/api/inngest", {
+          method: "PUT",
+          headers: { host: "localhost:3000" },
+        }),
+      );
+
+      const body = Option.getOrNull(capturedRequests[0]!.body) as {
+        functions: Array<{
+          checkpoint?: { batch_steps: number; batch_interval: string; max_runtime: string };
+        }>;
+      } | null;
+      expect(body).toBeTruthy();
+      expect(body!.functions[0]!.checkpoint).toEqual({
+        batch_steps: 5,
+        batch_interval: "2s",
+        max_runtime: "1m",
+      });
+    } finally {
+      await dispose();
+    }
+  });
+
+  it("omits checkpoint block for function with checkpointing: false (opt-out)", async () => {
+    const OptOutFn = InngestFunction.make("optout-ckpt-fn", {
+      trigger: { event: UserCreated },
+      success: Schema.Void,
+      checkpointing: false,
+    });
+    const OptOutGroup = InngestGroup.make(OptOutFn);
+    const OptOutHandlers = OptOutGroup.toLayer({
+      "optout-ckpt-fn": () => Effect.succeed({ processed: true }),
+    });
+
+    const capturedRequests: Array<{ body: Option.Option<unknown> }> = [];
+    const mockHttpClient = makeMockHttpClient((_method, _url, body) => capturedRequests.push({ body }));
+
+    const clientLayer = InngestClient.layer({
+      id: "ckpt-app",
+      eventKey: "test-key",
+    }).pipe(Layer.provide(mockHttpClient));
+
+    const fullLayer = Layer.mergeAll(OptOutHandlers, clientLayer, mockHttpClient);
+    const { handler, dispose } = InngestGroup.toWebHandler(OptOutGroup, { layer: fullLayer });
+
+    try {
+      await handler(
+        new Request("http://localhost:3000/api/inngest", {
+          method: "PUT",
+          headers: { host: "localhost:3000" },
+        }),
+      );
+
+      const body = Option.getOrNull(capturedRequests[0]!.body) as {
+        functions: Array<{ checkpoint?: unknown }>;
+      } | null;
+      expect(body).toBeTruthy();
+      // Fn-level opt-out wins — no `checkpoint` block emitted.
+      expect(body!.functions[0]!.checkpoint).toBeUndefined();
+    } finally {
+      await dispose();
+    }
+  });
+
   it("handles registration failure gracefully", async () => {
     const failingHttpClient = makeFailingHttpClient();
 
@@ -278,11 +413,13 @@ describe("TB-007: Registration", () => {
         }),
       );
 
-      // Registration failure triggers 500 with error message
-      // (since Effect.die throws a defect that gets caught by catchAllCause in toHttpApp)
+      // Spec §4.3.3: registration failure SHOULD return 500 with
+      // `{ message, modified: false }` body — never let the toWebHandler
+      // generic 500 wrapper escape.
       expect(response.status).toBe(500);
-      const body = (await response.json()) as { error?: string };
-      expect(body.error).toBe("Internal server error");
+      const body = (await response.json()) as { message?: string; modified?: boolean };
+      expect(body.modified).toBe(false);
+      expect(typeof body.message).toBe("string");
     } finally {
       await dispose();
     }

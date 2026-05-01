@@ -1,7 +1,8 @@
-import { HttpClient, HttpClientResponse } from "@effect/platform";
-import { it } from "../bun-effect.js";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import { it } from "@effect/vitest";
 import { Effect, Layer, Option } from "effect";
-import { describe, expect } from "../bun-effect";
+import { describe, expect } from "@effect/vitest";
 import * as Protocol from "../../src/internal/protocol.js";
 
 // Note: UseApi module uses internal API - test Protocol types instead
@@ -28,8 +29,21 @@ describe("Protocol types for UseApi", () => {
   describe("SDKRequestBody schema", () => {
     it.effect("creates request body with events", () =>
       Effect.sync(() => {
+        const makeCtx = () =>
+          Protocol.SDKRequestContext.make({
+            fn_id: "fn-1",
+            run_id: "run-1",
+            env: "dev",
+            step_id: "step",
+            attempt: 0,
+            max_attempts: 4,
+            stack: Protocol.FunctionStack.make({ stack: [], current: 0 }),
+            qi_id: "",
+            disable_immediate_execution: false,
+            use_api: false,
+          });
         const body = Protocol.SDKRequestBody.make({
-          event: Protocol.InngestEvent.make({ name: "test/event" }),
+          event: Protocol.InngestEvent.make({ name: "test/event", data: {} }),
           events: [
             Protocol.InngestEvent.make({ id: "evt-1", name: "test/event", data: { foo: "bar" }, ts: Date.now() }),
           ],
@@ -37,7 +51,9 @@ describe("Protocol types for UseApi", () => {
             "step-hash-1": { data: { result: 42 } },
             "step-hash-2": { data: null },
           },
-          ctx: Protocol.SDKRequestContext.make({ fn_id: "fn-1", run_id: "run-1" }),
+          ctx: makeCtx(),
+          version: 1,
+          use_api: false,
         });
 
         expect(body.events).toHaveLength(1);

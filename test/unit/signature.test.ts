@@ -4,8 +4,8 @@
  */
 
 import * as Crypto from "node:crypto";
-import { Effect } from "effect";
-import { describe, expect, it } from "../bun-effect.js";
+import { Effect, Result } from "effect";
+import { describe, expect, it } from "@effect/vitest";
 import { Signature, SignatureError, SignatureLive } from "../../src/internal/signature.js";
 
 // Test Fixtures
@@ -36,7 +36,7 @@ const createValidSignature = (body: Uint8Array, signingKey: string, timestampOve
 
 describe("Signature.verify", () => {
   describe("dev mode", () => {
-    it.effect("bypasses verification when isDev is true", () =>
+    it.live("bypasses verification when isDev is true", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig.verify({
@@ -50,7 +50,7 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("bypasses verification even with invalid signature in dev mode", () =>
+    it.live("bypasses verification even with invalid signature in dev mode", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig.verify({
@@ -66,7 +66,7 @@ describe("Signature.verify", () => {
   });
 
   describe("production mode (isDev: false)", () => {
-    it.effect("succeeds with valid signature", () =>
+    it.live("succeeds with valid signature", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
@@ -82,7 +82,7 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with missing signing key", () =>
+    it.live("fails with missing signing key", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
@@ -94,16 +94,16 @@ describe("Signature.verify", () => {
             signingKey: undefined,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("missing_signing_key");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("missing_signing_key");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with missing signature header", () =>
+    it.live("fails with missing signature header", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig
@@ -113,16 +113,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("missing_header");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("missing_header");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with invalid signature format (missing t=)", () =>
+    it.live("fails with invalid signature format (missing t=)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig
@@ -132,16 +132,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with invalid signature format (missing s=)", () =>
+    it.live("fails with invalid signature format (missing s=)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig
@@ -151,16 +151,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with expired signature (> 5 minutes old)", () =>
+    it.live("fails with expired signature (> 5 minutes old)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         // Create signature from 10 minutes ago
@@ -174,16 +174,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("expired");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("expired");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with future signature (> 5 minutes ahead)", () =>
+    it.live("fails with future signature (> 5 minutes ahead)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         // Create signature from 10 minutes in the future
@@ -197,16 +197,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("expired");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("expired");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with invalid signature (wrong key)", () =>
+    it.live("fails with invalid signature (wrong key)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const differentKey = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
@@ -219,16 +219,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with invalid signature (tampered body)", () =>
+    it.live("fails with invalid signature (tampered body)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
@@ -241,16 +241,16 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails with invalid signature (wrong length - truncated)", () =>
+    it.live("fails with invalid signature (wrong length - truncated)", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const timestamp = Math.floor(Date.now() / 1000);
@@ -264,18 +264,18 @@ describe("Signature.verify", () => {
             signingKey: TEST_SIGNING_KEY,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_format");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_format");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
   });
 
   describe("fallback key", () => {
-    it.effect("succeeds when primary key fails but fallback matches", () =>
+    it.live("succeeds when primary key fails but fallback matches", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         // Sign with fallback key
@@ -293,7 +293,7 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(SignatureLive)),
     );
 
-    it.effect("fails when neither primary nor fallback matches", () =>
+    it.live("fails when neither primary nor fallback matches", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const differentKey = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
@@ -307,11 +307,11 @@ describe("Signature.verify", () => {
             signingKeyFallback: TEST_SIGNING_KEY_FALLBACK,
             isDev: false,
           })
-          .pipe(Effect.either);
+          .pipe(Effect.result);
 
-        expect(result._tag).toBe("Left");
-        if (result._tag === "Left") {
-          expect(result.left.reason).toBe("invalid_signature");
+        expect(Result.isFailure(result)).toBe(true);
+        if (Result.isFailure(result)) {
+          expect(result.failure.reason).toBe("invalid_signature");
         }
       }).pipe(Effect.provide(SignatureLive)),
     );
@@ -321,7 +321,7 @@ describe("Signature.verify", () => {
 // Tests: sign()
 
 describe("Signature.sign", () => {
-  it.effect("creates valid signature header format", () =>
+  it.live("creates valid signature header format", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
       const header = yield* sig.sign(TEST_BODY, TEST_SIGNING_KEY);
@@ -330,7 +330,7 @@ describe("Signature.sign", () => {
     }).pipe(Effect.provide(SignatureLive)),
   );
 
-  it.effect("creates signature that can be verified", () =>
+  it.live("creates signature that can be verified", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
       const header = yield* sig.sign(TEST_BODY, TEST_SIGNING_KEY);
@@ -346,7 +346,7 @@ describe("Signature.sign", () => {
     }).pipe(Effect.provide(SignatureLive)),
   );
 
-  it.effect("uses current timestamp", () =>
+  it.live("uses current timestamp", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
       const before = Math.floor(Date.now() / 1000);

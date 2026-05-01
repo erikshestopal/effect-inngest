@@ -25,7 +25,7 @@ export class FunctionFailed extends Schema.TaggedClass<FunctionFailed>()("innges
   function_id: Schema.String,
   run_id: Schema.String,
   error: JsonError,
-  event: Schema.Record({ key: Schema.String, value: Schema.Unknown }),
+  event: Schema.Record(Schema.String, Schema.Unknown),
 }) {}
 
 /**
@@ -57,7 +57,7 @@ export class FunctionFinishedSuccess extends Schema.TaggedClass<FunctionFinished
  * Union of both FunctionFinished variants.
  * @since 0.1.0
  */
-export const FunctionFinished = Schema.Union(FunctionFinishedError, FunctionFinishedSuccess);
+export const FunctionFinished = Schema.Union([FunctionFinishedError, FunctionFinishedSuccess]);
 export type FunctionFinished = typeof FunctionFinished.Type;
 
 /**
@@ -75,7 +75,7 @@ export class FunctionCancelled extends Schema.TaggedClass<FunctionCancelled>()("
  * @since 0.1.0
  */
 export class FunctionInvoked extends Schema.TaggedClass<FunctionInvoked>()("inngest/function.invoked", {
-  data: Schema.optional(Schema.Record({ key: Schema.String, value: Schema.Unknown })),
+  data: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
 }) {}
 
 /**

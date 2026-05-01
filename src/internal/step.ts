@@ -3,7 +3,6 @@
  * @internal
  */
 import * as Arr from "effect/Array";
-import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as HashMap from "effect/HashMap";
@@ -15,6 +14,7 @@ import * as Schema from "effect/Schema";
 import { pipe } from "effect/Function";
 import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
+import type { CheckpointState } from "./checkpoint.js";
 import * as Protocol from "./protocol.js";
 import { StepError, SendEventError, isNonRetriableError, isRetryAfterError } from "./errors.js";
 import { timeStr, formatTimestamp } from "./helpers.js";
@@ -68,7 +68,7 @@ interface StepOptions {
 type StepOptionsOrId = string | StepOptions;
 
 interface WaitForEventOptions {
-  readonly timeout: Duration.DurationInput;
+  readonly timeout: Duration.Input;
   readonly if?: string;
 }
 
@@ -76,20 +76,22 @@ interface InvokeOptionsBase<F extends InngestFunction.Any> {
   readonly function: F;
   readonly user?: Record<string, unknown>;
   readonly v?: string;
-  readonly timeout?: Duration.DurationInput;
+  readonly timeout?: Duration.Input;
 }
 
 type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F>] extends [never]
   ? InvokeOptionsBase<F>
   : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventType<F> };
 
-type EventSchema = Schema.Schema.Any & { readonly _tag: string };
+type EventSchema = Schema.Top & { readonly identifier: string };
 type TaggedEvent = { readonly _tag: string };
 
-const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never> => {
+const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, never> => {
   const ctor = event.constructor;
   if (Schema.isSchema(ctor)) {
-    return Schema.encode(ctor as unknown as Schema.Schema.AnyNoContext)(event).pipe(Effect.orElseSucceed(() => event));
+    return Schema.encodeEffect(ctor as unknown as Schema.Top)(event).pipe(
+      Effect.orElseSucceed(() => event),
+    ) as Effect.Effect<unknown, never, never>;
   }
   return Effect.succeed(event);
 };
@@ -99,7 +101,7 @@ interface StepTools {
     id: StepOptionsOrId,
     effect: Effect.Effect<A, Err, R>,
   ) => Effect.Effect<A, StepError | Err, R>;
-  readonly sleep: (id: StepOptionsOrId, duration: Duration.DurationInput) => Effect.Effect<void>;
+  readonly sleep: (id: StepOptionsOrId, duration: Duration.Input) => Effect.Effect<void>;
   readonly sleepUntil: (id: StepOptionsOrId, timestamp: Date | number | string) => Effect.Effect<void>;
   readonly waitForEvent: <E extends EventSchema>(
     id: StepOptionsOrId,
@@ -128,8 +130,6 @@ export interface HandlerContext<F extends InngestFunction.Any> {
   readonly run: RunContext;
 }
 
-export class Step extends Context.Tag("effect-inngest/Step")<Step, StepTools>() {}
-
 const normalizeOpts = (opts: StepOptionsOrId): { id: string; name: string } =>
   typeof opts === "string" ? { id: opts, name: opts } : { id: opts.id, name: opts.name ?? opts.id };
 
@@ -140,6 +140,7 @@ export const createStepTools = (
   request: Protocol.SDKRequestBody,
   appName: string,
   stepIdCounts: Ref.Ref<HashMap.HashMap<string, number>>,
+  checkpoint: Option.Option<CheckpointState> = Option.none(),
 ): StepTools => {
   const ctx = request.ctx;
   const steps = request.steps as Record<string, unknown>;
@@ -159,7 +160,15 @@ export const createStepTools = (
   const canExecute = (hash: string) => ctx.step_id === hash || ctx.step_id === "step";
   const isBlocked = (hash: string) => ctx.disable_immediate_execution && ctx.step_id !== hash;
 
-  const sleep = (opts: StepOptionsOrId, duration: Duration.DurationInput): Effect.Effect<void, StepInterrupt> =>
+  // In checkpoint mode, async opcodes (sleep/wait/invoke) MUST flush the
+  // buffer before yielding so the executor sees buffered StepRuns prepended
+  // to the async opcode in the 206 response (spec §10.2 / §10.4.1 #6).
+  const flushIfCheckpoint = Option.match(checkpoint, {
+    onNone: () => Effect.void,
+    onSome: (state) => state.flush,
+  });
+
+  const sleep = (opts: StepOptionsOrId, duration: Duration.Input): Effect.Effect<void, StepInterrupt> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
         getMemo(info.hash),
@@ -168,7 +177,13 @@ export const createStepTools = (
         Match.tag("MemoTimeout", () => Effect.void),
         Match.tag("MemoError", () => Effect.void),
         Match.tag("MemoInput", () => Effect.void),
-        Match.tag("MemoNone", () => Effect.fail(sleepInterrupt({ info, duration: timeStr(duration) }))),
+        Match.tag("MemoNone", () =>
+          Effect.andThen(flushIfCheckpoint, Effect.fail(sleepInterrupt({ info, duration: timeStr(duration) }))).pipe(
+            Effect.withSpan(`inngest.step/sleep/${info.id}`, {
+              attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleep" },
+            }),
+          ),
+        ),
         Match.exhaustive,
       ),
     );
@@ -182,7 +197,16 @@ export const createStepTools = (
         Match.tag("MemoTimeout", () => Effect.void),
         Match.tag("MemoError", () => Effect.void),
         Match.tag("MemoInput", () => Effect.void),
-        Match.tag("MemoNone", () => Effect.fail(sleepInterrupt({ info, duration: formatTimestamp(timestamp) }))),
+        Match.tag("MemoNone", () =>
+          Effect.andThen(
+            flushIfCheckpoint,
+            Effect.fail(sleepInterrupt({ info, duration: formatTimestamp(timestamp) })),
+          ).pipe(
+            Effect.withSpan(`inngest.step/sleepUntil/${info.id}`, {
+              attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleepUntil" },
+            }),
+          ),
+        ),
         Match.exhaustive,
       ),
     );
@@ -210,8 +234,16 @@ export const createStepTools = (
         Match.tag("MemoError", () => Effect.succeed(Option.none())),
         Match.tag("MemoInput", () => Effect.succeed(Option.none())),
         Match.tag("MemoNone", () =>
-          Effect.fail(
-            waitForEventInterrupt({ info, event: event._tag, timeout: timeStr(options.timeout), if: options.if }),
+          Effect.andThen(
+            flushIfCheckpoint,
+            Effect.fail(
+              waitForEventInterrupt({
+                info,
+                event: event.identifier,
+                timeout: timeStr(options.timeout),
+                if: options.if,
+              }),
+            ),
           ),
         ),
         Match.exhaustive,
@@ -238,17 +270,20 @@ export const createStepTools = (
           const rawData = Predicate.hasProperty(options, "data") ? (options.data as TaggedEvent) : undefined;
           const encodeData = rawData ? encodeTaggedEvent(rawData) : Effect.succeed(undefined);
           return Effect.flatMap(encodeData, (encodedData) =>
-            Effect.fail(
-              invokeInterrupt({
-                info,
-                functionId: `${appName}-${options.function._tag}`,
-                payload: {
-                  data: encodedData,
-                  user: options.user ?? {},
-                  v: options.v ?? "1",
-                },
-                timeout: options.timeout ? timeStr(options.timeout) : "365d",
-              }),
+            Effect.andThen(
+              flushIfCheckpoint,
+              Effect.fail(
+                invokeInterrupt({
+                  info,
+                  functionId: `${appName}-${options.function._tag}`,
+                  payload: {
+                    data: encodedData,
+                    user: options.user ?? {},
+                    v: options.v ?? "1",
+                  },
+                  timeout: options.timeout ? timeStr(options.timeout) : "365d",
+                }),
+              ),
             ),
           );
         }),
@@ -266,8 +301,13 @@ export const createStepTools = (
         Match.value,
         Match.tag("MemoData", ({ data }) => Effect.succeed(data as A)),
         Match.tag("MemoError", ({ error }) =>
+          // Spec §5.2.2: an uncaught memoized step error MUST be treated as
+          // non-retriable. If the user wanted to recover they would have
+          // caught the StepError at the call site; reaching the driver's
+          // top-level failure path means the error is propagating unhandled.
           stepError(info.id, Predicate.hasProperty(error, "message") ? String(error.message) : "Step failed", {
             noRetry: true,
+            cause: error,
           }),
         ),
         Match.tag("MemoTimeout", () => stepError(info.id, "Step timed out", { noRetry: true })),
@@ -285,15 +325,23 @@ export const createStepTools = (
               onFailure: (err) => {
                 const noRetry = isNonRetriableError(err) ? true : undefined;
                 const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
-                return Effect.zipRight(
+                return Effect.andThen(
                   Effect.annotateCurrentSpan(errorOtelAttributes(err)),
                   Effect.fail(errorInterrupt({ info, error: err, noRetry, retryAfterMs })),
                 );
               },
-              onSuccess: (data) => Effect.fail(runInterrupt({ info, data })),
+              onSuccess: (data) =>
+                Option.match(checkpoint, {
+                  // Async (non-checkpoint) mode: surface result via interrupt — driver
+                  // returns 206 with a single StepRun and yields back to executor.
+                  onNone: () => Effect.fail(runInterrupt({ info, data })),
+                  // Checkpoint mode: buffer the StepRun (best-effort flush handled by
+                  // bufferStep) and continue execution with the value (spec §10.4.1).
+                  onSome: (state) => Effect.as(state.bufferStep(Protocol.stepRun(info, data)), data as A),
+                }),
             }),
-            Effect.catchAllDefect((defect) =>
-              Effect.zipRight(
+            Effect.catchDefect((defect) =>
+              Effect.andThen(
                 Effect.annotateCurrentSpan(errorOtelAttributes(defect)),
                 Effect.fail(errorInterrupt({ info, error: defect })),
               ),
@@ -329,12 +377,17 @@ export const createStepTools = (
               Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
             ),
             (eventPayloads) =>
-              Effect.flatMap(InngestClient, (client) =>
+              InngestClient.use((client) =>
                 client.sendEvent(eventPayloads).pipe(
                   Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
                     attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
                   }),
-                  Effect.flatMap((result) => Effect.fail(runInterrupt({ info, data: result }))),
+                  Effect.flatMap((result) =>
+                    Option.match(checkpoint, {
+                      onNone: () => Effect.fail(runInterrupt({ info, data: result })),
+                      onSome: (state) => Effect.as(state.bufferStep(Protocol.stepRun(info, result)), result),
+                    }),
+                  ),
                 ),
               ),
           );

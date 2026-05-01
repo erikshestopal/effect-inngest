@@ -2,6 +2,7 @@
  * Internal helper utilities.
  * @internal
  */
+import * as DateTime from "effect/DateTime";
 import * as Duration from "effect/Duration";
 
 const millisecond = 1;
@@ -17,6 +18,7 @@ const periods = [
   ["h", hour],
   ["m", minute],
   ["s", second],
+  ["ms", millisecond],
 ] as const;
 
 /**
@@ -25,8 +27,8 @@ const periods = [
  * Supports weeks, days, hours, minutes, and seconds. Years/months are converted
  * to their equivalent in weeks/days.
  */
-export const timeStr = (input: Duration.DurationInput): string => {
-  let ms = Duration.toMillis(Duration.decode(input));
+export const timeStr = (input: Duration.Input): string => {
+  let ms = Duration.toMillis(Duration.fromInputUnsafe(input));
 
   const [, result] = periods.reduce<[number, string]>(
     ([num, str], [suffix, period]) => {
@@ -46,13 +48,11 @@ export const timeStr = (input: Duration.DurationInput): string => {
 
 /**
  * Format a timestamp as an ISO string for Inngest's sleepUntil.
+ *
+ * String inputs are passed through unchanged (assumed ISO-formatted), matching
+ * the prior contract. Date/number inputs are normalized via DateTime.
  */
 export const formatTimestamp = (timestamp: Date | number | string): string => {
-  if (timestamp instanceof Date) {
-    return timestamp.toISOString();
-  }
-  if (typeof timestamp === "number") {
-    return new Date(timestamp).toISOString();
-  }
-  return timestamp;
+  if (typeof timestamp === "string") return timestamp;
+  return DateTime.formatIso(DateTime.makeUnsafe(timestamp));
 };

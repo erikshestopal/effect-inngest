@@ -2,19 +2,20 @@
  * Internal error types for the Effect Inngest SDK.
  * @internal
  */
+import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 
 /**
  * @internal
  */
-export class SignatureError extends Schema.TaggedError<SignatureError>()("SignatureError", {
+export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {
   message: Schema.String,
 }) {}
 
 /**
  * @internal
  */
-export class RegistrationError extends Schema.TaggedError<RegistrationError>()("RegistrationError", {
+export class RegistrationError extends Schema.TaggedErrorClass<RegistrationError>()("RegistrationError", {
   message: Schema.String,
   functions: Schema.Array(Schema.String),
 }) {}
@@ -22,7 +23,7 @@ export class RegistrationError extends Schema.TaggedError<RegistrationError>()("
 /**
  * @internal
  */
-export class FunctionNotFoundError extends Schema.TaggedError<FunctionNotFoundError>()("FunctionNotFoundError", {
+export class FunctionNotFoundError extends Schema.TaggedErrorClass<FunctionNotFoundError>()("FunctionNotFoundError", {
   message: Schema.String,
   functionId: Schema.String,
 }) {}
@@ -30,7 +31,7 @@ export class FunctionNotFoundError extends Schema.TaggedError<FunctionNotFoundEr
 /**
  * @internal
  */
-export class SendEventError extends Schema.TaggedError<SendEventError>()("SendEventError", {
+export class SendEventError extends Schema.TaggedErrorClass<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
 }) {}
@@ -38,17 +39,17 @@ export class SendEventError extends Schema.TaggedError<SendEventError>()("SendEv
 /**
  * @internal
  */
-export class UseApiFetchError extends Schema.TaggedError<UseApiFetchError>()("UseApiFetchError", {
+export class UseApiFetchError extends Schema.TaggedErrorClass<UseApiFetchError>()("UseApiFetchError", {
   message: Schema.String,
-  endpoint: Schema.Literal("batch", "actions"),
+  endpoint: Schema.Literals(["batch", "actions"]),
   runId: Schema.String,
-  statusCode: Schema.optionalWith(Schema.Number, { as: "Option" }),
+  statusCode: Schema.optional(Schema.Number),
 }) {}
 
 /**
  * @internal
  */
-export class StepError extends Schema.TaggedError<StepError>()("StepError", {
+export class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
   message: Schema.String,
   stepId: Schema.String,
   cause: Schema.optional(Schema.Unknown),
@@ -58,12 +59,14 @@ export class StepError extends Schema.TaggedError<StepError>()("StepError", {
 /**
  * @internal
  */
-export const isStepError = Schema.is(StepError);
+export const isStepError: (u: unknown) => u is StepError = Predicate.isTagged("StepError") as (
+  u: unknown,
+) => u is StepError;
 
 /**
  * @internal
  */
-export class TimeoutError extends Schema.TaggedError<TimeoutError>()("TimeoutError", {
+export class TimeoutError extends Schema.TaggedErrorClass<TimeoutError>()("TimeoutError", {
   message: Schema.String,
   stepId: Schema.optional(Schema.String),
   timeout: Schema.DurationFromMillis,
@@ -76,7 +79,7 @@ export class TimeoutError extends Schema.TaggedError<TimeoutError>()("TimeoutErr
  * @since 0.1.0
  * @category errors
  */
-export class NonRetriableError extends Schema.TaggedError<NonRetriableError>()("NonRetriableError", {
+export class NonRetriableError extends Schema.TaggedErrorClass<NonRetriableError>()("NonRetriableError", {
   message: Schema.String,
   cause: Schema.optional(Schema.Unknown),
 }) {}
@@ -84,7 +87,9 @@ export class NonRetriableError extends Schema.TaggedError<NonRetriableError>()("
 /**
  * @internal
  */
-export const isNonRetriableError = Schema.is(NonRetriableError);
+export const isNonRetriableError: (u: unknown) => u is NonRetriableError = Predicate.isTagged("NonRetriableError") as (
+  u: unknown,
+) => u is NonRetriableError;
 
 /**
  * Thrown to indicate that the operation should be retried after a specific delay.
@@ -93,7 +98,7 @@ export const isNonRetriableError = Schema.is(NonRetriableError);
  * @since 0.1.0
  * @category errors
  */
-export class RetryAfterError extends Schema.TaggedError<RetryAfterError>()("RetryAfterError", {
+export class RetryAfterError extends Schema.TaggedErrorClass<RetryAfterError>()("RetryAfterError", {
   message: Schema.String,
   retryAfter: Schema.DurationFromMillis,
   cause: Schema.optional(Schema.Unknown),
@@ -102,7 +107,9 @@ export class RetryAfterError extends Schema.TaggedError<RetryAfterError>()("Retr
 /**
  * @internal
  */
-export const isRetryAfterError = Schema.is(RetryAfterError);
+export const isRetryAfterError: (u: unknown) => u is RetryAfterError = Predicate.isTagged("RetryAfterError") as (
+  u: unknown,
+) => u is RetryAfterError;
 
 /**
  * @internal

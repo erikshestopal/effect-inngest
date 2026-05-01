@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -43,7 +43,7 @@ describe("TB-009: Parallel Step Execution", () => {
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { user, orders, preferences };
           }),
@@ -56,7 +56,7 @@ describe("TB-009: Parallel Step Execution", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(3);
@@ -107,7 +107,7 @@ describe("TB-009: Parallel Step Execution", () => {
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { user, orders, preferences };
           }),
@@ -118,7 +118,7 @@ describe("TB-009: Parallel Step Execution", () => {
       try {
         const firstResponse = yield* Effect.tryPromise(() => handler(request()));
         const firstBody = yield* Effect.tryPromise(() => firstResponse.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         const fetchUserHash = firstBody.find((op) => op.name === "fetch-user")!.id;
@@ -134,7 +134,7 @@ describe("TB-009: Parallel Step Execution", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(2);
@@ -175,7 +175,7 @@ describe("TB-009: Parallel Step Execution", () => {
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { user, orders, preferences };
           }),
@@ -186,7 +186,7 @@ describe("TB-009: Parallel Step Execution", () => {
       try {
         const firstResponse = yield* Effect.tryPromise(() => handler(request()));
         const firstBody = yield* Effect.tryPromise(() => firstResponse.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         const fetchUserHash = firstBody.find((op) => op.name === "fetch-user")!.id;
@@ -206,7 +206,7 @@ describe("TB-009: Parallel Step Execution", () => {
         expect(response.status).toBe(200);
 
         const result = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(FetchUserDataResult)),
+          Effect.flatMap(Schema.decodeUnknownEffect(FetchUserDataResult)),
         );
 
         expect(result.user).toEqual({ id: "user_123", name: "Alice" });
@@ -245,7 +245,7 @@ describe("TB-009: Parallel Step Execution", () => {
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { user, orders, preferences };
           }),
@@ -256,7 +256,7 @@ describe("TB-009: Parallel Step Execution", () => {
       try {
         const firstResponse = yield* Effect.tryPromise(() => handler(request()));
         const firstBody = yield* Effect.tryPromise(() => firstResponse.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         const fetchUserHash = firstBody.find((op) => op.name === "fetch-user")!.id;
@@ -274,7 +274,7 @@ describe("TB-009: Parallel Step Execution", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -335,7 +335,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
                 step.run("compute", Effect.succeed(`processed-${event.taskId}`)),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { result, sleptFor: "5s" };
           }),
@@ -348,7 +348,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(MixedOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(MixedOpcodeResponse)),
         );
 
         expect(body).toHaveLength(2);
@@ -394,7 +394,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
                 step.run("compute", Effect.succeed(`processed-${event.taskId}`)),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
-              { mode: "validate" },
+              { concurrency: "unbounded" },
             );
             return { result, sleptFor: "5s" };
           }),
@@ -405,7 +405,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
       try {
         const firstResponse = yield* Effect.tryPromise(() => handler(mixedRequest()));
         const firstBody = yield* Effect.tryPromise(() => firstResponse.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(MixedOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(MixedOpcodeResponse)),
         );
 
         const computeHash = firstBody.find((op) => op.displayName === "compute")!.id;
@@ -423,7 +423,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
         expect(response.status).toBe(200);
 
         const result = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(MixedStepsResult)),
+          Effect.flatMap(Schema.decodeUnknownEffect(MixedStepsResult)),
         );
 
         expect(result.result).toBe("processed-task_456");

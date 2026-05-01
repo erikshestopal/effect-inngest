@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { describe, expect, it } from "../bun-effect.js";
+import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -48,7 +48,7 @@ describe("TB-002: Step Memoization", () => {
         expect(response.status).toBe(206);
 
         const body = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(StepOpcodeResponse)),
+          Effect.flatMap(Schema.decodeUnknownEffect(StepOpcodeResponse)),
         );
 
         expect(body).toHaveLength(1);
@@ -99,7 +99,7 @@ describe("TB-002: Step Memoization", () => {
 
         expect(response.status).toBe(200);
         const result = yield* Effect.tryPromise(() => response.json()).pipe(
-          Effect.flatMap(Schema.decodeUnknown(ProcessOrderResult)),
+          Effect.flatMap(Schema.decodeUnknownEffect(ProcessOrderResult)),
         );
         expect(result).toEqual({ orderId: "order_123", total: 50 });
       } finally {

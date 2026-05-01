@@ -1,11 +1,11 @@
 /**
  * @since 0.1.0
  */
-import * as HttpApp from "@effect/platform/HttpApp";
-import * as HttpClient from "@effect/platform/HttpClient";
-import * as HttpServerRequest from "@effect/platform/HttpServerRequest";
-import * as HttpServerResponse from "@effect/platform/HttpServerResponse";
-import * as UrlParams from "@effect/platform/UrlParams";
+import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpEffect from "effect/unstable/http/HttpEffect";
+import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
+import * as UrlParams from "effect/unstable/http/UrlParams";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -150,7 +150,7 @@ const Proto = {
           const fn = functions.get(tag)!;
           contextMap.set(fn.key, { handler, context });
         }
-        return Context.unsafeMake(contextMap);
+        return Context.makeUnsafe(contextMap);
       }),
     );
   },
@@ -162,7 +162,7 @@ const Proto = {
         const context = yield* Effect.context<never>();
         const contextMap = new Map<string, unknown>();
         contextMap.set(fn.key, { handler, context });
-        return Context.unsafeMake(contextMap);
+        return Context.makeUnsafe(contextMap);
       }),
     );
   },
@@ -199,8 +199,8 @@ export const make = <Fns extends ReadonlyArray<InngestFunction.Any>>(...fns: Fns
  * )
  * ```
  */
-export const toHttpApp = (group: InngestGroup.Any): HttpApp.Default<never, InngestClient | HttpClient.HttpClient> =>
-  Effect.gen(function* () {
+export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(
+  function* (group: InngestGroup.Any) {
     const request = yield* HttpServerRequest.HttpServerRequest;
     const method = request.method;
     const requestUrl = Option.match(HttpServerRequest.toURL(request), {
@@ -225,17 +225,30 @@ export const toHttpApp = (group: InngestGroup.Any): HttpApp.Default<never, Innge
     }
 
     if (method === "POST") {
-      const url = Option.getOrThrow(HttpServerRequest.toURL(request));
-
-      const ExecuteParams = Schema.Struct({
-        fnId: Schema.String,
-        stepId: Schema.optional(Schema.String),
+      const url = yield* Option.match(HttpServerRequest.toURL(request), {
+        onNone: () =>
+          Effect.fail(
+            HttpServerResponse.jsonUnsafe(
+              { error: "Unable to parse request URL" },
+              { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
+            ),
+          ),
+        onSome: (u) => Effect.succeed(u),
       });
 
-      const params = yield* UrlParams.schemaStruct(ExecuteParams)(UrlParams.fromInput(url.searchParams)).pipe(
-        Effect.catchAll(() =>
+      const ExecuteParamsSchema = UrlParams.schemaRecord.pipe(
+        Schema.decodeTo(
+          Schema.Struct({
+            fnId: Schema.String,
+            stepId: Schema.optional(Schema.String),
+          }),
+        ),
+      );
+
+      const params = yield* Schema.decodeUnknownEffect(ExecuteParamsSchema)(UrlParams.fromInput(url.searchParams)).pipe(
+        Effect.catch(() =>
           Effect.fail(
-            HttpServerResponse.unsafeJson(
+            HttpServerResponse.jsonUnsafe(
               { error: "Missing or invalid fnId query parameter" },
               { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
             ),
@@ -245,9 +258,9 @@ export const toHttpApp = (group: InngestGroup.Any): HttpApp.Default<never, Innge
 
       const body = yield* InternalHandler.verifyAndParseRequestBody(request).pipe(
         Effect.provide(SignatureLive),
-        Effect.catchAll((error) =>
+        Effect.catch((error) =>
           Effect.fail(
-            HttpServerResponse.unsafeJson(
+            HttpServerResponse.jsonUnsafe(
               { error: error.message },
               {
                 status: error._tag === "SignatureError" ? 401 : 400,
@@ -267,13 +280,13 @@ export const toHttpApp = (group: InngestGroup.Any): HttpApp.Default<never, Innge
     }
 
     return yield* HttpServerResponse.json({ error: `Method ${method} not allowed` }, { status: 405 });
-  }).pipe(
-    Effect.catchAllCause((cause) =>
-      HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
-        Effect.orDie,
-      ),
+  },
+  Effect.catchCause((cause) =>
+    HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
+      Effect.orDie,
     ),
-  );
+  ),
+);
 
 /**
  * Create a standalone web handler from an InngestGroup.
@@ -307,4 +320,4 @@ export const toWebHandler = <R, E>(
 ): {
   readonly handler: (request: Request, context?: Context.Context<never>) => Promise<Response>;
   readonly dispose: () => Promise<void>;
-} => HttpApp.toWebHandlerLayer(toHttpApp(group), Layer.mergeAll(options.layer, Layer.scope));
+} => HttpEffect.toWebHandlerLayer(toHttpApp(group), options.layer);
