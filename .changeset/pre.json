@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "effect-inngest": "0.1.3"
+  },
+  "changesets": ["effect-v4-upgrade"]
+}
