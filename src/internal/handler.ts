@@ -29,12 +29,13 @@ export class InvalidRequestError extends Schema.TaggedErrorClass<InvalidRequestE
 
 const SDK_VERSION = "2.0.0";
 
-const baseHeaders = (): Record<string, string> => ({
+const baseHeaders = (framework?: string): Record<string, string> => ({
   "Content-Type": "application/json",
   "User-Agent": `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDKHandled]: "true",
   [Protocol.Headers.RequestVersion]: "2",
+  ...(framework ? { [Protocol.Headers.Framework]: framework } : {}),
 });
 
 const buildServeUrl = (requestUrl: string, serveHost?: string, servePath?: string): URL => {
@@ -101,7 +102,9 @@ export const handleIntrospection = Effect.fn("effect-inngest/handler/handleIntro
     schema_version: "2024-05-24",
   };
 
-  return { status: 200, headers: baseHeaders(), body } as HandlerResponse<typeof Protocol.IntrospectionResponse.Type>;
+  return { status: 200, headers: baseHeaders(config.framework), body } as HandlerResponse<
+    typeof Protocol.IntrospectionResponse.Type
+  >;
 });
 
 export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegistration")(function* (
@@ -116,22 +119,22 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
   const functions = Array.from(group.functions.values()).map((fn) =>
     fn.toRegistration({ appId: config.id, url: url.href }),
   );
+  const framework = config.framework;
 
   const registerUrl = new URL("fn/register", client.apiBaseUrl).toString();
-  const registerHeaders = baseHeaders();
+  const registerHeaders = baseHeaders(framework);
   delete registerHeaders[Protocol.Headers.RequestVersion];
 
   const request = HttpClientRequest.post(registerUrl).pipe(
     HttpClientRequest.setHeaders({
       ...registerHeaders,
       Authorization: `Bearer ${config.signingKey ?? ""}`,
-      [Protocol.Headers.Framework]: "effect",
       [Protocol.Headers.SyncKind]: "out_of_band",
     }),
     HttpClientRequest.bodyJsonUnsafe({
       url: url.href,
       deployType: "ping" as const,
-      framework: "effect",
+      ...(framework ? { framework } : {}),
       appName: config.id,
       functions,
       sdk: `effect-inngest:v${SDK_VERSION}`,
@@ -155,7 +158,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
     if (response.status !== 200 || !Predicate.hasProperty(responseBody, "ok")) {
       return {
         status: 500,
-        headers: baseHeaders(),
+        headers: baseHeaders(config.framework),
         body: {
           message:
             Predicate.hasProperty(responseBody, "error") && responseBody.error
@@ -168,7 +171,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
 
     return {
       status: 200,
-      headers: { ...baseHeaders(), [Protocol.Headers.SyncKind]: "out_of_band" },
+      headers: { ...baseHeaders(config.framework), [Protocol.Headers.SyncKind]: "out_of_band" },
       body: {
         message: "Successfully registered",
         modified: responseBody.modified ?? false,
@@ -192,7 +195,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
           : "Registration failed";
       return Effect.succeed({
         status: 500,
-        headers: baseHeaders(),
+        headers: baseHeaders(config.framework),
         body: { message, modified: false },
       } as HandlerResponse<typeof Protocol.RegisterResponse.Type>);
     }),
@@ -228,7 +231,7 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
     // Spec §4.4.3 pair rule: 500 MUST pair with X-Inngest-No-Retry: false.
     return {
       status: 500 as const,
-      headers: { ...baseHeaders(), [Protocol.Headers.NoRetry]: "false" },
+      headers: { ...baseHeaders(client.config.framework), [Protocol.Headers.NoRetry]: "false" },
       body: Protocol.UserError.make({ name: "FunctionNotFoundError", message: `Unknown function: ${fnId}` }),
     };
   }

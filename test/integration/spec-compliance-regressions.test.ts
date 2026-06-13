@@ -94,6 +94,7 @@ describe("Spec Compliance Regressions", () => {
         expect(capturedHeaders).toHaveLength(1);
         expect(capturedHeaders[0]![Protocol.Headers.SDKHandled.toLowerCase()]).toBe("true");
         expect(capturedHeaders[0]![Protocol.Headers.SyncKind.toLowerCase()]).toBe("out_of_band");
+        expect(capturedHeaders[0]![Protocol.Headers.Framework.toLowerCase()]).toBeUndefined();
         expect(capturedHeaders[0]![Protocol.Headers.RequestVersion.toLowerCase()]).toBeUndefined();
       } finally {
         yield* Effect.tryPromise(() => dispose());

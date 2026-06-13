@@ -114,8 +114,7 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
           ({ step }) =>
             Effect.gen(function* () {
               yield* step.run("a", Effect.succeed("A"));
-              yield* Effect.never;
-              return "unreachable";
+              return yield* Effect.never;
             }),
           { bufferedSteps: 10, maxRuntime: "50 millis" },
         );

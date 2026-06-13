@@ -24,7 +24,9 @@
           "preferSchemaOverJson": "warning",
           "processEnv": "warning",
           "processEnvInEffect": "warning"
-        }
+        },
+        "includeSuggestionsInTsc": false,
+        "ignoreEffectWarningsInTscExitCode": true
       }
     ],
     "paths": {

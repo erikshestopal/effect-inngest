@@ -59,12 +59,13 @@ const toUserError = (error: unknown): typeof Protocol.UserError.Type =>
     stack: Predicate.hasProperty(error, "stack") ? String(error.stack) : undefined,
   });
 
-const baseHeaders = (): Record<string, string> => ({
+const baseHeaders = (framework?: string): Record<string, string> => ({
   "Content-Type": "application/json",
   "User-Agent": `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDKHandled]: "true",
   [Protocol.Headers.RequestVersion]: "2",
+  ...(framework ? { [Protocol.Headers.Framework]: framework } : {}),
 });
 
 const encodeOpcodes = (opcodes: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>): unknown =>
@@ -79,8 +80,9 @@ export const execute = <F extends InngestFunction.Any, R>(
   checkpointConfig: Option.Option<CheckpointConfig> = Option.none(),
 ): Effect.Effect<ExecutionResult, never, R | InngestClient> =>
   Effect.gen(function* () {
+    const client = yield* InngestClient;
     const stepIdCounts = yield* Ref.make(HashMap.empty<string, number>());
-    const headers = baseHeaders();
+    const headers = baseHeaders(client.config.framework);
 
     // Build the optional CheckpointState. In checkpoint mode the step tools
     // buffer StepRun results into this state and yield (drain + DiscoveryRequest /
@@ -89,7 +91,6 @@ export const execute = <F extends InngestFunction.Any, R>(
       onNone: () => Effect.succeed(Option.none<CheckpointState>()),
       onSome: (config) =>
         Effect.gen(function* () {
-          const client = yield* InngestClient;
           const state = yield* Checkpoint.make({
             config,
             runId: request.ctx.run_id,

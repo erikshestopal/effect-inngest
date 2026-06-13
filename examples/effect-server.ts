@@ -13,6 +13,7 @@ const examplesDir = dirname(fileURLToPath(import.meta.url));
 const port = Number(process.env.EFFECT_INNGEST_PORT ?? "9999");
 const devUrl = (process.env.EFFECT_INNGEST_DEV_URL ?? "http://127.0.0.1:8288").replace(/\/+$/, "");
 const serveOrigin = (process.env.EFFECT_INNGEST_SERVE_ORIGIN ?? `http://127.0.0.1:${port}`).replace(/\/+$/, "");
+const framework = process.env.EFFECT_INNGEST_FRAMEWORK?.trim() || undefined;
 const selectedExampleIds = new Set(
   (process.env.EFFECT_INNGEST_EXAMPLE_IDS ?? "")
     .split(",")
@@ -74,6 +75,7 @@ const toRunnableExample = (example: LoadedExample): RunnableExample | undefined 
   const ClientLive = InngestClient.layer({
     id: appId,
     mode: "dev",
+    ...(framework ? { framework } : {}),
     apiBaseUrl: `${devUrl}/`,
     eventBaseUrl: `${devUrl}/`,
   }).pipe(Layer.provide(FetchHttpClient.layer));

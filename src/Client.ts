@@ -120,6 +120,12 @@ interface ClientConfig {
   readonly servePath?: string | undefined;
 
   /**
+   * The framework adapter serving this app, e.g. "bun" or "nodejs". Used for
+   * protocol headers and registration metadata.
+   */
+  readonly framework?: string | undefined;
+
+  /**
    * Whether to use checkpointing by default for executions of functions
    * created using this client.
    *

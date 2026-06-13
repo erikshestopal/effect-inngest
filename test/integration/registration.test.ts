@@ -141,7 +141,6 @@ describe("TB-007: Registration", () => {
         v: "0.1",
         url: expect.stringContaining("localhost:3000"),
         deployType: "ping",
-        framework: "effect",
         sdk: expect.stringContaining("effect-inngest"),
         appName: "test-app",
         functions: [
@@ -162,6 +161,7 @@ describe("TB-007: Registration", () => {
           },
         ],
       });
+      expect(body).not.toHaveProperty("framework");
     } finally {
       await dispose();
     }

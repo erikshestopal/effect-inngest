@@ -15,11 +15,14 @@ const Group = InngestGroup.make(ParallelFn);
 const HandlersLive = Group.toLayer({
   "parallel-steps": ({ step }) =>
     Effect.gen(function* () {
-      const results = yield* Effect.all([
-        step.run("step-1", Effect.succeed(1)),
-        step.run("step-2", Effect.succeed(2)),
-        step.run("step-3", Effect.succeed(3)),
-      ]);
+      const results = yield* Effect.all(
+        [
+          step.run("step-1", Effect.succeed(1)),
+          step.run("step-2", Effect.succeed(2)),
+          step.run("step-3", Effect.succeed(3)),
+        ],
+        { concurrency: "unbounded" },
+      );
       return { results };
     }),
 });

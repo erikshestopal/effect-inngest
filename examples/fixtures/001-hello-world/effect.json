@@ -9,7 +9,7 @@
       "path": "/examples/001-hello-world",
       "query": {},
       "headers": {
-        "user-agent": "node"
+        "user-agent": "<sdk>"
       },
       "body": null
     },
@@ -17,9 +17,10 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "effect-inngest:v2.0.0",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
       "body": {
@@ -44,7 +45,7 @@
       "path": "/examples/001-hello-world",
       "query": {},
       "headers": {
-        "user-agent": "node"
+        "user-agent": "<sdk>"
       },
       "body": null
     },
@@ -52,9 +53,10 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "effect-inngest:v2.0.0",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true",
         "x-inngest-sync-kind": "out_of_band"
       },
@@ -76,16 +78,16 @@
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "effect-inngest:v2.0.0",
-        "x-inngest-framework": "effect",
-        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true",
         "x-inngest-sync-kind": "out_of_band"
       },
       "body": {
         "url": "http://127.0.0.1:19998/examples/001-hello-world",
         "deployType": "ping",
-        "framework": "effect",
+        "framework": "bun",
         "appName": "examples-001-hello-world",
         "functions": [
           {
@@ -111,7 +113,7 @@
             }
           }
         ],
-        "sdk": "effect-inngest:v2.0.0",
+        "sdk": "<sdk>",
         "v": "0.1",
         "capabilities": {
           "trust_probe": "v1",
@@ -148,7 +150,7 @@
       "headers": {
         "account-id": "00000000-0000-4000-a000-000000000000",
         "content-type": "application/json",
-        "user-agent": "Inngest",
+        "user-agent": "<sdk>",
         "x-inngest-generation-id": "1",
         "x-inngest-req-version": "-1",
         "x-inngest-step-id": "step"
@@ -202,9 +204,10 @@
       "status": 206,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "effect-inngest:v2.0.0",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
       "body": [

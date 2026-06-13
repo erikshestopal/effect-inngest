@@ -9,7 +9,7 @@
       "path": "/examples/001-hello-world",
       "query": {},
       "headers": {
-        "user-agent": "node"
+        "user-agent": "<sdk>"
       },
       "body": null
     },
@@ -17,10 +17,10 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "inngest-js:v4.5.1",
+        "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
       "body": {
@@ -45,7 +45,7 @@
       "path": "/examples/001-hello-world",
       "query": {},
       "headers": {
-        "user-agent": "node"
+        "user-agent": "<sdk>"
       },
       "body": null
     },
@@ -53,10 +53,10 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "inngest-js:v4.5.1",
+        "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true",
         "x-inngest-sync-kind": "out_of_band"
       },
@@ -78,9 +78,9 @@
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "inngest-js:v4.5.1",
+        "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
-        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true",
         "x-inngest-sync-kind": "out_of_band"
       },
@@ -113,7 +113,7 @@
             }
           }
         ],
-        "sdk": "js:v4.5.1",
+        "sdk": "<sdk>",
         "v": "0.1",
         "capabilities": {
           "trust_probe": "v1",
@@ -150,7 +150,7 @@
       "headers": {
         "account-id": "00000000-0000-4000-a000-000000000000",
         "content-type": "application/json",
-        "user-agent": "Inngest",
+        "user-agent": "<sdk>",
         "x-inngest-generation-id": "1",
         "x-inngest-req-version": "-1",
         "x-inngest-step-id": "step"
@@ -204,10 +204,10 @@
       "status": 206,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "inngest-js:v4.5.1",
+        "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
       "body": [

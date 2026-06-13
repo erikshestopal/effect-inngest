@@ -21,6 +21,7 @@ const runtimes = {
     env: (example) => ({
       EFFECT_INNGEST_DEV_URL: recordedDevOrigin,
       EFFECT_INNGEST_EXAMPLE_IDS: example?.id ?? "",
+      EFFECT_INNGEST_FRAMEWORK: "bun",
       EFFECT_INNGEST_PORT: "19999",
       EFFECT_INNGEST_SERVE_ORIGIN: recordedSdkOrigin,
     }),
@@ -107,6 +108,7 @@ const sanitizeProtocolBody = (body) => {
   const sanitized = { ...body };
 
   if (sanitized.sync_id !== undefined) sanitized.sync_id = "<sync-id>";
+  if (sanitized.sdk !== undefined) sanitized.sdk = "<sdk>";
 
   if (sanitized.ctx && typeof sanitized.ctx === "object" && !Array.isArray(sanitized.ctx)) {
     sanitized.ctx = { ...sanitized.ctx };
@@ -148,7 +150,9 @@ const sanitizeHeaders = (headers) =>
         const lowerKey = key.toLowerCase();
         const valueToRecord = ["authorization", "cookie", "set-cookie", "x-inngest-signature"].includes(lowerKey)
           ? "<redacted>"
-          : value;
+          : ["user-agent", "x-inngest-sdk"].includes(lowerKey)
+            ? "<sdk>"
+            : value;
 
         return [lowerKey, valueToRecord];
       })
