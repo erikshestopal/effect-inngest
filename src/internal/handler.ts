@@ -31,7 +31,9 @@ const SDK_VERSION = "2.0.0";
 
 const baseHeaders = (): Record<string, string> => ({
   "Content-Type": "application/json",
+  "User-Agent": `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
+  [Protocol.Headers.SDKHandled]: "true",
   [Protocol.Headers.RequestVersion]: "2",
 });
 
@@ -89,13 +91,14 @@ export const handleIntrospection = Effect.fn("effect-inngest/handler/handleIntro
   const config = client.config;
 
   const body: typeof Protocol.IntrospectionResponse.Type = {
-    function_count: group.functions.size,
+    extra: {
+      native_crypto: globalThis.crypto?.subtle ? true : false,
+    },
     has_event_key: config.eventKey !== undefined,
     has_signing_key: config.signingKey !== undefined,
-    has_signing_key_fallback: config.signingKeyFallback !== undefined,
+    function_count: group.functions.size,
     mode: client.mode === "dev" ? "dev" : "cloud",
     schema_version: "2024-05-24",
-    authentication_succeeded: null,
   };
 
   return { status: 200, headers: baseHeaders(), body } as HandlerResponse<typeof Protocol.IntrospectionResponse.Type>;
@@ -115,19 +118,28 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
   );
 
   const registerUrl = new URL("fn/register", client.apiBaseUrl).toString();
+  const registerHeaders = baseHeaders();
+  delete registerHeaders[Protocol.Headers.RequestVersion];
+
   const request = HttpClientRequest.post(registerUrl).pipe(
     HttpClientRequest.setHeaders({
-      ...baseHeaders(),
+      ...registerHeaders,
       Authorization: `Bearer ${config.signingKey ?? ""}`,
+      [Protocol.Headers.Framework]: "effect",
+      [Protocol.Headers.SyncKind]: "out_of_band",
     }),
     HttpClientRequest.bodyJsonUnsafe({
       url: url.href,
-      v: "0.1",
       deployType: "ping" as const,
-      sdk: `effect-inngest:v${SDK_VERSION}`,
-      appName: config.id,
       framework: "effect",
+      appName: config.id,
       functions,
+      sdk: `effect-inngest:v${SDK_VERSION}`,
+      v: "0.1",
+      capabilities: {
+        trust_probe: "v1",
+        connect: "v1",
+      },
     }),
   );
 
@@ -156,9 +168,9 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
 
     return {
       status: 200,
-      headers: baseHeaders(),
+      headers: { ...baseHeaders(), [Protocol.Headers.SyncKind]: "out_of_band" },
       body: {
-        message: "Successfully synced.",
+        message: "Successfully registered",
         modified: responseBody.modified ?? false,
       },
     } as HandlerResponse<typeof Protocol.RegisterResponse.Type>;
@@ -221,10 +233,12 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
     };
   }
 
-  // URL stepId takes precedence over body.ctx.step_id
-  // This is how Inngest requests execution of a specific step
+  const requestedStepId = urlStepId === "step" ? undefined : urlStepId;
+
+  // Non-root URL stepId takes precedence over body.ctx.step_id. The root
+  // `stepId=step` identifies the function run step, not a targeted child step.
   const effectiveBody =
-    urlStepId && urlStepId !== body.ctx.step_id
+    requestedStepId && requestedStepId !== body.ctx.step_id
       ? Protocol.SDKRequestBody.make({
           event: body.event,
           events: body.events,
@@ -233,7 +247,7 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
             fn_id: body.ctx.fn_id,
             run_id: body.ctx.run_id,
             env: body.ctx.env,
-            step_id: urlStepId,
+            step_id: requestedStepId,
             attempt: body.ctx.attempt,
             max_attempts: body.ctx.max_attempts,
             qi_id: body.ctx.qi_id,
@@ -247,12 +261,12 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
       : body;
 
   // Checkpoint mode entry decision (spec §10):
-  //   - URL stepId NOT set (we are not running a targeted step)
+  //   - non-root URL stepId NOT set (we are not running a targeted child step)
   //   - ctx.fn_id present (executor knows the function)
   //   - ctx.disable_immediate_execution false (executor allowed it)
   //   - resolved per-fn or per-client config not opted out
   const enterCheckpoint =
-    !urlStepId && effectiveBody.ctx.fn_id !== "" && !effectiveBody.ctx.disable_immediate_execution;
+    !requestedStepId && effectiveBody.ctx.fn_id !== "" && !effectiveBody.ctx.disable_immediate_execution;
   const checkpointConfig = enterCheckpoint
     ? Option.fromNullishOr(Checkpoint.resolveConfig(fn.options.checkpointing, client.config.checkpointing))
     : Option.none<Checkpoint.CheckpointConfig>();

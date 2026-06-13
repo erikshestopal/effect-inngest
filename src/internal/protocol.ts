@@ -40,6 +40,9 @@ export const Opcode = {
   DiscoveryRequest: "DiscoveryRequest",
 } as const;
 
+// Native TS SDK emits sha1("complete") for terminal RunComplete opcodes.
+const RUN_COMPLETE_ID = "0737c22d3bfae812339732d14d8c7dbd6dc4e09c";
+
 type OpcodeValue = (typeof Opcode)[keyof typeof Opcode];
 
 export class UserError extends Schema.Class<UserError>("UserError")({
@@ -102,6 +105,8 @@ export const Headers = {
   RequestVersion: "x-inngest-req-version",
   NoRetry: "X-Inngest-No-Retry",
   RetryAfter: "Retry-After",
+  SDKHandled: "x-inngest-sdk-handled",
+  SyncKind: "x-inngest-sync-kind",
   ServerKind: "X-Inngest-Server-Kind",
   ExpectedServerKind: "X-Inngest-Expected-Server-Kind",
   RunID: "X-Run-ID",
@@ -129,7 +134,7 @@ export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpc
     Opcode.DiscoveryRequest,
   ]),
   id: Schema.String,
-  name: Schema.String,
+  name: Schema.optional(Schema.String),
   mode: Schema.optional(Schema.Literals(["sync", "async"])),
   opts: Schema.optional(WireUnknown),
   data: Schema.optional(WireUnknown),
@@ -187,7 +192,7 @@ export const invokeFunction = (
  * (spec §10.4.1).
  */
 export const runComplete = (data: unknown): GeneratorOpcode =>
-  GeneratorOpcode.make({ op: Opcode.RunComplete, id: "step", name: "step", data });
+  GeneratorOpcode.make({ op: Opcode.RunComplete, id: RUN_COMPLETE_ID, data });
 
 /**
  * Yield opcode emitted by the SDK in checkpoint mode when `maxRuntime` is
@@ -201,7 +206,7 @@ const IntrospectionBase = Schema.Struct({
   function_count: Schema.Number,
   has_event_key: Schema.Boolean,
   has_signing_key: Schema.Boolean,
-  has_signing_key_fallback: Schema.Boolean,
+  has_signing_key_fallback: Schema.optional(Schema.Boolean),
   mode: Schema.Literals(["cloud", "dev"]),
   schema_version: Schema.Literal("2024-05-24"),
   extra: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
@@ -209,7 +214,8 @@ const IntrospectionBase = Schema.Struct({
 
 export const IntrospectionUnauthenticated = IntrospectionBase.pipe(
   Schema.fieldsAssign({
-    authentication_succeeded: Schema.Union([Schema.Literal(false), Schema.Null]),
+    authentication_succeeded: Schema.optional(Schema.Union([Schema.Literal(false), Schema.Null])),
+    capabilities: Schema.optional(Schema.Record(Schema.String, Schema.String)),
     functions: Schema.optionalKey(Schema.Array(Schema.Unknown)),
   }),
 );

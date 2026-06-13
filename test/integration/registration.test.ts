@@ -153,7 +153,6 @@ describe("TB-007: Registration", () => {
               step: {
                 id: "step",
                 name: "step",
-                retries: { attempts: 3 },
                 runtime: {
                   type: "http",
                   url: expect.stringContaining("localhost:3000"),

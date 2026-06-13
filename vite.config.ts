@@ -166,7 +166,7 @@ export default defineConfig({
       builtin: true,
     },
     globals: {},
-    ignorePatterns: ["node_modules", "dist", "repos", ".context", "signoz/**", ".context/**/*"],
+    ignorePatterns: ["node_modules", "dist", "repos", ".context", "signoz/**", ".context/**/*", "scripts", "examples"],
     options: {
       typeAware: true,
       typeCheck: true,

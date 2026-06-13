@@ -48,9 +48,7 @@ describe("Spec Compliance Regressions", () => {
     }),
   );
 
-  // Spec §4.1.4 + §4.1.2: requests sent to Inngest (PUT sync + checkpoint POST)
-  // must also send X-Inngest-Req-Version: 2.
-  it.effect("registration request should send X-Inngest-Req-Version: 2", () =>
+  it.effect("registration request should send native out-of-band sync headers", () =>
     Effect.gen(function* () {
       const capturedHeaders: Array<Record<string, string>> = [];
       const mockHttpClient = Layer.effect(
@@ -94,7 +92,9 @@ describe("Spec Compliance Regressions", () => {
         );
 
         expect(capturedHeaders).toHaveLength(1);
-        expect(capturedHeaders[0]![Protocol.Headers.RequestVersion.toLowerCase()]).toBe("2");
+        expect(capturedHeaders[0]![Protocol.Headers.SDKHandled.toLowerCase()]).toBe("true");
+        expect(capturedHeaders[0]![Protocol.Headers.SyncKind.toLowerCase()]).toBe("out_of_band");
+        expect(capturedHeaders[0]![Protocol.Headers.RequestVersion.toLowerCase()]).toBeUndefined();
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
@@ -217,7 +217,7 @@ describe("Spec Compliance Regressions", () => {
 
         expect(response.status).toBe(200);
         expect((yield* Effect.tryPromise(() => response.json())) as unknown).toEqual({
-          message: "Successfully synced.",
+          message: "Successfully registered",
           modified: true,
         });
       } finally {

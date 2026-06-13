@@ -34,6 +34,8 @@ describe("Protocol coverage", () => {
       expect(Protocol.Headers.RequestVersion).toBe("x-inngest-req-version");
       expect(Protocol.Headers.NoRetry).toBe("X-Inngest-No-Retry");
       expect(Protocol.Headers.RetryAfter).toBe("Retry-After");
+      expect(Protocol.Headers.SDKHandled).toBe("x-inngest-sdk-handled");
+      expect(Protocol.Headers.SyncKind).toBe("x-inngest-sync-kind");
       expect(Protocol.Headers.ServerKind).toBe("X-Inngest-Server-Kind");
       expect(Protocol.Headers.ExpectedServerKind).toBe("X-Inngest-Expected-Server-Kind");
       expect(Protocol.Headers.RunID).toBe("X-Run-ID");
@@ -525,6 +527,20 @@ describe("Protocol coverage", () => {
           authentication_succeeded: false,
         });
         expect(result.authentication_succeeded).toBe(false);
+      }),
+    );
+
+    it.effect("decodes native dev introspection shape", () =>
+      Effect.gen(function* () {
+        const result = yield* Schema.decodeUnknownEffect(Protocol.IntrospectionResponse)({
+          extra: { native_crypto: true },
+          function_count: 1,
+          has_event_key: false,
+          has_signing_key: false,
+          mode: "dev",
+          schema_version: "2024-05-24",
+        });
+        expect(result.function_count).toBe(1);
       }),
     );
   });

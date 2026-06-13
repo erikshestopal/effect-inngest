@@ -130,7 +130,7 @@
       "body": {
         "ok": true,
         "modified": true,
-        "sync_id": "73feecb7-d691-4fe2-a130-d2d291f49818",
+        "sync_id": "<sync-id>",
         "app_id": "35d52c6f-7cb1-58f9-a7ab-294a6e954fdb"
       }
     }
@@ -162,11 +162,11 @@
           "env": "",
           "fn_id": "cd80c613-c58d-59c4-935f-b388e2176828",
           "generation_id": 1,
-          "job_id": "210xu96jaos5z",
+          "job_id": "<job_id>",
           "max_attempts": 5,
-          "qi_id": "MjEweHU5Nmphb3M1ejo6ZGVmYXVsdA==",
-          "request_id": "01KV1HQPFFFP72BV156NPCBJ36",
-          "run_id": "01KV1HQPF84ZBWVEKX25C665FX",
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
           "stack": {
             "current": 0,
             "stack": []
@@ -179,9 +179,9 @@
           "data": {
             "name": "Amp"
           },
-          "id": "fixture-native-001-hello-world-0-0",
+          "id": "<event-id>",
           "name": "demo/hello",
-          "ts": 1781389842809,
+          "ts": "<event-ts>",
           "user": {}
         },
         "events": [
@@ -189,9 +189,9 @@
             "data": {
               "name": "Amp"
             },
-            "id": "fixture-native-001-hello-world-0-0",
+            "id": "<event-id>",
             "name": "demo/hello",
-            "ts": 1781389842809,
+            "ts": "<event-ts>",
             "user": {}
           }
         ],

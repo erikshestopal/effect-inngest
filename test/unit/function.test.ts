@@ -92,6 +92,24 @@ describe("InngestFunction coverage", () => {
 
       expect(reg.triggers).toEqual([{ event: "test/event", expression: "event.data.userId != ''" }]);
     });
+
+    it("serializes retries only when explicitly configured", () => {
+      const defaultFn = InngestFunction.make("default-retries-fn", {
+        trigger: { event: TestEvent },
+        success: Schema.Void,
+      });
+      const customFn = InngestFunction.make("custom-retries-fn", {
+        trigger: { event: TestEvent },
+        success: Schema.Void,
+        retries: 5,
+      });
+
+      const defaultReg = defaultFn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
+      const customReg = customFn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
+
+      expect(defaultReg.steps.step.retries).toBeUndefined();
+      expect(customReg.steps.step.retries).toEqual({ attempts: 5 });
+    });
   });
 });
 

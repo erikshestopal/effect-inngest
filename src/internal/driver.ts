@@ -61,7 +61,9 @@ const toUserError = (error: unknown): typeof Protocol.UserError.Type =>
 
 const baseHeaders = (): Record<string, string> => ({
   "Content-Type": "application/json",
+  "User-Agent": `effect-inngest:v${SDK_VERSION}`,
   [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
+  [Protocol.Headers.SDKHandled]: "true",
   [Protocol.Headers.RequestVersion]: "2",
 });
 

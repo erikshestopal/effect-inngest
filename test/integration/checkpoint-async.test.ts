@@ -305,8 +305,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
             yield* step.run("a", Effect.succeed("A"));
             // Intentional global Error to test arbitrary user failure paths
             // eslint-disable-next-line effect-inngest/no-global-error-in-effect-fail
-            yield* step.run("boom", Effect.fail(new Error("kaboom")));
-            return "done";
+            return yield* step.run("boom", Effect.fail(new Error("kaboom")));
           }),
         { checkpointing: { bufferedSteps: 10, maxRuntime: "30 seconds" } },
       );
@@ -367,7 +366,36 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     { timeout: 30_000 },
   );
 
-  it.effect("urlStepId disables checkpoint mode", () =>
+  it.effect("stepId=step enters checkpoint mode", () =>
+    Effect.gen(function* () {
+      const { captures, layer } = setup(() => Effect.succeed({ greeting: "hi" }));
+      const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer });
+      try {
+        const response = yield* Effect.tryPromise(() =>
+          handler(
+            makeRequest({
+              fnId: "ckpt-fn",
+              eventName: "ckpt/test",
+              eventData: { value: "v" },
+              stepIdQuery: "step",
+              disableImmediateExecution: false,
+            }),
+          ),
+        );
+
+        expect(response.status).toBe(206);
+        const body = (yield* Effect.tryPromise(() => response.json())) as Array<{ op: string; data: unknown }>;
+        expect(body).toEqual([
+          { op: "RunComplete", id: "0737c22d3bfae812339732d14d8c7dbd6dc4e09c", data: { greeting: "hi" } },
+        ]);
+        expect(captures.length).toBe(0);
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
+  );
+
+  it.effect("targeted urlStepId disables checkpoint mode", () =>
     Effect.gen(function* () {
       const { captures, layer } = setup(({ step }) =>
         Effect.gen(function* () {
@@ -383,7 +411,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
               fnId: "ckpt-fn",
               eventName: "ckpt/test",
               eventData: { value: "v" },
-              stepIdQuery: "step",
+              stepIdQuery: "not-root-step",
               disableImmediateExecution: false,
             }),
           ),

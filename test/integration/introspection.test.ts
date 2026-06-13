@@ -9,11 +9,11 @@ import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js
 interface IntrospectionBody {
   function_count: number;
   mode: "dev" | "cloud";
-  authentication_succeeded: boolean | null;
+  authentication_succeeded?: boolean | null;
   schema_version: string;
   has_event_key: boolean;
   has_signing_key: boolean;
-  has_signing_key_fallback: boolean;
+  has_signing_key_fallback?: boolean;
   functions?: ReadonlyArray<{
     id: string;
     name: string;
@@ -86,7 +86,7 @@ describe("TB-007A: Introspection", () => {
         // Dev mode includes functions
         expect(body.mode).toBe("dev");
         expect(body.function_count).toBe(2);
-        expect(body.authentication_succeeded).toBe(null);
+        expect(body.authentication_succeeded).toBeUndefined();
         // Note: The current introspection implementation doesn't include functions array
         // This test documents the expected behavior
       } finally {
@@ -113,7 +113,7 @@ describe("TB-007A: Introspection", () => {
         // Cloud mode omits functions
         expect(body.mode).toBe("cloud");
         expect(body.function_count).toBe(2);
-        expect(body.authentication_succeeded).toBe(null);
+        expect(body.authentication_succeeded).toBeUndefined();
         expect(body.functions).toBeUndefined();
       } finally {
         yield* Effect.tryPromise(() => dispose());

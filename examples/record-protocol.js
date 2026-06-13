@@ -91,10 +91,41 @@ const parseBody = (text) => {
   }
 };
 
+const sanitizeEventBody = (event) => {
+  if (!event || typeof event !== "object" || Array.isArray(event)) return event;
+
+  return {
+    ...event,
+    ...(event.id !== undefined ? { id: "<event-id>" } : {}),
+    ...(event.ts !== undefined ? { ts: "<event-ts>" } : {}),
+  };
+};
+
+const sanitizeProtocolBody = (body) => {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return body;
+
+  const sanitized = { ...body };
+
+  if (sanitized.sync_id !== undefined) sanitized.sync_id = "<sync-id>";
+
+  if (sanitized.ctx && typeof sanitized.ctx === "object" && !Array.isArray(sanitized.ctx)) {
+    sanitized.ctx = { ...sanitized.ctx };
+    for (const key of ["job_id", "qi_id", "request_id", "run_id"]) {
+      if (sanitized.ctx[key] !== undefined) sanitized.ctx[key] = `<${key}>`;
+    }
+  }
+
+  if (sanitized.event) sanitized.event = sanitizeEventBody(sanitized.event);
+  if (Array.isArray(sanitized.events)) sanitized.events = sanitized.events.map(sanitizeEventBody);
+
+  return sanitized;
+};
+
 const omittedHeaders = new Set([
   "accept",
   "accept-encoding",
   "accept-language",
+  "b3",
   "connection",
   "content-length",
   "date",
@@ -124,7 +155,8 @@ const sanitizeHeaders = (headers) =>
       .sort(([a], [b]) => a.localeCompare(b)),
   );
 
-const serializeBody = async (body) => parseBody((await body.getText()) ?? body.buffer?.toString("utf8") ?? "");
+const serializeBody = async (body) =>
+  sanitizeProtocolBody(parseBody((await body.getText()) ?? body.buffer?.toString("utf8") ?? ""));
 
 const resetRecording = () => {
   sequence = 0;
@@ -147,7 +179,10 @@ const recordProxy = async ({ direction, name, port, proxyOrigin, targetOrigin })
       headers: sanitizeHeaders(request.headers),
     };
 
-    requests.set(request.id, serializeBody(request.body).then((body) => ({ ...record, body })));
+    requests.set(
+      request.id,
+      serializeBody(request.body).then((body) => ({ ...record, body })),
+    );
   });
   await server.on("response", async (response) => {
     const requestPromise = requests.get(response.id);
@@ -379,7 +414,8 @@ const waitForExecutionRecordings = async (server, path, expectedCount) => {
     }
 
     const actualCount = exchanges.filter(
-      (exchange) => exchange.direction === "inbound" && exchange.request.method === "POST" && exchange.request.path === path,
+      (exchange) =>
+        exchange.direction === "inbound" && exchange.request.method === "POST" && exchange.request.path === path,
     ).length;
 
     if (actualCount >= expectedCount) return;
@@ -450,7 +486,9 @@ const recordExample = async (runtimeName, example) => {
 
     await waitForExecutionRecordings(server, examplePath(example.id), expectedExecutionCount(example));
     await writeFixture(example.id, runtimeName);
-    console.log(`recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`);
+    console.log(
+      `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,
+    );
   } finally {
     await removeSyncedApp(sdkUrl);
     await stopManaged(server);

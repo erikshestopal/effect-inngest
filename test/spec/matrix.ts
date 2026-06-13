@@ -724,7 +724,7 @@ export const scenarios: ReadonlyArray<SpecScenario> = [
     id: "checkpoint.async.runComplete-shape",
     feature: "checkpointing",
     kind: "integration",
-    description: "RunComplete opcode {op,id,name,data} carries the function return value",
+    description: "RunComplete opcode {op,id,data} carries the function return value",
     clauses: ["10.4.1-completion-runComplete"],
     status: "covered",
     evidence: [

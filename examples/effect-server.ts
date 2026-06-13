@@ -76,7 +76,6 @@ const toRunnableExample = (example: LoadedExample): RunnableExample | undefined 
     mode: "dev",
     apiBaseUrl: `${devUrl}/`,
     eventBaseUrl: `${devUrl}/`,
-    eventKey: "test",
   }).pipe(Layer.provide(FetchHttpClient.layer));
   const layer = Layer.mergeAll(example.definition.handlers, ClientLive, FetchHttpClient.layer);
   const { handler, dispose } = InngestGroup.toWebHandler(example.definition.group, { layer });

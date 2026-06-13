@@ -17,17 +17,20 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
+        "user-agent": "effect-inngest:v2.0.0",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0"
+        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk-handled": "true"
       },
       "body": {
-        "function_count": 1,
-        "has_event_key": true,
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
         "has_signing_key": false,
-        "has_signing_key_fallback": false,
+        "function_count": 1,
         "mode": "dev",
-        "schema_version": "2024-05-24",
-        "authentication_succeeded": null
+        "schema_version": "2024-05-24"
       }
     }
   },
@@ -49,11 +52,14 @@
       "status": 200,
       "headers": {
         "content-type": "application/json",
+        "user-agent": "effect-inngest:v2.0.0",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0"
+        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
       },
       "body": {
-        "message": "Successfully synced.",
+        "message": "Successfully registered",
         "modified": true
       }
     }
@@ -69,19 +75,18 @@
       "query": {},
       "headers": {
         "authorization": "<redacted>",
-        "b3": "5bf3ece989d6aa5e41679b9365f91cb2-8b392e466001cc34-1-76fa77347880e109",
         "content-type": "application/json",
-        "user-agent": "Bun/1.3.14",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0"
+        "user-agent": "effect-inngest:v2.0.0",
+        "x-inngest-framework": "effect",
+        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
       },
       "body": {
         "url": "http://127.0.0.1:19998/examples/001-hello-world",
-        "v": "0.1",
         "deployType": "ping",
-        "sdk": "effect-inngest:v2.0.0",
-        "appName": "examples-001-hello-world",
         "framework": "effect",
+        "appName": "examples-001-hello-world",
         "functions": [
           {
             "id": "examples-001-hello-world-hello-world",
@@ -101,14 +106,17 @@
                 "runtime": {
                   "type": "http",
                   "url": "http://127.0.0.1:19998/examples/001-hello-world?fnId=examples-001-hello-world-hello-world&stepId=step"
-                },
-                "retries": {
-                  "attempts": 3
                 }
               }
             }
           }
-        ]
+        ],
+        "sdk": "effect-inngest:v2.0.0",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
       }
     },
     "response": {
@@ -120,7 +128,7 @@
       "body": {
         "ok": true,
         "modified": true,
-        "sync_id": "1900d917-5a93-4d33-ad5b-bc1415c36d0b",
+        "sync_id": "<sync-id>",
         "app_id": "35d52c6f-7cb1-58f9-a7ab-294a6e954fdb"
       }
     }
@@ -152,11 +160,11 @@
           "env": "",
           "fn_id": "cd80c613-c58d-59c4-935f-b388e2176828",
           "generation_id": 1,
-          "job_id": "27jyqexvzh59i",
-          "max_attempts": 4,
-          "qi_id": "MjdqeXFleHZ6aDU5aTo6ZGVmYXVsdA==",
-          "request_id": "01KV1HPFDQ9Q3A1A1W89E9T69W",
-          "run_id": "01KV1HPFDDXTXBT41BPEP9PRFC",
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
           "stack": {
             "current": 0,
             "stack": []
@@ -169,9 +177,9 @@
           "data": {
             "name": "Amp"
           },
-          "id": "fixture-effect-001-hello-world-0-0",
+          "id": "<event-id>",
           "name": "demo/hello",
-          "ts": 1781389802831,
+          "ts": "<event-ts>",
           "user": {}
         },
         "events": [
@@ -179,9 +187,9 @@
             "data": {
               "name": "Amp"
             },
-            "id": "fixture-effect-001-hello-world-0-0",
+            "id": "<event-id>",
             "name": "demo/hello",
-            "ts": 1781389802831,
+            "ts": "<event-ts>",
             "user": {}
           }
         ],
@@ -191,15 +199,23 @@
       }
     },
     "response": {
-      "status": 200,
+      "status": 206,
       "headers": {
         "content-type": "application/json",
+        "user-agent": "effect-inngest:v2.0.0",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "effect-inngest:v2.0.0"
+        "x-inngest-sdk": "effect-inngest:v2.0.0",
+        "x-inngest-sdk-handled": "true"
       },
-      "body": {
-        "greeting": "Hello, Amp!"
-      }
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "greeting": "Hello, Amp!"
+          }
+        }
+      ]
     }
   }
 ]

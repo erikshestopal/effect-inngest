@@ -533,6 +533,7 @@ const Proto = {
       : undefined;
 
     const idempotency = opts.idempotency;
+    const retries = opts.retries !== undefined ? { attempts: opts.retries } : undefined;
 
     // Function-level checkpoint config only — client-level default is
     // applied at runtime by the handler. Mirrors how other client defaults
@@ -555,7 +556,7 @@ const Proto = {
           id: "step",
           name: "step",
           runtime: { type: "http", url: stepUrl.href },
-          retries: { attempts: opts.retries ?? 3 },
+          retries,
         },
       },
       cancel: cancel && cancel.length > 0 ? cancel : undefined,

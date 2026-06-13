@@ -110,7 +110,7 @@ describe("InngestHttpApi public surface", () => {
       );
       expect(registration.status).toBe(200);
       expect(yield* Effect.tryPromise(() => registration.json())).toMatchObject({
-        message: "Successfully synced.",
+        message: "Successfully registered",
         modified: true,
       });
 
