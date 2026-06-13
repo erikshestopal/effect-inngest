@@ -1,11 +1,7 @@
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
+import { defineExample, eventCase } from "./_support.ts";
 
 class DemoDebounceKeyed extends Schema.TaggedClass<DemoDebounceKeyed>()("demo/debounce-keyed", {
   userId: Schema.String,
@@ -35,18 +31,27 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "045-debounce-key",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      events: [
+        {
+          name: "demo/debounce-keyed",
+          data: {
+            userId: "user-045",
+            action: "update",
+          },
+        },
+      ],
+      expect: [
+        {
+          functionTag: "debounce-keyed",
+        },
+      ],
+      timeoutMs: 20000,
+    }),
+  ],
+});

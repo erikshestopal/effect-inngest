@@ -38,6 +38,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 reports/
 .research/
 .amp-auto/
+.repos/
 repos/
 specs/
 .opencode/

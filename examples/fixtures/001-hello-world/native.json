@@ -1,0 +1,224 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/001-hello-world",
+      "path": "/examples/001-hello-world",
+      "query": {},
+      "headers": {
+        "user-agent": "node"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "inngest-js:v4.5.1",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/001-hello-world",
+      "path": "/examples/001-hello-world",
+      "query": {},
+      "headers": {
+        "user-agent": "node"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "inngest-js:v4.5.1",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "inngest-js:v4.5.1",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/001-hello-world",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-001-hello-world",
+        "functions": [
+          {
+            "id": "examples-001-hello-world-hello-world",
+            "name": "hello-world",
+            "triggers": [
+              {
+                "event": "demo/hello"
+              },
+              {
+                "event": "demo/bye"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/001-hello-world?fnId=examples-001-hello-world-hello-world&stepId=step"
+                }
+              }
+            }
+          }
+        ],
+        "sdk": "js:v4.5.1",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "73feecb7-d691-4fe2-a130-d2d291f49818",
+        "app_id": "35d52c6f-7cb1-58f9-a7ab-294a6e954fdb"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "method": "POST",
+      "url": "http://localhost:19998/examples/001-hello-world?fnId=examples-001-hello-world-hello-world&stepId=step",
+      "path": "/examples/001-hello-world",
+      "query": {
+        "fnId": "examples-001-hello-world-hello-world",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "Inngest",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "cd80c613-c58d-59c4-935f-b388e2176828",
+          "generation_id": 1,
+          "job_id": "210xu96jaos5z",
+          "max_attempts": 5,
+          "qi_id": "MjEweHU5Nmphb3M1ejo6ZGVmYXVsdA==",
+          "request_id": "01KV1HQPFFFP72BV156NPCBJ36",
+          "run_id": "01KV1HQPF84ZBWVEKX25C665FX",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "name": "Amp"
+          },
+          "id": "fixture-native-001-hello-world-0-0",
+          "name": "demo/hello",
+          "ts": 1781389842809,
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "name": "Amp"
+            },
+            "id": "fixture-native-001-hello-world-0-0",
+            "name": "demo/hello",
+            "ts": 1781389842809,
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "inngest-js:v4.5.1",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "inngest-js:v4.5.1",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "greeting": "Hello, Amp!"
+          }
+        }
+      ]
+    }
+  }
+]

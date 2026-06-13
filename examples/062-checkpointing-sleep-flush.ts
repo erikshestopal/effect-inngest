@@ -1,17 +1,13 @@
+import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.4.1 — async opcodes (Sleep, WaitForEvent, Invoke) force a buffer
  * flush before yielding. Here 2 buffered `step.run` results are checkpointed
  * prior to the `step.sleep` opcode, so the executor sees them durably before
  * the sleep schedule.
  */
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
 
 class SleepEvent extends Schema.TaggedClass<SleepEvent>()("demo/checkpoint-sleep", {
   tag: Schema.String,
@@ -37,20 +33,28 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-  eventKey: "test",
-  checkpointing: true,
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "062-checkpointing-sleep-flush",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      eventKey: "test",
+      events: [
+        {
+          name: "demo/checkpoint-sleep",
+          data: {
+            tag: "sleep-062",
+          },
+        },
+      ],
+      expect: [
+        {
+          spans: ["prepare-a", "prepare-b", "nap"],
+          functionTag: "checkpoint-sleep",
+        },
+      ],
+      timeoutMs: 30000,
+    }),
+  ],
+});

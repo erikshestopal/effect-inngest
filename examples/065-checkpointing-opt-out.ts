@@ -1,3 +1,4 @@
+import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.1.1 — function-level opt-out with `checkpointing: false`.
  *
@@ -6,14 +7,9 @@
  * classic 206-per-step round trip, no `/v1/checkpoint/{runId}/async` POSTs,
  * and the registration payload omits the `checkpoint` block for this function.
  */
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
 
 class OptOutEvent extends Schema.TaggedClass<OptOutEvent>()("demo/checkpoint-opt-out", {
   tag: Schema.String,
@@ -36,20 +32,27 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-  eventKey: "test",
-  checkpointing: true,
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "065-checkpointing-opt-out",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      eventKey: "test",
+      events: [
+        {
+          name: "demo/checkpoint-opt-out",
+          data: {
+            tag: "opt-out-065",
+          },
+        },
+      ],
+      expect: [
+        {
+          spans: ["a", "b"],
+          functionTag: "checkpoint-opt-out",
+        },
+      ],
+    }),
+  ],
+});

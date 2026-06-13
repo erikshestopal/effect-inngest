@@ -1,13 +1,6 @@
-import { FetchHttpClient } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import { InngestClient } from "effect-inngest";
-
-const ClientLive = InngestClient.layer({
-  id: "demo-client-send",
-  eventKey: "test",
-  apiBaseUrl: "http://127.0.0.1:8288",
-}).pipe(Layer.provide(FetchHttpClient.layer));
+import { defineExample, effectCase } from "./_support.ts";
 
 const sendSingleEvent = Effect.gen(function* () {
   const client = yield* InngestClient.InngestClient;
@@ -56,6 +49,9 @@ const main = Effect.gen(function* () {
   yield* sendWithDeduplicationId;
 
   yield* Effect.log("=== All events sent ===");
-}).pipe(Effect.provide(ClientLive));
+});
 
-void Effect.runPromise(main);
+export default defineExample({
+  id: "051-client-send",
+  cases: [effectCase(main, { timeoutMs: 20_000 })],
+});

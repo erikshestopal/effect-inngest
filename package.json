@@ -110,6 +110,8 @@
     "@effect/vitest": "4.0.0-beta.59",
     "@types/bun": "1.3.12",
     "@typescript/native-preview": "^7.0.0-dev.20260420.1",
+    "inngest": "^4.5.1",
+    "mockttp": "^4.4.2",
     "typescript": "^5.9.3",
     "vite-plus": "latest"
   },

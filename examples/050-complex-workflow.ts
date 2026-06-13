@@ -1,15 +1,11 @@
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
+import { defineExample, eventCase } from "./_support.ts";
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
+class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("examples/050/order/placed", {
   orderId: Schema.String,
   userId: Schema.String,
   items: Schema.Array(
@@ -22,7 +18,7 @@ class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
   total: Schema.Number,
 }) {}
 
-class OrderPaymentReceived extends Schema.TaggedClass<OrderPaymentReceived>()("order/payment-received", {
+class OrderPaymentReceived extends Schema.TaggedClass<OrderPaymentReceived>()("examples/050/order/payment-received", {
   orderId: Schema.String,
   transactionId: Schema.String,
 }) {}
@@ -149,19 +145,59 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-  eventKey: "test",
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "050-complex-workflow",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      eventKey: "test",
+      events: [
+        {
+          name: "examples/050/order/placed",
+          data: {
+            orderId: "order-050",
+            userId: "user-050",
+            items: [
+              {
+                sku: "sku-1",
+                qty: 2,
+                price: 10,
+              },
+            ],
+            total: 20,
+          },
+        },
+      ],
+      afterEvents: [
+        {
+          delayMs: 1000,
+          eventKey: "test",
+          events: [
+            {
+              name: "examples/050/order/payment-received",
+              data: {
+                orderId: "order-050",
+                transactionId: "txn-050",
+              },
+            },
+          ],
+        },
+      ],
+      expect: [
+        {
+          spans: [
+            "validate-order",
+            "reserve-inventory",
+            "wait-for-payment",
+            "send-confirmation",
+            "schedule-delivery",
+            "notify-delivery",
+          ],
+          functionTag: "process-order",
+        },
+      ],
+      timeoutMs: 40000,
+    }),
+  ],
+});

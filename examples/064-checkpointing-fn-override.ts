@@ -1,3 +1,4 @@
+import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.1.1 — function-level checkpointing overrides the client default.
  *
@@ -6,14 +7,9 @@
  * `checkpoint.batch_steps: 1`, and the dev-server timeline shows one checkpoint
  * per step rather than one per batch.
  */
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
 
 class OverrideEvent extends Schema.TaggedClass<OverrideEvent>()("demo/checkpoint-override", {
   key: Schema.String,
@@ -38,21 +34,27 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-  eventKey: "test",
-  // Client default — function above overrides it.
-  checkpointing: { bufferedSteps: 5 },
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "064-checkpointing-fn-override",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      eventKey: "test",
+      events: [
+        {
+          name: "demo/checkpoint-override",
+          data: {
+            key: "override-064",
+          },
+        },
+      ],
+      expect: [
+        {
+          spans: ["a", "b", "c"],
+          functionTag: "checkpoint-override",
+        },
+      ],
+    }),
+  ],
+});

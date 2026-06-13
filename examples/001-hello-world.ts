@@ -1,13 +1,8 @@
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
-import * as Logger from "effect/Logger";
 import { Predicate } from "effect";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
+import { defineExample, eventCase } from "./_support.ts";
 
 class DemoHello extends Schema.TaggedClass<DemoHello>()("demo/hello", {
   name: Schema.String,
@@ -32,19 +27,25 @@ const HelloFnHandler = Group.toLayerHandler("hello-world", ({ event }) =>
   }).pipe(Effect.withSpan("example/hello-world"), Effect.withLogSpan("example/hello-world")),
 );
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(Logger.layer([Logger.consolePretty()])),
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HelloFnHandler),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "001-hello-world",
+  group: Group,
+  handlers: HelloFnHandler,
+  cases: [
+    eventCase({
+      events: [
+        {
+          name: "demo/hello",
+          data: {
+            name: "Amp",
+          },
+        },
+      ],
+      expect: [
+        {
+          functionTag: "hello-world",
+        },
+      ],
+    }),
+  ],
+});

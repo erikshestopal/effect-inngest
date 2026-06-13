@@ -1,11 +1,7 @@
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
+import { defineExample, eventCase } from "./_support.ts";
 
 class DemoSleep extends Schema.TaggedClass<DemoSleep>()("demo/sleep", {}) {}
 
@@ -26,18 +22,25 @@ const HandlersLive = Group.toLayer({
     }).pipe(Effect.withSpan("example/sleep-test")),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "005-step-sleep",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      events: [
+        {
+          name: "demo/sleep",
+          data: {},
+        },
+      ],
+      expect: [
+        {
+          spans: ["wait"],
+          functionTag: "sleep-test",
+        },
+      ],
+      timeoutMs: 20000,
+    }),
+  ],
+});

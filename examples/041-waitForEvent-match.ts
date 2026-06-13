@@ -1,13 +1,9 @@
-import { FetchHttpClient } from "effect/unstable/http";
-import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
-import * as HttpMiddleware from "effect/unstable/http/HttpMiddleware";
-import * as HttpServer from "effect/unstable/http/HttpServer";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup } from "effect-inngest";
+import { defineExample, eventCase } from "./_support.ts";
 
 class DemoWaitMatch extends Schema.TaggedClass<DemoWaitMatch>()("demo/wait-match", {
   invoiceId: Schema.String,
@@ -45,18 +41,41 @@ const HandlersLive = Group.toLayer({
     }),
 });
 
-const ClientLive = InngestClient.layer({
-  id: "research-app",
-  mode: "dev",
-  apiBaseUrl: "http://127.0.0.1:8288",
-}).pipe(Layer.provide(FetchHttpClient.layer));
-
-HttpServer.serve(InngestGroup.toHttpApp(Group), HttpMiddleware.logger).pipe(
-  HttpServer.withLogAddress,
-  Layer.provide(BunHttpServer.layer({ port: 9999, hostname: "0.0.0.0" })),
-  Layer.provide(HandlersLive),
-  Layer.provide(ClientLive),
-  Layer.provide(FetchHttpClient.layer),
-  Layer.launch,
-  BunRuntime.runMain,
-);
+export default defineExample({
+  id: "041-waitForEvent-match",
+  group: Group,
+  handlers: HandlersLive,
+  cases: [
+    eventCase({
+      events: [
+        {
+          name: "demo/wait-match",
+          data: {
+            invoiceId: "invoice-041",
+          },
+        },
+      ],
+      afterEvents: [
+        {
+          delayMs: 1000,
+          events: [
+            {
+              name: "demo/invoice-paid",
+              data: {
+                invoiceId: "invoice-041",
+                amount: 123.45,
+              },
+            },
+          ],
+        },
+      ],
+      expect: [
+        {
+          spans: ["wait-for-payment"],
+          functionTag: "wait-for-invoice-payment",
+        },
+      ],
+      timeoutMs: 30000,
+    }),
+  ],
+});
