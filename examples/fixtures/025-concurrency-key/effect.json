@@ -219,13 +219,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
-          "name": "process",
-          "data": "Processing user-025",
-          "displayName": "process"
-        },
-        {
           "op": "Sleep",
           "id": "ba904789b6f90e72a1e78112beaeb19ba12bdfad",
           "name": "1s",
@@ -240,10 +233,85 @@
   },
   {
     "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZZWWPQ6DWNGMHSXXZ2XDV/async",
+      "path": "/v1/checkpoint/01KV1ZZWWPQ6DWNGMHSXXZ2XDV/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1ZZWWPQ6DWNGMHSXXZ2XDV",
+        "fn_id": "1ca1675e-a7fc-564d-ad2f-65a9e8d701b0",
+        "qi_id": "Njl6bmdtbDR4MmR4OjpkZWZhdWx0",
+        "request_id": "01KV1ZZWX2RCAPQ12YESYMHKA5",
+        "generation_id": 1,
+        "request_started_at": 1781404791722,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
+            "name": "process",
+            "displayName": "process",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "process"
+            },
+            "rawArgs": ["process", null],
+            "hashedId": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
+                "memoized": false,
+                "options": {
+                  "id": "process",
+                  "name": "process"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "Processing user-025",
+            "timing": {
+              "a": 1781404791723000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404791724
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 6,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/025-concurrency-key?fnId=examples-025-concurrency-key-user-processor&stepId=step",
       "path": "/examples/025-concurrency-key",
@@ -262,7 +330,7 @@
       "body": {
         "ctx": {
           "attempt": 0,
-          "disable_immediate_execution": true,
+          "disable_immediate_execution": false,
           "env": "",
           "fn_id": "1ca1675e-a7fc-564d-ad2f-65a9e8d701b0",
           "generation_id": 1,
@@ -310,7 +378,7 @@
       }
     },
     "response": {
-      "status": 200,
+      "status": 206,
       "headers": {
         "content-type": "application/json",
         "user-agent": "<sdk>",
@@ -319,9 +387,15 @@
         "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
-      "body": {
-        "processed": "user-025"
-      }
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "processed": "user-025"
+          }
+        }
+      ]
     }
   }
 ]

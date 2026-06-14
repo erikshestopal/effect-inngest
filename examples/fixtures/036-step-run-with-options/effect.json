@@ -209,27 +209,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "a9a7c9f9585dd5f2a0d3698cc51ac9bd949cd0af",
-          "name": "basic-step",
-          "data": "basic",
-          "displayName": "basic-step"
-        },
-        {
-          "op": "StepRun",
-          "id": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
-          "name": "named-step",
-          "data": "with-name",
-          "displayName": "Named Step"
-        },
-        {
-          "op": "StepRun",
-          "id": "9a036a2c52b082f185b9157f03c119b0525afa65",
-          "name": "third-step",
-          "data": "completed",
-          "displayName": "third-step"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -237,6 +216,231 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "path": "/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV200TQ13R6Y0D23YTQJ650P",
+        "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
+        "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
+        "request_id": "01KV200TQFNCA1P8KK8PFHPJZW",
+        "generation_id": 1,
+        "request_started_at": 1781404822264,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "a9a7c9f9585dd5f2a0d3698cc51ac9bd949cd0af",
+            "name": "basic-step",
+            "displayName": "basic-step",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "basic-step"
+            },
+            "rawArgs": ["basic-step", null],
+            "hashedId": "a9a7c9f9585dd5f2a0d3698cc51ac9bd949cd0af",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "a9a7c9f9585dd5f2a0d3698cc51ac9bd949cd0af",
+                "memoized": false,
+                "options": {
+                  "id": "basic-step",
+                  "name": "basic-step"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "basic",
+            "timing": {
+              "a": 1781404822266000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404822267
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "path": "/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV200TQ13R6Y0D23YTQJ650P",
+        "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
+        "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
+        "request_id": "01KV200TQFNCA1P8KK8PFHPJZW",
+        "generation_id": 1,
+        "request_started_at": 1781404822264,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
+            "name": "named-step",
+            "displayName": "Named Step",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "named-step"
+            },
+            "rawArgs": ["named-step", null],
+            "hashedId": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
+                "memoized": false,
+                "options": {
+                  "id": "named-step",
+                  "name": "Named Step"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "with-name",
+            "timing": {
+              "a": 1781404822271000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404822271
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "path": "/v1/checkpoint/01KV200TQ13R6Y0D23YTQJ650P/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV200TQ13R6Y0D23YTQJ650P",
+        "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
+        "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
+        "request_id": "01KV200TQFNCA1P8KK8PFHPJZW",
+        "generation_id": 1,
+        "request_started_at": 1781404822264,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "9a036a2c52b082f185b9157f03c119b0525afa65",
+            "name": "third-step",
+            "displayName": "third-step",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "third-step"
+            },
+            "rawArgs": ["third-step", null],
+            "hashedId": "9a036a2c52b082f185b9157f03c119b0525afa65",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "9a036a2c52b082f185b9157f03c119b0525afa65",
+                "memoized": false,
+                "options": {
+                  "id": "third-step",
+                  "name": "third-step"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "completed",
+            "timing": {
+              "a": 1781404822273000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404822273
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

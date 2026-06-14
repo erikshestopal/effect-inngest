@@ -2,7 +2,6 @@
  * Internal handler implementation.
  * @internal
  */
-import * as Headers from "effect/unstable/http/Headers";
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
@@ -17,7 +16,8 @@ import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
 import type { InngestGroup } from "../Group.js";
 import * as Checkpoint from "./checkpoint.js";
-import { Signature, SignatureError } from "./signature.js";
+import { SignatureError } from "./signature.js";
+import * as SdkRequest from "./serve/request.js";
 import * as Protocol from "./protocol.js";
 export { SignatureError } from "./signature.js";
 import { execute, type TraceHeaders } from "./driver.js";
@@ -58,12 +58,7 @@ export interface HandlerResponse<T> {
 export const verifyAndParseRequestBody = Effect.fn("effect-inngest/handler/verifyAndParseRequestBody")(function* (
   request: HttpServerRequest.HttpServerRequest,
 ) {
-  const client = yield* InngestClient;
-  const sig = yield* Signature;
-  const config = client.config;
-  const isDev = client.mode === "dev";
-
-  const bodyText = yield* request.text.pipe(
+  const body = yield* SdkRequest.bodyUint8Array(request).pipe(
     Effect.mapError((error) => {
       const msg =
         Predicate.hasProperty(error, "message") && typeof error.message === "string" ? error.message : "unknown";
@@ -71,15 +66,9 @@ export const verifyAndParseRequestBody = Effect.fn("effect-inngest/handler/verif
     }),
   );
 
-  yield* sig.verify({
-    body: new TextEncoder().encode(bodyText),
-    signatureHeader: Option.getOrUndefined(Headers.get(request.headers, Protocol.Headers.Signature)),
-    signingKey: config.signingKey,
-    signingKeyFallback: config.signingKeyFallback,
-    isDev,
-  });
+  yield* SdkRequest.verifySignature(body, request);
 
-  return yield* Schema.decodeUnknownEffect(Schema.fromJsonString(Protocol.SDKRequestBody))(bodyText).pipe(
+  return yield* SdkRequest.schemaBodyJson(Protocol.SDKRequestBody)(body).pipe(
     Effect.mapError((error) => new InvalidRequestError({ message: `Invalid request body: ${String(error)}` })),
   );
 });
@@ -95,8 +84,8 @@ export const handleIntrospection = Effect.fn("effect-inngest/handler/handleIntro
     extra: {
       native_crypto: globalThis.crypto?.subtle ? true : false,
     },
-    has_event_key: config.eventKey !== undefined,
-    has_signing_key: config.signingKey !== undefined,
+    has_event_key: Predicate.isNotUndefined(config.eventKey),
+    has_signing_key: Predicate.isNotUndefined(config.signingKey),
     function_count: group.functions.size,
     mode: client.mode === "dev" ? "dev" : "cloud",
     schema_version: "2024-05-24",
@@ -254,8 +243,8 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
             attempt: body.ctx.attempt,
             max_attempts: body.ctx.max_attempts,
             qi_id: body.ctx.qi_id,
-            ...(body.ctx.request_id !== undefined ? { request_id: body.ctx.request_id } : {}),
-            ...(body.ctx.generation_id !== undefined ? { generation_id: body.ctx.generation_id } : {}),
+            ...(Predicate.isNotUndefined(body.ctx.request_id) ? { request_id: body.ctx.request_id } : {}),
+            ...(Predicate.isNotUndefined(body.ctx.generation_id) ? { generation_id: body.ctx.generation_id } : {}),
             disable_immediate_execution: body.ctx.disable_immediate_execution,
             use_api: body.ctx.use_api,
             stack: body.ctx.stack,

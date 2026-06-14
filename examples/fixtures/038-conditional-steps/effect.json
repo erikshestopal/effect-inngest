@@ -213,34 +213,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "80437a44a661d141174209119d54125a59a64b2a",
-          "name": "setup",
-          "data": "initialized",
-          "displayName": "setup"
-        },
-        {
-          "op": "StepRun",
-          "id": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
-          "name": "heavy-step-1",
-          "data": "processed-1",
-          "displayName": "heavy-step-1"
-        },
-        {
-          "op": "StepRun",
-          "id": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
-          "name": "heavy-step-2",
-          "data": "processed-2",
-          "displayName": "heavy-step-2"
-        },
-        {
-          "op": "StepRun",
-          "id": "2878df8885808eb28275a24e12f920ed98457b86",
-          "name": "heavy-step-3",
-          "data": "processed-3",
-          "displayName": "heavy-step-3"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -249,6 +221,306 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "path": "/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2010AWVEX0P66K6606NENC",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MnhtenA0OWx5NG9iaDo6ZGVmYXVsdA==",
+        "request_id": "01KV2010B4MV5WV1J5ET867FEP",
+        "generation_id": 1,
+        "request_started_at": 1781404828013,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "80437a44a661d141174209119d54125a59a64b2a",
+            "name": "setup",
+            "displayName": "setup",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "setup"
+            },
+            "rawArgs": ["setup", null],
+            "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
+                "memoized": false,
+                "options": {
+                  "id": "setup",
+                  "name": "setup"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "initialized",
+            "timing": {
+              "a": 1781404828015000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404828015
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "path": "/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2010AWVEX0P66K6606NENC",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MnhtenA0OWx5NG9iaDo6ZGVmYXVsdA==",
+        "request_id": "01KV2010B4MV5WV1J5ET867FEP",
+        "generation_id": 1,
+        "request_started_at": 1781404828013,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+            "name": "heavy-step-1",
+            "displayName": "heavy-step-1",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "heavy-step-1"
+            },
+            "rawArgs": ["heavy-step-1", null],
+            "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-1",
+                  "name": "heavy-step-1"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-1",
+            "timing": {
+              "a": 1781404828018000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404828018
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "path": "/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2010AWVEX0P66K6606NENC",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MnhtenA0OWx5NG9iaDo6ZGVmYXVsdA==",
+        "request_id": "01KV2010B4MV5WV1J5ET867FEP",
+        "generation_id": 1,
+        "request_started_at": 1781404828013,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+            "name": "heavy-step-2",
+            "displayName": "heavy-step-2",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "heavy-step-2"
+            },
+            "rawArgs": ["heavy-step-2", null],
+            "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-2",
+                  "name": "heavy-step-2"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-2",
+            "timing": {
+              "a": 1781404828020000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404828020
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "path": "/v1/checkpoint/01KV2010AWVEX0P66K6606NENC/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2010AWVEX0P66K6606NENC",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MnhtenA0OWx5NG9iaDo6ZGVmYXVsdA==",
+        "request_id": "01KV2010B4MV5WV1J5ET867FEP",
+        "generation_id": 1,
+        "request_started_at": 1781404828013,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "2878df8885808eb28275a24e12f920ed98457b86",
+            "name": "heavy-step-3",
+            "displayName": "heavy-step-3",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "heavy-step-3"
+            },
+            "rawArgs": ["heavy-step-3", null],
+            "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-3",
+                  "name": "heavy-step-3"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-3",
+            "timing": {
+              "a": 1781404828021000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404828021
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

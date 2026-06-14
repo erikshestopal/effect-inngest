@@ -211,7 +211,7 @@ const resolveEventBaseUrl = (config: ClientConfig, mode: ClientMode): string =>
 const resolveApiBaseUrl = (config: ClientConfig, mode: ClientMode): string =>
   config.apiBaseUrl ?? (mode === "dev" ? DEFAULT_DEV_SERVER_URL : DEFAULT_API_BASE_URL);
 
-const isRetriable = (error: CheckpointApiError): boolean => error.status === undefined || error.status >= 500;
+const isRetriable = (error: CheckpointApiError): boolean => Predicate.isUndefined(error.status) || error.status >= 500;
 
 const defaultCheckpointRetrySchedule: Schedule.Schedule<unknown, CheckpointApiError> = Schedule.exponential(
   "100 millis",

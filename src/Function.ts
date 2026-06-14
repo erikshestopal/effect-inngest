@@ -533,13 +533,14 @@ const Proto = {
       : undefined;
 
     const idempotency = opts.idempotency;
-    const retries = opts.retries !== undefined ? { attempts: opts.retries } : undefined;
+    const retries = Predicate.isNotUndefined(opts.retries) ? { attempts: opts.retries } : undefined;
 
     // Function-level checkpoint config only — client-level default is
     // applied at runtime by the handler. Mirrors how other client defaults
     // (e.g. retries) interact with registration.
-    const resolvedCheckpoint =
-      opts.checkpointing !== undefined ? Checkpoint.resolveConfig(opts.checkpointing, undefined) : undefined;
+    const resolvedCheckpoint = Predicate.isNotUndefined(opts.checkpointing)
+      ? Checkpoint.resolveConfig(opts.checkpointing, undefined)
+      : undefined;
     const checkpoint = resolvedCheckpoint ? Checkpoint.toRegistration(resolvedCheckpoint) : undefined;
 
     const fnId = `${config.appId}-${this._tag}`;

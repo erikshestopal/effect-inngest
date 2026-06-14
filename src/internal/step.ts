@@ -230,7 +230,7 @@ export const createStepTools = (
           // Inngest returns full event { name, data, id, ts } - extract .data for payload
           // Or may return payload directly - use .data if present, otherwise use data as-is
           const event = data as { data?: unknown };
-          const payload = event.data !== undefined ? event.data : data;
+          const payload = Predicate.isNotUndefined(event.data) ? event.data : data;
           if (payload == null) {
             return Effect.succeed(Option.none());
           }

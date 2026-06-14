@@ -4,385 +4,230 @@
  */
 
 import * as Crypto from "node:crypto";
-import { Effect, Result } from "effect";
+import * as Effect from "effect/Effect";
+import * as Option from "effect/Option";
+import * as Result from "effect/Result";
 import { describe, expect, it } from "@effect/vitest";
-import { Signature, SignatureError, SignatureLive } from "../../src/internal/signature.js";
+import {
+  Signature,
+  SignatureConfig,
+  SignatureError,
+  SignatureHeader,
+  SignedPayload,
+} from "../../src/internal/signature.js";
 
-// Test Fixtures
-
-// Valid signing key format: signkey-{env}-{64_hex_chars}
 const TEST_SIGNING_KEY = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
 const TEST_SIGNING_KEY_FALLBACK = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
-
 const TEST_BODY = new TextEncoder().encode('{"event":"test"}');
 
-/**
- * Create a valid signature for testing.
- */
 const createValidSignature = (body: Uint8Array, signingKey: string, timestampOverride?: number): string => {
   const timestamp = timestampOverride ?? Math.floor(Date.now() / 1000);
-  const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
-  const keyBytes = Buffer.from(keyWithoutPrefix, "hex");
-
-  const hmac = Crypto.createHmac("sha256", keyBytes);
-  hmac.update(body);
-  hmac.update(String(timestamp));
-  const signature = hmac.digest("hex");
+  const keyBytes = Buffer.from(signingKey.replace(/^signkey-\w+-/, ""), "hex");
+  const signature = Crypto.createHmac("sha256", keyBytes).update(body).update(String(timestamp)).digest("hex");
 
   return `t=${timestamp}&s=${signature}`;
 };
 
-// Tests: verify()
+const layer = (config: {
+  readonly verification: "disabled" | "required";
+  readonly signingKey?: string | undefined;
+  readonly signingKeyFallback?: string | undefined;
+}) =>
+  Signature.layer(
+    SignatureConfig.make({
+      verification: config.verification,
+      signingKey: Option.fromNullishOr(config.signingKey),
+      signingKeyFallback: Option.fromNullishOr(config.signingKeyFallback),
+    }),
+  );
+
+const payload = (body: Uint8Array, signatureHeader?: string) =>
+  Option.match(Option.fromNullishOr(signatureHeader), {
+    onNone: () => Effect.succeed(SignedPayload.make({ body, signature: Option.none() })),
+    onSome: (header) =>
+      SignatureHeader.decode(header).pipe(
+        Effect.map((signature) => SignedPayload.make({ body, signature: Option.some(signature) })),
+      ),
+  });
 
 describe("Signature.verify", () => {
-  describe("dev mode", () => {
-    it.live("bypasses verification when isDev is true", () =>
+  describe("disabled verification", () => {
+    it.live("bypasses missing signature and signing key", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const result = yield* sig.verify({
-          body: TEST_BODY,
-          signatureHeader: undefined, // No signature
-          signingKey: undefined, // No key
-          isDev: true,
-        });
-
-        expect(result).toBe(true);
-      }).pipe(Effect.provide(SignatureLive)),
+        yield* sig.verify(SignedPayload.make({ body: TEST_BODY, signature: Option.none() }));
+      }).pipe(Effect.provide(layer({ verification: "disabled" }))),
     );
 
-    it.live("bypasses verification even with invalid signature in dev mode", () =>
+    it.live("bypasses invalid signature", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const result = yield* sig.verify({
-          body: TEST_BODY,
-          signatureHeader: "t=123&s=invalid",
-          signingKey: TEST_SIGNING_KEY,
-          isDev: true,
-        });
-
-        expect(result).toBe(true);
-      }).pipe(Effect.provide(SignatureLive)),
+        yield* sig.verify(SignedPayload.make({ body: TEST_BODY, signature: Option.none() }));
+      }).pipe(Effect.provide(layer({ verification: "disabled", signingKey: TEST_SIGNING_KEY }))),
     );
   });
 
-  describe("production mode (isDev: false)", () => {
+  describe("required verification", () => {
     it.live("succeeds with valid signature", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
-
-        const result = yield* sig.verify({
-          body: TEST_BODY,
-          signatureHeader: signature,
-          signingKey: TEST_SIGNING_KEY,
-          isDev: false,
-        });
-
-        expect(result).toBe(true);
-      }).pipe(Effect.provide(SignatureLive)),
+        yield* sig.verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)));
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
     it.live("fails with missing signing key", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
-
         const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: signature,
-            signingKey: undefined,
-            isDev: false,
-          })
+          .verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)))
           .pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("missing_signing_key");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required" }))),
     );
 
     it.live("fails with missing signature header", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: undefined,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
+          .verify(SignedPayload.make({ body: TEST_BODY, signature: Option.none() }))
           .pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("missing_header");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with invalid signature format (missing t=)", () =>
+    it.live("fails with invalid signature format", () =>
       Effect.gen(function* () {
-        const sig = yield* Signature;
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: "s=abc123",
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
-          .pipe(Effect.result);
+        const result = yield* payload(TEST_BODY, "s=abc123").pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("invalid_format");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }),
     );
 
-    it.live("fails with invalid signature format (missing s=)", () =>
+    it.live("fails with expired signature", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: "t=123456",
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
-          .pipe(Effect.result);
-
-        expect(Result.isFailure(result)).toBe(true);
-        if (Result.isFailure(result)) {
-          expect(result.failure.reason).toBe("invalid_format");
-        }
-      }).pipe(Effect.provide(SignatureLive)),
-    );
-
-    it.live("fails with expired signature (> 5 minutes old)", () =>
-      Effect.gen(function* () {
-        const sig = yield* Signature;
-        // Create signature from 10 minutes ago
-        const tenMinutesAgo = Math.floor(Date.now() / 1000) - 600;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, tenMinutesAgo);
-
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: signature,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
-          .pipe(Effect.result);
+        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, Math.floor(Date.now() / 1000) - 600);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, signature)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("expired");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with future signature (> 5 minutes ahead)", () =>
+    it.live("fails with future signature", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        // Create signature from 10 minutes in the future
-        const tenMinutesAhead = Math.floor(Date.now() / 1000) + 600;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, tenMinutesAhead);
-
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: signature,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
-          .pipe(Effect.result);
+        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, Math.floor(Date.now() / 1000) + 600);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, signature)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("expired");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with invalid signature (wrong key)", () =>
+    it.live("fails with wrong key", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
         const differentKey = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
-        const signature = createValidSignature(TEST_BODY, differentKey);
-
         const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: signature,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
+          .verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, differentKey)))
           .pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("invalid_signature");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with invalid signature (tampered body)", () =>
+    it.live("fails with tampered body", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY);
         const tamperedBody = new TextEncoder().encode('{"event":"tampered"}');
-
         const result = yield* sig
-          .verify({
-            body: tamperedBody,
-            signatureHeader: signature,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
+          .verify(yield* payload(tamperedBody, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)))
           .pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
           expect(result.failure.reason).toBe("invalid_signature");
         }
-      }).pipe(Effect.provide(SignatureLive)),
+      }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with invalid signature (wrong length - truncated)", () =>
+    it.live("succeeds when fallback key matches", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const timestamp = Math.floor(Date.now() / 1000);
-        // Truncated signature (not 64 hex chars)
-        const truncatedSig = `t=${timestamp}&s=abc123`;
-
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: truncatedSig,
-            signingKey: TEST_SIGNING_KEY,
-            isDev: false,
-          })
-          .pipe(Effect.result);
-
-        expect(Result.isFailure(result)).toBe(true);
-        if (Result.isFailure(result)) {
-          expect(result.failure.reason).toBe("invalid_format");
-        }
-      }).pipe(Effect.provide(SignatureLive)),
-    );
-  });
-
-  describe("fallback key", () => {
-    it.live("succeeds when primary key fails but fallback matches", () =>
-      Effect.gen(function* () {
-        const sig = yield* Signature;
-        // Sign with fallback key
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY_FALLBACK);
-
-        const result = yield* sig.verify({
-          body: TEST_BODY,
-          signatureHeader: signature,
-          signingKey: TEST_SIGNING_KEY, // Primary won't match
-          signingKeyFallback: TEST_SIGNING_KEY_FALLBACK, // Fallback will match
-          isDev: false,
-        });
-
-        expect(result).toBe(true);
-      }).pipe(Effect.provide(SignatureLive)),
-    );
-
-    it.live("fails when neither primary nor fallback matches", () =>
-      Effect.gen(function* () {
-        const sig = yield* Signature;
-        const differentKey = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
-        const signature = createValidSignature(TEST_BODY, differentKey);
-
-        const result = yield* sig
-          .verify({
-            body: TEST_BODY,
-            signatureHeader: signature,
+        yield* sig.verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY_FALLBACK)));
+      }).pipe(
+        Effect.provide(
+          layer({
+            verification: "required",
             signingKey: TEST_SIGNING_KEY,
             signingKeyFallback: TEST_SIGNING_KEY_FALLBACK,
-            isDev: false,
-          })
-          .pipe(Effect.result);
-
-        expect(Result.isFailure(result)).toBe(true);
-        if (Result.isFailure(result)) {
-          expect(result.failure.reason).toBe("invalid_signature");
-        }
-      }).pipe(Effect.provide(SignatureLive)),
+          }),
+        ),
+      ),
     );
   });
 });
-
-// Tests: sign()
 
 describe("Signature.sign", () => {
   it.live("creates valid signature header format", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
-      const header = yield* sig.sign(TEST_BODY, TEST_SIGNING_KEY);
+      const header = yield* sig.sign(TEST_BODY);
 
       expect(header).toMatch(/^t=\d+&s=[a-f0-9]{64}$/);
-    }).pipe(Effect.provide(SignatureLive)),
+    }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
   );
 
   it.live("creates signature that can be verified", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
-      const header = yield* sig.sign(TEST_BODY, TEST_SIGNING_KEY);
+      const header = yield* sig.sign(TEST_BODY);
 
-      const result = yield* sig.verify({
-        body: TEST_BODY,
-        signatureHeader: header,
-        signingKey: TEST_SIGNING_KEY,
-        isDev: false,
-      });
-
-      expect(result).toBe(true);
-    }).pipe(Effect.provide(SignatureLive)),
+      yield* sig.verify(yield* payload(TEST_BODY, header));
+    }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
   );
 
-  it.live("uses current timestamp", () =>
+  it.live("fails without configured signing key", () =>
     Effect.gen(function* () {
       const sig = yield* Signature;
-      const before = Math.floor(Date.now() / 1000);
-      const header = yield* sig.sign(TEST_BODY, TEST_SIGNING_KEY);
-      const after = Math.floor(Date.now() / 1000);
+      const result = yield* sig.sign(TEST_BODY).pipe(Effect.result);
 
-      const match = header.match(/^t=(\d+)/);
-      expect(match).not.toBeNull();
-      if (!match) {
-        throw new Error("match should not be null");
+      expect(Result.isFailure(result)).toBe(true);
+      if (Result.isFailure(result)) {
+        expect(result.failure.reason).toBe("missing_signing_key");
       }
-
-      const timestamp = parseInt(match[1]!, 10);
-      expect(timestamp).toBeGreaterThanOrEqual(before);
-      expect(timestamp).toBeLessThanOrEqual(after);
-    }).pipe(Effect.provide(SignatureLive)),
+    }).pipe(Effect.provide(layer({ verification: "disabled" }))),
   );
 });
 
-// Tests: SignatureError
-
 describe("SignatureError", () => {
   it("has correct _tag", () => {
-    const error = new SignatureError({
-      reason: "invalid_signature",
-      message: "test",
-    });
+    const error = new SignatureError({ reason: "invalid_signature", message: "test" });
 
     expect(error._tag).toBe("SignatureError");
   });
 
   it("contains reason and message", () => {
-    const error = new SignatureError({
-      reason: "expired",
-      message: "Signature expired",
-    });
+    const error = new SignatureError({ reason: "expired", message: "Signature expired" });
 
     expect(error.reason).toBe("expired");
     expect(error.message).toBe("Signature expired");

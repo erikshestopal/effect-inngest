@@ -11,6 +11,7 @@ import * as Clock from "effect/Clock";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
+import * as Predicate from "effect/Predicate";
 import * as Ref from "effect/Ref";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";
@@ -62,8 +63,12 @@ const DEFAULTS: CheckpointConfig = {
 
 const normalize = (option: Exclude<CheckpointingOption, boolean>): CheckpointConfig => ({
   bufferedSteps: option.bufferedSteps ?? DEFAULTS.bufferedSteps,
-  maxInterval: option.maxInterval !== undefined ? Duration.fromInputUnsafe(option.maxInterval) : DEFAULTS.maxInterval,
-  maxRuntime: option.maxRuntime !== undefined ? Duration.fromInputUnsafe(option.maxRuntime) : DEFAULTS.maxRuntime,
+  maxInterval: Predicate.isNotUndefined(option.maxInterval)
+    ? Duration.fromInputUnsafe(option.maxInterval)
+    : DEFAULTS.maxInterval,
+  maxRuntime: Predicate.isNotUndefined(option.maxRuntime)
+    ? Duration.fromInputUnsafe(option.maxRuntime)
+    : DEFAULTS.maxRuntime,
 });
 
 /**
@@ -87,7 +92,7 @@ export const resolveConfig = (
   if (fnLevel === true) {
     return DEFAULTS;
   }
-  if (fnLevel !== undefined) {
+  if (Predicate.isNotUndefined(fnLevel)) {
     return normalize(fnLevel);
   }
   // fnLevel === undefined — use client-level
@@ -97,7 +102,7 @@ export const resolveConfig = (
   if (clientLevel === true) {
     return DEFAULTS;
   }
-  if (clientLevel !== undefined) {
+  if (Predicate.isNotUndefined(clientLevel)) {
     return normalize(clientLevel);
   }
   // Default-ON: undefined at both levels

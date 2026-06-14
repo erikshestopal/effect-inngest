@@ -194,11 +194,11 @@ export const execute = <F extends InngestFunction.Any, R>(
                 op.error.noRetry === true,
             );
 
-            const retryAfterMs = interruptArray.find((i) => i.retryAfterMs !== undefined)?.retryAfterMs;
+            const retryAfterMs = interruptArray.find((i) => Predicate.isNotUndefined(i.retryAfterMs))?.retryAfterMs;
             const responseHeaders: Record<string, string> = hasNonRetriableError
               ? { ...headers, [Protocol.Headers.NoRetry]: "true" }
               : headers;
-            if (retryAfterMs !== undefined) {
+            if (Predicate.isNotUndefined(retryAfterMs)) {
               responseHeaders[Protocol.Headers.RetryAfter] = String(Math.ceil(retryAfterMs / 1000));
               // Spec §4.4.3: "If `Retry-After` is set, an SDK MUST also set
               // `X-Inngest-No-Retry: false`." Overrides any prior value from

@@ -183,10 +183,9 @@ export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
 
 export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): GeneratorOpcode => {
   // noRetry must be in the error object for Inngest executor to recognize it
-  const errorWithNoRetry =
-    noRetry !== undefined
-      ? UserError.make({ name: error.name, message: error.message, stack: error.stack, noRetry })
-      : error;
+  const errorWithNoRetry = Predicate.isNotUndefined(noRetry)
+    ? UserError.make({ name: error.name, message: error.message, stack: error.stack, noRetry })
+    : error;
   return mkOpcode(info, Opcode.StepError, { error: errorWithNoRetry });
 };
 

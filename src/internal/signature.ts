@@ -2,181 +2,180 @@
  * Signature verification service for Inngest requests.
  * @internal
  */
-import * as Crypto from "node:crypto";
+import * as NodeCrypto from "node:crypto";
+import * as Arr from "effect/Array";
 import * as Context from "effect/Context";
 import * as DateTime from "effect/DateTime";
+import * as Encoding from "effect/Encoding";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
+import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import * as SchemaTransformation from "effect/SchemaTransformation";
-import * as Protocol from "./protocol.js";
+import { InngestClient } from "../Client.js";
 
-/**
- * @internal
- */
 export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {
   reason: Schema.Literals(["missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"]),
   message: Schema.String,
 }) {}
 
-/**
- * @internal
- */
-export interface VerifyOptions {
-  readonly body: Uint8Array;
-  readonly signatureHeader: string | undefined;
-  readonly signingKey: string | undefined;
-  readonly signingKeyFallback?: string | undefined;
-  readonly isDev: boolean;
+export class SignatureConfig extends Schema.Class<SignatureConfig>("effect-inngest/SignatureConfig")({
+  verification: Schema.Literals(["disabled", "required"]),
+  signingKey: Schema.OptionFromUndefinedOr(Schema.String),
+  signingKeyFallback: Schema.OptionFromUndefinedOr(Schema.String),
+}) {}
+
+export class PreparedSigningKey extends Schema.Class<PreparedSigningKey>("effect-inngest/PreparedSigningKey")({
+  bytes: Schema.Uint8Array,
+}) {
+  static readonly decode = (signingKey: string) =>
+    Schema.decodeUnknownOption(Schema.Uint8ArrayFromHex)(signingKey.replace(/^signkey-\w+-/, "")).pipe(
+      Option.map((bytes) => PreparedSigningKey.make({ bytes })),
+    );
+
+  readonly sign = (body: Uint8Array, timestampSeconds: number) =>
+    NodeCrypto.createHmac("sha256", this.bytes).update(body).update(String(timestampSeconds)).digest();
+
+  readonly verifies = (body: Uint8Array, header: SignatureHeader) => {
+    const expected = this.sign(body, header.timestampSeconds);
+    return expected.length === header.signature.length && NodeCrypto.timingSafeEqual(expected, header.signature);
+  };
 }
 
-/**
- * @internal
- */
-export interface SignatureService {
-  readonly verify: (options: VerifyOptions) => Effect.Effect<boolean, SignatureError>;
-  readonly sign: (body: Uint8Array, signingKey: string) => Effect.Effect<string, SignatureError>;
-}
+export class SignatureHeader extends Schema.Class<SignatureHeader>("effect-inngest/SignatureHeader")({
+  timestampSeconds: Schema.Number,
+  signature: Schema.Uint8Array,
+}) {
+  static readonly decode = (header: string) => {
+    const params = new URLSearchParams(header);
+    const decode = Schema.decodeUnknownEffect(SignatureParams);
 
-/**
- * @internal
- */
-export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature") {}
-
-// ─────────────────────────────────────────────────────────────
-// Schemas (internal)
-// ─────────────────────────────────────────────────────────────
-
-const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(), Schema.isGreaterThan(0)));
-// Case-insensitive hex, normalized to lowercase in parseSignatureHeader
-const SignatureHex = Schema.String.pipe(
-  Schema.check(Schema.isPattern(/^[a-fA-F0-9]{64}$/)),
-  Schema.decodeTo(
-    Schema.String,
-    SchemaTransformation.transform({
-      decode: (s) => s.toLowerCase(),
-      encode: (s) => s,
-    }),
-  ),
-);
-const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: SignatureHex });
-
-// ─────────────────────────────────────────────────────────────
-// Internal helpers
-// ─────────────────────────────────────────────────────────────
-
-const SIGNATURE_VALIDITY_WINDOW_MS = 5 * 60 * 1000;
-
-const parseSignatureHeader = (header: string) => {
-  const params = new URLSearchParams(header);
-  const raw = { t: params.get("t") ?? "", s: params.get("s") ?? "" };
-  return Schema.decodeUnknownEffect(SignatureParams)(raw).pipe(
-    Effect.mapError(
-      () =>
-        new SignatureError({
+    return decode({ t: params.get("t") ?? "", s: params.get("s") ?? "" }).pipe(
+      Effect.map(({ t, s }) => SignatureHeader.make({ timestampSeconds: t, signature: s })),
+      Effect.mapError(() =>
+        SignatureError.make({
           reason: "invalid_format",
           message: `Invalid signature format: expected t=<int>&s=<64-hex>, got: ${header}`,
         }),
-    ),
-  );
-};
+      ),
+    );
+  };
 
-const extractKeyBytes = (signingKey: string): Buffer => {
-  const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
-  return Buffer.from(keyWithoutPrefix, "hex");
-};
-
-/**
- * SHA-256 hex of the signing key with the `signkey-{prefix}-` prefix stripped.
- * Used as the Bearer token for outbound requests to the Inngest API per spec
- * §4.1.1.
- *
- * @internal
- */
-export const hashSigningKey = (signingKey: string): string => {
-  const keyWithoutPrefix = signingKey.replace(/^signkey-\w+-/, "");
-  return Crypto.createHash("sha256").update(keyWithoutPrefix).digest("hex");
-};
-
-const computeSignature = (keyBytes: Buffer, body: Uint8Array, timestamp: string): string =>
-  Crypto.createHmac("sha256", keyBytes).update(body).update(timestamp).digest("hex");
-
-const timingSafeEqual = (a: string, b: string): boolean => {
-  if (a.length !== b.length) {
-    return false;
-  }
-  try {
-    return Crypto.timingSafeEqual(Buffer.from(a, "hex"), Buffer.from(b, "hex"));
-  } catch {
-    return false;
-  }
-};
-
-const checkSignature = (signature: string, body: Uint8Array, timestamp: string, signingKey: string): boolean => {
-  const keyBytes = extractKeyBytes(signingKey);
-  const expected = computeSignature(keyBytes, body, timestamp);
-  return timingSafeEqual(signature, expected);
-};
-
-// ─────────────────────────────────────────────────────────────
-// Live Layer
-// ─────────────────────────────────────────────────────────────
-
-/**
- * @internal
- */
-export const SignatureLive: Layer.Layer<Signature> = Layer.succeed(Signature, {
-  verify: Effect.fn("Signature.verify")(function* ({
-    body,
-    signatureHeader,
-    signingKey,
-    signingKeyFallback,
-    isDev,
-  }: VerifyOptions) {
-    if (isDev) {
-      return true;
-    }
-    if (!signingKey) {
-      return yield* new SignatureError({
-        reason: "missing_signing_key",
-        message: "No signing key configured for production mode",
-      });
-    }
-
-    if (!signatureHeader) {
-      return yield* new SignatureError({
-        reason: "missing_header",
-        message: `Missing ${Protocol.Headers.Signature} header`,
-      });
-    }
-
-    const { t: timestampSeconds, s: signature } = yield* parseSignatureHeader(signatureHeader);
-    const timestampMs = timestampSeconds * 1000;
+  readonly assertFresh = Effect.fn("effect-inngest/SignatureHeader/assertFresh")(function* (this: SignatureHeader) {
     const now = yield* DateTime.now;
+    if (Math.abs(now.epochMilliseconds - this.timestampSeconds * 1000) <= SIGNATURE_VALIDITY_WINDOW_MS) {
+      return;
+    }
 
-    if (Math.abs(now.epochMilliseconds - timestampMs) > SIGNATURE_VALIDITY_WINDOW_MS) {
-      return yield* new SignatureError({
-        reason: "expired",
-        message: `Signature expired: timestamp ${timestampSeconds} is outside the validity window`,
+    return yield* SignatureError.make({
+      reason: "expired",
+      message: `Signature expired: timestamp ${this.timestampSeconds} is outside the validity window`,
+    });
+  });
+}
+
+export class SignedPayload extends Schema.Class<SignedPayload>("effect-inngest/SignedPayload")({
+  body: Schema.Uint8Array,
+  signature: Schema.OptionFromUndefinedOr(SignatureHeader),
+}) {
+  readonly requireSignature = Effect.fn("effect-inngest/SignedPayload/requireSignature")(
+    function (this: SignedPayload) {
+      return Effect.fromOption(this.signature).pipe(
+        Effect.mapError(() =>
+          SignatureError.make({
+            reason: "missing_header",
+            message: "Missing Inngest signature header",
+          }),
+        ),
+      );
+    },
+  );
+}
+
+interface SignatureService {
+  readonly verify: (payload: SignedPayload) => Effect.Effect<void, SignatureError>;
+  readonly sign: (body: Uint8Array) => Effect.Effect<string, SignatureError>;
+}
+
+const SIGNATURE_VALIDITY_WINDOW_MS = 5 * 60 * 1000;
+
+const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(), Schema.isGreaterThan(0)));
+const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: Schema.Uint8ArrayFromHex });
+
+export const hashSigningKey = (signingKey: string): string =>
+  Encoding.encodeHex(
+    NodeCrypto.createHash("sha256")
+      .update(signingKey.replace(/^signkey-\w+-/, ""))
+      .digest(),
+  );
+
+export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature", {
+  make: (config: SignatureConfig) =>
+    Effect.gen(function* () {
+      const signingKey = config.signingKey.pipe(Option.flatMap(PreparedSigningKey.decode));
+      const fallbackSigningKey = config.signingKeyFallback.pipe(Option.flatMap(PreparedSigningKey.decode));
+
+      if (Option.isSome(config.signingKey) && Option.isNone(signingKey)) {
+        return yield* SignatureError.make({ reason: "invalid_format", message: "Invalid signing key" });
+      }
+      if (Option.isSome(config.signingKeyFallback) && Option.isNone(fallbackSigningKey)) {
+        return yield* SignatureError.make({ reason: "invalid_format", message: "Invalid signing key" });
+      }
+
+      const signingKeys = Arr.getSomes([signingKey, fallbackSigningKey]);
+
+      const verify = Effect.fn("effect-inngest/Signature/verify")(function* (payload: SignedPayload) {
+        if (config.verification === "disabled") {
+          return;
+        }
+        if (Arr.isArrayEmpty(signingKeys)) {
+          return yield* SignatureError.make({
+            reason: "missing_signing_key",
+            message: "No signing key configured for signature verification",
+          });
+        }
+
+        const header = yield* payload.requireSignature();
+        yield* header.assertFresh();
+
+        const valid = signingKeys.some((key) => key.verifies(payload.body, header));
+
+        if (!valid) {
+          return yield* SignatureError.make({ reason: "invalid_signature", message: "Invalid signature" });
+        }
       });
-    }
 
-    const timestamp = String(timestampSeconds);
-    const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
-    const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
+      const sign = Effect.fn("effect-inngest/Signature/sign")(function* (body: Uint8Array) {
+        const key = yield* Option.match(signingKey, {
+          onNone: () =>
+            SignatureError.make({
+              reason: "missing_signing_key",
+              message: "No signing key configured for signing",
+            }),
+          onSome: Effect.succeed,
+        });
 
-    if (valid) {
-      return true;
-    }
+        const now = yield* DateTime.now;
+        const timestampSeconds = Math.floor(now.epochMilliseconds / 1000);
+        return `t=${timestampSeconds}&s=${Encoding.encodeHex(key.sign(body, timestampSeconds))}`;
+      });
 
-    return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
-  }),
+      return { verify, sign };
+    }),
+}) {
+  static readonly layer = (config: SignatureConfig): Layer.Layer<Signature, SignatureError> =>
+    Layer.effect(this, this.make(config));
+}
 
-  sign: (body, signingKey) =>
-    DateTime.now.pipe(
-      Effect.map((now) => {
-        const ts = Math.floor(now.epochMilliseconds / 1000);
-        return `t=${ts}&s=${computeSignature(extractKeyBytes(signingKey), body, String(ts))}`;
+export const SignatureLive: Layer.Layer<Signature, SignatureError, InngestClient> = Layer.effect(
+  Signature,
+  Effect.gen(function* () {
+    const client = yield* InngestClient;
+    return yield* Signature.make(
+      SignatureConfig.make({
+        verification: client.mode === "dev" ? "disabled" : "required",
+        signingKey: Option.fromNullishOr(client.config.signingKey),
+        signingKeyFallback: Option.fromNullishOr(client.config.signingKeyFallback),
       }),
-    ),
-});
+    );
+  }),
+);

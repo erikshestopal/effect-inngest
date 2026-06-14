@@ -209,20 +209,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
-          "name": "capture-time",
-          "data": 1781396526927,
-          "displayName": "capture-time"
-        },
-        {
-          "op": "StepRun",
-          "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-          "name": "capture-random",
-          "data": 0.5754400854006166,
-          "displayName": "capture-random"
-        },
-        {
           "op": "Sleep",
           "id": "5c528ebc85c151361dc02ed08a25eb25f665fd8f",
           "name": "1s",
@@ -237,190 +223,152 @@
   },
   {
     "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step",
-      "path": "/examples/027-step-memoization",
-      "query": {
-        "fnId": "examples-027-step-memoization-memoization-demo",
-        "stepId": "step"
-      },
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "query": {},
       "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
+        "authorization": "<redacted>",
         "content-type": "application/json",
         "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
         "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
+        "x-inngest-sdk": "<sdk>"
       },
       "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": true,
-          "env": "",
-          "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-              "d6e5b274b69685abf64a53dea0060613b96689ca",
-              "5c528ebc85c151361dc02ed08a25eb25f665fd8f"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/memoized",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
+        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
+        "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
+        "request_id": "01KV20028YQJPVAFAPBSEF9HZA",
+        "generation_id": 1,
+        "request_started_at": 1781404797221,
+        "steps": [
           {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/memoized",
-            "ts": "<event-ts>",
-            "user": {}
+            "op": "StepRun",
+            "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
+            "name": "capture-time",
+            "displayName": "capture-time",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "capture-time"
+            },
+            "rawArgs": ["capture-time", null],
+            "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
+                "memoized": false,
+                "options": {
+                  "id": "capture-time",
+                  "name": "capture-time"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 1781404797221,
+            "timing": {
+              "a": 1781404797222000000,
+              "b": 0
+            }
           }
         ],
-        "steps": {
-          "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
-          "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.5754400854006166
-          },
-          "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781396526927
-          }
-        },
-        "use_api": false,
-        "version": 2
+        "ts": 1781404797223
       }
     },
     "response": {
-      "status": 206,
+      "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        "x-inngest-server-kind": "dev"
       },
-      "body": [
-        {
-          "op": "StepPlanned",
-          "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-          "name": "verify",
-          "displayName": "verify"
-        }
-      ]
+      "body": null
     }
   },
   {
     "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-      "path": "/examples/027-step-memoization",
-      "query": {
-        "fnId": "examples-027-step-memoization-memoization-demo",
-        "stepId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823"
-      },
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "query": {},
       "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
+        "authorization": "<redacted>",
         "content-type": "application/json",
         "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
         "x-inngest-req-version": "2",
-        "x-inngest-step-id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823"
+        "x-inngest-sdk": "<sdk>"
       },
       "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-              "d6e5b274b69685abf64a53dea0060613b96689ca",
-              "5c528ebc85c151361dc02ed08a25eb25f665fd8f"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/memoized",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
+        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
+        "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
+        "request_id": "01KV20028YQJPVAFAPBSEF9HZA",
+        "generation_id": 1,
+        "request_started_at": 1781404797221,
+        "steps": [
           {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/memoized",
-            "ts": "<event-ts>",
-            "user": {}
+            "op": "StepRun",
+            "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+            "name": "capture-random",
+            "displayName": "capture-random",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "capture-random"
+            },
+            "rawArgs": ["capture-random", null],
+            "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+                "memoized": false,
+                "options": {
+                  "id": "capture-random",
+                  "name": "capture-random"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 0.8675836098215892,
+            "timing": {
+              "a": 1781404797225000000,
+              "b": 0
+            }
           }
         ],
-        "steps": {
-          "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
-          "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.5754400854006166
-          },
-          "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781396526927
-          }
-        },
-        "use_api": false,
-        "version": 2
+        "ts": 1781404797225
       }
     },
     "response": {
-      "status": 206,
+      "status": 200,
       "headers": {
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        "x-inngest-server-kind": "dev"
       },
-      "body": [
-        {
-          "op": "StepRun",
-          "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-          "name": "verify",
-          "displayName": "verify"
-        }
-      ]
+      "body": null
     }
   },
   {
@@ -457,12 +405,11 @@
           "request_id": "<request_id>",
           "run_id": "<run_id>",
           "stack": {
-            "current": 4,
+            "current": 3,
             "stack": [
-              "845c91ac7c56024cd8b58d7bc5edd328c1662931",
               "d6e5b274b69685abf64a53dea0060613b96689ca",
-              "5c528ebc85c151361dc02ed08a25eb25f665fd8f",
-              "86a4261d849a6e99b3c3a38f7585e3c7d4a91823"
+              "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+              "5c528ebc85c151361dc02ed08a25eb25f665fd8f"
             ]
           },
           "step_id": "step",
@@ -488,13 +435,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.5754400854006166
-          },
-          "86a4261d849a6e99b3c3a38f7585e3c7d4a91823": {
-            "data": null
+            "data": 0.8675836098215892
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781396526927
+            "data": 1781404797221
           }
         },
         "use_api": false,
@@ -516,11 +460,85 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "timestamp": 1781396526927,
-            "randomValue": 0.5754400854006166
+            "timestamp": 1781404797221,
+            "randomValue": 0.8675836098215892
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
+        "qi_id": "M21pbXp3MG5hZjR5cTo6ZGVmYXVsdA==",
+        "request_id": "01KV20038NTJ7YT5KE3BQVGDND",
+        "generation_id": 1,
+        "request_started_at": 1781404798234,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+            "name": "verify",
+            "displayName": "verify",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "verify"
+            },
+            "rawArgs": ["verify", null],
+            "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+                "memoized": false,
+                "options": {
+                  "id": "verify",
+                  "name": "verify"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "timing": {
+              "a": 1781404798234000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404798235
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

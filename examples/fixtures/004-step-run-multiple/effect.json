@@ -229,8 +229,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1XQ82RHTQ4B2NZ115ZRK4Q/async",
-      "path": "/v1/checkpoint/01KV1XQ82RHTQ4B2NZ115ZRK4Q/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZY17PNQRAR7TWVJM5QNA2/async",
+      "path": "/v1/checkpoint/01KV1ZY17PNQRAR7TWVJM5QNA2/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -240,12 +240,12 @@
         "x-inngest-sdk": "<sdk>"
       },
       "body": {
-        "run_id": "01KV1XQ82RHTQ4B2NZ115ZRK4Q",
+        "run_id": "01KV1ZY17PNQRAR7TWVJM5QNA2",
         "fn_id": "7644b4bd-6247-5469-8592-85b2bae86fe5",
         "qi_id": "MTF2c3JkM2tvN3ptcTo6ZGVmYXVsdA==",
-        "request_id": "01KV1XQ8341ED3A00A0AN6D996",
+        "request_id": "01KV1ZY1801ED3A00A0AN6D996",
         "generation_id": 1,
-        "request_started_at": 1781402411118,
+        "request_started_at": 1781404730636,
         "steps": [
           {
             "op": "StepRun",
@@ -280,12 +280,12 @@
             "transformedResultPromise": {},
             "data": 32,
             "timing": {
-              "a": 1781402411122000000,
+              "a": 1781404730639000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781402411123
+        "ts": 1781404730640
       }
     },
     "response": {
@@ -304,8 +304,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1XQ82RHTQ4B2NZ115ZRK4Q/async",
-      "path": "/v1/checkpoint/01KV1XQ82RHTQ4B2NZ115ZRK4Q/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZY17PNQRAR7TWVJM5QNA2/async",
+      "path": "/v1/checkpoint/01KV1ZY17PNQRAR7TWVJM5QNA2/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -315,12 +315,12 @@
         "x-inngest-sdk": "<sdk>"
       },
       "body": {
-        "run_id": "01KV1XQ82RHTQ4B2NZ115ZRK4Q",
+        "run_id": "01KV1ZY17PNQRAR7TWVJM5QNA2",
         "fn_id": "7644b4bd-6247-5469-8592-85b2bae86fe5",
         "qi_id": "MTF2c3JkM2tvN3ptcTo6ZGVmYXVsdA==",
-        "request_id": "01KV1XQ8341ED3A00A0AN6D996",
+        "request_id": "01KV1ZY1801ED3A00A0AN6D996",
         "generation_id": 1,
-        "request_started_at": 1781402411118,
+        "request_started_at": 1781404730636,
         "steps": [
           {
             "op": "StepRun",
@@ -355,12 +355,12 @@
             "transformedResultPromise": {},
             "data": 42,
             "timing": {
-              "a": 1781402411126000000,
+              "a": 1781404730643000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781402411126
+        "ts": 1781404730643
       }
     },
     "response": {

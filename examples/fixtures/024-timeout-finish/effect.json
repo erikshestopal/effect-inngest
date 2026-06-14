@@ -212,13 +212,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "aa61778e7931f9fd46e47f699a45fa04a333426f",
-          "name": "work-1",
-          "data": "Phase 1 done",
-          "displayName": "work-1"
-        },
-        {
           "op": "Sleep",
           "id": "81fdc6d20b46b28d04ed80e253390cd7cbd7d975",
           "name": "5s",
@@ -229,6 +222,81 @@
           "displayName": "long-wait"
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZZSYQ3D8014RVZPBN9MZ6/async",
+      "path": "/v1/checkpoint/01KV1ZZSYQ3D8014RVZPBN9MZ6/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1ZZSYQ3D8014RVZPBN9MZ6",
+        "fn_id": "7061a31c-1cf9-5c11-982f-e7aee29ca535",
+        "qi_id": "MzNhbzh3amxtYWFpZjo6ZGVmYXVsdA==",
+        "request_id": "01KV1ZZSZ04682M922XJ4PMG6G",
+        "generation_id": 1,
+        "request_started_at": 1781404788710,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "aa61778e7931f9fd46e47f699a45fa04a333426f",
+            "name": "work-1",
+            "displayName": "work-1",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "work-1"
+            },
+            "rawArgs": ["work-1", null],
+            "hashedId": "aa61778e7931f9fd46e47f699a45fa04a333426f",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "aa61778e7931f9fd46e47f699a45fa04a333426f",
+                "memoized": false,
+                "options": {
+                  "id": "work-1",
+                  "name": "work-1"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "Phase 1 done",
+            "timing": {
+              "a": 1781404788712000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404788712
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

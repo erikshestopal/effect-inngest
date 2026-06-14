@@ -12,6 +12,21 @@ Native Effect client library for Inngest - durable, type-safe workflows.
 - **Watch mode**: `vp test`
 - **E2E tests**: `bun run test:e2e`
 
+## Effect v4 patterns
+
+Effect v4 is vendored in `.repos/effect-v4`.
+
+Before writing or changing Effect code, consult the relevant Effect v4 source/patterns first. Prefer existing Effect primitives and patterns over hand-rolled control flow.
+
+Common defaults:
+
+- Use `Schema.Class` / `Schema.TaggedErrorClass` for data and errors.
+- Use `Option` for optional values; avoid `undefined` sentinels in internal models.
+- Use `Schema.decodeUnknownOption` for pure optional decoding.
+- Use `Effect.fromOption(...).pipe(Effect.mapError(...))` to turn absence into domain errors.
+- Avoid `Option<Effect<...>>`; keep effects at service/orchestration boundaries.
+- Avoid one-line helpers unless they encode domain meaning.
+
 ## Architecture
 
 ```

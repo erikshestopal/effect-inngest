@@ -1,0 +1,10 @@
+id: no-undefined-equality
+language: TypeScript
+severity: error
+message: Use Predicate.isUndefined() / Predicate.isNotUndefined() from effect instead of direct undefined equality checks.
+rule:
+  any:
+    - pattern: $VALUE === undefined
+    - pattern: undefined === $VALUE
+    - pattern: $VALUE !== undefined
+    - pattern: undefined !== $VALUE

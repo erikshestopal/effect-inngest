@@ -142,6 +142,83 @@
     "request": {
       "sequence": 4,
       "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-invoke-by-reference&stepId=step",
+      "path": "/examples/034-reference-function",
+      "query": {
+        "fnId": "examples-034-reference-function-invoke-by-reference",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "3",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 2,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+          "generation_id": 3,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["0468d60916f8c6bb90279b321e3dd5afde1e9e55"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/reference-invoke",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/reference-invoke",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "0468d60916f8c6bb90279b321e3dd5afde1e9e55": {
+            "error": {
+              "message": "could not find function with ID: examples-034-reference-function-helper-function",
+              "name": "Error"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain;charset=utf-8"
+      },
+      "body": "Not found"
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/035-event-with-id?fnId=examples-035-event-with-id-idempotent-handler&stepId=step",
       "path": "/examples/035-event-with-id",
       "query": {
@@ -217,10 +294,87 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "processed": true,
-            "eventId": "01KV1R4M86N5TFTFQ3S4JZP1RA"
+            "eventId": "01KV200R0YTEA2FDEWFJNWT41M"
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-invoke-by-reference&stepId=step",
+      "path": "/examples/034-reference-function",
+      "query": {
+        "fnId": "examples-034-reference-function-invoke-by-reference",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "4",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 3,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+          "generation_id": 4,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["0468d60916f8c6bb90279b321e3dd5afde1e9e55"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/reference-invoke",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/reference-invoke",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "0468d60916f8c6bb90279b321e3dd5afde1e9e55": {
+            "error": {
+              "message": "could not find function with ID: examples-034-reference-function-helper-function",
+              "name": "Error"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain;charset=utf-8"
+      },
+      "body": "Not found"
     }
   }
 ]

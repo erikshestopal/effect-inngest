@@ -213,16 +213,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
-          "name": "send-notification",
-          "data": {
-            "ids": ["01KV1R185KFCZK3MMSNDHFS7HS"],
-            "status": 200
-          },
-          "displayName": "send-notification"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -255,7 +245,7 @@
             "userId": "u_001",
             "message": "Hello from step.sendEvent!"
           },
-          "ts": 1781396447410,
+          "ts": 1781404739142,
           "id": null,
           "v": null
         }
@@ -268,9 +258,87 @@
         "x-inngest-server-kind": "dev"
       },
       "body": {
-        "ids": ["01KV1R185KFCZK3MMSNDHFS7HS"],
+        "ids": ["01KV1ZY9J8R9S3NXXDEN87BZ78"],
         "status": 200
       }
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZY9HMXQ76MK3FCPY6YNJA/async",
+      "path": "/v1/checkpoint/01KV1ZY9HMXQ76MK3FCPY6YNJA/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1ZY9HMXQ76MK3FCPY6YNJA",
+        "fn_id": "6212f880-d58b-5b5d-a3b2-8f87b6f9716a",
+        "qi_id": "M3NhNHBudGM0eG83cDo6ZGVmYXVsdA==",
+        "request_id": "01KV1ZY9HXWQJRCQH4SF9NZR2Z",
+        "generation_id": 1,
+        "request_started_at": 1781404739141,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
+            "name": "send-notification",
+            "displayName": "send-notification",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "send-notification"
+            },
+            "rawArgs": ["send-notification", null],
+            "hashedId": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
+                "memoized": false,
+                "options": {
+                  "id": "send-notification",
+                  "name": "send-notification"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": {
+              "ids": ["01KV1ZY9J8R9S3NXXDEN87BZ78"],
+              "status": 200
+            },
+            "timing": {
+              "a": 1781404739144000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404739145
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]
