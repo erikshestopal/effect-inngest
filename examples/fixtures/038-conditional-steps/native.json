@@ -1,0 +1,518 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
+      "path": "/examples/038-conditional-steps",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
+      "path": "/examples/038-conditional-steps",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-038-conditional-steps",
+        "functions": [
+          {
+            "id": "examples-038-conditional-steps-conditional-steps",
+            "name": "conditional-steps",
+            "triggers": [
+              {
+                "event": "demo/conditional"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/038-conditional-steps?fnId=examples-038-conditional-steps-conditional-steps&stepId=step"
+                }
+              }
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "2aa66cff-8d7d-5a7e-8ab1-dc79da746c9b"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/038-conditional-steps?fnId=examples-038-conditional-steps-conditional-steps&stepId=step",
+      "path": "/examples/038-conditional-steps",
+      "query": {
+        "fnId": "examples-038-conditional-steps-conditional-steps",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "shouldSkip": false
+          },
+          "id": "<event-id>",
+          "name": "demo/conditional",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "shouldSkip": false
+            },
+            "id": "<event-id>",
+            "name": "demo/conditional",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "path": "full",
+            "result": "processed-1,processed-2,processed-3"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "path": "/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMGSMD8R1ZR3MYD2CB8VK",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MWV3eml3MnEweWU3NDo6ZGVmYXVsdA==",
+        "request_id": "01KV1QMGSV05NNSRKMNEWMCQPY",
+        "generation_id": 1,
+        "request_started_at": 1781396030272,
+        "steps": [
+          {
+            "id": "80437a44a661d141174209119d54125a59a64b2a",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "setup",
+            "displayName": "setup",
+            "userland": {
+              "id": "setup"
+            },
+            "opts": {},
+            "rawArgs": ["setup", null],
+            "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
+                "memoized": false,
+                "options": {
+                  "id": "setup",
+                  "name": "setup"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "initialized",
+            "timing": {
+              "a": 1781396030278000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396030279
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "path": "/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMGSMD8R1ZR3MYD2CB8VK",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MWV3eml3MnEweWU3NDo6ZGVmYXVsdA==",
+        "request_id": "01KV1QMGSV05NNSRKMNEWMCQPY",
+        "generation_id": 1,
+        "request_started_at": 1781396030272,
+        "steps": [
+          {
+            "id": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "heavy-step-1",
+            "displayName": "heavy-step-1",
+            "userland": {
+              "id": "heavy-step-1"
+            },
+            "opts": {},
+            "rawArgs": ["heavy-step-1", null],
+            "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-1",
+                  "name": "heavy-step-1"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-1",
+            "timing": {
+              "a": 1781396030281000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396030281
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "path": "/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMGSMD8R1ZR3MYD2CB8VK",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MWV3eml3MnEweWU3NDo6ZGVmYXVsdA==",
+        "request_id": "01KV1QMGSV05NNSRKMNEWMCQPY",
+        "generation_id": 1,
+        "request_started_at": 1781396030272,
+        "steps": [
+          {
+            "id": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "heavy-step-2",
+            "displayName": "heavy-step-2",
+            "userland": {
+              "id": "heavy-step-2"
+            },
+            "opts": {},
+            "rawArgs": ["heavy-step-2", null],
+            "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-2",
+                  "name": "heavy-step-2"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-2",
+            "timing": {
+              "a": 1781396030283000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396030283
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "path": "/v1/checkpoint/01KV1QMGSMD8R1ZR3MYD2CB8VK/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMGSMD8R1ZR3MYD2CB8VK",
+        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
+        "qi_id": "MWV3eml3MnEweWU3NDo6ZGVmYXVsdA==",
+        "request_id": "01KV1QMGSV05NNSRKMNEWMCQPY",
+        "generation_id": 1,
+        "request_started_at": 1781396030272,
+        "steps": [
+          {
+            "id": "2878df8885808eb28275a24e12f920ed98457b86",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "heavy-step-3",
+            "displayName": "heavy-step-3",
+            "userland": {
+              "id": "heavy-step-3"
+            },
+            "opts": {},
+            "rawArgs": ["heavy-step-3", null],
+            "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
+                "memoized": false,
+                "options": {
+                  "id": "heavy-step-3",
+                  "name": "heavy-step-3"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "processed-3",
+            "timing": {
+              "a": 1781396030285000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396030285
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  }
+]

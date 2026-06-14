@@ -7,13 +7,17 @@ import { Inngest } from "inngest";
 import { serve } from "inngest/bun";
 import type { NativeExample, NativeExampleFactory } from "./_support.ts";
 
+interface ServedNativeExample extends NativeExample {
+  readonly client: Inngest.Any;
+}
+
 const nativeDir = dirname(fileURLToPath(import.meta.url));
 
 const port = Number(process.env.NATIVE_INNGEST_PORT ?? "9999");
 const servePath = process.env.NATIVE_INNGEST_SERVE_PATH ?? "/api/inngest";
 const serveOrigin = process.env.NATIVE_INNGEST_SERVE_ORIGIN ?? `http://127.0.0.1:${port}`;
 const baseUrl = process.env.NATIVE_INNGEST_BASE_URL ?? "http://127.0.0.1:8288";
-const appId = process.env.NATIVE_INNGEST_APP_ID ?? "research-app";
+const appId = process.env.NATIVE_INNGEST_APP_ID;
 const selectedExampleIds = new Set(
   (process.env.NATIVE_INNGEST_EXAMPLE_IDS ?? "")
     .split(",")
@@ -21,13 +25,11 @@ const selectedExampleIds = new Set(
     .filter(Boolean),
 );
 
-const inngest = new Inngest({ id: appId, isDev: true, baseUrl });
-
 const exampleFiles = readdirSync(nativeDir)
   .filter((file) => /^\d+-.*\.ts$/.test(file))
   .sort();
 
-const examples: Array<NativeExample> = [];
+const examples: Array<ServedNativeExample> = [];
 
 for (const file of exampleFiles) {
   const module = await import(pathToFileURL(join(nativeDir, file)).href);
@@ -37,10 +39,12 @@ for (const file of exampleFiles) {
     throw new Error(`Native example ${file} must default-export defineNativeExample(...)`);
   }
 
+  const exampleId = file.replace(/\.ts$/, "");
+  const inngest = new Inngest({ id: appId ?? `examples-${exampleId}`, isDev: true, baseUrl });
   const example = factory(inngest);
 
   if (selectedExampleIds.size === 0 || selectedExampleIds.has(example.id)) {
-    examples.push(example);
+    examples.push({ ...example, client: inngest });
   }
 }
 
@@ -51,13 +55,15 @@ if (missingExampleIds.length > 0) {
 
 const functions = examples.flatMap((example) => example.functions);
 const manifest = examples.map((example) => ({ id: example.id, cases: example.cases }));
-
-const inngestHandler = serve({
-  client: inngest,
-  functions,
-  serveOrigin,
-  servePath,
-});
+const handlers = examples.map((example) => ({
+  id: example.id,
+  handler: serve({
+    client: example.client,
+    functions: example.functions,
+    serveOrigin,
+    servePath,
+  }),
+}));
 
 Bun.serve({
   hostname: "127.0.0.1",
@@ -65,8 +71,9 @@ Bun.serve({
   fetch(request: Request) {
     const url = new URL(request.url);
 
-    if (url.pathname === servePath) {
-      return inngestHandler(request);
+    const handler = handlers.find((entry) => url.pathname === `/examples/${entry.id}`);
+    if (handler) {
+      return handler.handler(request);
     }
 
     if (url.pathname === "/health") {
@@ -74,7 +81,7 @@ Bun.serve({
     }
 
     if (url.pathname === "/__native/examples") {
-      return Response.json({ appId, examples: manifest });
+      return Response.json({ appId: appId ?? "examples", examples: manifest });
     }
 
     return new Response("Not found", { status: 404 });

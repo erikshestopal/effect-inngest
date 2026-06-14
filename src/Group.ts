@@ -1,21 +1,11 @@
 /**
  * @since 0.1.0
  */
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpEffect from "effect/unstable/http/HttpEffect";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as UrlParams from "effect/unstable/http/UrlParams";
 import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
-import * as Option from "effect/Option";
-import * as Schema from "effect/Schema";
 import type { InngestFunction } from "./Function.js";
-import { InngestClient } from "./Client.js";
-import * as InternalHandler from "./internal/handler.js";
-import * as Protocol from "./internal/protocol.js";
-import { SignatureLive } from "./internal/signature.js";
+import * as ServeHttp from "./internal/serve/http.js";
 
 import { type HandlerContext } from "./internal/step.js";
 
@@ -100,7 +90,7 @@ export interface Handler<Tag extends string> {
  * @category models
  */
 export type ToHandler<F extends InngestFunction.Any> =
-  F extends InngestFunction<infer _Tag, infer _Triggers, infer _Success> ? Handler<_Tag> : never;
+  F extends InngestFunction<infer Tag, infer _Triggers, infer _Success> ? Handler<Tag> : never;
 
 /**
  * @since 0.1.0
@@ -109,6 +99,13 @@ export type ToHandler<F extends InngestFunction.Any> =
 export interface InngestGroup<Fns extends InngestFunction.Any> {
   readonly [TypeId]: TypeId;
   readonly functions: ReadonlyMap<string, Fns>;
+
+  /**
+   * Implement all handlers for the functions in this group, returning a context object.
+   */
+  readonly toHandlers: <H extends HandlersFrom<Fns>>(
+    handlers: H,
+  ) => Effect.Effect<Context.Context<ToHandler<Fns>>, never, HandlersRequirements<H>>;
 
   /**
    * Implement all handlers for the functions in this group.
@@ -124,6 +121,19 @@ export interface InngestGroup<Fns extends InngestFunction.Any> {
     tag: Tag,
     handler: H,
   ) => Layer.Layer<Handler<Tag>, never, HandlerRequirements<H>>;
+
+  /**
+   * Retrieve a handler for a specific function in the group.
+   */
+  readonly accessHandler: <Tag extends InngestFunction.Tag<Fns>>(
+    tag: Tag,
+  ) => Effect.Effect<
+    (
+      context: HandlerContext<Extract<Fns, { readonly _tag: Tag }>>,
+    ) => Effect.Effect<InngestFunction.Success<Extract<Fns, { readonly _tag: Tag }>>, unknown>,
+    never,
+    Handler<Tag>
+  >;
 }
 
 /**
@@ -140,19 +150,21 @@ export declare namespace InngestGroup {
 const Proto = {
   [TypeId]: TypeId,
 
-  toLayer(this: InngestGroup<InngestFunction.Any>, handlers: Record<string, unknown>) {
+  toHandlers(this: InngestGroup<InngestFunction.Any>, handlers: Record<string, unknown>) {
     const functions = this.functions;
-    return Layer.effectContext(
-      Effect.gen(function* () {
-        const context = yield* Effect.context<never>();
-        const contextMap = new Map<string, unknown>();
-        for (const [tag, handler] of Object.entries(handlers)) {
-          const fn = functions.get(tag)!;
-          contextMap.set(fn.key, { handler, context });
-        }
-        return Context.makeUnsafe(contextMap);
-      }),
-    );
+    return Effect.gen(function* () {
+      const context = yield* Effect.context<never>();
+      const contextMap = new Map<string, unknown>();
+      for (const [tag, handler] of Object.entries(handlers)) {
+        const fn = functions.get(tag)!;
+        contextMap.set(fn.key, { tag: fn._tag, handler, context });
+      }
+      return Context.makeUnsafe(contextMap);
+    });
+  },
+
+  toLayer(this: InngestGroup<InngestFunction.Any>, handlers: Record<string, unknown>) {
+    return Layer.effectContext(this.toHandlers(handlers as never));
   },
 
   toLayerHandler(this: InngestGroup<InngestFunction.Any>, tag: string, handler: unknown) {
@@ -161,10 +173,18 @@ const Proto = {
       Effect.gen(function* () {
         const context = yield* Effect.context<never>();
         const contextMap = new Map<string, unknown>();
-        contextMap.set(fn.key, { handler, context });
+        contextMap.set(fn.key, { tag: fn._tag, handler, context });
         return Context.makeUnsafe(contextMap);
       }),
     );
+  },
+
+  accessHandler(this: InngestGroup<InngestFunction.Any>, tag: string) {
+    return Effect.contextWith((parentContext: Context.Context<any>) => {
+      const fn = this.functions.get(tag)!;
+      const { handler, context } = parentContext.mapUnsafe.get(fn.key) as Handler<string>;
+      return Effect.succeed((handlerContext: HandlerContext<any>) => Effect.provide(handler(handlerContext), context));
+    });
   },
 };
 
@@ -176,7 +196,7 @@ export const make = <Fns extends ReadonlyArray<InngestFunction.Any>>(...fns: Fns
   const functions = new Map(fns.map((fn) => [fn._tag, fn]));
   const group = Object.create(Proto);
   group.functions = functions;
-  return group;
+  return group as InngestGroup<Fns[number]>;
 };
 
 /**
@@ -199,94 +219,9 @@ export const make = <Fns extends ReadonlyArray<InngestFunction.Any>>(...fns: Fns
  * )
  * ```
  */
-export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(
-  function* (group: InngestGroup.Any) {
-    const request = yield* HttpServerRequest.HttpServerRequest;
-    const method = request.method;
-    const requestUrl = Option.match(HttpServerRequest.toURL(request), {
-      onNone: () => request.url,
-      onSome: (url) => url.toString(),
-    });
-
-    if (method === "GET") {
-      const result = yield* InternalHandler.handleIntrospection(group, requestUrl);
-      return yield* HttpServerResponse.json(result.body, {
-        status: result.status,
-        headers: result.headers,
-      });
-    }
-
-    if (method === "PUT") {
-      const result = yield* InternalHandler.handleRegistration(group, requestUrl);
-      return yield* HttpServerResponse.json(result.body, {
-        status: result.status,
-        headers: result.headers,
-      });
-    }
-
-    if (method === "POST") {
-      const url = yield* Option.match(HttpServerRequest.toURL(request), {
-        onNone: () =>
-          Effect.fail(
-            HttpServerResponse.jsonUnsafe(
-              { error: "Unable to parse request URL" },
-              { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
-            ),
-          ),
-        onSome: (u) => Effect.succeed(u),
-      });
-
-      const ExecuteParamsSchema = UrlParams.schemaRecord.pipe(
-        Schema.decodeTo(
-          Schema.Struct({
-            fnId: Schema.String,
-            stepId: Schema.optional(Schema.String),
-          }),
-        ),
-      );
-
-      const params = yield* Schema.decodeUnknownEffect(ExecuteParamsSchema)(UrlParams.fromInput(url.searchParams)).pipe(
-        Effect.catch(() =>
-          Effect.fail(
-            HttpServerResponse.jsonUnsafe(
-              { error: "Missing or invalid fnId query parameter" },
-              { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
-            ),
-          ),
-        ),
-      );
-
-      const body = yield* InternalHandler.verifyAndParseRequestBody(request).pipe(
-        Effect.provide(SignatureLive),
-        Effect.catch((error) =>
-          Effect.fail(
-            HttpServerResponse.jsonUnsafe(
-              { error: error.message },
-              {
-                status: error._tag === "SignatureError" ? 401 : 400,
-                headers: { [Protocol.Headers.NoRetry]: "true" },
-              },
-            ),
-          ),
-        ),
-      );
-
-      const result = yield* InternalHandler.handleExecution(group, params.fnId, params.stepId, body);
-
-      return yield* HttpServerResponse.json(result.body, {
-        status: result.status,
-        headers: result.headers,
-      });
-    }
-
-    return yield* HttpServerResponse.json({ error: `Method ${method} not allowed` }, { status: 405 });
-  },
-  Effect.catchCause((cause) =>
-    HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
-      Effect.orDie,
-    ),
-  ),
-);
+export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(function* (group: InngestGroup.Any) {
+  return yield* ServeHttp.toHttpApp(group);
+});
 
 /**
  * Create a standalone web handler from an InngestGroup.
@@ -312,12 +247,4 @@ export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(
  * process.on("SIGTERM", dispose)
  * ```
  */
-export const toWebHandler = <R, E>(
-  group: InngestGroup.Any,
-  options: {
-    readonly layer: Layer.Layer<InngestClient | HttpClient.HttpClient | R, E, never>;
-  },
-): {
-  readonly handler: (request: Request, context?: Context.Context<never>) => Promise<Response>;
-  readonly dispose: () => Promise<void>;
-} => HttpEffect.toWebHandlerLayer(toHttpApp(group), options.layer);
+export const toWebHandler = ServeHttp.toWebHandler;

@@ -56,7 +56,9 @@ describe("Spec Compliance Regressions", () => {
         Effect.sync(() =>
           HttpClient.make((request) => {
             const headers: Record<string, string> = {};
-            for (const [k, v] of Object.entries(request.headers)) headers[k.toLowerCase()] = v as string;
+            for (const [k, v] of Object.entries(request.headers)) {
+              headers[k.toLowerCase()] = v as string;
+            }
             capturedHeaders.push(headers);
             return Effect.succeed(
               HttpClientResponse.fromWeb(

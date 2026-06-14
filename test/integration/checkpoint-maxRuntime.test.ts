@@ -26,8 +26,12 @@ interface CapturedCheckpoint {
 }
 
 const decodeBody = (body: { readonly _tag: string; readonly body?: Uint8Array; readonly text?: string }): unknown => {
-  if (body._tag === "Uint8Array" && body.body) return JSON.parse(new TextDecoder().decode(body.body));
-  if (body._tag === "Raw" && typeof body.text === "string") return JSON.parse(body.text);
+  if (body._tag === "Uint8Array" && body.body) {
+    return JSON.parse(new TextDecoder().decode(body.body));
+  }
+  if (body._tag === "Raw" && typeof body.text === "string") {
+    return JSON.parse(body.text);
+  }
   return undefined;
 };
 

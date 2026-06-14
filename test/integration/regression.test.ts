@@ -896,8 +896,13 @@ describe("Regression: disable_immediate_execution must not block target step", (
               "data": "first",
               "displayName": "first",
               "id": "e0996a37c13d44c3b06074939d43fa3759bd32c1",
+              "mode": "sync",
               "name": "first",
               "op": "StepRun",
+              "opts": {},
+              "userland": {
+                "id": "first",
+              },
             },
           ]
         `);
@@ -992,8 +997,13 @@ describe("Regression: disable_immediate_execution must not block target step", (
               "data": "second",
               "displayName": "second",
               "id": "352f7829a2384b001cc12b0c2613c756454a1f6a",
+              "mode": "sync",
               "name": "second",
               "op": "StepRun",
+              "opts": {},
+              "userland": {
+                "id": "second",
+              },
             },
           ]
         `);

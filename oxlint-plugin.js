@@ -51,7 +51,9 @@ const preferOptionFromNullable = {
     };
 
     const getReturnCall = (statement) => {
-      if (!statement) return null;
+      if (!statement) {
+        return null;
+      }
 
       if (statement.type === "ReturnStatement") {
         return statement.argument?.type === "CallExpression" ? statement.argument : null;
@@ -70,16 +72,24 @@ const preferOptionFromNullable = {
     };
 
     const isOptionSomeCall = (call, testedName) => {
-      if (!call) return false;
+      if (!call) {
+        return false;
+      }
       const callee = unwrapInstantiation(call.callee);
-      if (!isOptionMember(callee, "some")) return false;
+      if (!isOptionMember(callee, "some")) {
+        return false;
+      }
       const arg = call.arguments[0];
-      if (!arg) return false;
+      if (!arg) {
+        return false;
+      }
       return sourceCode.getText(arg) === testedName;
     };
 
     const isOptionNoneCall = (call) => {
-      if (!call) return false;
+      if (!call) {
+        return false;
+      }
       const callee = unwrapInstantiation(call.callee);
       return isOptionMember(callee, "none");
     };
@@ -90,17 +100,31 @@ const preferOptionFromNullable = {
       ConditionalExpression(node) {
         const { test, consequent, alternate } = node;
 
-        if (test.type !== "BinaryExpression") return;
-        if (test.operator !== "!==" && test.operator !== "!=") return;
+        if (test.type !== "BinaryExpression") {
+          return;
+        }
+        if (test.operator !== "!==" && test.operator !== "!=") {
+          return;
+        }
 
         const testedName = getTestedName(test);
-        if (!testedName) return;
+        if (!testedName) {
+          return;
+        }
 
-        if (consequent.type !== "CallExpression") return;
-        if (!isOptionSomeCall(consequent, testedName)) return;
+        if (consequent.type !== "CallExpression") {
+          return;
+        }
+        if (!isOptionSomeCall(consequent, testedName)) {
+          return;
+        }
 
-        if (alternate.type !== "CallExpression") return;
-        if (!isOptionNoneCall(alternate)) return;
+        if (alternate.type !== "CallExpression") {
+          return;
+        }
+        if (!isOptionNoneCall(alternate)) {
+          return;
+        }
 
         context.report({
           node,
@@ -114,27 +138,43 @@ const preferOptionFromNullable = {
       IfStatement(node) {
         const { test, consequent, alternate } = node;
 
-        if (test.type !== "BinaryExpression") return;
-        if (test.operator !== "!==" && test.operator !== "!=") return;
+        if (test.type !== "BinaryExpression") {
+          return;
+        }
+        if (test.operator !== "!==" && test.operator !== "!=") {
+          return;
+        }
 
         const testedName = getTestedName(test);
-        if (!testedName) return;
+        if (!testedName) {
+          return;
+        }
 
         const consequentCall = getReturnCall(consequent);
-        if (!isOptionSomeCall(consequentCall, testedName)) return;
+        if (!isOptionSomeCall(consequentCall, testedName)) {
+          return;
+        }
 
         const alternateCall = getReturnCall(alternate);
         let nextStatement = null;
         if (alternateCall) {
-          if (!isOptionNoneCall(alternateCall)) return;
+          if (!isOptionNoneCall(alternateCall)) {
+            return;
+          }
         } else {
           const parent = node.parent;
-          if (!parent || parent.type !== "BlockStatement") return;
+          if (!parent || parent.type !== "BlockStatement") {
+            return;
+          }
           const index = parent.body.indexOf(node);
-          if (index < 0 || index + 1 >= parent.body.length) return;
+          if (index < 0 || index + 1 >= parent.body.length) {
+            return;
+          }
           nextStatement = parent.body[index + 1];
           const nextReturn = getReturnCall(nextStatement);
-          if (!isOptionNoneCall(nextReturn)) return;
+          if (!isOptionNoneCall(nextReturn)) {
+            return;
+          }
         }
 
         context.report({
@@ -142,14 +182,18 @@ const preferOptionFromNullable = {
           messageId: "preferFromNullable",
           data: { name: testedName },
           fix(fixer) {
-            if (!node.range) return null;
+            if (!node.range) {
+              return null;
+            }
             const replacement = `return ${buildFromNullable(testedName)};`;
 
             if (alternateCall) {
               return fixer.replaceText(node, replacement);
             }
 
-            if (!nextStatement?.range) return null;
+            if (!nextStatement?.range) {
+              return null;
+            }
             return fixer.replaceTextRange([node.range[0], nextStatement.range[1]], replacement);
           },
         });
@@ -174,11 +218,19 @@ const noGlobalErrorInEffectFail = {
     const effectFailMethods = new Set(["fail", "failSync", "failCause", "failCauseSync", "die", "dieSync"]);
 
     const isEffectFailCall = (node) => {
-      if (node.type !== "CallExpression") return false;
+      if (node.type !== "CallExpression") {
+        return false;
+      }
       const callee = node.callee;
-      if (callee.type !== "MemberExpression") return false;
-      if (callee.object.type !== "Identifier" || callee.object.name !== "Effect") return false;
-      if (callee.property.type !== "Identifier") return false;
+      if (callee.type !== "MemberExpression") {
+        return false;
+      }
+      if (callee.object.type !== "Identifier" || callee.object.name !== "Effect") {
+        return false;
+      }
+      if (callee.property.type !== "Identifier") {
+        return false;
+      }
       return effectFailMethods.has(callee.property.name);
     };
 
@@ -187,7 +239,9 @@ const noGlobalErrorInEffectFail = {
 
     return {
       CallExpression(node) {
-        if (!isEffectFailCall(node)) return;
+        if (!isEffectFailCall(node)) {
+          return;
+        }
         for (const arg of node.arguments) {
           if (isGlobalErrorConstructor(arg)) {
             context.report({
@@ -218,7 +272,9 @@ const preferPredicateHasProperty = {
 
     return {
       BinaryExpression(node) {
-        if (node.operator !== "in") return;
+        if (node.operator !== "in") {
+          return;
+        }
 
         const property = node.left;
         const object = node.right;

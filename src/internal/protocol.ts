@@ -86,6 +86,8 @@ export class SDKRequestContext extends Schema.Class<SDKRequestContext>("SDKReque
     Schema.withDecodingDefaultType(Effect.succeed(FunctionStack.make({ stack: [], current: 0 }))),
   ),
   qi_id: Schema.String.pipe(Schema.withDecodingDefault(Effect.succeed(""))),
+  request_id: Schema.optionalKey(Schema.String),
+  generation_id: Schema.optionalKey(Schema.Number),
   disable_immediate_execution: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
   use_api: Schema.Boolean.pipe(Schema.withDecodingDefault(Effect.succeed(false))),
 }) {}
@@ -154,7 +156,30 @@ const mkOpcode = (info: StepInfo, op: OpcodeValue, extra?: object): GeneratorOpc
 
 export const stepPlanned = (info: StepInfo): GeneratorOpcode => mkOpcode(info, Opcode.StepPlanned);
 
-export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode => mkOpcode(info, Opcode.StepRun, { data });
+export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepRun, {
+    mode: "sync",
+    opts: {},
+    userland: { id: info.id },
+    rawArgs: [info.id, null],
+    hashedId: info.hash,
+    fulfilled: true,
+    hasStepState: true,
+    handled: true,
+    promise: {},
+    middleware: {
+      stepInfo: {
+        hashedId: info.hash,
+        memoized: false,
+        options: { id: info.id, name: info.name },
+        stepType: "run",
+      },
+    },
+    memoizationDeferred: { promise: {} },
+    transformedResultPromise: {},
+    data,
+    timing: { a: Date.now() * 1_000_000, b: 0 },
+  });
 
 export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): GeneratorOpcode => {
   // noRetry must be in the error object for Inngest executor to recognize it

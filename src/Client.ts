@@ -186,6 +186,9 @@ interface InngestClientService {
     readonly runId: string;
     readonly fnId: string;
     readonly qiId: string;
+    readonly requestId?: string;
+    readonly generationId?: number;
+    readonly requestStartedAt?: number;
     readonly steps: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>;
   }) => Effect.Effect<void, CheckpointApiError>;
 }
@@ -291,7 +294,7 @@ const makeClient = (
     const checkpointRequest = (
       runId: string,
       body: string,
-      signingKey: string,
+      hashedSigningKey: string,
     ): Effect.Effect<void, CheckpointApiError> => {
       const url = new URL(`v1/checkpoint/${runId}/async`, apiBaseUrl).toString();
       const request = HttpClientRequest.post(url).pipe(
@@ -301,7 +304,7 @@ const makeClient = (
           [Protocol.Headers.RequestVersion]: "2",
           ...(config.env ? { [Protocol.Headers.Env]: config.env } : {}),
         }),
-        HttpClientRequest.bearerToken(hashSigningKey(signingKey)),
+        HttpClientRequest.bearerToken(hashedSigningKey),
         HttpClientRequest.bodyText(body, "application/json"),
       );
 
@@ -331,7 +334,7 @@ const makeClient = (
     const checkpointAsync: InngestClientService["checkpointAsync"] = Effect.fn("InngestClient.checkpointAsync")(
       function* (args) {
         const signingKey = config.signingKey;
-        if (!signingKey) {
+        if (!signingKey && mode !== "dev") {
           return yield* Effect.fail(
             new CheckpointApiError({ message: "No signing key configured for checkpoint API" }),
           );
@@ -342,7 +345,10 @@ const makeClient = (
           run_id: args.runId,
           fn_id: args.fnId,
           qi_id: args.qiId,
-          steps: Schema.encodeSync(Schema.Array(Protocol.GeneratorOpcode))(args.steps),
+          request_id: args.requestId,
+          generation_id: args.generationId,
+          request_started_at: args.requestStartedAt,
+          steps: args.steps,
           ts: now,
         });
 
@@ -353,10 +359,13 @@ const makeClient = (
         const attempt: Effect.Effect<void, CheckpointApiError> = Ref.get(useFallbackKey).pipe(
           Effect.flatMap((usingFallback) => {
             const primaryKey = usingFallback && fallbackKey ? fallbackKey : signingKey;
-            return checkpointRequest(args.runId, body, primaryKey).pipe(
+            const primaryToken = primaryKey ? hashSigningKey(primaryKey) : "";
+            return checkpointRequest(args.runId, body, primaryToken).pipe(
               Effect.catch((error) =>
                 error.status === 401 && !usingFallback && fallbackKey
-                  ? checkpointRequest(args.runId, body, fallbackKey).pipe(Effect.andThen(Ref.set(useFallbackKey, true)))
+                  ? checkpointRequest(args.runId, body, hashSigningKey(fallbackKey)).pipe(
+                      Effect.andThen(Ref.set(useFallbackKey, true)),
+                    )
                   : Effect.fail(error),
               ),
             );

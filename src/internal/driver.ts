@@ -6,6 +6,7 @@ import * as Headers from "effect/unstable/http/Headers";
 import * as HttpTraceContext from "effect/unstable/http/HttpTraceContext";
 import * as Cause from "effect/Cause";
 import * as Chunk from "effect/Chunk";
+import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
@@ -83,6 +84,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     const client = yield* InngestClient;
     const stepIdCounts = yield* Ref.make(HashMap.empty<string, number>());
     const headers = baseHeaders(client.config.framework);
+    const requestStartedAt = yield* Clock.currentTimeMillis;
 
     // Build the optional CheckpointState. In checkpoint mode the step tools
     // buffer StepRun results into this state and yield (drain + DiscoveryRequest /
@@ -101,6 +103,9 @@ export const execute = <F extends InngestFunction.Any, R>(
                 runId: request.ctx.run_id,
                 fnId: request.ctx.fn_id,
                 qiId: request.ctx.qi_id,
+                requestId: request.ctx.request_id,
+                generationId: request.ctx.generation_id,
+                requestStartedAt,
                 steps,
               }),
           });
@@ -302,8 +307,12 @@ export const execute = <F extends InngestFunction.Any, R>(
   }).pipe(
     (base) => {
       const headers: Record<string, string> = {};
-      if (traceHeaders.traceparent) headers["traceparent"] = traceHeaders.traceparent;
-      if (traceHeaders.tracestate) headers["tracestate"] = traceHeaders.tracestate;
+      if (traceHeaders.traceparent) {
+        headers["traceparent"] = traceHeaders.traceparent;
+      }
+      if (traceHeaders.tracestate) {
+        headers["tracestate"] = traceHeaders.tracestate;
+      }
       return pipe(
         HttpTraceContext.fromHeaders(Headers.fromInput(headers)),
         Option.match({

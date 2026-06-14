@@ -254,6 +254,8 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
             attempt: body.ctx.attempt,
             max_attempts: body.ctx.max_attempts,
             qi_id: body.ctx.qi_id,
+            ...(body.ctx.request_id !== undefined ? { request_id: body.ctx.request_id } : {}),
+            ...(body.ctx.generation_id !== undefined ? { generation_id: body.ctx.generation_id } : {}),
             disable_immediate_execution: body.ctx.disable_immediate_execution,
             use_api: body.ctx.use_api,
             stack: body.ctx.stack,

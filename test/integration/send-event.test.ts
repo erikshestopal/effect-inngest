@@ -336,9 +336,11 @@ describe("TB-006: Send Event", () => {
         // canExecute returns true for all steps, so sendEvent should execute
         expect(response.status).toBe(206); // Still 206 because it returns runInterrupt
 
-        // Verify URL format: {eventBaseUrl}/e/{eventKey}
-        expect(capturedUrls).toHaveLength(1);
-        expect(capturedUrls[0]).toBe("https://custom.inn.gs/e/my-secret-key");
+        // Verify URL format: {eventBaseUrl}/e/{eventKey}. Checkpointing may
+        // issue additional HTTP requests; only the event send URL matters here.
+        const eventUrls = capturedUrls.filter((url) => url.includes("/e/"));
+        expect(eventUrls).toHaveLength(1);
+        expect(eventUrls[0]).toBe("https://custom.inn.gs/e/my-secret-key");
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }

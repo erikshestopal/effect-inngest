@@ -1,0 +1,51 @@
+/**
+ * Inbound SDK request verification and decoding boundary.
+ * @internal
+ */
+import * as Headers from "effect/unstable/http/Headers";
+import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as Effect from "effect/Effect";
+import { dual } from "effect/Function";
+import * as Option from "effect/Option";
+import * as Schema from "effect/Schema";
+import { InngestClient } from "../../Client.js";
+import * as Protocol from "../protocol.js";
+import { Signature, SignatureError } from "../signature.js";
+export { SignatureError } from "../signature.js";
+
+export const bodyUint8Array = Effect.fn("effect-inngest/serve/request/bodyUint8Array")(function* (
+  request: HttpServerRequest.HttpServerRequest,
+) {
+  return yield* request.arrayBuffer.pipe(Effect.map((buffer) => new Uint8Array(buffer)));
+});
+
+export const verifySignature: {
+  (
+    request: HttpServerRequest.HttpServerRequest,
+  ): (body: Uint8Array) => Effect.Effect<void, SignatureError, InngestClient | Signature>;
+  (
+    body: Uint8Array,
+    request: HttpServerRequest.HttpServerRequest,
+  ): Effect.Effect<void, SignatureError, InngestClient | Signature>;
+} = dual(2, (body: Uint8Array, request: HttpServerRequest.HttpServerRequest) =>
+  Effect.gen(function* () {
+    const client = yield* InngestClient;
+    const sig = yield* Signature;
+    const config = client.config;
+
+    yield* sig.verify({
+      body,
+      signatureHeader: Option.getOrUndefined(Headers.get(request.headers, Protocol.Headers.Signature)),
+      signingKey: config.signingKey,
+      signingKeyFallback: config.signingKeyFallback,
+      isDev: client.mode === "dev",
+    });
+  }),
+);
+
+export const schemaBodyJson =
+  <S extends Schema.Top>(schema: S) =>
+  (body: Uint8Array): Effect.Effect<S["Type"], Schema.SchemaError, S["DecodingServices"]> => {
+    const bodyText = new TextDecoder().decode(body);
+    return Schema.decodeUnknownEffect(Schema.fromJsonString(schema))(bodyText);
+  };

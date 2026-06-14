@@ -53,6 +53,8 @@ export const timeStr = (input: Duration.Input): string => {
  * the prior contract. Date/number inputs are normalized via DateTime.
  */
 export const formatTimestamp = (timestamp: Date | number | string): string => {
-  if (typeof timestamp === "string") return timestamp;
+  if (typeof timestamp === "string") {
+    return timestamp;
+  }
   return DateTime.formatIso(DateTime.makeUnsafe(timestamp));
 };

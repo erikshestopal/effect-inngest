@@ -1,0 +1,322 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/014-concurrency-limit",
+      "path": "/examples/014-concurrency-limit",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/014-concurrency-limit",
+      "path": "/examples/014-concurrency-limit",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/014-concurrency-limit",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-014-concurrency-limit",
+        "functions": [
+          {
+            "id": "examples-014-concurrency-limit-concurrent-fn",
+            "name": "concurrent-fn",
+            "triggers": [
+              {
+                "event": "demo/concurrent"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/014-concurrency-limit?fnId=examples-014-concurrency-limit-concurrent-fn&stepId=step"
+                }
+              }
+            },
+            "concurrency": {
+              "limit": 1
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "3c00cd77-2a90-5164-b8e3-e04d2063336a"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/014-concurrency-limit?fnId=examples-014-concurrency-limit-concurrent-fn&stepId=step",
+      "path": "/examples/014-concurrency-limit",
+      "query": {
+        "fnId": "examples-014-concurrency-limit-concurrent-fn",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "ffc1def5-401b-5ecd-8665-3948cf235900",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "id": "concurrent-014"
+          },
+          "id": "<event-id>",
+          "name": "demo/concurrent",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "id": "concurrent-014"
+            },
+            "id": "<event-id>",
+            "name": "demo/concurrent",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "displayName": "wait-1s",
+          "op": "Sleep",
+          "id": "46b173f1b151790f5c9c57585a4d80b06fa65765",
+          "name": "1s",
+          "opts": {},
+          "userland": {
+            "id": "wait-1s"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/014-concurrency-limit?fnId=examples-014-concurrency-limit-concurrent-fn&stepId=step",
+      "path": "/examples/014-concurrency-limit",
+      "query": {
+        "fnId": "examples-014-concurrency-limit-concurrent-fn",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "ffc1def5-401b-5ecd-8665-3948cf235900",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["46b173f1b151790f5c9c57585a4d80b06fa65765"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "id": "concurrent-014"
+          },
+          "id": "<event-id>",
+          "name": "demo/concurrent",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "id": "concurrent-014"
+            },
+            "id": "<event-id>",
+            "name": "demo/concurrent",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "46b173f1b151790f5c9c57585a4d80b06fa65765": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "id": "concurrent-014",
+            "completedAt": "2026-06-14T00:09:38.129Z"
+          }
+        }
+      ]
+    }
+  }
+]

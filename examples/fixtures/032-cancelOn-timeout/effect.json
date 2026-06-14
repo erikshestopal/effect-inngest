@@ -1,0 +1,242 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-032-cancelOn-timeout",
+        "functions": [
+          {
+            "id": "examples-032-cancelOn-timeout-cancellable-job",
+            "name": "cancellable-job",
+            "triggers": [
+              {
+                "event": "job/started"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step"
+                }
+              }
+            },
+            "cancel": [
+              {
+                "event": "job/cancelled",
+                "if": "async.data.jobId == event.data.jobId",
+                "timeout": "1m"
+              }
+            ]
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "194829d1-f934-568f-bb07-943ee45dfd4a"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {
+        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "jobId": "job-032"
+          },
+          "id": "<event-id>",
+          "name": "job/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "jobId": "job-032"
+            },
+            "id": "<event-id>",
+            "name": "job/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "StepRun",
+          "id": "2b020927d3c6eb407223a1baa3d6ce3597a3f88d",
+          "name": "start",
+          "data": "Starting job job-032",
+          "displayName": "start"
+        },
+        {
+          "op": "Sleep",
+          "id": "f293e613401d4942d83505b81dbd9ed0cbeba9ef",
+          "name": "2s",
+          "mode": "async",
+          "opts": {
+            "duration": "2s"
+          },
+          "displayName": "work-phase-1"
+        }
+      ]
+    }
+  }
+]

@@ -36,6 +36,7 @@ export default defineConfig({
       },
     ],
     rules: {
+      curly: "error",
       "for-direction": "warn",
       "no-async-promise-executor": "warn",
       "no-caller": "warn",

@@ -1,0 +1,251 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/064-checkpointing-fn-override",
+      "path": "/examples/064-checkpointing-fn-override",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/064-checkpointing-fn-override",
+      "path": "/examples/064-checkpointing-fn-override",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/064-checkpointing-fn-override",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-064-checkpointing-fn-override",
+        "functions": [
+          {
+            "id": "examples-064-checkpointing-fn-override-checkpoint-override",
+            "name": "checkpoint-override",
+            "triggers": [
+              {
+                "event": "demo/checkpoint-override"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/064-checkpointing-fn-override?fnId=examples-064-checkpointing-fn-override-checkpoint-override&stepId=step"
+                }
+              }
+            },
+            "checkpoint": {
+              "batch_steps": 1,
+              "batch_interval": "0s",
+              "max_runtime": "10s"
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "c02cb432-e186-575f-865b-53b2c34ddffe"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/064-checkpointing-fn-override?fnId=examples-064-checkpointing-fn-override-checkpoint-override&stepId=step",
+      "path": "/examples/064-checkpointing-fn-override",
+      "query": {
+        "fnId": "examples-064-checkpointing-fn-override-checkpoint-override",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "cbde0504-1553-56d2-85fd-f61ea5992ec8",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "key": "override-064"
+          },
+          "id": "<event-id>",
+          "name": "demo/checkpoint-override",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "key": "override-064"
+            },
+            "id": "<event-id>",
+            "name": "demo/checkpoint-override",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "StepRun",
+          "id": "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
+          "name": "a",
+          "data": "A",
+          "displayName": "a"
+        },
+        {
+          "op": "StepRun",
+          "id": "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98",
+          "name": "b",
+          "data": "B",
+          "displayName": "b"
+        },
+        {
+          "op": "StepRun",
+          "id": "84a516841ba77a5b4648de2cd0dfcb30ea46dbb4",
+          "name": "c",
+          "data": "C",
+          "displayName": "c"
+        },
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "key": "override-064"
+          }
+        }
+      ]
+    }
+  }
+]

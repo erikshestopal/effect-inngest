@@ -1,0 +1,351 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
+      "path": "/examples/053-step-invoke-options",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 2,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
+      "path": "/examples/053-step-invoke-options",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-053-step-invoke-options",
+        "functions": [
+          {
+            "id": "examples-053-step-invoke-options-worker-task",
+            "name": "worker-task",
+            "triggers": [
+              {
+                "event": "demo/worker-task"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step"
+                },
+                "retries": {
+                  "attempts": 3
+                }
+              }
+            }
+          },
+          {
+            "id": "examples-053-step-invoke-options-orchestrator",
+            "name": "orchestrator",
+            "triggers": [
+              {
+                "event": "demo/orchestrate"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step"
+                }
+              }
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "fd46353a-6fe7-5af1-b639-7572183f6165"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
+      "path": "/examples/053-step-invoke-options",
+      "query": {
+        "fnId": "examples-053-step-invoke-options-orchestrator",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "demo/orchestrate",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "taskId": "task-053"
+            },
+            "id": "<event-id>",
+            "name": "demo/orchestrate",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "displayName": "invoke-worker",
+          "op": "InvokeFunction",
+          "id": "98f60eef27694e38e56d53701e64d91e7b4b9166",
+          "opts": {
+            "payload": {
+              "data": {
+                "taskId": "task-053",
+                "priority": "high"
+              }
+            },
+            "function_id": "examples-053-step-invoke-options-worker-task",
+            "timeout": "30s"
+          },
+          "userland": {
+            "id": "invoke-worker"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
+      "path": "/examples/053-step-invoke-options",
+      "query": {
+        "fnId": "examples-053-step-invoke-options-orchestrator",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "demo/orchestrate",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "taskId": "task-053"
+            },
+            "id": "<event-id>",
+            "name": "demo/orchestrate",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "98f60eef27694e38e56d53701e64d91e7b4b9166": {
+            "error": {
+              "message": "could not find function with ID: examples-053-step-invoke-options-worker-task",
+              "name": "Error"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "true",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "name": "Error",
+        "message": "could not find function with ID: examples-053-step-invoke-options-worker-task",
+        "stack": "",
+        "__serialized": true
+      }
+    }
+  }
+]

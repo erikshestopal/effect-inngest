@@ -355,7 +355,9 @@ describe("Signature.sign", () => {
 
       const match = header.match(/^t=(\d+)/);
       expect(match).not.toBeNull();
-      if (!match) throw new Error("match should not be null");
+      if (!match) {
+        throw new Error("match should not be null");
+      }
 
       const timestamp = parseInt(match[1]!, 10);
       expect(timestamp).toBeGreaterThanOrEqual(before);

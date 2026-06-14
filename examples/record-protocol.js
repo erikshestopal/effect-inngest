@@ -2,7 +2,6 @@ import { spawn } from "node:child_process";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { getLocal } from "mockttp";
 
 const examplesDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(examplesDir, "..");
@@ -159,72 +158,90 @@ const sanitizeHeaders = (headers) =>
       .sort(([a], [b]) => a.localeCompare(b)),
   );
 
-const serializeBody = async (body) =>
-  sanitizeProtocolBody(parseBody((await body.getText()) ?? body.buffer?.toString("utf8") ?? ""));
-
 const resetRecording = () => {
   sequence = 0;
   exchanges = [];
 };
 
+const requestBody = async (request) => {
+  if (["GET", "HEAD"].includes(request.method)) return "";
+  return await request.clone().text();
+};
+
 const recordProxy = async ({ direction, name, port, proxyOrigin, targetOrigin }) => {
-  const server = getLocal({ recordTraffic: true, suggestChanges: false });
-  const requests = new Map();
+  const server = Bun.serve({
+    hostname: "127.0.0.1",
+    port,
+    async fetch(request) {
+      const url = new URL(request.url);
+      const targetUrl = `${targetOrigin}${url.pathname}${url.search}`;
+      const bodyText = await requestBody(request);
+      const headers = new Headers(request.headers);
+      headers.delete("content-length");
+      headers.set("host", new URL(targetOrigin).host);
 
-  await server.start(port);
-  await server.on("request", (request) => {
-    const url = new URL(request.url, proxyOrigin);
-    const record = {
-      sequence: ++sequence,
-      method: request.method,
-      url: url.toString(),
-      path: url.pathname,
-      query: Object.fromEntries(url.searchParams.entries()),
-      headers: sanitizeHeaders(request.headers),
-    };
-
-    requests.set(
-      request.id,
-      serializeBody(request.body).then((body) => ({ ...record, body })),
-    );
-  });
-  await server.on("response", async (response) => {
-    const requestPromise = requests.get(response.id);
-    if (!requestPromise) return;
-
-    const request = await requestPromise;
-    exchanges.push({
-      sequence: request.sequence,
-      direction,
-      proxy: name,
-      request: {
+      const requestRecord = {
+        sequence: ++sequence,
         method: request.method,
-        url: request.url,
-        path: request.path,
-        query: request.query,
-        headers: request.headers,
-        body: request.body,
-      },
-      response: {
-        status: response.statusCode,
-        headers: sanitizeHeaders(response.headers),
-        body: await serializeBody(response.body),
-      },
-    });
+        url: `${proxyOrigin}${url.pathname}${url.search}`,
+        path: url.pathname,
+        query: Object.fromEntries(url.searchParams.entries()),
+        headers: sanitizeHeaders(Object.fromEntries(request.headers.entries())),
+        body: sanitizeProtocolBody(parseBody(bodyText)),
+      };
+
+      let upstream;
+      try {
+        upstream = await fetch(targetUrl, {
+          body: bodyText ? bodyText : undefined,
+          headers,
+          method: request.method,
+          redirect: "manual",
+        });
+      } catch (error) {
+        if (error instanceof Error && "code" in error && error.code === "ConnectionRefused") {
+          return new Response("SDK server stopped", { status: 410 });
+        }
+
+        throw error;
+      }
+      const responseText = await upstream.text();
+
+      exchanges.push({
+        sequence: requestRecord.sequence,
+        direction,
+        proxy: name,
+        request: requestRecord,
+        response: {
+          status: upstream.status,
+          headers: sanitizeHeaders(Object.fromEntries(upstream.headers.entries())),
+          body: sanitizeProtocolBody(parseBody(responseText)),
+        },
+      });
+
+      return new Response(responseText, { headers: upstream.headers, status: upstream.status });
+    },
   });
-  await server.forAnyRequest().thenForwardTo(targetOrigin);
 
   console.log(`${name} recorder listening on ${proxyOrigin} -> ${targetOrigin}`);
-  return server;
+  return { stop: () => server.stop(true) };
 };
 
 const http = async (url, { body, headers, method = "GET", timeoutMs = 10_000 } = {}) => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  const fetchOptions = { headers, method, signal: controller.signal };
+  if (body !== undefined && !["GET", "HEAD"].includes(method)) fetchOptions.body = body;
 
   try {
-    const response = await fetch(url, { body, headers, method, signal: controller.signal });
+    const response = await fetch(url, fetchOptions);
     return { body: await response.text(), status: response.status };
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw new Error(`${method} ${url} timed out after ${timeoutMs}ms`);
+    }
+
+    throw error;
   } finally {
     clearTimeout(timeout);
   }
@@ -409,6 +426,15 @@ const triggerCase = async (runtimeName, example, caseData, caseIndex) => {
 const expectedExecutionCount = (example) =>
   example.cases.reduce((total, caseData) => total + (caseData.expect?.length ?? 1), 0);
 
+const drainDelayMs = (example) => {
+  const afterEventDelay = Math.max(
+    0,
+    ...example.cases.flatMap((caseData) => (caseData.afterEvents ?? []).map((afterEvent) => afterEvent.delayMs)),
+  );
+
+  return Math.min(10_000, Math.max(1_500, afterEventDelay + 1_500));
+};
+
 const waitForExecutionRecordings = async (server, path, expectedCount) => {
   const deadline = Date.now() + 30_000;
 
@@ -489,12 +515,15 @@ const recordExample = async (runtimeName, example) => {
     }
 
     await waitForExecutionRecordings(server, examplePath(example.id), expectedExecutionCount(example));
+    await removeSyncedApp(sdkUrl);
+    await sleep(drainDelayMs(example));
     await writeFixture(example.id, runtimeName);
     console.log(
       `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,
     );
   } finally {
     await removeSyncedApp(sdkUrl);
+    await sleep(250);
     await stopManaged(server);
   }
 };

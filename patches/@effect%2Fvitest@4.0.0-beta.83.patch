@@ -1,5 +1,5 @@
 diff --git a/dist/index.d.ts b/dist/index.d.ts
-index 94fb88c5d8dfc9bec0876230744e0082287f9c9f..4eb2cea6b2ee4213e92587cc16ddb7555b52f821 100644
+index 14b0e5d..50e74f2 100644
 --- a/dist/index.d.ts
 +++ b/dist/index.d.ts
 @@ -7,11 +7,11 @@ import type * as Layer from "effect/Layer";
@@ -9,15 +9,15 @@ index 94fb88c5d8dfc9bec0876230744e0082287f9c9f..4eb2cea6b2ee4213e92587cc16ddb755
 -import * as V from "vitest";
 +import * as V from "@voidzero-dev/vite-plus-test";
  /**
-  * @since 1.0.0
+  * @since 4.0.0
   */
 -export * from "vitest";
 +export * from "@voidzero-dev/vite-plus-test";
  /**
-  * @since 1.0.0
+  * @since 4.0.0
   */
 diff --git a/dist/index.js b/dist/index.js
-index 32a4f81e4eb6883231b47ec2ac30ffad86595b5a..a24142fb5c330f2aed392225d147dc0ec3f36f10 100644
+index 938c9c8..28604ec 100644
 --- a/dist/index.js
 +++ b/dist/index.js
 @@ -1,9 +1,9 @@
@@ -25,18 +25,27 @@ index 32a4f81e4eb6883231b47ec2ac30ffad86595b5a..a24142fb5c330f2aed392225d147dc0e
 +import * as V from "@voidzero-dev/vite-plus-test";
  import * as internal from "./internal/internal.js";
  /**
-  * @since 1.0.0
+  * @since 4.0.0
   */
 -export * from "vitest";
 +export * from "@voidzero-dev/vite-plus-test";
  /**
-  * @since 1.0.0
+  * @since 4.0.0
   */
 diff --git a/dist/internal/internal.js b/dist/internal/internal.js
-index 7fd3a9d25e17e474a88ce137e5dc164a3d915c3c..04732953a1a6749d43622d58ed4b97f3a1f2a00e 100644
+index a30fc1a..5ef4283 100644
 --- a/dist/internal/internal.js
 +++ b/dist/internal/internal.js
-@@ -14,7 +14,7 @@ import * as Scope from "effect/Scope";
+@@ -1,7 +1,7 @@
+ /**
+  * @since 4.0.0
+  */
+-import { getCurrentSuite } from "@vitest/runner";
++import { getCurrentSuite } from "@voidzero-dev/vite-plus-test/suite";
+ import * as Cause from "effect/Cause";
+ import * as Duration from "effect/Duration";
+ import * as Effect from "effect/Effect";
+@@ -15,7 +15,7 @@ import * as Scope from "effect/Scope";
  import * as fc from "effect/testing/FastCheck";
  import * as TestClock from "effect/testing/TestClock";
  import * as TestConsole from "effect/testing/TestConsole";
@@ -46,7 +55,7 @@ index 7fd3a9d25e17e474a88ce137e5dc164a3d915c3c..04732953a1a6749d43622d58ed4b97f3
    const exit = yield* Effect.exit(effect);
    if (Exit.isFailure(exit)) {
 diff --git a/dist/utils.js b/dist/utils.js
-index 72dfe8217daaab11d33b3c255d81fb33d56c9bcf..4472f4b5d2a2eb1c3169312f2384a68eea6443df 100644
+index cfb2c39..98536bd 100644
 --- a/dist/utils.js
 +++ b/dist/utils.js
 @@ -4,7 +4,7 @@ import * as Option from "effect/Option";

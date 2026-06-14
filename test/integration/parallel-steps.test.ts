@@ -142,7 +142,8 @@ describe("TB-009: Parallel Step Execution", () => {
         const stepNames = body.map((op) => op.name).sort();
         expect(stepNames).toEqual(["fetch-orders", "fetch-preferences"]);
 
-        expect(body).toMatchInlineSnapshot(`
+        const sortedBody = [...body].sort((a, b) => a.name.localeCompare(b.name));
+        expect(sortedBody).toMatchInlineSnapshot(`
           [
             {
               "displayName": "fetch-orders",

@@ -1,0 +1,516 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/037-nested-steps",
+      "path": "/examples/037-nested-steps",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/037-nested-steps",
+      "path": "/examples/037-nested-steps",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/037-nested-steps",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-037-nested-steps",
+        "functions": [
+          {
+            "id": "examples-037-nested-steps-nested-steps-demo",
+            "name": "nested-steps-demo",
+            "triggers": [
+              {
+                "event": "demo/nested"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/037-nested-steps?fnId=examples-037-nested-steps-nested-steps-demo&stepId=step"
+                }
+              }
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "6b39e111-7b4b-5818-bece-5b0d1071a14e"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/037-nested-steps?fnId=examples-037-nested-steps-nested-steps-demo&stepId=step",
+      "path": "/examples/037-nested-steps",
+      "query": {
+        "fnId": "examples-037-nested-steps-nested-steps-demo",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "5b6b4ff5-7aed-5d64-8f53-83985a982747",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/nested",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/nested",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "level1": 10,
+            "level2": 20,
+            "level3": 25,
+            "final": 55
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "path": "/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QM9463JTR6V439FG642QW",
+        "fn_id": "5b6b4ff5-7aed-5d64-8f53-83985a982747",
+        "qi_id": "MmdweWo2ZjlpeGUwazo6ZGVmYXVsdA==",
+        "request_id": "01KV1QM94EK3F0D51QCFAJD5K7",
+        "generation_id": 1,
+        "request_started_at": 1781396022417,
+        "steps": [
+          {
+            "id": "be0e10dec73185646da71d3d849e0b5652208a27",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "level-1",
+            "displayName": "level-1",
+            "userland": {
+              "id": "level-1"
+            },
+            "opts": {},
+            "rawArgs": ["level-1", null],
+            "hashedId": "be0e10dec73185646da71d3d849e0b5652208a27",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "be0e10dec73185646da71d3d849e0b5652208a27",
+                "memoized": false,
+                "options": {
+                  "id": "level-1",
+                  "name": "level-1"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 10,
+            "timing": {
+              "a": 1781396022422000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396022423
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "path": "/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QM9463JTR6V439FG642QW",
+        "fn_id": "5b6b4ff5-7aed-5d64-8f53-83985a982747",
+        "qi_id": "MmdweWo2ZjlpeGUwazo6ZGVmYXVsdA==",
+        "request_id": "01KV1QM94EK3F0D51QCFAJD5K7",
+        "generation_id": 1,
+        "request_started_at": 1781396022417,
+        "steps": [
+          {
+            "id": "6c0cbed291bdb52fe93474ae3a67aa868b2fdb50",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "level-2",
+            "displayName": "level-2",
+            "userland": {
+              "id": "level-2"
+            },
+            "opts": {},
+            "rawArgs": ["level-2", null],
+            "hashedId": "6c0cbed291bdb52fe93474ae3a67aa868b2fdb50",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "6c0cbed291bdb52fe93474ae3a67aa868b2fdb50",
+                "memoized": false,
+                "options": {
+                  "id": "level-2",
+                  "name": "level-2"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 20,
+            "timing": {
+              "a": 1781396022425000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396022426
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "path": "/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QM9463JTR6V439FG642QW",
+        "fn_id": "5b6b4ff5-7aed-5d64-8f53-83985a982747",
+        "qi_id": "MmdweWo2ZjlpeGUwazo6ZGVmYXVsdA==",
+        "request_id": "01KV1QM94EK3F0D51QCFAJD5K7",
+        "generation_id": 1,
+        "request_started_at": 1781396022417,
+        "steps": [
+          {
+            "id": "3f040094cf5dc414d87fdabc216a2b364b17a8d9",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "level-3",
+            "displayName": "level-3",
+            "userland": {
+              "id": "level-3"
+            },
+            "opts": {},
+            "rawArgs": ["level-3", null],
+            "hashedId": "3f040094cf5dc414d87fdabc216a2b364b17a8d9",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "3f040094cf5dc414d87fdabc216a2b364b17a8d9",
+                "memoized": false,
+                "options": {
+                  "id": "level-3",
+                  "name": "level-3"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 25,
+            "timing": {
+              "a": 1781396022427000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396022427
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "path": "/v1/checkpoint/01KV1QM9463JTR6V439FG642QW/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QM9463JTR6V439FG642QW",
+        "fn_id": "5b6b4ff5-7aed-5d64-8f53-83985a982747",
+        "qi_id": "MmdweWo2ZjlpeGUwazo6ZGVmYXVsdA==",
+        "request_id": "01KV1QM94EK3F0D51QCFAJD5K7",
+        "generation_id": 1,
+        "request_started_at": 1781396022417,
+        "steps": [
+          {
+            "id": "436f292dbb55b33af9e5e8248159fa1a7487e4ec",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "final-computation",
+            "displayName": "final-computation",
+            "userland": {
+              "id": "final-computation"
+            },
+            "opts": {},
+            "rawArgs": ["final-computation", null],
+            "hashedId": "436f292dbb55b33af9e5e8248159fa1a7487e4ec",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "436f292dbb55b33af9e5e8248159fa1a7487e4ec",
+                "memoized": false,
+                "options": {
+                  "id": "final-computation",
+                  "name": "final-computation"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 55,
+            "timing": {
+              "a": 1781396022428000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396022428
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  }
+]

@@ -48,7 +48,9 @@ const errorOtelAttributes = (err: unknown): Record<string, string> => {
   if (err instanceof Error) {
     attrs[OtelAttributes.ExceptionType] = err.name;
     attrs[OtelAttributes.ExceptionMessage] = err.message;
-    if (err.stack) attrs[OtelAttributes.ExceptionStacktrace] = err.stack;
+    if (err.stack) {
+      attrs[OtelAttributes.ExceptionStacktrace] = err.stack;
+    }
   } else if (Predicate.hasProperty(err, "_tag") && typeof err._tag === "string") {
     attrs[OtelAttributes.ExceptionType] = err._tag;
     if (Predicate.hasProperty(err, "message") && typeof err.message === "string") {
@@ -222,12 +224,16 @@ export const createStepTools = (
         Match.value,
         Match.tag("MemoData", ({ data }) => {
           // null/undefined = timeout (no matching event received)
-          if (data == null) return Effect.succeed(Option.none());
+          if (data == null) {
+            return Effect.succeed(Option.none());
+          }
           // Inngest returns full event { name, data, id, ts } - extract .data for payload
           // Or may return payload directly - use .data if present, otherwise use data as-is
           const event = data as { data?: unknown };
           const payload = event.data !== undefined ? event.data : data;
-          if (payload == null) return Effect.succeed(Option.none());
+          if (payload == null) {
+            return Effect.succeed(Option.none());
+          }
           return Effect.succeed(Option.some(payload as Schema.Schema.Type<E>));
         }),
         Match.tag("MemoTimeout", () => Effect.succeed(Option.none())),

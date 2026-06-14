@@ -1,0 +1,400 @@
+[
+  {
+    "sequence": 1,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 1,
+      "method": "GET",
+      "url": "http://127.0.0.1:19998/examples/039-large-payload",
+      "path": "/examples/039-large-payload",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "extra": {
+          "native_crypto": true
+        },
+        "has_event_key": false,
+        "has_signing_key": false,
+        "function_count": 1,
+        "mode": "dev",
+        "schema_version": "2024-05-24"
+      }
+    }
+  },
+  {
+    "sequence": 2,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 2,
+      "method": "PUT",
+      "url": "http://127.0.0.1:19998/examples/039-large-payload",
+      "path": "/examples/039-large-payload",
+      "query": {},
+      "headers": {
+        "user-agent": "<sdk>"
+      },
+      "body": null
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "message": "Successfully registered",
+        "modified": true
+      }
+    }
+  },
+  {
+    "sequence": 3,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 3,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/fn/register",
+      "path": "/fn/register",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true",
+        "x-inngest-sync-kind": "out_of_band"
+      },
+      "body": {
+        "url": "http://127.0.0.1:19998/examples/039-large-payload",
+        "deployType": "ping",
+        "framework": "bun",
+        "appName": "examples-039-large-payload",
+        "functions": [
+          {
+            "id": "examples-039-large-payload-process-large-payload",
+            "name": "process-large-payload",
+            "triggers": [
+              {
+                "event": "demo/large-payload"
+              }
+            ],
+            "steps": {
+              "step": {
+                "id": "step",
+                "name": "step",
+                "runtime": {
+                  "type": "http",
+                  "url": "http://127.0.0.1:19998/examples/039-large-payload?fnId=examples-039-large-payload-process-large-payload&stepId=step"
+                }
+              }
+            }
+          }
+        ],
+        "sdk": "<sdk>",
+        "v": "0.1",
+        "capabilities": {
+          "trust_probe": "v1",
+          "connect": "v1"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "text/plain; charset=utf-8",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": {
+        "ok": true,
+        "modified": true,
+        "sync_id": "<sync-id>",
+        "app_id": "3b564e1e-20a4-560e-8928-5be372451e79"
+      }
+    }
+  },
+  {
+    "sequence": 4,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 4,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/039-large-payload?fnId=examples-039-large-payload-process-large-payload&stepId=step",
+      "path": "/examples/039-large-payload",
+      "query": {
+        "fnId": "examples-039-large-payload-process-large-payload",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "items": [
+              {
+                "id": "a",
+                "value": 1
+              },
+              {
+                "id": "b",
+                "value": 2
+              }
+            ]
+          },
+          "id": "<event-id>",
+          "name": "demo/large-payload",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "items": [
+                {
+                  "id": "a",
+                  "value": 1
+                },
+                {
+                  "id": "b",
+                  "value": 2
+                }
+              ]
+            },
+            "id": "<event-id>",
+            "name": "demo/large-payload",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "itemCount": 2,
+            "totalValue": 3,
+            "processedIds": ["a", "b"]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMRF3T27ST9B21V1XBY60/async",
+      "path": "/v1/checkpoint/01KV1QMRF3T27ST9B21V1XBY60/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMRF3T27ST9B21V1XBY60",
+        "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
+        "qi_id": "eWEycGJhbDhxdmp6OjpkZWZhdWx0",
+        "request_id": "01KV1QMRFB36YTZ2K1GBXW8VS2",
+        "generation_id": 1,
+        "request_started_at": 1781396038128,
+        "steps": [
+          {
+            "id": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "process-all-items",
+            "displayName": "process-all-items",
+            "userland": {
+              "id": "process-all-items"
+            },
+            "opts": {},
+            "rawArgs": ["process-all-items", null],
+            "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+                "memoized": false,
+                "options": {
+                  "id": "process-all-items",
+                  "name": "process-all-items"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": [
+              {
+                "id": "a",
+                "processedValue": 2
+              },
+              {
+                "id": "b",
+                "processedValue": 4
+              }
+            ],
+            "timing": {
+              "a": 1781396038135000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396038136
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QMRF3T27ST9B21V1XBY60/async",
+      "path": "/v1/checkpoint/01KV1QMRF3T27ST9B21V1XBY60/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV1QMRF3T27ST9B21V1XBY60",
+        "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
+        "qi_id": "eWEycGJhbDhxdmp6OjpkZWZhdWx0",
+        "request_id": "01KV1QMRFB36YTZ2K1GBXW8VS2",
+        "generation_id": 1,
+        "request_started_at": 1781396038128,
+        "steps": [
+          {
+            "id": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "calculate-total",
+            "displayName": "calculate-total",
+            "userland": {
+              "id": "calculate-total"
+            },
+            "opts": {},
+            "rawArgs": ["calculate-total", null],
+            "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+                "memoized": false,
+                "options": {
+                  "id": "calculate-total",
+                  "name": "calculate-total"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 3,
+            "timing": {
+              "a": 1781396038139000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781396038139
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  }
+]

@@ -158,7 +158,9 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
     Effect.gen(function* () {
       const captures: Array<CapturedReq> = [];
       const httpLayer = makeMockHttpClient(captures, (idx) => {
-        if (idx < 3) return new Response("oops", { status: 500 });
+        if (idx < 3) {
+          return new Response("oops", { status: 500 });
+        }
         return okResponse();
       });
       const clientLayer = layerWithRetrySchedule({ id: "app", signingKey: "signkey-prod-abc" }, instantRetry).pipe(
@@ -226,7 +228,9 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
       // Then a SECOND checkpoint request: should use fallback first → 200.
       const httpLayer = makeMockHttpClient(captures, (_idx, req) => {
         const auth = req.headers["authorization"] ?? "";
-        if (auth === `Bearer ${primaryHash}`) return new Response("nope", { status: 401 });
+        if (auth === `Bearer ${primaryHash}`) {
+          return new Response("nope", { status: 401 });
+        }
         return okResponse();
       });
 
@@ -254,11 +258,11 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
     }),
   );
 
-  it.effect("fails with CheckpointApiError when no signing key configured", () =>
+  it.effect("fails with CheckpointApiError when no signing key is configured in cloud mode", () =>
     Effect.gen(function* () {
       const captures: Array<CapturedReq> = [];
       const httpLayer = makeMockHttpClient(captures, () => okResponse());
-      const clientLayer = InngestClient.layer({ id: "app" }).pipe(Layer.provide(httpLayer));
+      const clientLayer = InngestClient.layer({ id: "app", mode: "cloud" }).pipe(Layer.provide(httpLayer));
 
       const result = yield* Effect.exit(
         InngestClient.InngestClient.use((c) =>
@@ -268,6 +272,21 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
 
       expect(result._tag).toBe("Failure");
       expect(captures.length).toBe(0);
+    }),
+  );
+
+  it.effect("uses an empty bearer token for local dev checkpointing without a signing key", () =>
+    Effect.gen(function* () {
+      const captures: Array<CapturedReq> = [];
+      const httpLayer = makeMockHttpClient(captures, () => okResponse());
+      const clientLayer = InngestClient.layer({ id: "app", mode: "dev" }).pipe(Layer.provide(httpLayer));
+
+      yield* InngestClient.InngestClient.use((c) =>
+        c.checkpointAsync({ runId: "r", fnId: "f", qiId: "q", steps: sampleSteps }),
+      ).pipe(Effect.provide(Layer.mergeAll(clientLayer, httpLayer)));
+
+      expect(captures).toHaveLength(1);
+      expect(captures[0]!.headers.authorization).toBe("Bearer ");
     }),
   );
 });

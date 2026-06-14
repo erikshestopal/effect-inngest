@@ -78,16 +78,28 @@ export const resolveConfig = (
   fnLevel: CheckpointingOption | undefined,
   clientLevel: CheckpointingOption | undefined,
 ): CheckpointConfig | undefined => {
-  if (fnLevel === false) return undefined;
+  if (fnLevel === false) {
+    return undefined;
+  }
   // Per the `CheckpointingOption` docstring, `true` means "enable with safe
   // defaults" — it never inherits a client-level object. Explicit object at
   // the fn level overrides everything; otherwise fall through to client.
-  if (fnLevel === true) return DEFAULTS;
-  if (fnLevel !== undefined) return normalize(fnLevel);
+  if (fnLevel === true) {
+    return DEFAULTS;
+  }
+  if (fnLevel !== undefined) {
+    return normalize(fnLevel);
+  }
   // fnLevel === undefined — use client-level
-  if (clientLevel === false) return undefined;
-  if (clientLevel === true) return DEFAULTS;
-  if (clientLevel !== undefined) return normalize(clientLevel);
+  if (clientLevel === false) {
+    return undefined;
+  }
+  if (clientLevel === true) {
+    return DEFAULTS;
+  }
+  if (clientLevel !== undefined) {
+    return normalize(clientLevel);
+  }
   // Default-ON: undefined at both levels
   return DEFAULTS;
 };
@@ -167,7 +179,9 @@ export const make = (args: {
         current,
         [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>,
       ]);
-      if (steps.length === 0) return;
+      if (steps.length === 0) {
+        return;
+      }
       const result = yield* Effect.result(args.checkpointAsync(steps));
       if (Result.isFailure(result)) {
         // Restore at the head so subsequent `drain` includes them in the 206.

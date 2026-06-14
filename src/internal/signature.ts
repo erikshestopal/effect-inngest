@@ -102,7 +102,9 @@ const computeSignature = (keyBytes: Buffer, body: Uint8Array, timestamp: string)
   Crypto.createHmac("sha256", keyBytes).update(body).update(timestamp).digest("hex");
 
 const timingSafeEqual = (a: string, b: string): boolean => {
-  if (a.length !== b.length) return false;
+  if (a.length !== b.length) {
+    return false;
+  }
   try {
     return Crypto.timingSafeEqual(Buffer.from(a, "hex"), Buffer.from(b, "hex"));
   } catch {
@@ -131,7 +133,9 @@ export const SignatureLive: Layer.Layer<Signature> = Layer.succeed(Signature, {
     signingKeyFallback,
     isDev,
   }: VerifyOptions) {
-    if (isDev) return true;
+    if (isDev) {
+      return true;
+    }
     if (!signingKey) {
       return yield* new SignatureError({
         reason: "missing_signing_key",
@@ -161,7 +165,9 @@ export const SignatureLive: Layer.Layer<Signature> = Layer.succeed(Signature, {
     const keys = [signingKey, signingKeyFallback].filter(Boolean) as string[];
     const valid = keys.some((key) => checkSignature(signature, body, timestamp, key));
 
-    if (valid) return true;
+    if (valid) {
+      return true;
+    }
 
     return yield* new SignatureError({ reason: "invalid_signature", message: "Invalid signature" });
   }),
