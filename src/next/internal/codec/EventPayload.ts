@@ -12,22 +12,27 @@ export class EventDecodeError extends Schema.TaggedErrorClass<EventDecodeError>(
   cause: Schema.Unknown,
 }) {}
 
-export const schemaFor = (args: {
-  readonly fn: InngestFunction.Any;
+export const schemaFor = eventSchemaFor;
+
+export const decodeSchema = <A>(args: {
+  readonly event: EventSchema<A>;
   readonly eventName: string;
-}): Option.Option<EventSchema> => eventSchemaFor(args);
+  readonly eventData: unknown;
+}): Effect.Effect<A, EventDecodeError> =>
+  Schema.decodeUnknownEffect(Schema.toCodecJson(args.event))(args.eventData).pipe(
+    Effect.mapError((cause) => EventDecodeError.make({ eventName: args.eventName, cause })),
+  );
 
 export const decode = <F extends InngestFunction.Any>(args: {
   readonly fn: F;
   readonly eventName: string;
   readonly eventData: unknown;
 }): Effect.Effect<InngestFunction.EventType<F>, EventDecodeError> =>
-  Option.match(schemaFor(args), {
+  Option.match(eventSchemaFor(args), {
     onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
     onSome: (event) =>
-      Schema.decodeUnknownEffect(Schema.toCodecJson(event))(args.eventData).pipe(
+      decodeSchema({ event, eventName: args.eventName, eventData: args.eventData }).pipe(
         Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
-        Effect.mapError((cause) => EventDecodeError.make({ eventName: args.eventName, cause })),
       ),
   });
 

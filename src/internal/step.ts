@@ -13,6 +13,7 @@ import { InngestDuration } from "../next/internal/wire/Duration.js";
 import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 import * as Memo from "../next/internal/domain/Memo.js";
+import * as EventPayload from "../next/internal/codec/EventPayload.js";
 
 import {
   StepInterrupt,
@@ -140,6 +141,43 @@ const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, ne
     ) as Effect.Effect<unknown, never, never>;
   }
   return Effect.succeed(event);
+};
+
+const decodeLegacyEventData = <F extends InngestFunction.Any>(args: {
+  readonly fn: F;
+  readonly eventName: string;
+  readonly eventData: unknown;
+}): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> =>
+  Option.match(EventPayload.schemaFor({ fn: args.fn, eventName: args.eventName }), {
+    onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
+    onSome: (event) =>
+      EventPayload.decodeSchema({
+        event,
+        eventName: args.eventName,
+        eventData: withEventTag(event, args.eventData),
+      }).pipe(Effect.map((decoded) => decoded as InngestFunction.EventType<F>)),
+  });
+
+const decodeLegacyInvocation = <F extends InngestFunction.Any>(args: {
+  readonly fn: F;
+  readonly request: Protocol.SDKRequestBody;
+}): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> => {
+  if (Predicate.isNotNullish(args.fn.options?.batchEvents)) {
+    return Effect.forEach(args.request.events, (event) =>
+      decodeLegacyEventData({ fn: args.fn, eventName: event.name, eventData: event.data }),
+    ).pipe(Effect.map((events) => events as InngestFunction.EventType<F>));
+  }
+
+  if (args.request.event.name === "inngest/function.invoked" && Predicate.isObject(args.request.event.data)) {
+    const { _inngest, ...payload } = args.request.event.data;
+    return decodeLegacyEventData({ fn: args.fn, eventName: args.request.event.name, eventData: payload });
+  }
+
+  return decodeLegacyEventData({
+    fn: args.fn,
+    eventName: args.request.event.name,
+    eventData: args.request.event.data,
+  });
 };
 
 const stripTopLevelTag = (value: unknown): unknown =>
@@ -295,7 +333,14 @@ export const createStepTools = (
           if (Predicate.isNullish(payload)) {
             return Effect.succeed(Option.none());
           }
-          return decodeJson(event, withEventTag(event, payload), info.id).pipe(Effect.map(Option.some));
+          return EventPayload.decodeSchema({
+            event,
+            eventName: event.identifier,
+            eventData: withEventTag(event, payload),
+          }).pipe(
+            Effect.map(Option.some),
+            Effect.mapError((cause) => stepDecodeError(info.id, cause)),
+          );
         }),
         Match.tag("MemoTimeout", "MemoError", "MemoInput", () => Effect.succeed(Option.none())),
         Match.tag("MemoNone", () =>
@@ -547,65 +592,13 @@ export const createStepTools = (
   };
 };
 
-const triggerEventSchema = (args: {
-  readonly fn: InngestFunction.Any;
-  readonly eventName: string;
-}): Option.Option<EventSchema> => {
-  const triggers = args.fn.triggers.filter((trigger): trigger is { readonly event: EventSchema } =>
-    Predicate.hasProperty(trigger, "event"),
-  );
-  return Option.fromNullishOr(
-    triggers.find((trigger) => trigger.event.identifier === args.eventName)?.event ?? triggers[0]?.event,
-  );
-};
-
-const decodeEventData = <F extends InngestFunction.Any>(args: {
-  readonly fn: F;
-  readonly eventName: string;
-  readonly eventData: unknown;
-}): Effect.Effect<InngestFunction.EventType<F>> =>
-  Option.match(triggerEventSchema({ fn: args.fn, eventName: args.eventName }), {
-    onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
-    onSome: (event) =>
-      Schema.decodeUnknownEffect(Schema.toCodecJson(event))(withEventTag(event, args.eventData)).pipe(
-        Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
-        Effect.orDie,
-      ),
-  });
-
 export const buildHandlerContext = <F extends InngestFunction.Any>(
   fn: F,
   step: StepTools,
   request: Protocol.SDKRequestBody,
 ): Effect.Effect<HandlerContext<F>> =>
   Effect.gen(function* () {
-    // Batch mode: function has batchEvents configured - always return array of event data payloads
-    const isBatchMode = Predicate.isNotNullish(fn.options?.batchEvents);
-    if (isBatchMode) {
-      const eventDataArray = yield* Effect.forEach(request.events, (event) =>
-        decodeEventData({ fn, eventName: event.name, eventData: event.data }),
-      );
-      return {
-        event: eventDataArray as InngestFunction.EventType<F>,
-        step,
-        run: {
-          id: request.ctx.run_id,
-          attempt: request.ctx.attempt,
-          maxAttempts: request.ctx.max_attempts,
-        },
-      };
-    }
-
-    // When invoked via step.invoke, Inngest sends "inngest/function.invoked" event
-    // The payload is in event.data but mixed with _inngest metadata - extract just the user data
-    let eventData = request.event.data;
-    if (request.event.name === "inngest/function.invoked" && Predicate.isObject(eventData)) {
-      // Remove _inngest metadata, keep only the invoke payload
-      const { _inngest, ...payload } = eventData as Record<string, unknown>;
-      eventData = payload;
-    }
-
-    const event = yield* decodeEventData({ fn, eventName: request.event.name, eventData });
+    const event = yield* decodeLegacyInvocation({ fn, request }).pipe(Effect.orDie);
 
     return {
       event,

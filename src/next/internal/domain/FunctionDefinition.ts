@@ -1,11 +1,14 @@
-import { Option, Schema } from "effect";
+import { Option, Predicate, Schema } from "effect";
 import type { EventTrigger, InngestFunction } from "../../../Function.js";
 import type { EventSchema } from "../codec/EventPayload.js";
 
+const EventSchemaShape = Schema.declare<EventSchema>(
+  (value): value is EventSchema =>
+    Schema.isSchema(value) && Predicate.hasProperty(value, "identifier") && Predicate.isString(value.identifier),
+);
+
 const EventTriggerShape = Schema.Struct({
-  event: Schema.Struct({
-    identifier: Schema.String,
-  }),
+  event: EventSchemaShape,
 });
 
 const isEventTriggerShape = Schema.is(EventTriggerShape);
