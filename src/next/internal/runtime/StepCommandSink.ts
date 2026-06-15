@@ -1,49 +1,50 @@
-import { Context, Effect, Layer, Match, Option } from "effect";
-import type { CheckpointState } from "../../../internal/checkpoint.js";
+import { Context, Effect, Layer, Option } from "effect";
 import * as StepCommandOpcode from "../codec/StepCommandOpcode.js";
 import * as StepCommand from "../domain/StepCommand.js";
+import { CurrentCheckpoint } from "./CheckpointContext.js";
 import { StepInterruptBoundary } from "./StepInterruptBoundary.js";
 
 export interface Service {
-  readonly submit: (command: StepCommand.StepCommand) => Effect.Effect<void>;
+  readonly yieldCommand: (command: StepCommand.YieldCommand) => Effect.Effect<void>;
+  readonly recordResult: (command: StepCommand.ResultCommand) => Effect.Effect<void>;
+  readonly planCommand: (command: StepCommand.PlanCommand) => Effect.Effect<void>;
 }
 
 export class StepCommandSink extends Context.Service<StepCommandSink, Service>()(
   "effect-inngest/internal/runtime/StepCommandSink",
 ) {
-  static readonly layer = (args: { readonly checkpoint: Option.Option<CheckpointState> }) =>
-    Layer.effect(
-      this,
-      Effect.gen(function* () {
-        const boundary = yield* StepInterruptBoundary;
+  static readonly layer = Layer.effect(
+    this,
+    Effect.gen(function* () {
+      const boundary = yield* StepInterruptBoundary;
 
-        return {
-          submit: (command) =>
-            Match.value(command).pipe(
-              Match.tag("Sleep", "WaitForEvent", "InvokeFunction", (cmd) =>
-                Option.match(args.checkpoint, {
-                  onNone: () => boundary.interrupt(StepCommandOpcode.interrupt(cmd)),
-                  onSome: (state) => Effect.andThen(state.flush, boundary.interrupt(StepCommandOpcode.interrupt(cmd))),
-                }),
-              ),
-              Match.tag("StepRunResult", "SendEventResult", (cmd) =>
-                Option.match(args.checkpoint, {
-                  onNone: () => boundary.interrupt(StepCommandOpcode.response(cmd)),
-                  onSome: (state) => state.bufferStep(StepCommandOpcode.checkpointedResponse(cmd)),
-                }),
-              ),
-              Match.tag("StepPlanned", (cmd) =>
-                Option.match(args.checkpoint, {
-                  onNone: () => boundary.interrupt(StepCommandOpcode.planned(cmd).opcode),
-                  onSome: (state) => {
-                    const planned = StepCommandOpcode.planned(cmd);
-                    return state.planOpcode(planned.opcode, planned.order);
-                  },
-                }),
-              ),
-              Match.exhaustive,
-            ),
-        };
-      }),
-    ).pipe(Layer.provide(StepInterruptBoundary.layer));
+      return {
+        yieldCommand: (command) =>
+          Effect.gen(function* () {
+            const checkpoint = yield* CurrentCheckpoint;
+            if (Option.isSome(checkpoint)) {
+              yield* checkpoint.value.flush;
+            }
+            return yield* boundary.interrupt(StepCommandOpcode.yielded(command));
+          }),
+        recordResult: (command) =>
+          Effect.gen(function* () {
+            const checkpoint = yield* CurrentCheckpoint;
+            if (Option.isNone(checkpoint)) {
+              return yield* boundary.interrupt(StepCommandOpcode.response(command));
+            }
+            return yield* checkpoint.value.bufferStep(StepCommandOpcode.checkpointedResponse(command));
+          }),
+        planCommand: (command) =>
+          Effect.gen(function* () {
+            const checkpoint = yield* CurrentCheckpoint;
+            const planned = StepCommandOpcode.planned(command);
+            if (Option.isNone(checkpoint)) {
+              return yield* boundary.interrupt(planned.opcode);
+            }
+            return yield* checkpoint.value.planOpcode(planned.opcode, planned.order);
+          }),
+      };
+    }),
+  ).pipe(Layer.provide(StepInterruptBoundary.layer));
 }

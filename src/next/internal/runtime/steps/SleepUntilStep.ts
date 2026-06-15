@@ -11,21 +11,24 @@ export const sleepUntil = (args: {
   readonly input: ExecutionInput;
   readonly id: StepInput;
   readonly timestamp: Date | number | string;
-}): Effect.Effect<void, never, StepIdentity | StepCommandSink> =>
+}) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
     const info = yield* identity.resolve(args.id);
+    const memo = StepOperation.memoFor({ input: args.input, info });
 
-    if (!Predicate.isTagged(StepOperation.memoFor({ input: args.input, info }), "MemoNone")) {
+    if (!Predicate.isTagged(memo, "MemoNone")) {
       return;
     }
 
     if (StepOperation.shouldPlan({ input: args.input, info })) {
-      return yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "run" }));
+      return yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
     }
 
-    return yield* sink.submit(
-      StepCommand.Sleep.make({ info, duration: Schema.decodeUnknownSync(InngestTimestamp)(args.timestamp) }),
-    );
+    const command = StepCommand.Sleep.make({
+      info,
+      duration: Schema.decodeUnknownSync(InngestTimestamp)(args.timestamp),
+    });
+    return yield* sink.yieldCommand(command);
   });

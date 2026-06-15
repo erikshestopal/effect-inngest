@@ -31,9 +31,18 @@ export class SendEventResult extends Schema.TaggedClass<SendEventResult>()("Send
   rawPayload: Schema.Unknown,
 }) {}
 
-export class StepPlanned extends Schema.TaggedClass<StepPlanned>()("StepPlanned", {
+export class StepRunPlanned extends Schema.TaggedClass<StepRunPlanned>()("StepRunPlanned", {
   info: StepInfo,
-  kind: Schema.Literals(["run", "sendEvent"]),
 }) {}
 
-export type StepCommand = Sleep | WaitForEvent | InvokeFunction | StepRunResult | SendEventResult | StepPlanned;
+export class SendEventPlanned extends Schema.TaggedClass<SendEventPlanned>()("SendEventPlanned", {
+  info: StepInfo,
+}) {}
+
+export type YieldCommand = Sleep | WaitForEvent | InvokeFunction;
+
+export type ResultCommand = StepRunResult | SendEventResult;
+
+export type PlanCommand = YieldCommand | StepRunPlanned | SendEventPlanned;
+
+export type StepCommand = YieldCommand | ResultCommand | PlanCommand;

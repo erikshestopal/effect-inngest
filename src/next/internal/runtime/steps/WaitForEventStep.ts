@@ -27,7 +27,7 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
   readonly id: StepInput;
   readonly event: E;
   readonly options: WaitForEventOptions;
-}): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError, StepIdentity | StepCommandSink> =>
+}) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
@@ -48,10 +48,10 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (StepOperation.shouldPlan({ input: args.input, info })) {
-            yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "run" }));
+            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
             return Option.none();
           }
-          yield* sink.submit(
+          yield* sink.yieldCommand(
             StepCommand.WaitForEvent.make({
               info,
               event: args.event.identifier,

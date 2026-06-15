@@ -14,7 +14,7 @@ export const run = <A, Err, R>(args: {
   readonly id: StepInput;
   readonly effect: Effect.Effect<A, Err, R>;
   readonly options?: RunOptions<JsonSchema<A>>;
-}): Effect.Effect<A | RunOutput<A>, StepError | Err, R | StepIdentity | StepCommandSink> =>
+}) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
@@ -48,8 +48,8 @@ export const run = <A, Err, R>(args: {
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (StepOperation.shouldPlan({ input: args.input, info })) {
-            yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "run" }));
-            return undefined as unknown as RunOutput<A>;
+            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            return yield* Effect.void;
           }
 
           const value = yield* args.effect;
@@ -61,7 +61,7 @@ export const run = <A, Err, R>(args: {
                 )
               : yield* StepResult.encodeUnknownJson({ value, stepId: info.id });
 
-          yield* sink.submit(StepCommand.StepRunResult.make({ info, data }));
+          yield* sink.recordResult(StepCommand.StepRunResult.make({ info, data }));
           return args.options?.schema ? value : (data as RunOutput<A>);
         }),
       ),

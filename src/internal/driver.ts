@@ -14,6 +14,8 @@ import * as Protocol from "./protocol.js";
 import { StepInterrupt } from "./interrupts.js";
 import { createStepTools, buildHandlerContext, type HandlerContext } from "./step.js";
 import { OtelAttributes } from "./constants.js";
+import { CurrentCheckpoint } from "../next/internal/runtime/CheckpointContext.js";
+import { HandlerFiberScope } from "../next/internal/runtime/HandlerFiberScope.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 
 /** Trace context headers extracted from incoming request */
@@ -103,13 +105,14 @@ export const execute = <F extends InngestFunction.Any, R>(
         }),
     });
 
-    const runHandler = Effect.gen(function* () {
-      const rootFiberId = yield* Effect.fiberId;
-      const identity = yield* StepIdentity;
-      const step = createStepTools(request, appName, identity, rootFiberId, checkpointState);
-      const context = yield* buildHandlerContext<F>(fn, step, request);
-      return yield* handler(context);
-    });
+    const runHandler = HandlerFiberScope.withRoot(
+      Effect.gen(function* () {
+        const identity = yield* StepIdentity;
+        const step = createStepTools(request, appName, identity, checkpointState);
+        const context = yield* buildHandlerContext<F>(fn, step, request);
+        return yield* handler(context);
+      }),
+    );
 
     /**
      * Drain any unflushed buffered opcodes (no-op outside checkpoint mode).
@@ -139,6 +142,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     });
 
     const result = yield* Effect.scoped(handlerWithDeadline).pipe(
+      Effect.provideService(CurrentCheckpoint, checkpointState),
       Effect.provide(StepIdentity.layer),
       Effect.flatMap((maybeValue) =>
         Effect.gen(function* () {

@@ -16,7 +16,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
   readonly appName: string;
   readonly id: StepInput;
   readonly options: InvokeOptions<F>;
-}): Effect.Effect<InngestFunction.Success<F>, StepError, StepIdentity | StepCommandSink> =>
+}) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
@@ -41,17 +41,17 @@ export const invoke = <F extends InngestFunction.Any>(args: {
       Match.tag("MemoTimeout", () =>
         Effect.fail(StepError.make({ stepId: info.id, message: "Invoke timed out", noRetry: true })),
       ),
-      Match.tag("MemoInput", () => Effect.succeed(undefined as InngestFunction.Success<F>)),
+      Match.tag("MemoInput", () => Effect.succeed(undefined)),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (StepOperation.shouldPlan({ input: args.input, info })) {
-            yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "run" }));
-            return undefined as InngestFunction.Success<F>;
+            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            return yield* Effect.void;
           }
 
           const data = Predicate.hasProperty(args.options, "data") ? args.options.data : undefined;
 
-          yield* sink.submit(
+          yield* sink.yieldCommand(
             StepCommand.InvokeFunction.make({
               info,
               functionId: `${args.appName}-${args.options.function._tag}`,
@@ -65,7 +65,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
                 : undefined,
             }),
           );
-          return undefined as InngestFunction.Success<F>;
+          return yield* Effect.void;
         }),
       ),
       Match.exhaustive,

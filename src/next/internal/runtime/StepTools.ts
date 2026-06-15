@@ -8,6 +8,7 @@ import type * as EventPayload from "../codec/EventPayload.js";
 import type { ExecutionInput } from "../domain/ExecutionInput.js";
 import type { StepInput } from "../domain/StepInput.js";
 import { EventApi, type OutgoingEvent } from "./EventApi.js";
+import { CurrentCheckpoint } from "./CheckpointContext.js";
 import { StepCommandSink } from "./StepCommandSink.js";
 import { StepIdentity } from "./StepIdentity.js";
 import * as InvokeStep from "./steps/InvokeStep.js";
@@ -115,6 +116,7 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
           Context.make(StepIdentity, identity),
           Context.add(StepCommandSink, sink),
           Context.add(EventApi, eventApi),
+          Context.add(CurrentCheckpoint, args.checkpoint),
         );
 
         return {
@@ -138,9 +140,5 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
             SendEventStep.sendEvent({ input: args.input, id, payload }).pipe(Effect.provide(runtime))) as SendEvent,
         };
       }),
-    ).pipe(
-      Layer.provide(StepIdentity.layer),
-      Layer.provide(StepCommandSink.layer({ checkpoint: args.checkpoint })),
-      Layer.provide(EventApi.layer),
-    );
+    ).pipe(Layer.provide(StepIdentity.layer), Layer.provide(StepCommandSink.layer), Layer.provide(EventApi.layer));
 }

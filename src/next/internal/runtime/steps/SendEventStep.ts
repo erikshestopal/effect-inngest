@@ -13,11 +13,7 @@ export const sendEvent = (args: {
   readonly input: ExecutionInput;
   readonly id: StepInput;
   readonly payload: OutgoingEvent | ReadonlyArray<OutgoingEvent>;
-}): Effect.Effect<
-  { readonly ids: ReadonlyArray<string> },
-  SendEventError,
-  InngestClient | EventApi | StepIdentity | StepCommandSink
-> =>
+}) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
@@ -33,13 +29,13 @@ export const sendEvent = (args: {
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (StepOperation.shouldPlan({ input: args.input, info })) {
-            yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "sendEvent" }));
+            yield* sink.planCommand(StepCommand.SendEventPlanned.make({ info }));
             return { ids: [] };
           }
 
           const events = Arr.ensure(args.payload);
           const result = yield* eventApi.send(events);
-          yield* sink.submit(
+          yield* sink.recordResult(
             StepCommand.SendEventResult.make({
               info,
               data: { ids: [...result.ids] },
