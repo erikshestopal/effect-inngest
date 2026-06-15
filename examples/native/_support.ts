@@ -8,6 +8,13 @@ export interface NativeEventInput {
 
 export interface NativeExpectedRun {
   readonly functionId: string;
+  readonly status?:
+    | "CANCELLED"
+    | "CANCELED"
+    | "COMPLETED"
+    | "FAILED"
+    | "TIMED_OUT"
+    | ReadonlyArray<"CANCELLED" | "CANCELED" | "COMPLETED" | "FAILED" | "TIMED_OUT">;
 }
 
 export interface NativeEventCase {

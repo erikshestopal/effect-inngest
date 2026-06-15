@@ -142,78 +142,6 @@
     "request": {
       "sequence": 4,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/006-step-sleepUntil?fnId=examples-006-step-sleepUntil-sleep-until&stepId=step",
-      "path": "/examples/006-step-sleepUntil",
-      "query": {
-        "fnId": "examples-006-step-sleepUntil-sleep-until",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "89db4fc7-c179-55f2-9cf6-e255bf01480f",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["277d17825bcc1c6b9bfcec798e3bc15dc427a873"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/sleep-until",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/sleep-until",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "277d17825bcc1c6b9bfcec798e3bc15dc427a873": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent?fnId=examples-008-step-waitForEvent-wait-for-event&stepId=step",
       "path": "/examples/008-step-waitForEvent",
       "query": {
@@ -302,83 +230,11 @@
     }
   },
   {
-    "sequence": 6,
+    "sequence": 5,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/006-step-sleepUntil?fnId=examples-006-step-sleepUntil-sleep-until&stepId=step",
-      "path": "/examples/006-step-sleepUntil",
-      "query": {
-        "fnId": "examples-006-step-sleepUntil-sleep-until",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "89db4fc7-c179-55f2-9cf6-e255bf01480f",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["277d17825bcc1c6b9bfcec798e3bc15dc427a873"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/sleep-until",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/sleep-until",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "277d17825bcc1c6b9bfcec798e3bc15dc427a873": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
+      "sequence": 5,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent?fnId=examples-008-step-waitForEvent-wait-for-event&stepId=step",
       "path": "/examples/008-step-waitForEvent",
@@ -442,7 +298,7 @@
             },
             "id": "fixture-effect-008-step-waitForEvent-0-after-0-0",
             "name": "demo/wait-complete",
-            "ts": 1781484639521,
+            "ts": 1781487690875,
             "user": {}
           }
         },
@@ -469,150 +325,6 @@
           }
         }
       ]
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/006-step-sleepUntil?fnId=examples-006-step-sleepUntil-sleep-until&stepId=step",
-      "path": "/examples/006-step-sleepUntil",
-      "query": {
-        "fnId": "examples-006-step-sleepUntil-sleep-until",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "3",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 2,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "89db4fc7-c179-55f2-9cf6-e255bf01480f",
-          "generation_id": 3,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["277d17825bcc1c6b9bfcec798e3bc15dc427a873"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/sleep-until",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/sleep-until",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "277d17825bcc1c6b9bfcec798e3bc15dc427a873": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/006-step-sleepUntil?fnId=examples-006-step-sleepUntil-sleep-until&stepId=step",
-      "path": "/examples/006-step-sleepUntil",
-      "query": {
-        "fnId": "examples-006-step-sleepUntil-sleep-until",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "4",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 3,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "89db4fc7-c179-55f2-9cf6-e255bf01480f",
-          "generation_id": 4,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["277d17825bcc1c6b9bfcec798e3bc15dc427a873"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/sleep-until",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/sleep-until",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "277d17825bcc1c6b9bfcec798e3bc15dc427a873": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
     }
   }
 ]

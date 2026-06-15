@@ -161,85 +161,6 @@
     "request": {
       "sequence": 4,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
-      "path": "/examples/032-cancelOn-timeout",
-      "query": {
-        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "4",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 3,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
-          "generation_id": 4,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "jobId": "job-032"
-          },
-          "id": "<event-id>",
-          "name": "job/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "jobId": "job-032"
-            },
-            "id": "<event-id>",
-            "name": "job/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
-            "data": "Starting job job-032"
-          },
-          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-invoke-by-reference&stepId=step",
       "path": "/examples/034-reference-function",
       "query": {
@@ -307,24 +228,153 @@
       },
       "body": [
         {
-          "op": "InvokeFunction",
           "id": "0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-          "name": "call-helper",
-          "mode": "async",
+          "op": "InvokeFunction",
+          "displayName": "call-helper",
           "opts": {
-            "function_id": "examples-034-reference-function-helper-function",
             "payload": {
               "data": {
                 "input": 21
-              },
-              "user": {},
-              "v": "1"
+              }
             },
-            "timeout": "365d"
+            "function_id": "examples-034-reference-function-helper-function"
           },
-          "displayName": "call-helper",
           "userland": {
             "id": "call-helper"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-helper-function&stepId=step",
+      "path": "/examples/034-reference-function",
+      "query": {
+        "fnId": "examples-034-reference-function-helper-function",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "6ee3e9fe-bbf6-5994-a859-b46413bb129f",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+              "expire": 1813023690291,
+              "fn_id": "examples-034-reference-function-helper-function",
+              "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+              "isr": {
+                "dsid": "c16a60f39651a064",
+                "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                "ts": ""
+              },
+              "name": "call-helper",
+              "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+              "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "8b3f2645f19eec04",
+                  "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                },
+                "ts": "2026-06-15T01:41:30.291906Z"
+              }
+            },
+            "input": 21
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                "expire": 1813023690291,
+                "fn_id": "examples-034-reference-function-helper-function",
+                "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+                "isr": {
+                  "dsid": "c16a60f39651a064",
+                  "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                  "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                  "ts": ""
+                },
+                "name": "call-helper",
+                "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                "source_fn_v": 1,
+                "tc": {
+                  "ctx": {
+                    "sid": "8b3f2645f19eec04",
+                    "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                  },
+                  "ts": "2026-06-15T01:41:30.291906Z"
+                }
+              },
+              "input": 21
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.invoked",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "doubled": 42
           }
         }
       ]
@@ -389,175 +439,8 @@
         ],
         "steps": {
           "0468d60916f8c6bb90279b321e3dd5afde1e9e55": {
-            "error": {
-              "message": "could not find function with ID: examples-034-reference-function-helper-function",
-              "name": "Error"
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 500,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "false",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "name": "StepError",
-        "message": "could not find function with ID: examples-034-reference-function-helper-function",
-        "stack": "Error: could not find function with ID: examples-034-reference-function-helper-function\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:139:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
-      }
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
-      "path": "/examples/032-cancelOn-timeout",
-      "query": {
-        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "5",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 4,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
-          "generation_id": 5,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "jobId": "job-032"
-          },
-          "id": "<event-id>",
-          "name": "job/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
             "data": {
-              "jobId": "job-032"
-            },
-            "id": "<event-id>",
-            "name": "job/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
-            "data": "Starting job job-032"
-          },
-          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-invoke-by-reference&stepId=step",
-      "path": "/examples/034-reference-function",
-      "query": {
-        "fnId": "examples-034-reference-function-invoke-by-reference",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["0468d60916f8c6bb90279b321e3dd5afde1e9e55"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/reference-invoke",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/reference-invoke",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "0468d60916f8c6bb90279b321e3dd5afde1e9e55": {
-            "error": {
-              "message": "could not find function with ID: examples-034-reference-function-helper-function",
-              "name": "Error"
+              "doubled": 42
             }
           }
         },
@@ -566,21 +449,24 @@
       }
     },
     "response": {
-      "status": 500,
+      "status": 206,
       "headers": {
         "content-type": "application/json",
         "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "false",
         "x-inngest-req-version": "2",
         "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
-      "body": {
-        "name": "StepError",
-        "message": "could not find function with ID: examples-034-reference-function-helper-function",
-        "stack": "Error: could not find function with ID: examples-034-reference-function-helper-function\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:139:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
-      }
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "result": 42
+          }
+        }
+      ]
     }
   }
 ]

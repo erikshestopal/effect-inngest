@@ -229,49 +229,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/e/NO_EVENT_KEY_SET",
-      "path": "/e/NO_EVENT_KEY_SET",
-      "query": {},
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-sdk": "<sdk>"
-      },
-      "body": [
-        {
-          "name": "demo/notification",
-          "data": {
-            "_tag": "demo/notification",
-            "userId": "u_001",
-            "message": "Hello from step.sendEvent!"
-          },
-          "ts": 1781484635859,
-          "id": null,
-          "v": null
-        }
-      ]
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ids": ["01KV4C4HPMMYP8D2WVNYW156Y0"],
-        "status": 200
-      }
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4C4HNTTZC5TVF061TQZASH/async",
-      "path": "/v1/checkpoint/01KV4C4HNTTZC5TVF061TQZASH/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1R9415HM6NN73ZPAKTAR/async",
+      "path": "/v1/checkpoint/01KV4F1R9415HM6NN73ZPAKTAR/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -279,12 +238,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4C4HNTTZC5TVF061TQZASH",
+        "run_id": "01KV4F1R9415HM6NN73ZPAKTAR",
         "fn_id": "6212f880-d58b-5b5d-a3b2-8f87b6f9716a",
         "qi_id": "M3NhNHBudGM0eG83cDo6ZGVmYXVsdA==",
-        "request_id": "01KV4C4HP5WQJRCQH4SF9NZR2Z",
+        "request_id": "01KV4F1R9MWQJRCQH4SF9NZR2Z",
         "generation_id": 1,
-        "request_started_at": 1781484635855,
+        "request_started_at": 1781487690061,
         "steps": [
           {
             "id": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
@@ -318,16 +277,16 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV4C4HPMMYP8D2WVNYW156Y0"],
+              "ids": ["01KV4F1RAGHWE73FVMR0S8JE84"],
               "status": 200
             },
             "timing": {
-              "a": 1781484635861000000,
+              "a": 1781487690068000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484635862
+        "ts": 1781487690068
       }
     },
     "response": {

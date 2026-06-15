@@ -242,6 +242,20 @@ export const createStepTools = (
       onSome: (state) => state.planOpcode(op, order),
     });
 
+  const yieldPlannedIfRuntimeExceeded = (info: StepInfo): Effect.Effect<void, never> =>
+    Option.match(checkpoint, {
+      onNone: () => Effect.void,
+      onSome: (state) =>
+        ctx.step_id === "step"
+          ? Effect.gen(function* () {
+              if (yield* state.isRuntimeExceeded) {
+                yield* state.flush;
+                return yield* Effect.die(plannedInterrupt({ info }));
+              }
+            })
+          : Effect.void,
+    });
+
   const sleep = (opts: StepOptionsOrId, duration: Duration.Input): Effect.Effect<void, StepInterrupt> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
@@ -429,57 +443,62 @@ export const createStepTools = (
             ? Ref.update(activeStepRuns, (n) => Math.max(0, n - 1))
             : Effect.void;
 
-          return Effect.flatMap(enterStepRun, (planned) =>
-            planned
-              ? Effect.succeed(undefined as unknown as StepRunOutput<A>)
-              : effect.pipe(
-                  Effect.withSpan(`inngest.step/run/${info.id}`, {
-                    attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "run" },
-                  }),
-                  Effect.matchEffect({
-                    onFailure: (err) => {
-                      const noRetry = isNonRetriableError(err) ? true : undefined;
-                      const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
-                      const interrupt =
-                        noRetry === true || ctx.attempt >= ctx.max_attempts - 1
-                          ? failedInterrupt({ info, error: err })
-                          : errorInterrupt({ info, error: err, noRetry, retryAfterMs });
-                      return Effect.andThen(
-                        Effect.annotateCurrentSpan(errorOtelAttributes(err)),
-                        Effect.die(interrupt),
-                      );
-                    },
-                    onSuccess: (data) => {
-                      const encoded = options?.schema
-                        ? encodeJson(options.schema, data, info.id)
-                        : encodeUnknownJson(data, info.id);
+          return yieldPlannedIfRuntimeExceeded(info)
+            .pipe(
+              Effect.flatMap(() => enterStepRun),
+              Effect.flatMap((planned) =>
+                planned
+                  ? Effect.succeed(undefined as unknown as StepRunOutput<A>)
+                  : effect.pipe(
+                      Effect.withSpan(`inngest.step/run/${info.id}`, {
+                        attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "run" },
+                      }),
+                      Effect.matchEffect({
+                        onFailure: (err) => {
+                          const noRetry = isNonRetriableError(err) ? true : undefined;
+                          const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
+                          const interrupt =
+                            noRetry === true || ctx.attempt >= ctx.max_attempts - 1
+                              ? failedInterrupt({ info, error: err })
+                              : errorInterrupt({ info, error: err, noRetry, retryAfterMs });
+                          return Effect.andThen(
+                            Effect.annotateCurrentSpan(errorOtelAttributes(err)),
+                            Effect.die(interrupt),
+                          );
+                        },
+                        onSuccess: (data) => {
+                          const encoded = options?.schema
+                            ? encodeJson(options.schema, data, info.id)
+                            : encodeUnknownJson(data, info.id);
 
-                      return Effect.flatMap(encoded, (encodedData) =>
-                        Option.match(checkpoint, {
-                          // Async (non-checkpoint) mode: surface result via interrupt — driver
-                          // returns 206 with a single StepRun and yields back to executor.
-                          onNone: () => Effect.die(runInterrupt({ info, data: encodedData })),
-                          // Checkpoint mode: buffer the StepRun (best-effort flush handled by
-                          // bufferStep) and continue execution with the value (spec §10.4.1).
-                          onSome: (state) =>
-                            Effect.as(
-                              state.bufferStep(Protocol.stepRun(info, encodedData)),
-                              options?.schema ? data : (encodedData as StepRunOutput<A>),
-                            ),
-                        }),
-                      );
-                    },
-                  }),
-                  Effect.ensuring(exitStepRun),
-                ),
-          ).pipe(
-            Effect.catchDefect((defect) =>
-              Effect.andThen(
-                Effect.annotateCurrentSpan(errorOtelAttributes(defect)),
-                isStepInterrupt(defect) ? Effect.die(defect) : Effect.die(errorInterrupt({ info, error: defect })),
+                          return Effect.flatMap(encoded, (encodedData) =>
+                            Option.match(checkpoint, {
+                              // Async (non-checkpoint) mode: surface result via interrupt — driver
+                              // returns 206 with a single StepRun and yields back to executor.
+                              onNone: () => Effect.die(runInterrupt({ info, data: encodedData })),
+                              // Checkpoint mode: buffer the StepRun (best-effort flush handled by
+                              // bufferStep) and continue execution with the value (spec §10.4.1).
+                              onSome: (state) =>
+                                Effect.as(
+                                  state.bufferStep(Protocol.stepRun(info, encodedData)),
+                                  options?.schema ? data : (encodedData as StepRunOutput<A>),
+                                ),
+                            }),
+                          );
+                        },
+                      }),
+                      Effect.ensuring(exitStepRun),
+                    ),
               ),
-            ),
-          );
+            )
+            .pipe(
+              Effect.catchDefect((defect) =>
+                Effect.andThen(
+                  Effect.annotateCurrentSpan(errorOtelAttributes(defect)),
+                  isStepInterrupt(defect) ? Effect.die(defect) : Effect.die(errorInterrupt({ info, error: defect })),
+                ),
+              ),
+            );
         }),
         Match.exhaustive,
       ),
@@ -505,6 +524,7 @@ export const createStepTools = (
           }
 
           const nativeInfo = { id: "sendEvent", name: "sendEvent", hash: info.hash };
+          const plannedInfo = { ...nativeInfo, id: info.id, name: info.name };
           const shouldDetectParallelCheckpoint = Option.isSome(checkpoint) && ctx.step_id === "step";
           const enterStepRun = shouldDetectParallelCheckpoint
             ? Effect.gen(function* () {
@@ -512,10 +532,7 @@ export const createStepTools = (
                 yield* Effect.yieldNow;
                 const active = yield* Ref.get(activeStepRuns);
                 if (active > 1) {
-                  yield* planIfCheckpoint(
-                    Protocol.stepPlanned({ ...nativeInfo, id: info.id, name: info.name }),
-                    info.order,
-                  );
+                  yield* planIfCheckpoint(Protocol.stepPlanned(plannedInfo), info.order);
                   return true;
                 }
                 return false;
@@ -526,29 +543,32 @@ export const createStepTools = (
             : Effect.void;
 
           const events = Arr.ensure(payload);
-          return Effect.flatMap(enterStepRun, (planned) =>
-            planned
-              ? Effect.succeed({ ids: [] as ReadonlyArray<string> })
-              : Effect.flatMap(
-                  Effect.forEach(events, (e) =>
-                    Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
-                  ),
-                  (eventPayloads) =>
-                    InngestClient.use((client) =>
-                      client.sendEvent(eventPayloads).pipe(
-                        Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
-                          attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
-                        }),
-                        Effect.flatMap((result) =>
-                          Option.match(checkpoint, {
-                            onNone: () => Effect.die(runInterrupt({ info: nativeInfo, data: result })),
-                            onSome: (state) =>
-                              Effect.as(state.bufferStep(Protocol.stepRun(nativeInfo, result)), result),
+          return yieldPlannedIfRuntimeExceeded(plannedInfo).pipe(
+            Effect.flatMap(() => enterStepRun),
+            Effect.flatMap((planned) =>
+              planned
+                ? Effect.succeed({ ids: [] as ReadonlyArray<string> })
+                : Effect.flatMap(
+                    Effect.forEach(events, (e) =>
+                      Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
+                    ),
+                    (eventPayloads) =>
+                      InngestClient.use((client) =>
+                        client.sendEvent(eventPayloads).pipe(
+                          Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
+                            attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
                           }),
+                          Effect.flatMap((result) =>
+                            Option.match(checkpoint, {
+                              onNone: () => Effect.die(runInterrupt({ info: nativeInfo, data: result })),
+                              onSome: (state) =>
+                                Effect.as(state.bufferStep(Protocol.stepRun(nativeInfo, result)), result),
+                            }),
+                          ),
                         ),
                       ),
-                    ),
-                ).pipe(Effect.ensuring(exitStepRun)),
+                  ).pipe(Effect.ensuring(exitStepRun)),
+            ),
           );
         }),
         Match.exhaustive,

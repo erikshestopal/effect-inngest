@@ -215,20 +215,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "e9dff3557ded7414ae530834de7011f1388d202a",
-          "name": "sum",
-          "data": 13,
-          "displayName": "sum"
-        },
-        {
-          "op": "StepRun",
-          "id": "38a007151abe87cc01a5b6e9cc418e85286e2087",
-          "name": "product",
-          "data": 42,
-          "displayName": "product"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -237,6 +223,152 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1SZKWC16DBGRY87MWS0B/async",
+      "path": "/v1/checkpoint/01KV4F1SZKWC16DBGRY87MWS0B/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1SZKWC16DBGRY87MWS0B",
+        "fn_id": "0086d3db-73d9-52a1-a50a-1198fd659294",
+        "qi_id": "MzU5bmtmeThubXZ5cTo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1SZYFSM3529QZ3432Q4Z",
+        "generation_id": 1,
+        "request_started_at": 1781487691777,
+        "steps": [
+          {
+            "id": "e9dff3557ded7414ae530834de7011f1388d202a",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "sum",
+            "displayName": "sum",
+            "userland": {
+              "id": "sum"
+            },
+            "opts": {},
+            "rawArgs": ["sum", null],
+            "hashedId": "e9dff3557ded7414ae530834de7011f1388d202a",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "e9dff3557ded7414ae530834de7011f1388d202a",
+                "memoized": false,
+                "options": {
+                  "id": "sum",
+                  "name": "sum"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 13,
+            "timing": {
+              "a": 1781487691779000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691779
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1SZKWC16DBGRY87MWS0B/async",
+      "path": "/v1/checkpoint/01KV4F1SZKWC16DBGRY87MWS0B/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1SZKWC16DBGRY87MWS0B",
+        "fn_id": "0086d3db-73d9-52a1-a50a-1198fd659294",
+        "qi_id": "MzU5bmtmeThubXZ5cTo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1SZYFSM3529QZ3432Q4Z",
+        "generation_id": 1,
+        "request_started_at": 1781487691777,
+        "steps": [
+          {
+            "id": "38a007151abe87cc01a5b6e9cc418e85286e2087",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "product",
+            "displayName": "product",
+            "userland": {
+              "id": "product"
+            },
+            "opts": {},
+            "rawArgs": ["product", null],
+            "hashedId": "38a007151abe87cc01a5b6e9cc418e85286e2087",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "38a007151abe87cc01a5b6e9cc418e85286e2087",
+                "memoized": false,
+                "options": {
+                  "id": "product",
+                  "name": "product"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 42,
+            "timing": {
+              "a": 1781487691780000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691780
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

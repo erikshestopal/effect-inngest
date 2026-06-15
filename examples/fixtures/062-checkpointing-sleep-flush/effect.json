@@ -218,28 +218,224 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0",
-          "name": "prepare-a",
-          "data": "a",
-          "displayName": "prepare-a"
-        },
-        {
-          "op": "StepRun",
-          "id": "d64c13d1025c5af5c0fd6984a65d17955f022ef3",
-          "name": "prepare-b",
-          "data": "b",
-          "displayName": "prepare-b"
-        },
-        {
-          "op": "Sleep",
           "id": "c2640f79b4ed481b838ce4ad75330aa3f825d4d9",
+          "op": "Sleep",
           "name": "2s",
-          "mode": "async",
-          "opts": {
-            "duration": "2s"
+          "displayName": "nap",
+          "opts": {},
+          "data": null,
+          "userland": {
+            "id": "nap"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RRQDVDN43MYSPSG583C/async",
+      "path": "/v1/checkpoint/01KV4F1RRQDVDN43MYSPSG583C/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1RRQDVDN43MYSPSG583C",
+        "fn_id": "c8e8d887-8734-541a-be96-f7225592b217",
+        "qi_id": "MnR0NmVoYXlwbXJscTo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1RS5KPWQAJBK7AD1JJ3Q",
+        "generation_id": 1,
+        "request_started_at": 1781487690540,
+        "steps": [
+          {
+            "id": "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "prepare-a",
+            "displayName": "prepare-a",
+            "userland": {
+              "id": "prepare-a"
+            },
+            "opts": {},
+            "rawArgs": ["prepare-a", null],
+            "hashedId": "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0",
+                "memoized": false,
+                "options": {
+                  "id": "prepare-a",
+                  "name": "prepare-a"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "a",
+            "timing": {
+              "a": 1781487690541000000,
+              "b": 0
+            }
           },
-          "displayName": "nap"
+          {
+            "id": "d64c13d1025c5af5c0fd6984a65d17955f022ef3",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "prepare-b",
+            "displayName": "prepare-b",
+            "userland": {
+              "id": "prepare-b"
+            },
+            "opts": {},
+            "rawArgs": ["prepare-b", null],
+            "hashedId": "d64c13d1025c5af5c0fd6984a65d17955f022ef3",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "d64c13d1025c5af5c0fd6984a65d17955f022ef3",
+                "memoized": false,
+                "options": {
+                  "id": "prepare-b",
+                  "name": "prepare-b"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "b",
+            "timing": {
+              "a": 1781487690541000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487690546
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/062-checkpointing-sleep-flush?fnId=examples-062-checkpointing-sleep-flush-checkpoint-sleep&stepId=step",
+      "path": "/examples/062-checkpointing-sleep-flush",
+      "query": {
+        "fnId": "examples-062-checkpointing-sleep-flush-checkpoint-sleep",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "c8e8d887-8734-541a-be96-f7225592b217",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 3,
+            "stack": [
+              "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0",
+              "d64c13d1025c5af5c0fd6984a65d17955f022ef3",
+              "c2640f79b4ed481b838ce4ad75330aa3f825d4d9"
+            ]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "tag": "sleep-062"
+          },
+          "id": "<event-id>",
+          "name": "demo/checkpoint-sleep",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "tag": "sleep-062"
+            },
+            "id": "<event-id>",
+            "name": "demo/checkpoint-sleep",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "25eb4bfecec7529b0dd0d8b0e8f81d6a6211a0e0": {
+            "data": "a"
+          },
+          "c2640f79b4ed481b838ce4ad75330aa3f825d4d9": null,
+          "d64c13d1025c5af5c0fd6984a65d17955f022ef3": {
+            "data": "b"
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tag": "sleep-062"
+          }
         }
       ]
     }

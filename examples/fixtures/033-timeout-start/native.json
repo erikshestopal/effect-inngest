@@ -5,85 +5,6 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 1,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
-      "path": "/examples/032-cancelOn-timeout",
-      "query": {
-        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "3",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 2,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
-          "generation_id": 3,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "jobId": "job-032"
-          },
-          "id": "<event-id>",
-          "name": "job/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "jobId": "job-032"
-            },
-            "id": "<event-id>",
-            "name": "job/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
-            "data": "Starting job job-032"
-          },
-          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/033-timeout-start",
       "path": "/examples/033-timeout-start",
@@ -116,11 +37,11 @@
     }
   },
   {
-    "sequence": 3,
+    "sequence": 2,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 3,
+      "sequence": 2,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/033-timeout-start",
       "path": "/examples/033-timeout-start",
@@ -148,11 +69,11 @@
     }
   },
   {
-    "sequence": 4,
+    "sequence": 3,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 4,
+      "sequence": 3,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -218,11 +139,11 @@
     }
   },
   {
-    "sequence": 5,
+    "sequence": 4,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 4,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/033-timeout-start?fnId=examples-033-timeout-start-slow-start-task&stepId=step",
       "path": "/examples/033-timeout-start",
@@ -301,14 +222,14 @@
     }
   },
   {
-    "sequence": 6,
+    "sequence": 5,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 6,
+      "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BYV8H2GSGWS1YSV9QDHGR/async",
-      "path": "/v1/checkpoint/01KV4BYV8H2GSGWS1YSV9QDHGR/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBKK2V5BQ8XDDRPEQGN/async",
+      "path": "/v1/checkpoint/01KV4F1HBKK2V5BQ8XDDRPEQGN/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -316,12 +237,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BYV8H2GSGWS1YSV9QDHGR",
+        "run_id": "01KV4F1HBKK2V5BQ8XDDRPEQGN",
         "fn_id": "b6be8c46-ff2b-5ab8-b3c4-df83f58bcb9f",
         "qi_id": "MWZ6c3JqZTUyMm1zeDo6ZGVmYXVsdA==",
-        "request_id": "01KV4BYV8K5GNKZSHR9PSQRC24",
+        "request_id": "01KV4F1HC05GNKZSHR9PSQRC24",
         "generation_id": 1,
-        "request_started_at": 1781484449046,
+        "request_started_at": 1781487682951,
         "steps": [
           {
             "id": "d257362c8d5eb7af0a9bb22ec85da25a93b7ed8c",
@@ -356,12 +277,12 @@
             "transformedResultPromise": {},
             "data": "Started successfully",
             "timing": {
-              "a": 1781484449052000000,
+              "a": 1781487682952000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484449053
+        "ts": 1781487682952
       }
     },
     "response": {
@@ -371,164 +292,6 @@
         "x-inngest-server-kind": "dev"
       },
       "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
-      "path": "/examples/032-cancelOn-timeout",
-      "query": {
-        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "4",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 3,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
-          "generation_id": 4,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "jobId": "job-032"
-          },
-          "id": "<event-id>",
-          "name": "job/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "jobId": "job-032"
-            },
-            "id": "<event-id>",
-            "name": "job/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
-            "data": "Starting job job-032"
-          },
-          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
-      "path": "/examples/032-cancelOn-timeout",
-      "query": {
-        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "5",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 4,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
-          "generation_id": 5,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "jobId": "job-032"
-          },
-          "id": "<event-id>",
-          "name": "job/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "jobId": "job-032"
-            },
-            "id": "<event-id>",
-            "name": "job/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
-            "data": "Starting job job-032"
-          },
-          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
     }
   }
 ]

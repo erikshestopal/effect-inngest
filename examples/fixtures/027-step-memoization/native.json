@@ -1,10 +1,10 @@
 [
   {
-    "sequence": 2,
+    "sequence": 1,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 2,
+      "sequence": 1,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/027-step-memoization",
       "path": "/examples/027-step-memoization",
@@ -37,11 +37,11 @@
     }
   },
   {
-    "sequence": 3,
+    "sequence": 2,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 3,
+      "sequence": 2,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/027-step-memoization",
       "path": "/examples/027-step-memoization",
@@ -69,11 +69,11 @@
     }
   },
   {
-    "sequence": 4,
+    "sequence": 3,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 4,
+      "sequence": 3,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -136,11 +136,11 @@
     }
   },
   {
-    "sequence": 5,
+    "sequence": 4,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 4,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step",
       "path": "/examples/027-step-memoization",
@@ -223,14 +223,14 @@
     }
   },
   {
-    "sequence": 6,
+    "sequence": 5,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 6,
+      "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
-      "path": "/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
+      "path": "/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -238,12 +238,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BXYWRTMD4AM8CPM3QG7AF",
+        "run_id": "01KV4F1HBDX040NXN7DSJK2FA4",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "M252M2NhMTU2MXlkcTo6ZGVmYXVsdA==",
-        "request_id": "01KV4BXYX5R660T1AG6G0KD1DH",
+        "request_id": "01KV4F1HC3R660T1AG6G0KD1DH",
         "generation_id": 1,
-        "request_started_at": 1781484420010,
+        "request_started_at": 1781487682966,
         "steps": [
           {
             "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
@@ -276,14 +276,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781484420019,
+            "data": 1781487682966,
             "timing": {
-              "a": 1781484420019000000,
+              "a": 1781487682966000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484420020
+        "ts": 1781487682966
       }
     },
     "response": {
@@ -296,14 +296,14 @@
     }
   },
   {
-    "sequence": 7,
+    "sequence": 6,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 7,
+      "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
-      "path": "/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
+      "path": "/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -311,12 +311,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BXYWRTMD4AM8CPM3QG7AF",
+        "run_id": "01KV4F1HBDX040NXN7DSJK2FA4",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "M252M2NhMTU2MXlkcTo6ZGVmYXVsdA==",
-        "request_id": "01KV4BXYX5R660T1AG6G0KD1DH",
+        "request_id": "01KV4F1HC3R660T1AG6G0KD1DH",
         "generation_id": 1,
-        "request_started_at": 1781484420010,
+        "request_started_at": 1781487682966,
         "steps": [
           {
             "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
@@ -349,14 +349,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.8046738608911475,
+            "data": 0.8009823011806881,
             "timing": {
-              "a": 1781484420022000000,
+              "a": 1781487682976000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484420022
+        "ts": 1781487682976
       }
     },
     "response": {
@@ -369,11 +369,11 @@
     }
   },
   {
-    "sequence": 8,
+    "sequence": 7,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 8,
+      "sequence": 7,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step",
       "path": "/examples/027-step-memoization",
@@ -432,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.8046738608911475
+            "data": 0.8009823011806881
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781484420019
+            "data": 1781487682966
           }
         },
         "use_api": false,
@@ -457,22 +457,22 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "timestamp": 1781484420019,
-            "randomValue": 0.8046738608911475
+            "timestamp": 1781487682966,
+            "randomValue": 0.8009823011806881
           }
         }
       ]
     }
   },
   {
-    "sequence": 9,
+    "sequence": 8,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 9,
+      "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
-      "path": "/v1/checkpoint/01KV4BXYWRTMD4AM8CPM3QG7AF/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
+      "path": "/v1/checkpoint/01KV4F1HBDX040NXN7DSJK2FA4/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -480,12 +480,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BXYWRTMD4AM8CPM3QG7AF",
+        "run_id": "01KV4F1HBDX040NXN7DSJK2FA4",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "MWJlZWRidXcwM2l5OjpkZWZhdWx0",
-        "request_id": "01KV4BXZX1T2VRSKRQXQWCCM34",
+        "request_id": "01KV4F1JCCT2VRSKRQXQWCCM34",
         "generation_id": 1,
-        "request_started_at": 1781484421028,
+        "request_started_at": 1781487683983,
         "steps": [
           {
             "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
@@ -519,12 +519,12 @@
             },
             "transformedResultPromise": {},
             "timing": {
-              "a": 1781484421029000000,
+              "a": 1781487683983000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484421029
+        "ts": 1781487683983
       }
     },
     "response": {

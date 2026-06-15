@@ -291,14 +291,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4BYZX3NP4CGTHBTMQP2TVE.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-              "expire": 1813020453818,
+              "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+              "expire": 1813023683238,
               "fn_id": "examples-034-reference-function-helper-function",
-              "gid": "5d3a6750-885b-4309-a0ef-23fb57dfb5f4",
+              "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
               "isr": {
-                "dsid": "d46e72d45e483c22",
-                "dstp": "00-715de3a914b807a52c3ab7be054c0dde-ccde5a4824e60f42-00",
-                "tp": "00-715de3a914b807a52c3ab7be054c0dde-d46e72d45e483c22-01",
+                "dsid": "0d7b2578eed4f1f7",
+                "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
+                "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
                 "ts": ""
               },
               "name": "call-helper",
@@ -307,10 +307,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "d1229f9c85947e20",
-                  "traceparent": "00-ec62b7f8461dfbb1dc3ed9d801c7c9e2-11c53fdd9fd853f0-01"
+                  "sid": "2c5d88bc924de5df",
+                  "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
                 },
-                "ts": "2026-06-15T00:47:33.818498Z"
+                "ts": "2026-06-15T01:41:23.23873Z"
               }
             },
             "input": 21
@@ -324,14 +324,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4BYZX3NP4CGTHBTMQP2TVE.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                "expire": 1813020453818,
+                "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                "expire": 1813023683238,
                 "fn_id": "examples-034-reference-function-helper-function",
-                "gid": "5d3a6750-885b-4309-a0ef-23fb57dfb5f4",
+                "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
                 "isr": {
-                  "dsid": "d46e72d45e483c22",
-                  "dstp": "00-715de3a914b807a52c3ab7be054c0dde-ccde5a4824e60f42-00",
-                  "tp": "00-715de3a914b807a52c3ab7be054c0dde-d46e72d45e483c22-01",
+                  "dsid": "0d7b2578eed4f1f7",
+                  "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
+                  "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
                   "ts": ""
                 },
                 "name": "call-helper",
@@ -340,10 +340,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "d1229f9c85947e20",
-                    "traceparent": "00-ec62b7f8461dfbb1dc3ed9d801c7c9e2-11c53fdd9fd853f0-01"
+                    "sid": "2c5d88bc924de5df",
+                    "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
                   },
-                  "ts": "2026-06-15T00:47:33.818498Z"
+                  "ts": "2026-06-15T01:41:23.23873Z"
                 }
               },
               "input": 21

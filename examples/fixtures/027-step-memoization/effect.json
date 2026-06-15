@@ -209,14 +209,15 @@
       },
       "body": [
         {
-          "op": "Sleep",
           "id": "5c528ebc85c151361dc02ed08a25eb25f665fd8f",
+          "op": "Sleep",
           "name": "1s",
-          "mode": "async",
-          "opts": {
-            "duration": "1s"
-          },
-          "displayName": "checkpoint"
+          "displayName": "checkpoint",
+          "opts": {},
+          "data": null,
+          "userland": {
+            "id": "checkpoint"
+          }
         }
       ]
     }
@@ -228,40 +229,38 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
-      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
+      "path": "/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "run_id": "01KV4F1R945W5WKC0G8XT1PFSJ",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
-        "request_id": "01KV20028YQJPVAFAPBSEF9HZA",
+        "request_id": "01KV4F1R9KQJPVAFAPBSEF9HZA",
         "generation_id": 1,
-        "request_started_at": 1781404797221,
+        "request_started_at": 1781487690049,
         "steps": [
           {
-            "op": "StepRun",
             "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "capture-time",
             "displayName": "capture-time",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "capture-time"
             },
+            "opts": {},
             "rawArgs": ["capture-time", null],
             "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
@@ -277,14 +276,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781404797221,
+            "data": 1781487690049,
             "timing": {
-              "a": 1781404797222000000,
+              "a": 1781487690057000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404797223
+        "ts": 1781487690057
       }
     },
     "response": {
@@ -303,40 +302,38 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
-      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
+      "path": "/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "run_id": "01KV4F1R945W5WKC0G8XT1PFSJ",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
-        "request_id": "01KV20028YQJPVAFAPBSEF9HZA",
+        "request_id": "01KV4F1R9KQJPVAFAPBSEF9HZA",
         "generation_id": 1,
-        "request_started_at": 1781404797221,
+        "request_started_at": 1781487690049,
         "steps": [
           {
-            "op": "StepRun",
             "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "capture-random",
             "displayName": "capture-random",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "capture-random"
             },
+            "opts": {},
             "rawArgs": ["capture-random", null],
             "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
@@ -352,14 +349,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.8675836098215892,
+            "data": 0.02285571108709017,
             "timing": {
-              "a": 1781404797225000000,
+              "a": 1781487690065000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404797225
+        "ts": 1781487690065
       }
     },
     "response": {
@@ -435,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.8675836098215892
+            "data": 0.02285571108709017
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781404797221
+            "data": 1781487690049
           }
         },
         "use_api": false,
@@ -460,8 +457,8 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "timestamp": 1781404797221,
-            "randomValue": 0.8675836098215892
+            "timestamp": 1781487690049,
+            "randomValue": 0.02285571108709017
           }
         }
       ]
@@ -474,40 +471,38 @@
     "request": {
       "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
-      "path": "/v1/checkpoint/01KV20028PYPE3A881YJWBF42K/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
+      "path": "/v1/checkpoint/01KV4F1R945W5WKC0G8XT1PFSJ/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV20028PYPE3A881YJWBF42K",
+        "run_id": "01KV4F1R945W5WKC0G8XT1PFSJ",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
         "qi_id": "M21pbXp3MG5hZjR5cTo6ZGVmYXVsdA==",
-        "request_id": "01KV20038NTJ7YT5KE3BQVGDND",
+        "request_id": "01KV4F1S9YTJ7YT5KE3BQVGDND",
         "generation_id": 1,
-        "request_started_at": 1781404798234,
+        "request_started_at": 1781487691073,
         "steps": [
           {
-            "op": "StepRun",
             "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "verify",
             "displayName": "verify",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "verify"
             },
+            "opts": {},
             "rawArgs": ["verify", null],
             "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
@@ -523,13 +518,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
+            "data": null,
             "timing": {
-              "a": 1781404798234000000,
+              "a": 1781487691074000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404798235
+        "ts": 1781487691074
       }
     },
     "response": {

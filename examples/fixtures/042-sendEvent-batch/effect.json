@@ -209,16 +209,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "3491af6b98f899d37b283dabc2d534c741bf3f74",
-          "name": "send-notifications",
-          "data": {
-            "ids": ["01KV1R5FERNDBXA6G39AYKPH8Q", "01KV1R5FERMKVRY2YAGPQ1J194", "01KV1R5FESKS3ADX62CSB1Z8JF"],
-            "status": 200
-          },
-          "displayName": "send-notifications"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -235,60 +225,73 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/e/local",
-      "path": "/e/local",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGY1XC9JP1G3CBXX2RJ/async",
+      "path": "/v1/checkpoint/01KV4F1RGY1XC9JP1G3CBXX2RJ/async",
       "query": {},
       "headers": {
+        "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
-      "body": [
-        {
-          "name": "demo/notification",
-          "data": {
-            "_tag": "demo/notification",
-            "userId": "u1",
-            "message": "First notification"
-          },
-          "ts": 1781396585943,
-          "id": null,
-          "v": null
-        },
-        {
-          "name": "demo/notification",
-          "data": {
-            "_tag": "demo/notification",
-            "userId": "u2",
-            "message": "Second notification"
-          },
-          "ts": 1781396585943,
-          "id": null,
-          "v": null
-        },
-        {
-          "name": "demo/notification",
-          "data": {
-            "_tag": "demo/notification",
-            "userId": "u3",
-            "message": "Third notification"
-          },
-          "ts": 1781396585943,
-          "id": null,
-          "v": null
-        }
-      ]
+      "body": {
+        "run_id": "01KV4F1RGY1XC9JP1G3CBXX2RJ",
+        "fn_id": "d5e11071-88a3-52ab-93b8-18296d5e47a6",
+        "qi_id": "ZXB1cXA1Z3F0N3FyOjpkZWZhdWx0",
+        "request_id": "01KV4F1RHCH4NNAJZY4FVADDZE",
+        "generation_id": 1,
+        "request_started_at": 1781487690289,
+        "steps": [
+          {
+            "id": "3491af6b98f899d37b283dabc2d534c741bf3f74",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "sendEvent",
+            "displayName": "sendEvent",
+            "userland": {
+              "id": "sendEvent"
+            },
+            "opts": {},
+            "rawArgs": ["sendEvent", null],
+            "hashedId": "3491af6b98f899d37b283dabc2d534c741bf3f74",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "3491af6b98f899d37b283dabc2d534c741bf3f74",
+                "memoized": false,
+                "options": {
+                  "id": "sendEvent",
+                  "name": "sendEvent"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": {
+              "ids": ["01KV4F1RHN3X99ZKQVPD7YGDVP", "01KV4F1RHNYVVWNYGP0Z56MGAW", "01KV4F1RHNVNJ5YJBBWPJTRCHB"],
+              "status": 200
+            },
+            "timing": {
+              "a": 1781487690296000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487690296
+      }
     },
     "response": {
       "status": 200,
       "headers": {
-        "content-type": "text/plain; charset=utf-8",
+        "content-type": "application/json",
         "x-inngest-server-kind": "dev"
       },
-      "body": {
-        "ids": ["01KV1R5FERNDBXA6G39AYKPH8Q", "01KV1R5FERMKVRY2YAGPQ1J194", "01KV1R5FESKS3ADX62CSB1Z8JF"],
-        "status": 200
-      }
+      "body": null
     }
   }
 ]

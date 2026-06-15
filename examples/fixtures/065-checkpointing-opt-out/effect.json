@@ -213,11 +213,19 @@
       },
       "body": [
         {
-          "op": "StepRun",
           "id": "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
+          "op": "StepRun",
           "name": "a",
+          "opts": {},
+          "displayName": "a",
+          "userland": {
+            "id": "a"
+          },
           "data": "A",
-          "displayName": "a"
+          "timing": {
+            "a": 1781487690545000000,
+            "b": 0
+          }
         }
       ]
     }
@@ -304,11 +312,19 @@
       },
       "body": [
         {
-          "op": "StepRun",
           "id": "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98",
+          "op": "StepRun",
           "name": "b",
+          "opts": {},
+          "displayName": "b",
+          "userland": {
+            "id": "b"
+          },
           "data": "B",
-          "displayName": "b"
+          "timing": {
+            "a": 1781487690557000000,
+            "b": 0
+          }
         }
       ]
     }

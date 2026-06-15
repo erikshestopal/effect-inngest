@@ -5,85 +5,6 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 1,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "taskId": "task-021"
-          },
-          "id": "<event-id>",
-          "name": "task/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
-          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
-            "data": "Started task task-021"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/022-priority",
       "path": "/examples/022-priority",
@@ -116,11 +37,11 @@
     }
   },
   {
-    "sequence": 3,
+    "sequence": 2,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 3,
+      "sequence": 2,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/022-priority",
       "path": "/examples/022-priority",
@@ -148,11 +69,11 @@
     }
   },
   {
-    "sequence": 4,
+    "sequence": 3,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 4,
+      "sequence": 3,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -218,11 +139,11 @@
     }
   },
   {
-    "sequence": 5,
+    "sequence": 4,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 4,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/022-priority?fnId=examples-022-priority-priority-handler&stepId=step",
       "path": "/examples/022-priority",
@@ -302,164 +223,6 @@
           }
         }
       ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "3",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 2,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 3,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "taskId": "task-021"
-          },
-          "id": "<event-id>",
-          "name": "task/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
-          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
-            "data": "Started task task-021"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "4",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 3,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 4,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "taskId": "task-021"
-          },
-          "id": "<event-id>",
-          "name": "task/started",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
-          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
-            "data": "Started task task-021"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
     }
   }
 ]

@@ -228,11 +228,239 @@
       },
       "body": [
         {
+          "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+          "op": "InvokeFunction",
+          "displayName": "call-child",
+          "opts": {
+            "payload": {
+              "data": {}
+            },
+            "function_id": "examples-028-invoke-failure-failing-child"
+          },
+          "userland": {
+            "id": "call-child"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-failing-child&stepId=step",
+      "path": "/examples/028-invoke-failure",
+      "query": {
+        "fnId": "examples-028-invoke-failure-failing-child",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "b469a03b-9aa5-51f5-878b-747134678d2c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "expire": 1813023690064,
+              "fn_id": "examples-028-invoke-failure-failing-child",
+              "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+              "isr": {
+                "dsid": "576e1bc42f75b06e",
+                "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                "ts": ""
+              },
+              "name": "call-child",
+              "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+              "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "ae127a61eaa27f9b",
+                  "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                },
+                "ts": "2026-06-15T01:41:30.064069Z"
+              }
+            }
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                "expire": 1813023690064,
+                "fn_id": "examples-028-invoke-failure-failing-child",
+                "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                "isr": {
+                  "dsid": "576e1bc42f75b06e",
+                  "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                  "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                  "ts": ""
+                },
+                "name": "call-child",
+                "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                "source_fn_v": 1,
+                "tc": {
+                  "ctx": {
+                    "sid": "ae127a61eaa27f9b",
+                    "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                  },
+                  "ts": "2026-06-15T01:41:30.064069Z"
+                }
+              }
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.invoked",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "true",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "name": "NonRetriableError",
+        "message": "Child always fails",
+        "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+      }
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step",
+      "path": "/examples/028-invoke-failure",
+      "query": {
+        "fnId": "examples-028-invoke-failure-parent-invoker",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["93f72581df96e9a8f01f1481b3570b4e9370a0a6"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/invoke-failing",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/invoke-failing",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "NonRetriableError",
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "status": "caught-error",
-            "error": "unknown"
+            "error": "Child always fails"
           }
         }
       ]

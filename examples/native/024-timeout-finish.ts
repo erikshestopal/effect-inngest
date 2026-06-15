@@ -21,7 +21,12 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         events: [{ name: "demo/long-running", data: {} }],
-        expect: [{ functionId: "examples-024-timeout-finish-long-running-task" }],
+        expect: [
+          {
+            functionId: "examples-024-timeout-finish-long-running-task",
+            status: ["CANCELLED", "CANCELED", "COMPLETED", "FAILED", "TIMED_OUT"],
+          },
+        ],
       }),
     ],
   };

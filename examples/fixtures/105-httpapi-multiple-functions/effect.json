@@ -234,12 +234,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-          "name": "send-welcome",
-          "displayName": "send-welcome"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -247,6 +241,79 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1SZM0MHWZE65DHGXEBQA/async",
+      "path": "/v1/checkpoint/01KV4F1SZM0MHWZE65DHGXEBQA/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1SZM0MHWZE65DHGXEBQA",
+        "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
+        "qi_id": "bDJkMGl4aDd0ZXI2OjpkZWZhdWx0",
+        "request_id": "01KV4F1SZZ5AXX5F72RQC91V63",
+        "generation_id": 1,
+        "request_started_at": 1781487691779,
+        "steps": [
+          {
+            "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "send-welcome",
+            "displayName": "send-welcome",
+            "userland": {
+              "id": "send-welcome"
+            },
+            "opts": {},
+            "rawArgs": ["send-welcome", null],
+            "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
+                "memoized": false,
+                "options": {
+                  "id": "send-welcome",
+                  "name": "send-welcome"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": null,
+            "timing": {
+              "a": 1781487691780000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691780
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

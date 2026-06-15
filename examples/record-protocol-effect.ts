@@ -30,6 +30,7 @@ interface ExampleCase {
   readonly expect?: ReadonlyArray<{
     readonly functionId?: string;
     readonly functionTag?: string;
+    readonly status?: string | ReadonlyArray<string>;
   }>;
 }
 
@@ -650,25 +651,37 @@ const triggerCase = (
 const expectedExecutionCount = (example: ExampleManifestEntry) =>
   example.cases.reduce((total, caseData) => total + (caseData.expect?.length ?? 1), 0);
 
-const expectedRootFunctionIds = (example: ExampleManifestEntry) =>
-  new Set(
-    example.cases.flatMap((caseData) =>
-      (caseData.expect ?? []).flatMap((expected) => {
-        if (expected.functionId) return [expected.functionId];
-        if (expected.functionTag) return [`examples-${example.id}-${expected.functionTag}`];
-        return [];
-      }),
-    ),
+const expectedRuns = (example: ExampleManifestEntry) =>
+  example.cases.flatMap((caseData) =>
+    (caseData.expect ?? [{}]).map((expected) => ({
+      functionId:
+        expected.functionId ?? (expected.functionTag ? `examples-${example.id}-${expected.functionTag}` : undefined),
+      status: expected.status,
+    })),
   );
 
-const isTerminalExecutionResponse = (body: unknown) =>
+const allowsServerSideTerminalStatus = (status: string | ReadonlyArray<string> | undefined) => {
+  const statuses = typeof status === "string" ? [status] : (status ?? []);
+  return statuses.some((value) => value === "TIMED_OUT" || value === "CANCELLED" || value === "CANCELED");
+};
+
+const expectedTerminalExecutionCount = (example: ExampleManifestEntry) =>
+  expectedRuns(example).filter((expected) => !allowsServerSideTerminalStatus(expected.status)).length;
+
+const expectedRootFunctionIds = (example: ExampleManifestEntry) =>
+  new Set(expectedRuns(example).flatMap((expected) => (expected.functionId ? [expected.functionId] : [])));
+
+const hasTerminalOpcode = (body: unknown) =>
   Array.isArray(body) &&
   body.some(
     (op) =>
       isObject(op) &&
       typeof op.op === "string" &&
-      (op.op === "RunComplete" || op.op === "StepError" || op.op === "StepFailed"),
+      (op.op === "RunComplete" || op.op === "SyncRunComplete" || op.op === "StepFailed"),
   );
+
+const isTerminalExecutionResponse = (exchange: Exchange) =>
+  exchange.response.status !== 206 || hasTerminalOpcode(exchange.response.body);
 
 const terminalExecutionCount = (
   exchanges: ReadonlyArray<Exchange>,
@@ -682,34 +695,72 @@ const terminalExecutionCount = (
       exchange.request.path === path &&
       (expectedFunctionIds.size === 0 || expectedFunctionIds.has(String((exchange.request.query as any)?.fnId))) &&
       (exchange.request.query as any)?.stepId === "step" &&
-      isTerminalExecutionResponse(exchange.response.body),
+      isTerminalExecutionResponse(exchange),
   ).length;
 
-const waitForTerminalExecutionRecordings = (
+const rootExecutionCount = (
+  exchanges: ReadonlyArray<Exchange>,
+  path: string,
+  expectedFunctionIds: ReadonlySet<string>,
+) =>
+  exchanges.filter(
+    (exchange) =>
+      exchange.direction === "inbound" &&
+      exchange.request.method === "POST" &&
+      exchange.request.path === path &&
+      (expectedFunctionIds.size === 0 || expectedFunctionIds.has(String((exchange.request.query as any)?.fnId))) &&
+      (exchange.request.query as any)?.stepId === "step",
+  ).length;
+
+const waitForExpectedExecutionRecordings = (
   state: RecordingState,
   server: ProcessHandle,
   path: string,
   expectedFunctionIds: ReadonlySet<string>,
   expectedCount: number,
+  expectedTerminalCount: number,
 ) =>
-  withDeadline(
-    Effect.gen(function* () {
-      const exampleId = exampleIdFromPath(path);
-      if (!exampleId) return yield* Effect.fail(new Error(`Cannot identify example from path ${path}`));
+  Effect.gen(function* () {
+    const exampleId = exampleIdFromPath(path);
+    if (!exampleId) return yield* Effect.fail(new Error(`Cannot identify example from path ${path}`));
+    const wait = Effect.gen(function* () {
       while (true) {
         if (!(yield* server.handle.isRunning)) {
           return yield* Effect.fail(new Error(`${server.label} exited early\n${yield* server.getOutput}`));
         }
         const exchanges = (yield* Ref.get(state.exchanges)).get(exampleId) ?? [];
-        const actualCount = terminalExecutionCount(exchanges, path, expectedFunctionIds);
-        if (actualCount >= expectedCount) return;
+        const rootCount = rootExecutionCount(exchanges, path, expectedFunctionIds);
+        const terminalCount = terminalExecutionCount(exchanges, path, expectedFunctionIds);
+        if (rootCount >= expectedCount && terminalCount >= expectedTerminalCount) return;
         yield* waitForNetworkIdle(state);
         yield* delay(100);
       }
-    }),
-    30_000,
-    `Timed out waiting for ${expectedCount} terminal execution recordings at ${path}`,
-  );
+    });
+
+    yield* wait.pipe(
+      Effect.timeoutOrElse({
+        duration: "30 seconds",
+        orElse: () =>
+          Effect.gen(function* () {
+            const exchanges = (yield* Ref.get(state.exchanges)).get(exampleId) ?? [];
+            const observed = exchanges.map((exchange) => ({
+              sequence: exchange.sequence,
+              direction: exchange.direction,
+              path: exchange.request.path,
+              method: exchange.request.method,
+              query: exchange.request.query,
+              status: exchange.response.status,
+              body: exchange.response.body,
+            }));
+            return yield* Effect.fail(
+              new Error(
+                `Timed out waiting for ${expectedCount} expected execution recordings at ${path}\nObserved exchanges: ${JSON.stringify(observed, null, 2)}`,
+              ),
+            );
+          }),
+      }),
+    );
+  });
 
 const removeSyncedApp = (sdkUrl: string) =>
   http(`${realDevOrigin}/fn/remove?url=${encodeURIComponent(sdkUrl)}`, { method: "DELETE", timeoutMs: 5_000 }).pipe(
@@ -839,12 +890,13 @@ const recordExample = (
       for (const [caseIndex, caseData] of example.cases.entries()) {
         yield* triggerCase(runtimeName, example, caseData, caseIndex);
       }
-      yield* waitForTerminalExecutionRecordings(
+      yield* waitForExpectedExecutionRecordings(
         state,
         server,
         examplePath(example.id),
         expectedRootFunctionIds(example),
         expectedExecutionCount(example),
+        expectedTerminalExecutionCount(example),
       );
       yield* waitForNetworkIdle(state);
       yield* removeSyncedApp(sdkUrl);
@@ -872,7 +924,6 @@ const program = (input: {
       const path = yield* Path.Path;
       yield* fs.remove(path.join(examplesDir, "native", "fixtures"), { force: true, recursive: true });
       yield* fs.makeDirectory(fixturesRoot, { recursive: true });
-      yield* startDevServer;
       yield* recordProxy(state, {
         direction: "inbound",
         name: "inngest-to-sdk",
@@ -888,16 +939,21 @@ const program = (input: {
         targetOrigin: realDevOrigin,
       });
       for (const runtimeName of selectedRuntimes(input.runtime)) {
-        const server = yield* startRuntimeServer(runtimeName);
-        const examples = yield* readExamples(runtimeName, input.only);
-        if (examples.length === 0) {
-          console.log(`no ${runtimeName} examples matched`);
-          continue;
-        }
-        yield* Effect.forEach(examples, (example) => recordExample(state, server, runtimeName, example), {
-          concurrency: input.concurrency,
-          discard: true,
-        });
+        yield* Effect.scoped(
+          Effect.gen(function* () {
+            yield* startDevServer;
+            const server = yield* startRuntimeServer(runtimeName);
+            const examples = yield* readExamples(runtimeName, input.only);
+            if (examples.length === 0) {
+              console.log(`no ${runtimeName} examples matched`);
+              return;
+            }
+            yield* Effect.forEach(examples, (example) => recordExample(state, server, runtimeName, example), {
+              concurrency: input.concurrency,
+              discard: true,
+            });
+          }),
+        );
       }
     }),
   );

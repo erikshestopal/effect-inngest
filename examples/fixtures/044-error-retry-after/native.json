@@ -5,90 +5,6 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 1,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "3",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 2,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 3,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "24989d8ee41c1575924630844ad094b55e6b1445",
-              "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "24989d8ee41c1575924630844ad094b55e6b1445": {
-            "data": 42
-          },
-          "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
-          "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
-            "data": {
-              "ids": ["01KV4C0B77EW5EFEPE22K8H24M"]
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/044-error-retry-after",
       "path": "/examples/044-error-retry-after",
@@ -121,11 +37,11 @@
     }
   },
   {
-    "sequence": 3,
+    "sequence": 2,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 3,
+      "sequence": 2,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/044-error-retry-after",
       "path": "/examples/044-error-retry-after",
@@ -153,11 +69,11 @@
     }
   },
   {
-    "sequence": 4,
+    "sequence": 3,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 4,
+      "sequence": 3,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -220,11 +136,11 @@
     }
   },
   {
-    "sequence": 5,
+    "sequence": 4,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 4,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/044-error-retry-after?fnId=examples-044-error-retry-after-retry-after-demo&stepId=step",
       "path": "/examples/044-error-retry-after",
@@ -299,340 +215,6 @@
         "stack": "RetryAfterError: Rate limited by external API\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/044-error-retry-after.ts:15:19)\n    at processTicksAndRejections (native:7:39)",
         "__serialized": true
       }
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/044-error-retry-after?fnId=examples-044-error-retry-after-retry-after-demo&stepId=step",
-      "path": "/examples/044-error-retry-after",
-      "query": {
-        "fnId": "examples-044-error-retry-after-retry-after-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c13fc519-4016-5e3d-800f-204cdef7b959",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/retry-after",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/retry-after",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 500,
-      "headers": {
-        "content-type": "application/json",
-        "retry-after": "1",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "false",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "name": "Error",
-        "message": "Rate limited by external API",
-        "stack": "RetryAfterError: Rate limited by external API\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/044-error-retry-after.ts:15:19)\n    at processTicksAndRejections (native:7:39)",
-        "__serialized": true
-      }
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "4",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 3,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 4,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "24989d8ee41c1575924630844ad094b55e6b1445",
-              "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "24989d8ee41c1575924630844ad094b55e6b1445": {
-            "data": 42
-          },
-          "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
-          "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
-            "data": {
-              "ids": ["01KV4C0B77EW5EFEPE22K8H24M"]
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/044-error-retry-after?fnId=examples-044-error-retry-after-retry-after-demo&stepId=step",
-      "path": "/examples/044-error-retry-after",
-      "query": {
-        "fnId": "examples-044-error-retry-after-retry-after-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "3",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 2,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c13fc519-4016-5e3d-800f-204cdef7b959",
-          "generation_id": 3,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/retry-after",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/retry-after",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "attempt": 3,
-            "succeeded": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "5",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 4,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 5,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "24989d8ee41c1575924630844ad094b55e6b1445",
-              "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "24989d8ee41c1575924630844ad094b55e6b1445": {
-            "data": 42
-          },
-          "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
-          "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
-            "data": {
-              "ids": ["01KV4C0B77EW5EFEPE22K8H24M"]
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
     }
   }
 ]

@@ -214,15 +214,15 @@
       },
       "body": [
         {
-          "op": "StepError",
           "id": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
+          "op": "StepError",
           "name": "flaky-step",
+          "displayName": "flaky-step",
           "error": {
             "name": "RetryAfterError",
             "message": "Attempt 0 failed",
-            "stack": "Error: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/029-retry-error.ts:29:19)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
-          },
-          "displayName": "flaky-step"
+            "stack": "Error: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/029-retry-error.ts:29:19)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:656:13)\n    at runTasks (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Scheduler.js:150:15)\n    at afterScheduled (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Scheduler.js:140:10)"
+          }
         }
       ]
     }
@@ -301,10 +301,18 @@
       },
       "body": [
         {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "attempts": 2
+          "id": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
+          "op": "StepRun",
+          "name": "flaky-step",
+          "opts": {},
+          "displayName": "flaky-step",
+          "userland": {
+            "id": "flaky-step"
+          },
+          "data": 2,
+          "timing": {
+            "a": 1781487691003000000,
+            "b": 0
           }
         }
       ]
@@ -312,77 +320,89 @@
   },
   {
     "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2007MTQTYFNAZX0EFKTQKN/async",
-      "path": "/v1/checkpoint/01KV2007MTQTYFNAZX0EFKTQKN/async",
-      "query": {},
+      "url": "http://127.0.0.1:19998/examples/029-retry-error?fnId=examples-029-retry-error-retry-demo&stepId=step",
+      "path": "/examples/029-retry-error",
+      "query": {
+        "fnId": "examples-029-retry-error-retry-demo",
+        "stepId": "step"
+      },
       "headers": {
-        "authorization": "<redacted>",
+        "account-id": "00000000-0000-4000-a000-000000000000",
         "content-type": "application/json",
         "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
         "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "x-inngest-step-id": "step"
       },
       "body": {
-        "run_id": "01KV2007MTQTYFNAZX0EFKTQKN",
-        "fn_id": "53ef4a8a-258d-5013-8268-aee71aa9fcb4",
-        "qi_id": "M29pbjlwMTl1b2FteTo6ZGVmYXVsdA==",
-        "request_id": "01KV2007XR73VZGSG2MXMYSQ3D",
-        "generation_id": 2,
-        "request_started_at": 1781404803004,
-        "steps": [
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "53ef4a8a-258d-5013-8268-aee71aa9fcb4",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 6,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["89eb82ebf637b47026f61e0cd02e76a1fdb88aae"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/retry-error",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
           {
-            "op": "StepRun",
-            "id": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
-            "name": "flaky-step",
-            "displayName": "flaky-step",
-            "mode": "sync",
-            "opts": {},
-            "userland": {
-              "id": "flaky-step"
-            },
-            "rawArgs": ["flaky-step", null],
-            "hashedId": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "promise": {},
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
-                "memoized": false,
-                "options": {
-                  "id": "flaky-step",
-                  "name": "flaky-step"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": 2,
-            "timing": {
-              "a": 1781404803005000000,
-              "b": 0
-            }
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/retry-error",
+            "ts": "<event-ts>",
+            "user": {}
           }
         ],
-        "ts": 1781404803006
+        "steps": {
+          "89eb82ebf637b47026f61e0cd02e76a1fdb88aae": {
+            "data": 2
+          }
+        },
+        "use_api": false,
+        "version": 2
       }
     },
     "response": {
-      "status": 200,
+      "status": 206,
       "headers": {
         "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
       },
-      "body": null
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "attempts": 2
+          }
+        }
+      ]
     }
   }
 ]

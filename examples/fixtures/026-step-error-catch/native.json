@@ -226,7 +226,7 @@
             "id": "risky-step"
           },
           "timing": {
-            "a": 1781484415253000000,
+            "a": 1781487682967000000,
             "b": 0
           }
         }
@@ -324,8 +324,398 @@
             "id": "risky-step"
           },
           "timing": {
-            "a": 1781484416259000000,
+            "a": 1781487683970000000,
             "b": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/026-step-error-catch?fnId=examples-026-step-error-catch-step-catch-handler&stepId=step",
+      "path": "/examples/026-step-error-catch",
+      "query": {
+        "fnId": "examples-026-step-error-catch-step-catch-handler",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "3",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 2,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "2f73b80b-bb3e-54d2-9a4d-ee018dce4b24",
+          "generation_id": 3,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/step-catch",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/step-catch",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "false",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "3517117e68ff1d5e54b6c980def4df01e09941ea",
+          "op": "StepError",
+          "name": "risky-step",
+          "displayName": "risky-step",
+          "error": {
+            "name": "Error",
+            "message": "Something went wrong",
+            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "__serialized": true
+          },
+          "data": null,
+          "opts": {},
+          "userland": {
+            "id": "risky-step"
+          },
+          "timing": {
+            "a": 1781487684975000000,
+            "b": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/026-step-error-catch?fnId=examples-026-step-error-catch-step-catch-handler&stepId=step",
+      "path": "/examples/026-step-error-catch",
+      "query": {
+        "fnId": "examples-026-step-error-catch-step-catch-handler",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "4",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 3,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "2f73b80b-bb3e-54d2-9a4d-ee018dce4b24",
+          "generation_id": 4,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/step-catch",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/step-catch",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "false",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "3517117e68ff1d5e54b6c980def4df01e09941ea",
+          "op": "StepError",
+          "name": "risky-step",
+          "displayName": "risky-step",
+          "error": {
+            "name": "Error",
+            "message": "Something went wrong",
+            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "__serialized": true
+          },
+          "data": null,
+          "opts": {},
+          "userland": {
+            "id": "risky-step"
+          },
+          "timing": {
+            "a": 1781487685978000000,
+            "b": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/026-step-error-catch?fnId=examples-026-step-error-catch-step-catch-handler&stepId=step",
+      "path": "/examples/026-step-error-catch",
+      "query": {
+        "fnId": "examples-026-step-error-catch-step-catch-handler",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "5",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 4,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "2f73b80b-bb3e-54d2-9a4d-ee018dce4b24",
+          "generation_id": 5,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/step-catch",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/step-catch",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "true",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "3517117e68ff1d5e54b6c980def4df01e09941ea",
+          "op": "StepFailed",
+          "name": "risky-step",
+          "displayName": "risky-step",
+          "error": {
+            "name": "Error",
+            "message": "Something went wrong",
+            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "__serialized": true
+          },
+          "data": {
+            "__serialized": true,
+            "name": "Error",
+            "message": "Something went wrong",
+            "stack": ""
+          },
+          "opts": {},
+          "userland": {
+            "id": "risky-step"
+          },
+          "timing": {
+            "a": 1781487686982000000,
+            "b": 0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/026-step-error-catch?fnId=examples-026-step-error-catch-step-catch-handler&stepId=step",
+      "path": "/examples/026-step-error-catch",
+      "query": {
+        "fnId": "examples-026-step-error-catch-step-catch-handler",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "2f73b80b-bb3e-54d2-9a4d-ee018dce4b24",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["3517117e68ff1d5e54b6c980def4df01e09941ea"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "demo/step-catch",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "demo/step-catch",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "3517117e68ff1d5e54b6c980def4df01e09941ea": {
+            "error": {
+              "message": "Something went wrong",
+              "name": "Error",
+              "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "result": "Caught error: Something went wrong"
           }
         }
       ]

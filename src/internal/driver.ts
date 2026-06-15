@@ -138,30 +138,22 @@ export const execute = <F extends InngestFunction.Any, R>(
       },
     );
 
-    /**
-     * In checkpoint mode wrap the handler in `Effect.raceFirst` against a
-     * `maxRuntime` deadline. Branches produce disjoint `Option` variants —
-     * `Some(value)` for a successful handler result, `None` for the deadline
-     * winning — so no type cast is required. Spec §10.4.1 #7.
-     */
-    type RaceResult = Option.Option<InngestFunction.Success<F>>;
-    const handlerWithRace: Effect.Effect<RaceResult, unknown, R> = Option.match(checkpointState, {
+    type DeadlineResult = Option.Option<InngestFunction.Success<F>>;
+    const handlerWithDeadline: Effect.Effect<DeadlineResult, unknown, R> = Option.match(checkpointState, {
       onNone: () => Effect.map(handler(context), Option.some<InngestFunction.Success<F>>),
       onSome: (state) =>
-        // raceFirst (not race) so a handler failure (e.g. sleepInterrupt) is
-        // surfaced immediately instead of waiting for the deadline. Race
-        // would block until a side succeeds — handler interrupts would hang.
         Effect.raceFirst(
           Effect.map(handler(context), Option.some<InngestFunction.Success<F>>),
           Effect.sleep(state.config.maxRuntime).pipe(
-            Effect.tap(() => state.markRuntimeExceeded),
+            Effect.flatMap(() => state.markRuntimeExceeded),
+            Effect.flatMap(() => Effect.sleep(state.config.maxRuntime)),
             Effect.as(Option.none<InngestFunction.Success<F>>()),
           ),
         ),
     });
 
-    const result = yield* Effect.scoped(handlerWithRace).pipe(
-      Effect.flatMap((raced) =>
+    const result = yield* Effect.scoped(handlerWithDeadline).pipe(
+      Effect.flatMap((maybeValue) =>
         Effect.gen(function* () {
           const planned = yield* drainPlanned;
           if (planned.length > 0) {
@@ -174,16 +166,15 @@ export const execute = <F extends InngestFunction.Any, R>(
           // completion so the executor can correlate (spec §10.4.1 #8).
           if (Option.isSome(checkpointState)) {
             const state = checkpointState.value;
-            const exceeded = (yield* state.isRuntimeExceeded) || Option.isNone(raced);
-            const terminal = exceeded ? Protocol.discoveryRequest() : Protocol.runComplete(raced.value);
+            const exceeded = (yield* state.isRuntimeExceeded) || Option.isNone(maybeValue);
+            const terminal = exceeded ? Protocol.discoveryRequest() : Protocol.runComplete(maybeValue.value);
             const opcodes = [...drained, terminal];
             return ExecutionResult.make({ status: 206, body: encodeOpcodes(opcodes), headers });
           }
           // Async mode: classic 200 with the bare return value.
-          // `raced` is always Some in async mode (no deadline branch).
           return ExecutionResult.make({
             status: 200,
-            body: Option.getOrThrow(raced),
+            body: Option.getOrThrow(maybeValue),
             headers,
           });
         }),

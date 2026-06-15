@@ -202,6 +202,151 @@
     "request": {
       "sequence": 4,
       "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-040-step-return-types-0-0",
+              "name": "demo/return-types",
+              "ts": 1781487690089,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-040-step-return-types-0-0",
+                "name": "demo/return-types",
+                "ts": 1781487690089
+              }
+            ],
+            "function_id": "examples-040-step-return-types-return-types-demo",
+            "result": {
+              "arrayResult": [1, 2, 3, 4, 5],
+              "boolResult": true,
+              "numberResult": 42,
+              "objectResult": {
+                "count": 100,
+                "key": "test"
+              },
+              "stringResult": "hello"
+            },
+            "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-040-step-return-types-0-0",
+                "name": "demo/return-types",
+                "ts": 1781487690089,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-040-step-return-types-0-0",
+                  "name": "demo/return-types",
+                  "ts": 1781487690089
+                }
+              ],
+              "function_id": "examples-040-step-return-types-return-types-demo",
+              "result": {
+                "arrayResult": [1, 2, 3, 4, 5],
+                "boolResult": true,
+                "numberResult": 42,
+                "objectResult": {
+                  "count": 100,
+                  "key": "test"
+                },
+                "stringResult": "hello"
+              },
+              "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-trigger-failure&stepId=step",
       "path": "/examples/055-system-events",
       "query": {
@@ -275,6 +420,5553 @@
         {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c"
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-handle-failure",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Failed"
+            },
+            "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "NonRetriableError",
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813023690064,
+                  "fn_id": "examples-028-invoke-failure-failing-child",
+                  "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                  "isr": {
+                    "dsid": "576e1bc42f75b06e",
+                    "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                    "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                    "ts": ""
+                  },
+                  "name": "call-child",
+                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "ae127a61eaa27f9b",
+                      "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                    },
+                    "ts": "2026-06-15T01:41:30.064069Z"
+                  }
+                }
+              },
+              "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+              "name": "inngest/function.invoked",
+              "ts": 1781487690064,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690064,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                    "isr": {
+                      "dsid": "576e1bc42f75b06e",
+                      "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                      "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "ae127a61eaa27f9b",
+                        "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.064069Z"
+                    }
+                  }
+                },
+                "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690064
+              }
+            ],
+            "function_id": "examples-028-invoke-failure-failing-child",
+            "result": {
+              "message": "Child always fails",
+              "name": "NonRetriableError",
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "run_id": "01KV4F1RGYSWY6VBCEPVFBSXKP"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.failed",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Failed"
+              },
+              "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Child always fails",
+                "name": "NonRetriableError",
+                "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690064,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                    "isr": {
+                      "dsid": "576e1bc42f75b06e",
+                      "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                      "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "ae127a61eaa27f9b",
+                        "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.064069Z"
+                    }
+                  }
+                },
+                "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690064,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813023690064,
+                      "fn_id": "examples-028-invoke-failure-failing-child",
+                      "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                      "isr": {
+                        "dsid": "576e1bc42f75b06e",
+                        "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                        "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                        "ts": ""
+                      },
+                      "name": "call-child",
+                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "ae127a61eaa27f9b",
+                          "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                        },
+                        "ts": "2026-06-15T01:41:30.064069Z"
+                      }
+                    }
+                  },
+                  "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487690064
+                }
+              ],
+              "function_id": "examples-028-invoke-failure-failing-child",
+              "result": {
+                "message": "Child always fails",
+                "name": "NonRetriableError",
+                "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "run_id": "01KV4F1RGYSWY6VBCEPVFBSXKP"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.failed",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "handled": true,
+            "failedFunctionId": "examples-028-invoke-failure-failing-child"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Failed"
+            },
+            "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "NonRetriableError",
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813023690064,
+                  "fn_id": "examples-028-invoke-failure-failing-child",
+                  "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                  "isr": {
+                    "dsid": "576e1bc42f75b06e",
+                    "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                    "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                    "ts": ""
+                  },
+                  "name": "call-child",
+                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "ae127a61eaa27f9b",
+                      "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                    },
+                    "ts": "2026-06-15T01:41:30.064069Z"
+                  }
+                }
+              },
+              "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+              "name": "inngest/function.invoked",
+              "ts": 1781487690064,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690064,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                    "isr": {
+                      "dsid": "576e1bc42f75b06e",
+                      "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                      "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "ae127a61eaa27f9b",
+                        "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.064069Z"
+                    }
+                  }
+                },
+                "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690064
+              }
+            ],
+            "function_id": "examples-028-invoke-failure-failing-child",
+            "result": {
+              "message": "Child always fails",
+              "name": "NonRetriableError",
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "run_id": "01KV4F1RGYSWY6VBCEPVFBSXKP"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Failed"
+              },
+              "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Child always fails",
+                "name": "NonRetriableError",
+                "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690064,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                    "isr": {
+                      "dsid": "576e1bc42f75b06e",
+                      "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                      "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "ae127a61eaa27f9b",
+                        "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.064069Z"
+                    }
+                  }
+                },
+                "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690064,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813023690064,
+                      "fn_id": "examples-028-invoke-failure-failing-child",
+                      "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                      "isr": {
+                        "dsid": "576e1bc42f75b06e",
+                        "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
+                        "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                        "ts": ""
+                      },
+                      "name": "call-child",
+                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "ae127a61eaa27f9b",
+                          "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                        },
+                        "ts": "2026-06-15T01:41:30.064069Z"
+                      }
+                    }
+                  },
+                  "id": "01KV4F1RAGHAV49ZKSAWA2HH8G",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487690064
+                }
+              ],
+              "function_id": "examples-028-invoke-failure-failing-child",
+              "result": {
+                "message": "Child always fails",
+                "name": "NonRetriableError",
+                "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "run_id": "01KV4F1RGYSWY6VBCEPVFBSXKP"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "companyId": "company-047"
+              },
+              "id": "fixture-effect-047-rate-limit-key-0-0",
+              "name": "demo/rate-keyed",
+              "ts": 1781487690185,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "companyId": "company-047"
+                },
+                "id": "fixture-effect-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
+                "ts": 1781487690185
+              }
+            ],
+            "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+            "result": {
+              "companyId": "company-047",
+              "processedAt": "2026-06-15T01:41:30.288Z"
+            },
+            "run_id": "01KV4F1RGY9DHWB7209FN82GD2"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "companyId": "company-047"
+                },
+                "id": "fixture-effect-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
+                "ts": 1781487690185,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "companyId": "company-047"
+                  },
+                  "id": "fixture-effect-047-rate-limit-key-0-0",
+                  "name": "demo/rate-keyed",
+                  "ts": 1781487690185
+                }
+              ],
+              "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+              "result": {
+                "companyId": "company-047",
+                "processedAt": "2026-06-15T01:41:30.288Z"
+              },
+              "run_id": "01KV4F1RGY9DHWB7209FN82GD2"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-037-nested-steps-0-0",
+              "name": "demo/nested",
+              "ts": 1781487690088,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": 1781487690088
+              }
+            ],
+            "function_id": "examples-037-nested-steps-nested-steps-demo",
+            "result": {
+              "final": 55,
+              "level1": 10,
+              "level2": 20,
+              "level3": 25
+            },
+            "run_id": "01KV4F1RGWBEVY8XV8QEE36VWN"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": 1781487690088,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-037-nested-steps-0-0",
+                  "name": "demo/nested",
+                  "ts": 1781487690088
+                }
+              ],
+              "function_id": "examples-037-nested-steps-nested-steps-demo",
+              "result": {
+                "final": 55,
+                "level1": 10,
+                "level2": 20,
+                "level3": 25
+              },
+              "run_id": "01KV4F1RGWBEVY8XV8QEE36VWN"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "teamId": "team-046"
+              },
+              "id": "fixture-effect-046-throttle-key-0-0",
+              "name": "demo/throttle-keyed",
+              "ts": 1781487690185,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "teamId": "team-046"
+                },
+                "id": "fixture-effect-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": 1781487690185
+              }
+            ],
+            "function_id": "examples-046-throttle-key-throttle-keyed",
+            "result": {
+              "processedAt": "2026-06-15T01:41:30.277Z",
+              "teamId": "team-046"
+            },
+            "run_id": "01KV4F1RGSPNXNQQP3JMAD9DMY"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "teamId": "team-046"
+                },
+                "id": "fixture-effect-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": 1781487690185,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "teamId": "team-046"
+                  },
+                  "id": "fixture-effect-046-throttle-key-0-0",
+                  "name": "demo/throttle-keyed",
+                  "ts": 1781487690185
+                }
+              ],
+              "function_id": "examples-046-throttle-key-throttle-keyed",
+              "result": {
+                "processedAt": "2026-06-15T01:41:30.277Z",
+                "teamId": "team-046"
+              },
+              "run_id": "01KV4F1RGSPNXNQQP3JMAD9DMY"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 11,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 11,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "items": [
+                  {
+                    "id": "a",
+                    "value": 1
+                  },
+                  {
+                    "id": "b",
+                    "value": 2
+                  }
+                ]
+              },
+              "id": "fixture-effect-039-large-payload-0-0",
+              "name": "demo/large-payload",
+              "ts": 1781487690088,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "items": [
+                    {
+                      "id": "a",
+                      "value": 1
+                    },
+                    {
+                      "id": "b",
+                      "value": 2
+                    }
+                  ]
+                },
+                "id": "fixture-effect-039-large-payload-0-0",
+                "name": "demo/large-payload",
+                "ts": 1781487690088
+              }
+            ],
+            "function_id": "examples-039-large-payload-process-large-payload",
+            "result": {
+              "itemCount": 2,
+              "processedIds": ["a", "b"],
+              "totalValue": 3
+            },
+            "run_id": "01KV4F1RGYZCTZEJBNWQS1417J"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "items": [
+                    {
+                      "id": "a",
+                      "value": 1
+                    },
+                    {
+                      "id": "b",
+                      "value": 2
+                    }
+                  ]
+                },
+                "id": "fixture-effect-039-large-payload-0-0",
+                "name": "demo/large-payload",
+                "ts": 1781487690088,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "items": [
+                      {
+                        "id": "a",
+                        "value": 1
+                      },
+                      {
+                        "id": "b",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  "id": "fixture-effect-039-large-payload-0-0",
+                  "name": "demo/large-payload",
+                  "ts": 1781487690088
+                }
+              ],
+              "function_id": "examples-039-large-payload-process-large-payload",
+              "result": {
+                "itemCount": 2,
+                "processedIds": ["a", "b"],
+                "totalValue": 3
+              },
+              "run_id": "01KV4F1RGYZCTZEJBNWQS1417J"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 12,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 12,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-036-step-run-with-options-0-0",
+              "name": "demo/step-options",
+              "ts": 1781487690088,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": 1781487690088
+              }
+            ],
+            "function_id": "examples-036-step-run-with-options-step-options-demo",
+            "result": {
+              "results": ["basic", "with-name", "completed"]
+            },
+            "run_id": "01KV4F1RGS5HME11KB8NNHHQKV"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": 1781487690088,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-036-step-run-with-options-0-0",
+                  "name": "demo/step-options",
+                  "ts": 1781487690088
+                }
+              ],
+              "function_id": "examples-036-step-run-with-options-step-options-demo",
+              "result": {
+                "results": ["basic", "with-name", "completed"]
+              },
+              "run_id": "01KV4F1RGS5HME11KB8NNHHQKV"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 13,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 13,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-042-sendEvent-batch-0-0",
+              "name": "demo/send-batch",
+              "ts": 1781487690089,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": 1781487690089
+              }
+            ],
+            "function_id": "examples-042-sendEvent-batch-send-batch",
+            "result": {
+              "sentCount": 3
+            },
+            "run_id": "01KV4F1RGY1XC9JP1G3CBXX2RJ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": 1781487690089,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-042-sendEvent-batch-0-0",
+                  "name": "demo/send-batch",
+                  "ts": 1781487690089
+                }
+              ],
+              "function_id": "examples-042-sendEvent-batch-send-batch",
+              "result": {
+                "sentCount": 3
+              },
+              "run_id": "01KV4F1RGY1XC9JP1G3CBXX2RJ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 14,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 14,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813023690054,
+                  "fn_id": "examples-011-step-invoke-child-square",
+                  "gid": "85e9f492-c3a2-45a0-aec1-5558013b0bf6",
+                  "isr": {
+                    "dsid": "fcadb214512c5f6e",
+                    "dstp": "00-c9fa1a60a361a1270883371d637d7b7c-e83f21c0457e93a3-00",
+                    "tp": "00-c9fa1a60a361a1270883371d637d7b7c-fcadb214512c5f6e-01",
+                    "ts": ""
+                  },
+                  "name": "call-child",
+                  "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                  "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "df880f51e349da9d",
+                      "traceparent": "00-42888f1a598c9b08da74cd8ffdb2116c-9645613571405ce8-01"
+                    },
+                    "ts": "2026-06-15T01:41:30.054385Z"
+                  }
+                },
+                "value": 7
+              },
+              "id": "01KV4F1RA6MW3ZNR5SP866VVEN",
+              "name": "inngest/function.invoked",
+              "ts": 1781487690054,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690054,
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "85e9f492-c3a2-45a0-aec1-5558013b0bf6",
+                    "isr": {
+                      "dsid": "fcadb214512c5f6e",
+                      "dstp": "00-c9fa1a60a361a1270883371d637d7b7c-e83f21c0457e93a3-00",
+                      "tp": "00-c9fa1a60a361a1270883371d637d7b7c-fcadb214512c5f6e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "df880f51e349da9d",
+                        "traceparent": "00-42888f1a598c9b08da74cd8ffdb2116c-9645613571405ce8-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.054385Z"
+                    }
+                  },
+                  "value": 7
+                },
+                "id": "01KV4F1RA6MW3ZNR5SP866VVEN",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690054
+              }
+            ],
+            "function_id": "examples-011-step-invoke-child-square",
+            "result": {
+              "squared": 49
+            },
+            "run_id": "01KV4F1RGTPC693XS0F9DGWJ1H"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813023690054,
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "85e9f492-c3a2-45a0-aec1-5558013b0bf6",
+                    "isr": {
+                      "dsid": "fcadb214512c5f6e",
+                      "dstp": "00-c9fa1a60a361a1270883371d637d7b7c-e83f21c0457e93a3-00",
+                      "tp": "00-c9fa1a60a361a1270883371d637d7b7c-fcadb214512c5f6e-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "df880f51e349da9d",
+                        "traceparent": "00-42888f1a598c9b08da74cd8ffdb2116c-9645613571405ce8-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.054385Z"
+                    }
+                  },
+                  "value": 7
+                },
+                "id": "01KV4F1RA6MW3ZNR5SP866VVEN",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690054,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1R9012XQAEVTM76008HH.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813023690054,
+                      "fn_id": "examples-011-step-invoke-child-square",
+                      "gid": "85e9f492-c3a2-45a0-aec1-5558013b0bf6",
+                      "isr": {
+                        "dsid": "fcadb214512c5f6e",
+                        "dstp": "00-c9fa1a60a361a1270883371d637d7b7c-e83f21c0457e93a3-00",
+                        "tp": "00-c9fa1a60a361a1270883371d637d7b7c-fcadb214512c5f6e-01",
+                        "ts": ""
+                      },
+                      "name": "call-child",
+                      "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                      "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "df880f51e349da9d",
+                          "traceparent": "00-42888f1a598c9b08da74cd8ffdb2116c-9645613571405ce8-01"
+                        },
+                        "ts": "2026-06-15T01:41:30.054385Z"
+                      }
+                    },
+                    "value": 7
+                  },
+                  "id": "01KV4F1RA6MW3ZNR5SP866VVEN",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487690054
+                }
+              ],
+              "function_id": "examples-011-step-invoke-child-square",
+              "result": {
+                "squared": 49
+              },
+              "run_id": "01KV4F1RGTPC693XS0F9DGWJ1H"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 15,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 15,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "data": "payload-035"
+              },
+              "id": "fixture-effect-035-event-with-id-0-0",
+              "name": "demo/idempotent-event",
+              "ts": 1781487690089,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-effect-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": 1781487690089
+              }
+            ],
+            "function_id": "examples-035-event-with-id-idempotent-handler",
+            "result": {
+              "eventId": "01KV4F1RGXGH1CJQQWN6EV2FYE",
+              "processed": true
+            },
+            "run_id": "01KV4F1RGXGH1CJQQWN6EV2FYE"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-effect-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": 1781487690089,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "data": "payload-035"
+                  },
+                  "id": "fixture-effect-035-event-with-id-0-0",
+                  "name": "demo/idempotent-event",
+                  "ts": 1781487690089
+                }
+              ],
+              "function_id": "examples-035-event-with-id-idempotent-handler",
+              "result": {
+                "eventId": "01KV4F1RGXGH1CJQQWN6EV2FYE",
+                "processed": true
+              },
+              "run_id": "01KV4F1RGXGH1CJQQWN6EV2FYE"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 16,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 16,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "shouldSkip": false
+              },
+              "id": "fixture-effect-038-conditional-steps-0-0",
+              "name": "demo/conditional",
+              "ts": 1781487690088,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "shouldSkip": false
+                },
+                "id": "fixture-effect-038-conditional-steps-0-0",
+                "name": "demo/conditional",
+                "ts": 1781487690088
+              }
+            ],
+            "function_id": "examples-038-conditional-steps-conditional-steps",
+            "result": {
+              "path": "full",
+              "result": "processed-1,processed-2,processed-3"
+            },
+            "run_id": "01KV4F1RGQF08XNRYY3CRF2DAZ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "shouldSkip": false
+                },
+                "id": "fixture-effect-038-conditional-steps-0-0",
+                "name": "demo/conditional",
+                "ts": 1781487690088,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "shouldSkip": false
+                  },
+                  "id": "fixture-effect-038-conditional-steps-0-0",
+                  "name": "demo/conditional",
+                  "ts": 1781487690088
+                }
+              ],
+              "function_id": "examples-038-conditional-steps-conditional-steps",
+              "result": {
+                "path": "full",
+                "result": "processed-1,processed-2,processed-3"
+              },
+              "run_id": "01KV4F1RGQF08XNRYY3CRF2DAZ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 17,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 17,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "shouldFail": false
+              },
+              "id": "fixture-effect-055-system-events-0-0",
+              "name": "demo/trigger-failure",
+              "ts": 1781487690418,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "shouldFail": false
+                },
+                "id": "fixture-effect-055-system-events-0-0",
+                "name": "demo/trigger-failure",
+                "ts": 1781487690418
+              }
+            ],
+            "function_id": "examples-055-system-events-trigger-failure",
+            "result": null,
+            "run_id": "01KV4F1RRPVAGZ6Z6PT2D3VXQG"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "shouldFail": false
+                },
+                "id": "fixture-effect-055-system-events-0-0",
+                "name": "demo/trigger-failure",
+                "ts": 1781487690418,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "shouldFail": false
+                  },
+                  "id": "fixture-effect-055-system-events-0-0",
+                  "name": "demo/trigger-failure",
+                  "ts": 1781487690418
+                }
+              ],
+              "function_id": "examples-055-system-events-trigger-failure",
+              "result": null,
+              "run_id": "01KV4F1RRPVAGZ6Z6PT2D3VXQG"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 18,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 18,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "base": 10
+              },
+              "id": "fixture-effect-061-checkpointing-buffered-steps-0-0",
+              "name": "demo/checkpoint-buffered",
+              "ts": 1781487690418,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "base": 10
+                },
+                "id": "fixture-effect-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
+                "ts": 1781487690418
+              }
+            ],
+            "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+            "result": {
+              "total": 50
+            },
+            "run_id": "01KV4F1RRP2X14RVHW2J6AE1RY"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "base": 10
+                },
+                "id": "fixture-effect-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
+                "ts": 1781487690418,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "base": 10
+                  },
+                  "id": "fixture-effect-061-checkpointing-buffered-steps-0-0",
+                  "name": "demo/checkpoint-buffered",
+                  "ts": 1781487690418
+                }
+              ],
+              "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+              "result": {
+                "total": 50
+              },
+              "run_id": "01KV4F1RRP2X14RVHW2J6AE1RY"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 19,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 19,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "amount": 600,
+                "customerId": "customer-052",
+                "orderId": "order-052"
+              },
+              "id": "fixture-effect-052-trigger-if-filter-0-0",
+              "name": "order/placed",
+              "ts": 1781487690316,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
+                },
+                "id": "fixture-effect-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781487690316
+              }
+            ],
+            "function_id": "examples-052-trigger-if-filter-process-vip-order",
+            "result": {
+              "vip": true
+            },
+            "run_id": "01KV4F1RRPERRQBR68RFK9FGBS"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
+                },
+                "id": "fixture-effect-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781487690316,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "amount": 600,
+                    "customerId": "customer-052",
+                    "orderId": "order-052"
+                  },
+                  "id": "fixture-effect-052-trigger-if-filter-0-0",
+                  "name": "order/placed",
+                  "ts": 1781487690316
+                }
+              ],
+              "function_id": "examples-052-trigger-if-filter-process-vip-order",
+              "result": {
+                "vip": true
+              },
+              "run_id": "01KV4F1RRPERRQBR68RFK9FGBS"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 20,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 20,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "tag": "opt-out-065"
+              },
+              "id": "fixture-effect-065-checkpointing-opt-out-0-0",
+              "name": "demo/checkpoint-opt-out",
+              "ts": 1781487690418,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "tag": "opt-out-065"
+                },
+                "id": "fixture-effect-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": 1781487690418
+              }
+            ],
+            "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+            "result": {
+              "tag": "opt-out-065"
+            },
+            "run_id": "01KV4F1RRSKRPGE9YQ3FSJEVQJ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "tag": "opt-out-065"
+                },
+                "id": "fixture-effect-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": 1781487690418,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "tag": "opt-out-065"
+                  },
+                  "id": "fixture-effect-065-checkpointing-opt-out-0-0",
+                  "name": "demo/checkpoint-opt-out",
+                  "ts": 1781487690418
+                }
+              ],
+              "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+              "result": {
+                "tag": "opt-out-065"
+              },
+              "run_id": "01KV4F1RRSKRPGE9YQ3FSJEVQJ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 21,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 21,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "amount": 600,
+                "customerId": "customer-052",
+                "orderId": "order-052"
+              },
+              "id": "fixture-effect-052-trigger-if-filter-0-0",
+              "name": "order/placed",
+              "ts": 1781487690316,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
+                },
+                "id": "fixture-effect-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781487690316
+              }
+            ],
+            "function_id": "examples-052-trigger-if-filter-process-high-value-order",
+            "result": {
+              "priority": "high",
+              "processed": true
+            },
+            "run_id": "01KV4F1RRPDNPJFY1H901N1ANB"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
+                },
+                "id": "fixture-effect-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781487690316,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "amount": 600,
+                    "customerId": "customer-052",
+                    "orderId": "order-052"
+                  },
+                  "id": "fixture-effect-052-trigger-if-filter-0-0",
+                  "name": "order/placed",
+                  "ts": 1781487690316
+                }
+              ],
+              "function_id": "examples-052-trigger-if-filter-process-high-value-order",
+              "result": {
+                "priority": "high",
+                "processed": true
+              },
+              "run_id": "01KV4F1RRPDNPJFY1H901N1ANB"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 22,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 22,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-028-invoke-failure-0-0",
+              "name": "demo/invoke-failing",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-028-invoke-failure-0-0",
+                "name": "demo/invoke-failing",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-028-invoke-failure-parent-invoker",
+            "result": {
+              "error": "Child always fails",
+              "status": "caught-error"
+            },
+            "run_id": "01KV4F1R9461WES336Z3X2K1HB"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-028-invoke-failure-0-0",
+                "name": "demo/invoke-failing",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-028-invoke-failure-0-0",
+                  "name": "demo/invoke-failing",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-028-invoke-failure-parent-invoker",
+              "result": {
+                "error": "Child always fails",
+                "status": "caught-error"
+              },
+              "run_id": "01KV4F1R9461WES336Z3X2K1HB"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 23,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 23,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                  "expire": 1813023690291,
+                  "fn_id": "examples-034-reference-function-helper-function",
+                  "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+                  "isr": {
+                    "dsid": "c16a60f39651a064",
+                    "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                    "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                    "ts": ""
+                  },
+                  "name": "call-helper",
+                  "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                  "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "8b3f2645f19eec04",
+                      "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                    },
+                    "ts": "2026-06-15T01:41:30.291906Z"
+                  }
+                },
+                "input": 21
+              },
+              "id": "01KV4F1RHKXFVAKNMXAPB7TPXJ",
+              "name": "inngest/function.invoked",
+              "ts": 1781487690291,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                    "expire": 1813023690291,
+                    "fn_id": "examples-034-reference-function-helper-function",
+                    "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+                    "isr": {
+                      "dsid": "c16a60f39651a064",
+                      "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                      "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                      "ts": ""
+                    },
+                    "name": "call-helper",
+                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "8b3f2645f19eec04",
+                        "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.291906Z"
+                    }
+                  },
+                  "input": 21
+                },
+                "id": "01KV4F1RHKXFVAKNMXAPB7TPXJ",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690291
+              }
+            ],
+            "function_id": "examples-034-reference-function-helper-function",
+            "result": {
+              "doubled": 42
+            },
+            "run_id": "01KV4F1RRMB1Y7CCAC3290B5S9"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                    "expire": 1813023690291,
+                    "fn_id": "examples-034-reference-function-helper-function",
+                    "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+                    "isr": {
+                      "dsid": "c16a60f39651a064",
+                      "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                      "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                      "ts": ""
+                    },
+                    "name": "call-helper",
+                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "8b3f2645f19eec04",
+                        "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.291906Z"
+                    }
+                  },
+                  "input": 21
+                },
+                "id": "01KV4F1RHKXFVAKNMXAPB7TPXJ",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690291,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1RGW4DC08WVECB9K59Q1.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                      "expire": 1813023690291,
+                      "fn_id": "examples-034-reference-function-helper-function",
+                      "gid": "95b8447a-0ae6-4f60-b199-54fdf2e6b5d0",
+                      "isr": {
+                        "dsid": "c16a60f39651a064",
+                        "dstp": "00-2dcba416cbe7a15fb8ba180f27504d43-858739605e3ce8c4-00",
+                        "tp": "00-2dcba416cbe7a15fb8ba180f27504d43-c16a60f39651a064-01",
+                        "ts": ""
+                      },
+                      "name": "call-helper",
+                      "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                      "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "8b3f2645f19eec04",
+                          "traceparent": "00-e11f3406d82b3db14fe901f7057b4e5c-34ea674970846f40-01"
+                        },
+                        "ts": "2026-06-15T01:41:30.291906Z"
+                      }
+                    },
+                    "input": 21
+                  },
+                  "id": "01KV4F1RHKXFVAKNMXAPB7TPXJ",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487690291
+                }
+              ],
+              "function_id": "examples-034-reference-function-helper-function",
+              "result": {
+                "doubled": 42
+              },
+              "run_id": "01KV4F1RRMB1Y7CCAC3290B5S9"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 24,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 24,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "number": 7
+              },
+              "id": "fixture-effect-011-step-invoke-0-0",
+              "name": "demo/invoke-parent",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "number": 7
+                },
+                "id": "fixture-effect-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-011-step-invoke-parent-invoke",
+            "result": {
+              "result": 49
+            },
+            "run_id": "01KV4F1R9012XQAEVTM76008HH"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "number": 7
+                },
+                "id": "fixture-effect-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "number": 7
+                  },
+                  "id": "fixture-effect-011-step-invoke-0-0",
+                  "name": "demo/invoke-parent",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-011-step-invoke-parent-invoke",
+              "result": {
+                "result": 49
+              },
+              "run_id": "01KV4F1R9012XQAEVTM76008HH"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 25,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 25,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "key": "override-064"
+              },
+              "id": "fixture-effect-064-checkpointing-fn-override-0-0",
+              "name": "demo/checkpoint-override",
+              "ts": 1781487690418,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "key": "override-064"
+                },
+                "id": "fixture-effect-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
+                "ts": 1781487690418
+              }
+            ],
+            "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
+            "result": {
+              "key": "override-064"
+            },
+            "run_id": "01KV4F1RRQVVBSN5864N7TQQG5"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "key": "override-064"
+                },
+                "id": "fixture-effect-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
+                "ts": 1781487690418,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "key": "override-064"
+                  },
+                  "id": "fixture-effect-064-checkpointing-fn-override-0-0",
+                  "name": "demo/checkpoint-override",
+                  "ts": 1781487690418
+                }
+              ],
+              "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
+              "result": {
+                "key": "override-064"
+              },
+              "run_id": "01KV4F1RRQVVBSN5864N7TQQG5"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 26,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 26,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "value": 4
+              },
+              "id": "fixture-effect-060-checkpointing-basic-0-0",
+              "name": "demo/checkpoint-basic",
+              "ts": 1781487690418,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "value": 4
+                },
+                "id": "fixture-effect-060-checkpointing-basic-0-0",
+                "name": "demo/checkpoint-basic",
+                "ts": 1781487690418
+              }
+            ],
+            "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
+            "result": {
+              "doubled": 8,
+              "total": 20,
+              "tripled": 12
+            },
+            "run_id": "01KV4F1RRQXEYYFJD59FV3Y0NB"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "value": 4
+                },
+                "id": "fixture-effect-060-checkpointing-basic-0-0",
+                "name": "demo/checkpoint-basic",
+                "ts": 1781487690418,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "value": 4
+                  },
+                  "id": "fixture-effect-060-checkpointing-basic-0-0",
+                  "name": "demo/checkpoint-basic",
+                  "ts": 1781487690418
+                }
+              ],
+              "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
+              "result": {
+                "doubled": 8,
+                "total": 20,
+                "tripled": 12
+              },
+              "run_id": "01KV4F1RRQXEYYFJD59FV3Y0NB"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 27,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 27,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                  "expire": 1781487720547,
+                  "fn_id": "examples-053-step-invoke-options-worker-task",
+                  "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+                  "isr": {
+                    "dsid": "05236d9b91816707",
+                    "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                    "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                    "ts": ""
+                  },
+                  "name": "invoke-worker",
+                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "d7ad81ad3d86ad96",
+                      "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                    },
+                    "ts": "2026-06-15T01:41:30.547195Z"
+                  }
+                },
+                "priority": "high",
+                "taskId": "task-053"
+              },
+              "id": "01KV4F1RSKXPW9J8N1E288GR6A",
+              "name": "inngest/function.invoked",
+              "ts": 1781487690547,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                    "expire": 1781487720547,
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+                    "isr": {
+                      "dsid": "05236d9b91816707",
+                      "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                      "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                      "ts": ""
+                    },
+                    "name": "invoke-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "d7ad81ad3d86ad96",
+                        "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.547195Z"
+                    }
+                  },
+                  "priority": "high",
+                  "taskId": "task-053"
+                },
+                "id": "01KV4F1RSKXPW9J8N1E288GR6A",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690547
+              }
+            ],
+            "function_id": "examples-053-step-invoke-options-worker-task",
+            "result": {
+              "completed": true,
+              "taskId": "task-053"
+            },
+            "run_id": "01KV4F1S0EHC3FXQ59Y9R699H1"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                    "expire": 1781487720547,
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+                    "isr": {
+                      "dsid": "05236d9b91816707",
+                      "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                      "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                      "ts": ""
+                    },
+                    "name": "invoke-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "d7ad81ad3d86ad96",
+                        "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                      },
+                      "ts": "2026-06-15T01:41:30.547195Z"
+                    }
+                  },
+                  "priority": "high",
+                  "taskId": "task-053"
+                },
+                "id": "01KV4F1RSKXPW9J8N1E288GR6A",
+                "name": "inngest/function.invoked",
+                "ts": 1781487690547,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                      "expire": 1781487720547,
+                      "fn_id": "examples-053-step-invoke-options-worker-task",
+                      "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+                      "isr": {
+                        "dsid": "05236d9b91816707",
+                        "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                        "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                        "ts": ""
+                      },
+                      "name": "invoke-worker",
+                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "d7ad81ad3d86ad96",
+                          "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                        },
+                        "ts": "2026-06-15T01:41:30.547195Z"
+                      }
+                    },
+                    "priority": "high",
+                    "taskId": "task-053"
+                  },
+                  "id": "01KV4F1RSKXPW9J8N1E288GR6A",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487690547
+                }
+              ],
+              "function_id": "examples-053-step-invoke-options-worker-task",
+              "result": {
+                "completed": true,
+                "taskId": "task-053"
+              },
+              "run_id": "01KV4F1S0EHC3FXQ59Y9R699H1"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 28,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 28,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-034-reference-function-0-0",
+              "name": "demo/reference-invoke",
+              "ts": 1781487690088,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-034-reference-function-0-0",
+                "name": "demo/reference-invoke",
+                "ts": 1781487690088
+              }
+            ],
+            "function_id": "examples-034-reference-function-invoke-by-reference",
+            "result": {
+              "result": 42
+            },
+            "run_id": "01KV4F1RGW4DC08WVECB9K59Q1"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-034-reference-function-0-0",
+                "name": "demo/reference-invoke",
+                "ts": 1781487690088,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-034-reference-function-0-0",
+                  "name": "demo/reference-invoke",
+                  "ts": 1781487690088
+                }
+              ],
+              "function_id": "examples-034-reference-function-invoke-by-reference",
+              "result": {
+                "result": 42
+              },
+              "run_id": "01KV4F1RGW4DC08WVECB9K59Q1"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 29,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 29,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-handle-failure",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Failed"
+            },
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Intentional failure",
+              "name": "StepError",
+              "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-013-retries-config-0-0",
+              "name": "demo/retries-limited",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-013-retries-config-0-0",
+                "name": "demo/retries-limited",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-013-retries-config-retries-limited",
+            "result": {
+              "message": "Intentional failure",
+              "name": "StepError",
+              "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "run_id": "01KV4F1R905Z3AX7A78V5D1YHX"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.failed",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Failed"
+              },
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Intentional failure",
+                "name": "StepError",
+                "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-013-retries-config-0-0",
+                "name": "demo/retries-limited",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-013-retries-config-0-0",
+                  "name": "demo/retries-limited",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-013-retries-config-retries-limited",
+              "result": {
+                "message": "Intentional failure",
+                "name": "StepError",
+                "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "run_id": "01KV4F1R905Z3AX7A78V5D1YHX"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.failed",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "handled": true,
+            "failedFunctionId": "examples-013-retries-config-retries-limited"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 30,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 30,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "id": "concurrent-014"
+              },
+              "id": "fixture-effect-014-concurrency-limit-0-0",
+              "name": "demo/concurrent",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "id": "concurrent-014"
+                },
+                "id": "fixture-effect-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-014-concurrency-limit-concurrent-fn",
+            "result": {
+              "completedAt": "2026-06-15T01:41:31.060Z",
+              "id": "concurrent-014"
+            },
+            "run_id": "01KV4F1R902PWK438H8F55DYBJ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "id": "concurrent-014"
+                },
+                "id": "fixture-effect-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "id": "concurrent-014"
+                  },
+                  "id": "fixture-effect-014-concurrency-limit-0-0",
+                  "name": "demo/concurrent",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-014-concurrency-limit-concurrent-fn",
+              "result": {
+                "completedAt": "2026-06-15T01:41:31.060Z",
+                "id": "concurrent-014"
+              },
+              "run_id": "01KV4F1R902PWK438H8F55DYBJ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 31,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 31,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Failed"
+            },
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Intentional failure",
+              "name": "StepError",
+              "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-013-retries-config-0-0",
+              "name": "demo/retries-limited",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-013-retries-config-0-0",
+                "name": "demo/retries-limited",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-013-retries-config-retries-limited",
+            "result": {
+              "message": "Intentional failure",
+              "name": "StepError",
+              "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            },
+            "run_id": "01KV4F1R905Z3AX7A78V5D1YHX"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Failed"
+              },
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Intentional failure",
+                "name": "StepError",
+                "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-013-retries-config-0-0",
+                "name": "demo/retries-limited",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-013-retries-config-0-0",
+                  "name": "demo/retries-limited",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-013-retries-config-retries-limited",
+              "result": {
+                "message": "Intentional failure",
+                "name": "StepError",
+                "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at stepError (/Users/erikshestopal/erik/effect-inngest/src/internal/step.ts:201:25)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:68:51)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              },
+              "run_id": "01KV4F1R905Z3AX7A78V5D1YHX"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 32,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 32,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-027-step-memoization-0-0",
+              "name": "demo/memoized",
+              "ts": 1781487689873,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-027-step-memoization-0-0",
+                "name": "demo/memoized",
+                "ts": 1781487689873
+              }
+            ],
+            "function_id": "examples-027-step-memoization-memoization-demo",
+            "result": {
+              "randomValue": 0.02285571108709017,
+              "timestamp": 1781487690049
+            },
+            "run_id": "01KV4F1R945W5WKC0G8XT1PFSJ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-027-step-memoization-0-0",
+                "name": "demo/memoized",
+                "ts": 1781487689873,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-027-step-memoization-0-0",
+                  "name": "demo/memoized",
+                  "ts": 1781487689873
+                }
+              ],
+              "function_id": "examples-027-step-memoization-memoization-demo",
+              "result": {
+                "randomValue": 0.02285571108709017,
+                "timestamp": 1781487690049
+              },
+              "run_id": "01KV4F1R945W5WKC0G8XT1PFSJ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 33,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 33,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "orderId": "order-008"
+              },
+              "id": "fixture-effect-008-step-waitForEvent-0-0",
+              "name": "demo/wait-start",
+              "ts": 1781487689871,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "orderId": "order-008"
+                },
+                "id": "fixture-effect-008-step-waitForEvent-0-0",
+                "name": "demo/wait-start",
+                "ts": 1781487689871
+              }
+            ],
+            "function_id": "examples-008-step-waitForEvent-wait-for-event",
+            "result": {
+              "receivedStatus": "approved"
+            },
+            "run_id": "01KV4F1R901ZS7DHM2ET7ZYB07"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "orderId": "order-008"
+                },
+                "id": "fixture-effect-008-step-waitForEvent-0-0",
+                "name": "demo/wait-start",
+                "ts": 1781487689871,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "orderId": "order-008"
+                  },
+                  "id": "fixture-effect-008-step-waitForEvent-0-0",
+                  "name": "demo/wait-start",
+                  "ts": 1781487689871
+                }
+              ],
+              "function_id": "examples-008-step-waitForEvent-wait-for-event",
+              "result": {
+                "receivedStatus": "approved"
+              },
+              "run_id": "01KV4F1R901ZS7DHM2ET7ZYB07"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 34,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 34,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-005-step-sleep-0-0",
+              "name": "demo/sleep",
+              "ts": 1781487689871,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-005-step-sleep-0-0",
+                "name": "demo/sleep",
+                "ts": 1781487689871
+              }
+            ],
+            "function_id": "examples-005-step-sleep-sleep-test",
+            "result": {
+              "slept": true
+            },
+            "run_id": "01KV4F1R944PQ0FVJFMAK6M4H9"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-005-step-sleep-0-0",
+                "name": "demo/sleep",
+                "ts": 1781487689871,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-005-step-sleep-0-0",
+                  "name": "demo/sleep",
+                  "ts": 1781487689871
+                }
+              ],
+              "function_id": "examples-005-step-sleep-sleep-test",
+              "result": {
+                "slept": true
+              },
+              "run_id": "01KV4F1R944PQ0FVJFMAK6M4H9"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 35,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 35,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "userId": "user-025"
+              },
+              "id": "fixture-effect-025-concurrency-key-0-0",
+              "name": "demo/concurrent-keyed",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-effect-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-025-concurrency-key-user-processor",
+            "result": {
+              "processed": "user-025"
+            },
+            "run_id": "01KV4F1R94E6VM71A5VHG7DYQ3"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-effect-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "userId": "user-025"
+                  },
+                  "id": "fixture-effect-025-concurrency-key-0-0",
+                  "name": "demo/concurrent-keyed",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-025-concurrency-key-user-processor",
+              "result": {
+                "processed": "user-025"
+              },
+              "run_id": "01KV4F1R94E6VM71A5VHG7DYQ3"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 36,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 36,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "itemId": "item-054",
+                "userId": "user-054"
+              },
+              "id": "fixture-effect-054-concurrency-scope-0-0",
+              "name": "demo/process-item",
+              "ts": 1781487690316,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "itemId": "item-054",
+                  "userId": "user-054"
+                },
+                "id": "fixture-effect-054-concurrency-scope-0-0",
+                "name": "demo/process-item",
+                "ts": 1781487690316
+              }
+            ],
+            "function_id": "examples-054-concurrency-scope-process-item",
+            "result": {
+              "itemId": "item-054",
+              "processed": true
+            },
+            "run_id": "01KV4F1RRS49549GF13AMZZ86X"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "itemId": "item-054",
+                  "userId": "user-054"
+                },
+                "id": "fixture-effect-054-concurrency-scope-0-0",
+                "name": "demo/process-item",
+                "ts": 1781487690316,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "itemId": "item-054",
+                    "userId": "user-054"
+                  },
+                  "id": "fixture-effect-054-concurrency-scope-0-0",
+                  "name": "demo/process-item",
+                  "ts": 1781487690316
+                }
+              ],
+              "function_id": "examples-054-concurrency-scope-process-item",
+              "result": {
+                "itemId": "item-054",
+                "processed": true
+              },
+              "run_id": "01KV4F1RRS49549GF13AMZZ86X"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 37,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 37,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-effect-029-retry-error-0-0",
+              "name": "demo/retry-error",
+              "ts": 1781487689872,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-effect-029-retry-error-0-0",
+                "name": "demo/retry-error",
+                "ts": 1781487689872
+              }
+            ],
+            "function_id": "examples-029-retry-error-retry-demo",
+            "result": {
+              "attempts": 2
+            },
+            "run_id": "01KV4F1R8XD5HNYGRTACD9GMQ8"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-effect-029-retry-error-0-0",
+                "name": "demo/retry-error",
+                "ts": 1781487689872,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-effect-029-retry-error-0-0",
+                  "name": "demo/retry-error",
+                  "ts": 1781487689872
+                }
+              ],
+              "function_id": "examples-029-retry-error-retry-demo",
+              "result": {
+                "attempts": 2
+              },
+              "run_id": "01KV4F1R8XD5HNYGRTACD9GMQ8"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 38,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 38,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+                  "expire": 1781487991028,
+                  "fn_id": "examples-053-step-invoke-options-worker-task",
+                  "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+                  "isr": {
+                    "dsid": "daaafe8d8e4fdc4d",
+                    "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                    "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                    "ts": ""
+                  },
+                  "name": "invoke-batch-worker",
+                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "5ee9394918abb9ec",
+                      "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                    },
+                    "ts": "2026-06-15T01:41:31.028249Z"
+                  }
+                },
+                "priority": "low",
+                "taskId": "task-053-batch"
+              },
+              "id": "01KV4F1S8M9BXCN9JDHHDHGC48",
+              "name": "inngest/function.invoked",
+              "ts": 1781487691028,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+                    "expire": 1781487991028,
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+                    "isr": {
+                      "dsid": "daaafe8d8e4fdc4d",
+                      "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                      "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                      "ts": ""
+                    },
+                    "name": "invoke-batch-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "5ee9394918abb9ec",
+                        "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                      },
+                      "ts": "2026-06-15T01:41:31.028249Z"
+                    }
+                  },
+                  "priority": "low",
+                  "taskId": "task-053-batch"
+                },
+                "id": "01KV4F1S8M9BXCN9JDHHDHGC48",
+                "name": "inngest/function.invoked",
+                "ts": 1781487691028
+              }
+            ],
+            "function_id": "examples-053-step-invoke-options-worker-task",
+            "result": {
+              "completed": true,
+              "taskId": "task-053-batch"
+            },
+            "run_id": "01KV4F1SG30PB3B20RVG43H07V"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+                    "expire": 1781487991028,
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+                    "isr": {
+                      "dsid": "daaafe8d8e4fdc4d",
+                      "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                      "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                      "ts": ""
+                    },
+                    "name": "invoke-batch-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "5ee9394918abb9ec",
+                        "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                      },
+                      "ts": "2026-06-15T01:41:31.028249Z"
+                    }
+                  },
+                  "priority": "low",
+                  "taskId": "task-053-batch"
+                },
+                "id": "01KV4F1S8M9BXCN9JDHHDHGC48",
+                "name": "inngest/function.invoked",
+                "ts": 1781487691028,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
+                      "expire": 1781487991028,
+                      "fn_id": "examples-053-step-invoke-options-worker-task",
+                      "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+                      "isr": {
+                        "dsid": "daaafe8d8e4fdc4d",
+                        "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
+                        "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                        "ts": ""
+                      },
+                      "name": "invoke-batch-worker",
+                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "5ee9394918abb9ec",
+                          "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                        },
+                        "ts": "2026-06-15T01:41:31.028249Z"
+                      }
+                    },
+                    "priority": "low",
+                    "taskId": "task-053-batch"
+                  },
+                  "id": "01KV4F1S8M9BXCN9JDHHDHGC48",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781487691028
+                }
+              ],
+              "function_id": "examples-053-step-invoke-options-worker-task",
+              "result": {
+                "completed": true,
+                "taskId": "task-053-batch"
+              },
+              "run_id": "01KV4F1SG30PB3B20RVG43H07V"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 39,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 39,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "items": [
+                  {
+                    "price": 10,
+                    "qty": 2,
+                    "sku": "sku-1"
+                  }
+                ],
+                "orderId": "order-050",
+                "total": 20,
+                "userId": "user-050"
+              },
+              "id": "fixture-effect-050-complex-workflow-0-0",
+              "name": "examples/050/order/placed",
+              "ts": 1781487690185,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "items": [
+                    {
+                      "price": 10,
+                      "qty": 2,
+                      "sku": "sku-1"
+                    }
+                  ],
+                  "orderId": "order-050",
+                  "total": 20,
+                  "userId": "user-050"
+                },
+                "id": "fixture-effect-050-complex-workflow-0-0",
+                "name": "examples/050/order/placed",
+                "ts": 1781487690185
+              }
+            ],
+            "function_id": "examples-050-complex-workflow-process-order",
+            "result": {
+              "deliveryDate": "2026-06-19",
+              "orderId": "order-050",
+              "status": "completed",
+              "transactionId": "txn-050"
+            },
+            "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "items": [
+                    {
+                      "price": 10,
+                      "qty": 2,
+                      "sku": "sku-1"
+                    }
+                  ],
+                  "orderId": "order-050",
+                  "total": 20,
+                  "userId": "user-050"
+                },
+                "id": "fixture-effect-050-complex-workflow-0-0",
+                "name": "examples/050/order/placed",
+                "ts": 1781487690185,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "items": [
+                      {
+                        "price": 10,
+                        "qty": 2,
+                        "sku": "sku-1"
+                      }
+                    ],
+                    "orderId": "order-050",
+                    "total": 20,
+                    "userId": "user-050"
+                  },
+                  "id": "fixture-effect-050-complex-workflow-0-0",
+                  "name": "examples/050/order/placed",
+                  "ts": 1781487690185
+                }
+              ],
+              "function_id": "examples-050-complex-workflow-process-order",
+              "result": {
+                "deliveryDate": "2026-06-19",
+                "orderId": "order-050",
+                "status": "completed",
+                "transactionId": "txn-050"
+              },
+              "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 40,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 40,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "invoiceId": "invoice-041"
+              },
+              "id": "fixture-effect-041-waitForEvent-match-0-0",
+              "name": "demo/wait-match",
+              "ts": 1781487690089,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "invoiceId": "invoice-041"
+                },
+                "id": "fixture-effect-041-waitForEvent-match-0-0",
+                "name": "demo/wait-match",
+                "ts": 1781487690089
+              }
+            ],
+            "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
+            "result": {
+              "amount": 123.45,
+              "invoiceId": "invoice-041"
+            },
+            "run_id": "01KV4F1RGQZ5A43EZJCN65FE1A"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "invoiceId": "invoice-041"
+                },
+                "id": "fixture-effect-041-waitForEvent-match-0-0",
+                "name": "demo/wait-match",
+                "ts": 1781487690089,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "invoiceId": "invoice-041"
+                  },
+                  "id": "fixture-effect-041-waitForEvent-match-0-0",
+                  "name": "demo/wait-match",
+                  "ts": 1781487690089
+                }
+              ],
+              "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
+              "result": {
+                "amount": 123.45,
+                "invoiceId": "invoice-041"
+              },
+              "run_id": "01KV4F1RGQZ5A43EZJCN65FE1A"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
         }
       ]
     }

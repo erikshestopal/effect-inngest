@@ -298,14 +298,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4E3FHR2A2CR2RZ30VHX35Q.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "expire": 1813022698073,
+              "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "expire": 1813023682958,
               "fn_id": "examples-011-step-invoke-child-square",
-              "gid": "7a644a82-ce82-433d-885a-438fe7224ea3",
+              "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
               "isr": {
-                "dsid": "3abd32571b2f8e79",
-                "dstp": "00-be00b61c70431b9e6237e612a7a59c16-534e3dae6eb39c92-00",
-                "tp": "00-be00b61c70431b9e6237e612a7a59c16-3abd32571b2f8e79-01",
+                "dsid": "b8a4fd4ac245b9cb",
+                "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
+                "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
                 "ts": ""
               },
               "name": "call-child",
@@ -314,10 +314,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "3950c25442aee294",
-                  "traceparent": "00-4e87348a4349432d49dabfc787c3f435-efcf7ed196380a90-01"
+                  "sid": "1ab304b3651881c0",
+                  "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
                 },
-                "ts": "2026-06-15T01:24:58.077567Z"
+                "ts": "2026-06-15T01:41:22.958632Z"
               }
             },
             "value": 7
@@ -331,14 +331,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4E3FHR2A2CR2RZ30VHX35Q.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                "expire": 1813022698073,
+                "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                "expire": 1813023682958,
                 "fn_id": "examples-011-step-invoke-child-square",
-                "gid": "7a644a82-ce82-433d-885a-438fe7224ea3",
+                "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
                 "isr": {
-                  "dsid": "3abd32571b2f8e79",
-                  "dstp": "00-be00b61c70431b9e6237e612a7a59c16-534e3dae6eb39c92-00",
-                  "tp": "00-be00b61c70431b9e6237e612a7a59c16-3abd32571b2f8e79-01",
+                  "dsid": "b8a4fd4ac245b9cb",
+                  "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
+                  "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
                   "ts": ""
                 },
                 "name": "call-child",
@@ -347,10 +347,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "3950c25442aee294",
-                    "traceparent": "00-4e87348a4349432d49dabfc787c3f435-efcf7ed196380a90-01"
+                    "sid": "1ab304b3651881c0",
+                    "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
                   },
-                  "ts": "2026-06-15T01:24:58.077567Z"
+                  "ts": "2026-06-15T01:41:22.958632Z"
                 }
               },
               "value": 7

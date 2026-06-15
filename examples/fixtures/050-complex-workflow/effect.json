@@ -231,40 +231,174 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
-          "name": "validate-order",
-          "data": true,
-          "displayName": "validate-order"
-        },
-        {
-          "op": "StepRun",
-          "id": "380c861392c8f4e28e7463396b6828f1b81238f6",
-          "name": "reserve-inventory",
-          "data": true,
-          "displayName": "reserve-inventory"
-        },
-        {
-          "op": "WaitForEvent",
           "id": "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8",
-          "name": "wait-for-payment",
-          "mode": "async",
+          "op": "WaitForEvent",
+          "name": "examples/050/order/payment-received",
+          "displayName": "wait-for-payment",
           "opts": {
-            "event": "examples/050/order/payment-received",
             "timeout": "30s",
             "if": "async.data.orderId == \"order-050\""
           },
-          "displayName": "wait-for-payment"
+          "data": null,
+          "userland": {
+            "id": "wait-for-payment"
+          }
         }
       ]
     }
   },
   {
     "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
+        "qi_id": "M2hhamVpcnpvN2c2Zjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1RH1DQB9WZ7XSPM3T5FJ",
+        "generation_id": 1,
+        "request_started_at": 1781487690278,
+        "steps": [
+          {
+            "id": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "validate-order",
+            "displayName": "validate-order",
+            "userland": {
+              "id": "validate-order"
+            },
+            "opts": {},
+            "rawArgs": ["validate-order", null],
+            "hashedId": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
+                "memoized": false,
+                "options": {
+                  "id": "validate-order",
+                  "name": "validate-order"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": true,
+            "timing": {
+              "a": 1781487690282000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487690282
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
+        "qi_id": "M2hhamVpcnpvN2c2Zjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1RH1DQB9WZ7XSPM3T5FJ",
+        "generation_id": 1,
+        "request_started_at": 1781487690278,
+        "steps": [
+          {
+            "id": "380c861392c8f4e28e7463396b6828f1b81238f6",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "reserve-inventory",
+            "displayName": "reserve-inventory",
+            "userland": {
+              "id": "reserve-inventory"
+            },
+            "opts": {},
+            "rawArgs": ["reserve-inventory", null],
+            "hashedId": "380c861392c8f4e28e7463396b6828f1b81238f6",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "380c861392c8f4e28e7463396b6828f1b81238f6",
+                "memoized": false,
+                "options": {
+                  "id": "reserve-inventory",
+                  "name": "reserve-inventory"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": true,
+            "timing": {
+              "a": 1781487690285000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487690285
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 5,
+      "sequence": 7,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/050-complex-workflow?fnId=examples-050-complex-workflow-process-order&stepId=step",
       "path": "/examples/050-complex-workflow",
@@ -353,7 +487,7 @@
             },
             "id": "fixture-effect-050-complex-workflow-0-after-0-0",
             "name": "examples/050/order/payment-received",
-            "ts": 1781396618325,
+            "ts": 1781487691187,
             "user": {}
           },
           "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d": {
@@ -376,126 +510,241 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
-          "name": "send-confirmation",
-          "data": {
-            "ids": ["01KV1R6F5MN0NDFVZAHT65Y5EZ"],
-            "status": 200
-          },
-          "displayName": "send-confirmation"
-        },
-        {
-          "op": "StepRun",
-          "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
-          "name": "schedule-delivery",
-          "data": "2026-06-18",
-          "displayName": "schedule-delivery"
-        },
-        {
-          "op": "StepRun",
-          "id": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
-          "name": "notify-delivery",
-          "data": {
-            "ids": ["01KV1R6F5PM1F4X4V36DFA6Y4V"],
-            "status": 200
-          },
-          "displayName": "notify-delivery"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "orderId": "order-050",
             "status": "completed",
             "transactionId": "txn-050",
-            "deliveryDate": "2026-06-18"
+            "deliveryDate": "2026-06-19"
           }
         }
       ]
     }
   },
   {
-    "sequence": 6,
+    "sequence": 8,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 6,
+      "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/e/local",
-      "path": "/e/local",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
       "query": {},
       "headers": {
+        "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
-      "body": [
-        {
-          "name": "order/confirmed",
-          "data": {
-            "_tag": "order/confirmed",
-            "orderId": "order-050",
-            "userId": "user-050",
-            "total": 20
-          },
-          "ts": 1781396618419,
-          "id": null,
-          "v": null
-        }
-      ]
+      "body": {
+        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
+        "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "generation_id": 1,
+        "request_started_at": 1781487691274,
+        "steps": [
+          {
+            "id": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "sendEvent",
+            "displayName": "sendEvent",
+            "userland": {
+              "id": "sendEvent"
+            },
+            "opts": {},
+            "rawArgs": ["sendEvent", null],
+            "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
+                "memoized": false,
+                "options": {
+                  "id": "sendEvent",
+                  "name": "sendEvent"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": {
+              "ids": ["01KV4F1SGBMT370N47WM54JRV3"],
+              "status": 200
+            },
+            "timing": {
+              "a": 1781487691275000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691275
+      }
     },
     "response": {
       "status": 200,
       "headers": {
-        "content-type": "text/plain; charset=utf-8",
+        "content-type": "application/json",
         "x-inngest-server-kind": "dev"
       },
-      "body": {
-        "ids": ["01KV1R6F5MN0NDFVZAHT65Y5EZ"],
-        "status": 200
-      }
+      "body": null
     }
   },
   {
-    "sequence": 7,
+    "sequence": 9,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 7,
+      "sequence": 9,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/e/local",
-      "path": "/e/local",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
       "query": {},
       "headers": {
+        "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
-      "body": [
-        {
-          "name": "delivery/scheduled",
-          "data": {
-            "_tag": "delivery/scheduled",
-            "orderId": "order-050",
-            "estimatedDelivery": "2026-06-18"
-          },
-          "ts": 1781396618421,
-          "id": null,
-          "v": null
-        }
-      ]
+      "body": {
+        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
+        "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "generation_id": 1,
+        "request_started_at": 1781487691274,
+        "steps": [
+          {
+            "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "schedule-delivery",
+            "displayName": "schedule-delivery",
+            "userland": {
+              "id": "schedule-delivery"
+            },
+            "opts": {},
+            "rawArgs": ["schedule-delivery", null],
+            "hashedId": "91c46f0670afb468a102fea6c5016d548f550f3d",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "91c46f0670afb468a102fea6c5016d548f550f3d",
+                "memoized": false,
+                "options": {
+                  "id": "schedule-delivery",
+                  "name": "schedule-delivery"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "2026-06-19",
+            "timing": {
+              "a": 1781487691278000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691278
+      }
     },
     "response": {
       "status": 200,
       "headers": {
-        "content-type": "text/plain; charset=utf-8",
+        "content-type": "application/json",
         "x-inngest-server-kind": "dev"
       },
+      "body": null
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
       "body": {
-        "ids": ["01KV1R6F5PM1F4X4V36DFA6Y4V"],
-        "status": 200
+        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
+        "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "generation_id": 1,
+        "request_started_at": 1781487691274,
+        "steps": [
+          {
+            "id": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "sendEvent",
+            "displayName": "sendEvent",
+            "userland": {
+              "id": "sendEvent"
+            },
+            "opts": {},
+            "rawArgs": ["sendEvent", null],
+            "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
+                "memoized": false,
+                "options": {
+                  "id": "sendEvent",
+                  "name": "sendEvent"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": {
+              "ids": ["01KV4F1SGHD0YDQEJK2HEX2KM7"],
+              "status": 200
+            },
+            "timing": {
+              "a": 1781487691281000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691281
       }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

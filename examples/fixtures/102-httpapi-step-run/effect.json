@@ -213,13 +213,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "bdb36bb22deb169275b3094ba9005a29eeddd195",
-          "name": "double",
-          "data": 42,
-          "displayName": "double"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -227,6 +220,79 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1SZKZW56WRBH4JN31G4M/async",
+      "path": "/v1/checkpoint/01KV4F1SZKZW56WRBH4JN31G4M/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1SZKZW56WRBH4JN31G4M",
+        "fn_id": "fde58a29-a345-5d0b-96fc-ef7e8028c6f3",
+        "qi_id": "bGs0NGRvMDd5YzN0OjpkZWZhdWx0",
+        "request_id": "01KV4F1SZYR3715FT3VB2D1S88",
+        "generation_id": 1,
+        "request_started_at": 1781487691778,
+        "steps": [
+          {
+            "id": "bdb36bb22deb169275b3094ba9005a29eeddd195",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "double",
+            "displayName": "double",
+            "userland": {
+              "id": "double"
+            },
+            "opts": {},
+            "rawArgs": ["double", null],
+            "hashedId": "bdb36bb22deb169275b3094ba9005a29eeddd195",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "bdb36bb22deb169275b3094ba9005a29eeddd195",
+                "memoized": false,
+                "options": {
+                  "id": "double",
+                  "name": "double"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 42,
+            "timing": {
+              "a": 1781487691779000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487691779
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

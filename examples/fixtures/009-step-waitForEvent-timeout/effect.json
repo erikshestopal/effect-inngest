@@ -142,78 +142,6 @@
     "request": {
       "sequence": 4,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/006-step-sleepUntil?fnId=examples-006-step-sleepUntil-sleep-until&stepId=step",
-      "path": "/examples/006-step-sleepUntil",
-      "query": {
-        "fnId": "examples-006-step-sleepUntil-sleep-until",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "5",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 4,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "89db4fc7-c179-55f2-9cf6-e255bf01480f",
-          "generation_id": 5,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["277d17825bcc1c6b9bfcec798e3bc15dc427a873"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/sleep-until",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/sleep-until",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "277d17825bcc1c6b9bfcec798e3bc15dc427a873": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 404,
-      "headers": {
-        "content-type": "text/plain;charset=utf-8"
-      },
-      "body": "Not found"
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
       "path": "/examples/009-step-waitForEvent-timeout",
       "query": {
@@ -296,6 +224,95 @@
           "data": null,
           "userland": {
             "id": "wait-for-signal"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
+      "path": "/examples/009-step-waitForEvent-timeout",
+      "query": {
+        "fnId": "examples-009-step-waitForEvent-timeout-wait-timeout",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "5e39f98b-bb38-5fbe-80eb-b94299089214",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["dd4654a352d46a6f4b313e0b0dd326be36e5004c"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "orderId": "timeout-009"
+          },
+          "id": "<event-id>",
+          "name": "demo/wait-timeout",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "orderId": "timeout-009"
+            },
+            "id": "<event-id>",
+            "name": "demo/wait-timeout",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "dd4654a352d46a6f4b313e0b0dd326be36e5004c": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "timedOut": true
           }
         }
       ]

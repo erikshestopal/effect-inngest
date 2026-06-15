@@ -249,40 +249,38 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
-      "path": "/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGYZCTZEJBNWQS1417J/async",
+      "path": "/v1/checkpoint/01KV4F1RGYZCTZEJBNWQS1417J/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2013111CS1TYMYQK8R1KHJ",
+        "run_id": "01KV4F1RGYZCTZEJBNWQS1417J",
         "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
         "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
-        "request_id": "01KV20131CJQKYF1EEAN664A72",
+        "request_id": "01KV4F1RHBJQKYF1EEAN664A72",
         "generation_id": 1,
-        "request_started_at": 1781404830770,
+        "request_started_at": 1781487690289,
         "steps": [
           {
-            "op": "StepRun",
             "id": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "process-all-items",
             "displayName": "process-all-items",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "process-all-items"
             },
+            "opts": {},
             "rawArgs": ["process-all-items", null],
             "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
@@ -309,12 +307,12 @@
               }
             ],
             "timing": {
-              "a": 1781404830771000000,
+              "a": 1781487690290000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404830772
+        "ts": 1781487690290
       }
     },
     "response": {
@@ -333,40 +331,38 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
-      "path": "/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGYZCTZEJBNWQS1417J/async",
+      "path": "/v1/checkpoint/01KV4F1RGYZCTZEJBNWQS1417J/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2013111CS1TYMYQK8R1KHJ",
+        "run_id": "01KV4F1RGYZCTZEJBNWQS1417J",
         "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
         "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
-        "request_id": "01KV20131CJQKYF1EEAN664A72",
+        "request_id": "01KV4F1RHBJQKYF1EEAN664A72",
         "generation_id": 1,
-        "request_started_at": 1781404830770,
+        "request_started_at": 1781487690289,
         "steps": [
           {
-            "op": "StepRun",
             "id": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "calculate-total",
             "displayName": "calculate-total",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "calculate-total"
             },
+            "opts": {},
             "rawArgs": ["calculate-total", null],
             "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
@@ -384,12 +380,12 @@
             "transformedResultPromise": {},
             "data": 3,
             "timing": {
-              "a": 1781404830774000000,
+              "a": 1781487690297000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404830774
+        "ts": 1781487690297
       }
     },
     "response": {

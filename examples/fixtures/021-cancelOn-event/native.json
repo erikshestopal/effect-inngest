@@ -239,8 +239,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BX30H6PSFZCY86F44HN80/async",
-      "path": "/v1/checkpoint/01KV4BX30H6PSFZCY86F44HN80/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
+      "path": "/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -248,12 +248,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BX30H6PSFZCY86F44HN80",
+        "run_id": "01KV4F1HBFJEB53639XJFYKSZN",
         "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
         "qi_id": "c3Roanh4eXh2ZGE2OjpkZWZhdWx0",
-        "request_id": "01KV4BX30YK2TCR3ZW456K3DQS",
+        "request_id": "01KV4F1HC2K2TCR3ZW456K3DQS",
         "generation_id": 1,
-        "request_started_at": 1781484391458,
+        "request_started_at": 1781487682959,
         "steps": [
           {
             "id": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
@@ -288,12 +288,355 @@
             "transformedResultPromise": {},
             "data": "Started task task-021",
             "timing": {
-              "a": 1781484391471000000,
+              "a": 1781487682960000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484391472
+        "ts": 1781487682960
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
+      "path": "/examples/021-cancelOn-event",
+      "query": {
+        "fnId": "examples-021-cancelOn-event-long-task",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 2,
+            "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "taskId": "task-021"
+          },
+          "id": "<event-id>",
+          "name": "task/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "taskId": "task-021"
+            },
+            "id": "<event-id>",
+            "name": "task/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
+          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
+            "data": "Started task task-021"
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "76d4b828e1c56bd7c77b9ff42209bf70deba64ec",
+          "op": "Sleep",
+          "name": "3s",
+          "displayName": "wait-2",
+          "opts": {},
+          "userland": {
+            "id": "wait-2"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
+      "path": "/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1HBFJEB53639XJFYKSZN",
+        "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
+        "qi_id": "MjIyN3lxZ3U4b3g1eTo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1MAFHD01CWX7ERTJ1B2T",
+        "generation_id": 1,
+        "request_started_at": 1781487685970,
+        "steps": [
+          {
+            "id": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "step-2",
+            "displayName": "step-2",
+            "userland": {
+              "id": "step-2"
+            },
+            "opts": {},
+            "rawArgs": ["step-2", null],
+            "hashedId": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+                "memoized": false,
+                "options": {
+                  "id": "step-2",
+                  "name": "step-2"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "Still running...",
+            "timing": {
+              "a": 1781487685971000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487685971
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
+      "path": "/examples/021-cancelOn-event",
+      "query": {
+        "fnId": "examples-021-cancelOn-event-long-task",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 4,
+            "stack": [
+              "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
+              "859e1632ab0214dcec1dc35596a5a8d8169a433d",
+              "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+              "76d4b828e1c56bd7c77b9ff42209bf70deba64ec"
+            ]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "taskId": "task-021"
+          },
+          "id": "<event-id>",
+          "name": "task/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "taskId": "task-021"
+            },
+            "id": "<event-id>",
+            "name": "task/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "76d4b828e1c56bd7c77b9ff42209bf70deba64ec": null,
+          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
+          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
+            "data": "Started task task-021"
+          },
+          "e64b25e67dec6c8d30e63029286ad7b6d263931d": {
+            "data": "Still running..."
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "status": "completed"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
+      "path": "/v1/checkpoint/01KV4F1HBFJEB53639XJFYKSZN/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1HBFJEB53639XJFYKSZN",
+        "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
+        "qi_id": "M3JmeWdsZG81enh5NDo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1Q8DCX8GB41ZJ696Z8XJ",
+        "generation_id": 1,
+        "request_started_at": 1781487688977,
+        "steps": [
+          {
+            "id": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "step-3",
+            "displayName": "step-3",
+            "userland": {
+              "id": "step-3"
+            },
+            "opts": {},
+            "rawArgs": ["step-3", null],
+            "hashedId": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
+                "memoized": false,
+                "options": {
+                  "id": "step-3",
+                  "name": "step-3"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "Almost done...",
+            "timing": {
+              "a": 1781487688978000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487688978
       }
     },
     "response": {

@@ -232,40 +232,38 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "bb8954f975022ace90365e99e5913d001543e1d1",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "return-string",
             "displayName": "return-string",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "return-string"
             },
+            "opts": {},
             "rawArgs": ["return-string", null],
             "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
@@ -283,12 +281,12 @@
             "transformedResultPromise": {},
             "data": "hello",
             "timing": {
-              "a": 1781404833524000000,
+              "a": 1781487690282000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833524
+        "ts": 1781487690282
       }
     },
     "response": {
@@ -307,40 +305,38 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "f414d0a95357a1dbdf860042fb912e738830905d",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "return-number",
             "displayName": "return-number",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "return-number"
             },
+            "opts": {},
             "rawArgs": ["return-number", null],
             "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
@@ -358,12 +354,12 @@
             "transformedResultPromise": {},
             "data": 42,
             "timing": {
-              "a": 1781404833527000000,
+              "a": 1781487690285000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833527
+        "ts": 1781487690285
       }
     },
     "response": {
@@ -382,40 +378,38 @@
     "request": {
       "sequence": 7,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "return-object",
             "displayName": "return-object",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "return-object"
             },
+            "opts": {},
             "rawArgs": ["return-object", null],
             "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
@@ -436,12 +430,12 @@
               "count": 100
             },
             "timing": {
-              "a": 1781404833529000000,
+              "a": 1781487690287000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833529
+        "ts": 1781487690287
       }
     },
     "response": {
@@ -460,40 +454,38 @@
     "request": {
       "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "698ac4257503dbbbd154caf355a547bc18cea62a",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "return-array",
             "displayName": "return-array",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "return-array"
             },
+            "opts": {},
             "rawArgs": ["return-array", null],
             "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
@@ -511,12 +503,12 @@
             "transformedResultPromise": {},
             "data": [1, 2, 3, 4, 5],
             "timing": {
-              "a": 1781404833530000000,
+              "a": 1781487690291000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833530
+        "ts": 1781487690291
       }
     },
     "response": {
@@ -535,40 +527,38 @@
     "request": {
       "sequence": 9,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "df87611b931013d235001d63a109c5fa00312c33",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "return-boolean",
             "displayName": "return-boolean",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "return-boolean"
             },
+            "opts": {},
             "rawArgs": ["return-boolean", null],
             "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
@@ -586,12 +576,12 @@
             "transformedResultPromise": {},
             "data": true,
             "timing": {
-              "a": 1781404833532000000,
+              "a": 1781487690298000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833532
+        "ts": 1781487690298
       }
     },
     "response": {
@@ -610,40 +600,38 @@
     "request": {
       "sequence": 10,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
-      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
+      "path": "/v1/checkpoint/01KV4F1RGRVMZQN6G60TB2DG2S/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "run_id": "01KV4F1RGRVMZQN6G60TB2DG2S",
         "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
         "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
-        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "request_id": "01KV4F1RH1QV270RB7WD30X062",
         "generation_id": 1,
-        "request_started_at": 1781404833522,
+        "request_started_at": 1781487690278,
         "steps": [
           {
-            "op": "StepRun",
             "id": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "use-all-types",
             "displayName": "use-all-types",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "use-all-types"
             },
+            "opts": {},
             "rawArgs": ["use-all-types", null],
             "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
@@ -661,12 +649,12 @@
             "transformedResultPromise": {},
             "data": "hello-42-test-5-true",
             "timing": {
-              "a": 1781404833533000000,
+              "a": 1781487690303000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404833533
+        "ts": 1781487690303
       }
     },
     "response": {

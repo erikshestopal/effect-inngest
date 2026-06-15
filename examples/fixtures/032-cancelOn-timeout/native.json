@@ -240,8 +240,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4BYPKSTPR175JSTJBYBGPS/async",
-      "path": "/v1/checkpoint/01KV4BYPKSTPR175JSTJBYBGPS/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
+      "path": "/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -249,12 +249,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4BYPKSTPR175JSTJBYBGPS",
+        "run_id": "01KV4F1HBDCW4NPZFHSA4YPVGD",
         "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
         "qi_id": "Mm1lMTVwcGFvam04OTo6ZGVmYXVsdA==",
-        "request_id": "01KV4BYPM6QRPFTSJWS2258BMQ",
+        "request_id": "01KV4F1HC1QRPFTSJWS2258BMQ",
         "generation_id": 1,
-        "request_started_at": 1781484444298,
+        "request_started_at": 1781487682964,
         "steps": [
           {
             "id": "2b020927d3c6eb407223a1baa3d6ce3597a3f88d",
@@ -289,12 +289,12 @@
             "transformedResultPromise": {},
             "data": "Starting job job-032",
             "timing": {
-              "a": 1781484444304000000,
+              "a": 1781487682964000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781484444305
+        "ts": 1781487682965
       }
     },
     "response": {
@@ -304,6 +304,461 @@
         "x-inngest-server-kind": "dev"
       },
       "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {
+        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 2,
+            "stack": ["2b020927d3c6eb407223a1baa3d6ce3597a3f88d", "f293e613401d4942d83505b81dbd9ed0cbeba9ef"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "jobId": "job-032"
+          },
+          "id": "<event-id>",
+          "name": "job/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "jobId": "job-032"
+            },
+            "id": "<event-id>",
+            "name": "job/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
+            "data": "Starting job job-032"
+          },
+          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "aa1f9f3aea7adabec95a21e2fc3ab14eb132385d",
+          "op": "Sleep",
+          "name": "2s",
+          "displayName": "work-phase-2",
+          "opts": {},
+          "userland": {
+            "id": "work-phase-2"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
+      "path": "/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1HBDCW4NPZFHSA4YPVGD",
+        "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+        "qi_id": "Mzd3MWd1bG5pbDFuYzo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1KBJ2Z8PN9WRPH6DKPWB",
+        "generation_id": 1,
+        "request_started_at": 1781487684981,
+        "steps": [
+          {
+            "id": "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "progress",
+            "displayName": "progress",
+            "userland": {
+              "id": "progress"
+            },
+            "opts": {},
+            "rawArgs": ["progress", null],
+            "hashedId": "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd",
+                "memoized": false,
+                "options": {
+                  "id": "progress",
+                  "name": "progress"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "30% complete",
+            "timing": {
+              "a": 1781487684982000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487684982
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {
+        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 4,
+            "stack": [
+              "2b020927d3c6eb407223a1baa3d6ce3597a3f88d",
+              "f293e613401d4942d83505b81dbd9ed0cbeba9ef",
+              "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd",
+              "aa1f9f3aea7adabec95a21e2fc3ab14eb132385d"
+            ]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "jobId": "job-032"
+          },
+          "id": "<event-id>",
+          "name": "job/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "jobId": "job-032"
+            },
+            "id": "<event-id>",
+            "name": "job/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
+            "data": "Starting job job-032"
+          },
+          "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd": {
+            "data": "30% complete"
+          },
+          "aa1f9f3aea7adabec95a21e2fc3ab14eb132385d": null,
+          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "7f63b9b059c2367957f6a595488c174e9dd773e9",
+          "op": "Sleep",
+          "name": "2s",
+          "displayName": "work-phase-3",
+          "opts": {},
+          "userland": {
+            "id": "work-phase-3"
+          },
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
+      "path": "/v1/checkpoint/01KV4F1HBDCW4NPZFHSA4YPVGD/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV4F1HBDCW4NPZFHSA4YPVGD",
+        "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+        "qi_id": "MTFvaTYzNzNtcHF4Yjo6ZGVmYXVsdA==",
+        "request_id": "01KV4F1NA8GHKQFSZYCMY8GFNB",
+        "generation_id": 1,
+        "request_started_at": 1781487686987,
+        "steps": [
+          {
+            "id": "089a36246d28b3d22ab1512993a0561c353998a5",
+            "mode": "sync",
+            "op": "StepRun",
+            "name": "almost-done",
+            "displayName": "almost-done",
+            "userland": {
+              "id": "almost-done"
+            },
+            "opts": {},
+            "rawArgs": ["almost-done", null],
+            "hashedId": "089a36246d28b3d22ab1512993a0561c353998a5",
+            "promise": {},
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "089a36246d28b3d22ab1512993a0561c353998a5",
+                "memoized": false,
+                "options": {
+                  "id": "almost-done",
+                  "name": "almost-done"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "60% complete",
+            "timing": {
+              "a": 1781487686988000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781487686988
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/032-cancelOn-timeout?fnId=examples-032-cancelOn-timeout-cancellable-job&stepId=step",
+      "path": "/examples/032-cancelOn-timeout",
+      "query": {
+        "fnId": "examples-032-cancelOn-timeout-cancellable-job",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "3df24f50-0738-5a6b-8921-9e70de757784",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 6,
+            "stack": [
+              "2b020927d3c6eb407223a1baa3d6ce3597a3f88d",
+              "f293e613401d4942d83505b81dbd9ed0cbeba9ef",
+              "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd",
+              "aa1f9f3aea7adabec95a21e2fc3ab14eb132385d",
+              "089a36246d28b3d22ab1512993a0561c353998a5",
+              "7f63b9b059c2367957f6a595488c174e9dd773e9"
+            ]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "jobId": "job-032"
+          },
+          "id": "<event-id>",
+          "name": "job/started",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "jobId": "job-032"
+            },
+            "id": "<event-id>",
+            "name": "job/started",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "089a36246d28b3d22ab1512993a0561c353998a5": {
+            "data": "60% complete"
+          },
+          "2b020927d3c6eb407223a1baa3d6ce3597a3f88d": {
+            "data": "Starting job job-032"
+          },
+          "5aaf8905f32a43e8dd1a2ea0cbacb689428ccecd": {
+            "data": "30% complete"
+          },
+          "7f63b9b059c2367957f6a595488c174e9dd773e9": null,
+          "aa1f9f3aea7adabec95a21e2fc3ab14eb132385d": null,
+          "f293e613401d4942d83505b81dbd9ed0cbeba9ef": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "status": "completed",
+            "jobId": "job-032"
+          }
+        }
+      ]
     }
   }
 ]
