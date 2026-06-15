@@ -1,7 +1,7 @@
 import { describe, expect, it } from "@effect/vitest";
-import { decode } from "../../src/next/internal/runtime/MemoStore.js";
+import { decode } from "../../src/next/internal/domain/Memo.js";
 
-describe("MemoStore.decode", () => {
+describe("Memo.decode", () => {
   it("decodes { data: x } as MemoData", () => {
     expect(decode({ data: 42 })).toEqual({ _tag: "MemoData", data: 42 });
     expect(decode({ data: "hello" })).toEqual({ _tag: "MemoData", data: "hello" });

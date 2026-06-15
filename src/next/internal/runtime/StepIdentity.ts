@@ -1,18 +1,6 @@
-import { Context, Effect, Option, Predicate, Ref, Schema, Layer, Number, Encoding, MutableHashMap } from "effect";
-
-const StepOptions = Schema.Struct({ id: Schema.String, name: Schema.optional(Schema.String) });
-const StepInput = Schema.Union([Schema.String, StepOptions]);
-
-export const StepInfo = Schema.Struct({
-  id: Schema.String,
-  name: Schema.String,
-  hash: Schema.String,
-  order: Schema.Number,
-  rawStepArg: Schema.Unknown,
-});
-
-type StepInput = typeof StepInput.Type;
-export type StepInfo = typeof StepInfo.Type;
+import { Context, Effect, Option, Predicate, Ref, Layer, Number, Encoding, MutableHashMap } from "effect";
+import type { StepInput } from "../domain/StepInput.js";
+import { StepInfo } from "../domain/StepInfo.js";
 
 export class StepIdentity extends Context.Service<
   StepIdentity,
@@ -47,3 +35,5 @@ export class StepIdentity extends Context.Service<
 }) {
   static readonly layer = Layer.effect(this, this.make);
 }
+
+export { StepInfo };

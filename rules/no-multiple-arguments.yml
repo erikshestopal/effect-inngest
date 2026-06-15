@@ -1,0 +1,22 @@
+id: no-multiple-arguments
+language: TypeScript
+severity: error
+message: Use a single argument. Pass an object when more than one value is needed.
+files:
+  - src/next/**/*.ts
+ignores:
+  - src/next/internal/runtime/StepTools.ts
+rule:
+  all:
+    - any:
+        - pattern: $FN($A, $B, $$$REST)
+        - pattern: function $FN($A, $B, $$$REST) { $$$BODY }
+        - pattern: ($A, $B, $$$REST) => $$$BODY
+        - pattern: class $CLASS { $METHOD($A, $B, $$$REST) { $$$BODY } }
+    - not:
+        any:
+          - pattern: $VALUE.pipe($$$ARGS)
+          - pattern: Effect.forEach($$$ARGS)
+          - pattern: Effect.provideService($$$ARGS)
+          - pattern: MutableHashMap.set($$$ARGS)
+          - pattern: Schema.decodeUnknownEffect($$$ARGS)
