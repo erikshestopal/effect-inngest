@@ -15,6 +15,7 @@ import { StepInterrupt } from "./interrupts.js";
 import { createStepTools, buildHandlerContext, type HandlerContext } from "./step.js";
 import { OtelAttributes } from "./constants.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
+import { MemoStore } from "../next/internal/runtime/MemoStore.js";
 
 /** Trace context headers extracted from incoming request */
 export interface TraceHeaders {
@@ -106,7 +107,8 @@ export const execute = <F extends InngestFunction.Any, R>(
     const runHandler = Effect.gen(function* () {
       const rootFiberId = yield* Effect.fiberId;
       const identity = yield* StepIdentity;
-      const step = createStepTools(request, appName, identity, rootFiberId, checkpointState);
+      const memoStore = yield* MemoStore;
+      const step = createStepTools(request, appName, identity, memoStore, rootFiberId, checkpointState);
       const context = yield* buildHandlerContext<F>(fn, step, request);
       return yield* handler(context);
     });
@@ -140,6 +142,7 @@ export const execute = <F extends InngestFunction.Any, R>(
 
     const result = yield* Effect.scoped(handlerWithDeadline).pipe(
       Effect.provide(StepIdentity.layer),
+      Effect.provide(MemoStore.layer(request.steps as Record<string, unknown>)),
       Effect.flatMap((maybeValue) =>
         Effect.gen(function* () {
           const planned = yield* drainPlanned;

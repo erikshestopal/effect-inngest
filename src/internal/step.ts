@@ -9,10 +9,10 @@ import type { CheckpointState } from "./checkpoint.js";
 import * as Protocol from "./protocol.js";
 import { StepError, SendEventError, isNonRetriableError, isRetryAfterError } from "./errors.js";
 import { OtelAttributes } from "./constants.js";
-import { decodeMemo, type Memo } from "./memo.js";
 import { InngestDuration } from "../next/internal/wire/Duration.js";
 import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
+import { MemoStore } from "../next/internal/runtime/MemoStore.js";
 
 import {
   StepInterrupt,
@@ -185,15 +185,13 @@ export const createStepTools = (
   request: Protocol.SDKRequestBody,
   appName: string,
   identity: StepIdentity["Service"],
+  memoStore: MemoStore["Service"],
   rootFiberId: number,
   checkpoint: Option.Option<CheckpointState> = Option.none(),
 ): StepTools => {
   const ctx = request.ctx;
-  const steps = request.steps as Record<string, unknown>;
 
   const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => identity.resolve(opts);
-
-  const getMemo = (hash: string): Memo => decodeMemo(steps[hash]);
   const canExecute = (hash: string) => ctx.step_id === hash || ctx.step_id === "step";
   const isBlocked = (hash: string) => ctx.disable_immediate_execution && ctx.step_id !== hash;
 
@@ -233,12 +231,9 @@ export const createStepTools = (
   const sleep = (opts: StepOptionsOrId, duration: Duration.Input): Effect.Effect<void, StepInterrupt> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
-        Match.tag("MemoData", () => Effect.void),
-        Match.tag("MemoTimeout", () => Effect.void),
-        Match.tag("MemoError", () => Effect.void),
-        Match.tag("MemoInput", () => Effect.void),
+        Match.tag("MemoData", "MemoTimeout", "MemoError", "MemoInput", () => Effect.void),
         Match.tag("MemoNone", () =>
           Effect.gen(function* () {
             const encodedDuration = Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(duration));
@@ -262,12 +257,9 @@ export const createStepTools = (
   const sleepUntil = (opts: StepOptionsOrId, timestamp: Date | number | string): Effect.Effect<void, StepInterrupt> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
-        Match.tag("MemoData", () => Effect.void),
-        Match.tag("MemoTimeout", () => Effect.void),
-        Match.tag("MemoError", () => Effect.void),
-        Match.tag("MemoInput", () => Effect.void),
+        Match.tag("MemoData", "MemoTimeout", "MemoError", "MemoInput", () => Effect.void),
         Match.tag("MemoNone", () =>
           Effect.andThen(
             flushIfCheckpoint,
@@ -289,7 +281,7 @@ export const createStepTools = (
   ): Effect.Effect<Option.Option<A>, StepInterrupt | StepError> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
         Match.tag("MemoData", ({ data }) => {
           // null/undefined = timeout (no matching event received)
@@ -305,9 +297,7 @@ export const createStepTools = (
           }
           return decodeJson(event, withEventTag(event, payload), info.id).pipe(Effect.map(Option.some));
         }),
-        Match.tag("MemoTimeout", () => Effect.succeed(Option.none())),
-        Match.tag("MemoError", () => Effect.succeed(Option.none())),
-        Match.tag("MemoInput", () => Effect.succeed(Option.none())),
+        Match.tag("MemoTimeout", "MemoError", "MemoInput", () => Effect.succeed(Option.none())),
         Match.tag("MemoNone", () =>
           Effect.andThen(
             flushIfCheckpoint,
@@ -331,7 +321,7 @@ export const createStepTools = (
   ): Effect.Effect<InngestFunction.Success<F>, StepInterrupt | StepError> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
         Match.tag("MemoData", ({ data }) =>
           decodeJson(options.function.success as JsonSchema<InngestFunction.Success<F>>, data, info.id),
@@ -377,7 +367,7 @@ export const createStepTools = (
   ): Effect.Effect<A | StepRunOutput<A>, StepInterrupt | StepError | Err, R> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
         Match.tag("MemoData", ({ data }) =>
           options?.schema ? decodeJson(options.schema, data, info.id) : Effect.succeed(data as StepRunOutput<A>),
@@ -475,7 +465,7 @@ export const createStepTools = (
   ): Effect.Effect<{ readonly ids: ReadonlyArray<string> }, StepInterrupt | SendEventError, InngestClient> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
-        getMemo(info.hash),
+        memoStore.get(info),
         Match.value,
         Match.tag("MemoData", ({ data }) => Effect.succeed(data as { readonly ids: ReadonlyArray<string> })),
         Match.tag("MemoError", () => Effect.fail(SendEventError.make({ message: "SendEvent failed", events: [] }))),
