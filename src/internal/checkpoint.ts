@@ -15,7 +15,7 @@ import * as Predicate from "effect/Predicate";
 import * as Ref from "effect/Ref";
 import * as Result from "effect/Result";
 import * as Schema from "effect/Schema";
-import { timeStr } from "./helpers.js";
+import { InngestDuration } from "../next/internal/wire/Duration.js";
 import type * as Protocol from "./protocol.js";
 
 /**
@@ -120,8 +120,8 @@ export interface RegistrationFragment {
 
 export const toRegistration = (cfg: CheckpointConfig): RegistrationFragment => ({
   batch_steps: cfg.bufferedSteps,
-  batch_interval: timeStr(cfg.maxInterval),
-  max_runtime: timeStr(cfg.maxRuntime),
+  batch_interval: Schema.encodeSync(InngestDuration)(cfg.maxInterval),
+  max_runtime: Schema.encodeSync(InngestDuration)(cfg.maxRuntime),
 });
 
 /**

@@ -17,9 +17,10 @@ import type { InngestFunction } from "../Function.js";
 import type { CheckpointState } from "./checkpoint.js";
 import * as Protocol from "./protocol.js";
 import { StepError, SendEventError, isNonRetriableError, isRetryAfterError } from "./errors.js";
-import { timeStr, formatTimestamp } from "./helpers.js";
 import { OtelAttributes } from "./constants.js";
 import { decodeMemo, type Memo } from "./memo.js";
+import { InngestDuration } from "../next/internal/wire/Duration.js";
+import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 
 import {
   StepInterrupt,
@@ -56,9 +57,9 @@ const errorOtelAttributes = (err: unknown): Record<string, string> => {
     if (err.stack) {
       attrs[OtelAttributes.ExceptionStacktrace] = err.stack;
     }
-  } else if (Predicate.hasProperty(err, "_tag") && typeof err._tag === "string") {
+  } else if (Predicate.hasProperty(err, "_tag") && Predicate.isString(err._tag)) {
     attrs[OtelAttributes.ExceptionType] = err._tag;
-    if (Predicate.hasProperty(err, "message") && typeof err.message === "string") {
+    if (Predicate.hasProperty(err, "message") && Predicate.isString(err.message)) {
       attrs[OtelAttributes.ExceptionMessage] = err.message;
     }
   } else {
@@ -195,7 +196,7 @@ export interface HandlerContext<F extends InngestFunction.Any> {
 }
 
 const normalizeOpts = (opts: StepOptionsOrId): { id: string; name: string } =>
-  typeof opts === "string" ? { id: opts, name: opts } : { id: opts.id, name: opts.name ?? opts.id };
+  Predicate.isString(opts) ? { id: opts, name: opts } : { id: opts.id, name: opts.name ?? opts.id };
 
 const stepError = (stepId: string, message: string, opts?: { noRetry?: boolean; cause?: unknown }) =>
   Effect.fail(StepError.make({ stepId, message, noRetry: opts?.noRetry, cause: opts?.cause }));
@@ -213,7 +214,7 @@ export const createStepTools = (
 
   const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => {
     const { id, name } = normalizeOpts(opts);
-    const rawStepArg = typeof opts === "string" ? opts : opts;
+    const rawStepArg = opts;
     return Effect.gen(function* () {
       const order = yield* Ref.modify(stepOrder, (current) => [current, current + 1]);
       const count = yield* Ref.modify(stepIdCounts, (map) => {
@@ -273,13 +274,14 @@ export const createStepTools = (
         Match.tag("MemoInput", () => Effect.void),
         Match.tag("MemoNone", () =>
           Effect.gen(function* () {
-            const opcode = Protocol.sleep(info, timeStr(duration));
+            const encodedDuration = Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(duration));
+            const opcode = Protocol.sleep(info, encodedDuration);
             if (yield* isParallelRootChild) {
               yield* planIfCheckpoint(opcode, info.order);
               return;
             }
             yield* flushIfCheckpoint;
-            return yield* Effect.die(sleepInterrupt({ info, duration: timeStr(duration) }));
+            return yield* Effect.die(sleepInterrupt({ info, duration: encodedDuration }));
           }).pipe(
             Effect.withSpan(`inngest.step/sleep/${info.id}`, {
               attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleep" },
@@ -302,7 +304,7 @@ export const createStepTools = (
         Match.tag("MemoNone", () =>
           Effect.andThen(
             flushIfCheckpoint,
-            Effect.die(sleepInterrupt({ info, duration: formatTimestamp(timestamp) })),
+            Effect.die(sleepInterrupt({ info, duration: Schema.decodeUnknownSync(InngestTimestamp)(timestamp) })),
           ).pipe(
             Effect.withSpan(`inngest.step/sleepUntil/${info.id}`, {
               attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleepUntil" },
@@ -346,7 +348,7 @@ export const createStepTools = (
               waitForEventInterrupt({
                 info,
                 event: event.identifier,
-                timeout: timeStr(options.timeout),
+                timeout: Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(options.timeout)),
                 if: options.if,
               }),
             ),
@@ -389,7 +391,9 @@ export const createStepTools = (
                     ...(Predicate.isNotUndefined(options.user) ? { user: options.user } : {}),
                     ...(Predicate.isNotUndefined(options.v) ? { v: options.v } : {}),
                   },
-                  timeout: options.timeout ? timeStr(options.timeout) : undefined,
+                  timeout: options.timeout
+                    ? Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(options.timeout))
+                    : undefined,
                 }),
               ),
             ),

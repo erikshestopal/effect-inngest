@@ -306,24 +306,22 @@ Responsibilities:
 
 ### `internal/codec`
 
-Codec modules replace broad helper dumping grounds for user values, not protocol scalar values.
+Codec modules replace broad helper dumping grounds for user values, not protocol scalar values or wire envelopes.
 
 Possible modules:
 
 ```txt
-internal/codec/Event.ts
 internal/codec/Json.ts
 ```
 
 Responsibilities:
 
-- event `_tag` injection/stripping policy;
 - Schema JSON encode/decode helpers;
 - mapping decode/encode failures into existing SDK errors.
 
 Avoid recreating `helpers.ts` under another name. Each codec module should serve one concept.
 
-Do not put Inngest wire scalars such as duration strings or sleep-until timestamps here. Those are protocol concepts and belong in `internal/wire`.
+Do not put Inngest wire scalars such as duration strings, sleep-until timestamps, event envelopes, or opcode payloads here. Those are protocol concepts and belong in `internal/wire`.
 
 ## Current pain points to eliminate gradually
 
@@ -341,6 +339,67 @@ These are architectural targets, not instructions to remove everything in one pa
 
 Use a strangler pattern. Each step should reduce one mixed concern while keeping public behavior unchanged.
 
+Do not migrate one horizontal module at a time. Prefer vertical slices: a behavior crosses public facade, runtime/domain decision, wire encoding, adapter boundary, and validation. A slice can start in `src/next`, but it is not complete until it has a named seam back into current production code or an explicit reason to remain a spike.
+
+Before implementing any new `src/next` module, write down this seam map:
+
+```txt
+Behavior:
+Current owner:
+New owner:
+Compatibility seam:
+First production call site:
+Validation:
+```
+
+If any row is unclear, the slice is not ready. This prevents a collection of polished modules that do not compose into the SDK.
+
+Examples:
+
+```txt
+Behavior: encode relative durations for registration and step operations
+Current owner: internal/helpers.ts timeStr
+New owner: internal/wire/Duration.ts
+Compatibility seam: production registration and step call sites import the wire scalar directly; helpers.timeStr is deleted
+First production call site: Function.toRegistration, step.sleep, waitForEvent, invoke timeout
+Validation: duration unit tests, registration tests, protocol parity tests
+
+Behavior: encode absolute sleep-until timestamps
+Current owner: internal/helpers.ts formatTimestamp
+New owner: internal/wire/Timestamp.ts
+Compatibility seam: step.sleepUntil imports the wire scalar directly; helpers.ts is deleted
+First production call site: step.sleepUntil
+Validation: timestamp unit tests, sleepUntil protocol tests
+
+Behavior: represent Inngest event envelopes on the wire
+Current owner: internal/protocol.ts InngestEvent plus ad hoc step.ts event payload construction
+New owner: internal/wire/Event.ts
+Compatibility seam: protocol.ts re-exports or delegates to the wire model under existing internal names
+First production call site: request body decoding, waitForEvent memo decoding, sendEvent payload encoding
+Validation: protocol tests, send-event integration tests, wait-for-event tests
+
+Behavior: resolve a step occurrence identity
+Current owner: internal/step.ts normalizeOpts, getInfo, hashStepId, duplicate count refs
+New owner: internal/runtime/StepIdentity.ts
+Compatibility seam: step.ts getInfo delegates to StepIdentity
+First production call site: every step operation through createStepTools
+Validation: memo tests, protocol step ordering tests, native protocol parity tests
+
+Behavior: interpret memoized step state
+Current owner: internal/memo.ts plus internal/step.ts getMemo branching
+New owner: internal/runtime/MemoStore.ts backed by internal/domain/Memo.ts
+Compatibility seam: step.ts reads through MemoStore while preserving decodeMemo exports
+First production call site: step.run, sleep, waitForEvent, invoke, sendEvent replay paths
+Validation: memo unit tests, step memoization integration tests, protocol parity tests
+
+Behavior: turn step decisions into generator opcodes
+Current owner: internal/protocol.ts factory functions called directly from step.ts
+New owner: internal/wire/OpcodeEncoder.ts
+Compatibility seam: protocol factory functions delegate to OpcodeEncoder
+First production call site: run/sleep/wait/invoke/sendEvent interrupt construction
+Validation: protocol tests, fixture parity tests, native RED tests
+```
+
 ### 1. Establish the baseline
 
 Before meaningful internal changes, run or record the relevant compatibility checks:
@@ -353,18 +412,17 @@ vp test run
 
 When full validation is too expensive during iteration, prioritize targeted compatibility checks that cover protocol parity and public behavior.
 
-### 2. Extract low-risk wire scalars and user codecs first
+### 2. Extract low-risk wire scalars first
 
-Start by replacing generic helpers with named protocol/user-value modules:
+Start by replacing generic helpers with named protocol modules:
 
 ```txt
 internal/wire/Duration.ts
 internal/wire/Timestamp.ts
-internal/codec/Event.ts
 internal/codec/Json.ts
 ```
 
-`internal/wire/Duration.ts` should be a schema-backed Inngest duration scalar, not a free-floating `timeStr` helper. `internal/wire/Timestamp.ts` should own the sleep-until timestamp wire representation. Keep any old helper module as a temporary compatibility facade if that minimizes churn.
+`internal/wire/Duration.ts` should be a schema-backed Inngest duration scalar, not a free-floating `timeStr` helper. `internal/wire/Timestamp.ts` should own the sleep-until timestamp wire representation. `internal/codec/Json.ts` may follow only when a vertical slice needs user JSON encode/decode behavior. Keep any old helper module as a temporary compatibility facade if that minimizes churn.
 
 ### 3. Extract step identity and memo lookup
 

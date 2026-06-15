@@ -5,7 +5,7 @@ import { Array as Arr, Duration, Predicate, Schema } from "effect";
 import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Checkpoint from "./internal/checkpoint.js";
 import type { CheckpointingOption } from "./internal/checkpoint.js";
-import { timeStr } from "./internal/helpers.js";
+import { InngestDuration } from "./next/internal/wire/Duration.js";
 
 export type { CheckpointingOption } from "./internal/checkpoint.js";
 
@@ -455,6 +455,9 @@ export declare namespace InngestFunction {
 
 const isEventTrigger = (t: Trigger): t is EventTrigger => Predicate.hasProperty(t, "event");
 
+const encodeDuration = (input: Duration.Input): string =>
+  Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(input));
+
 const Proto = {
   [TypeId]: TypeId,
 
@@ -481,13 +484,13 @@ const Proto = {
     const cancel = opts.cancelOn?.map((c) => ({
       event: c.event,
       if: c.if,
-      timeout: c.timeout ? timeStr(c.timeout) : undefined,
+      timeout: c.timeout ? encodeDuration(c.timeout) : undefined,
     }));
     const timeouts =
       opts.timeouts?.start || opts.timeouts?.finish
         ? {
-            start: opts.timeouts.start ? timeStr(opts.timeouts.start) : undefined,
-            finish: opts.timeouts.finish ? timeStr(opts.timeouts.finish) : undefined,
+            start: opts.timeouts.start ? encodeDuration(opts.timeouts.start) : undefined,
+            finish: opts.timeouts.finish ? encodeDuration(opts.timeouts.finish) : undefined,
           }
         : undefined;
 
@@ -495,7 +498,7 @@ const Proto = {
       ? {
           key: opts.rateLimit.key,
           limit: opts.rateLimit.limit,
-          period: timeStr(opts.rateLimit.period),
+          period: encodeDuration(opts.rateLimit.period),
         }
       : undefined;
 
@@ -503,7 +506,7 @@ const Proto = {
       ? {
           key: opts.throttle.key,
           limit: opts.throttle.limit,
-          period: timeStr(opts.throttle.period),
+          period: encodeDuration(opts.throttle.period),
           burst: opts.throttle.burst,
         }
       : undefined;
@@ -511,8 +514,8 @@ const Proto = {
     const debounce = opts.debounce
       ? {
           key: opts.debounce.key,
-          period: timeStr(opts.debounce.period),
-          timeout: opts.debounce.timeout ? timeStr(opts.debounce.timeout) : undefined,
+          period: encodeDuration(opts.debounce.period),
+          timeout: opts.debounce.timeout ? encodeDuration(opts.debounce.timeout) : undefined,
         }
       : undefined;
 
@@ -536,7 +539,7 @@ const Proto = {
     const batchEvents = opts.batchEvents
       ? {
           maxSize: opts.batchEvents.maxSize,
-          timeout: timeStr(opts.batchEvents.timeout),
+          timeout: encodeDuration(opts.batchEvents.timeout),
           key: opts.batchEvents.key,
         }
       : undefined;

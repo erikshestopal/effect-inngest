@@ -61,7 +61,7 @@ export const verifyAndParseRequestBody = Effect.fn("effect-inngest/handler/verif
   const body = yield* SdkRequest.bodyUint8Array(request).pipe(
     Effect.mapError((error) => {
       const msg =
-        Predicate.hasProperty(error, "message") && typeof error.message === "string" ? error.message : "unknown";
+        Predicate.hasProperty(error, "message") && Predicate.isString(error.message) ? error.message : "unknown";
       return new InvalidRequestError({ message: `Failed to read request body: ${msg}` });
     }),
   );
@@ -174,11 +174,11 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
       const errorOpt = Cause.findErrorOption(cause);
       const dieReason = cause.reasons.find(Cause.isDieReason);
       const message = Option.isSome(errorOpt)
-        ? Predicate.hasProperty(errorOpt.value, "message") && typeof errorOpt.value.message === "string"
+        ? Predicate.hasProperty(errorOpt.value, "message") && Predicate.isString(errorOpt.value.message)
           ? errorOpt.value.message
           : "Registration failed"
         : dieReason
-          ? Predicate.hasProperty(dieReason.defect, "message") && typeof dieReason.defect.message === "string"
+          ? Predicate.hasProperty(dieReason.defect, "message") && Predicate.isString(dieReason.defect.message)
             ? dieReason.defect.message
             : "Registration failed"
           : "Registration failed";

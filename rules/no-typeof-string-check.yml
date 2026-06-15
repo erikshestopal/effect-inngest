@@ -1,0 +1,14 @@
+id: no-typeof-string-check
+language: TypeScript
+severity: error
+message: Use Predicate.isString() / Predicate.isNotString() from effect instead of typeof string checks.
+rule:
+  any:
+    - pattern: 'typeof $VALUE === "string"'
+    - pattern: 'typeof $VALUE !== "string"'
+    - pattern: '"string" === typeof $VALUE'
+    - pattern: '"string" !== typeof $VALUE'
+    - pattern: "typeof $VALUE === 'string'"
+    - pattern: "typeof $VALUE !== 'string'"
+    - pattern: "'string' === typeof $VALUE"
+    - pattern: "'string' !== typeof $VALUE"
