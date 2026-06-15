@@ -55,7 +55,7 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["src/**/*", "test/**/*", "examples/**/*"],
+  "include": ["src/**/*", "test/**/*", "examples/**/*", "src-next/**/*"],
   "exclude": ["node_modules", "dist"],
   "$schema": "https://raw.githubusercontent.com/Effect-TS/tsgo/refs/heads/main/schema.json"
 }
