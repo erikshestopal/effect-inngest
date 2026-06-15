@@ -55,13 +55,14 @@ if (missingExampleIds.length > 0) {
 
 const functions = examples.flatMap((example) => example.functions);
 const manifest = examples.map((example) => ({ id: example.id, cases: example.cases }));
+const servePathFor = (exampleId: string) => process.env.NATIVE_INNGEST_SERVE_PATH ?? `/examples/${exampleId}`;
 const handlers = examples.map((example) => ({
   id: example.id,
   handler: serve({
     client: example.client,
     functions: example.functions,
     serveOrigin,
-    servePath,
+    servePath: servePathFor(example.id),
   }),
 }));
 

@@ -300,14 +300,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4C8Z65CYJAGY93Z9PVN8PD.98f60eef27694e38e56d53701e64d91e7b4b9166",
-              "expire": 1781484810771,
+              "correlation_id": "01KV4E3FHR4FWSRA8GJ6SQZAZ2.98f60eef27694e38e56d53701e64d91e7b4b9166",
+              "expire": 1781486728073,
               "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "6e191132-4f59-4729-a755-4885b5403bed",
+              "gid": "e3fd343f-053d-41f7-aa6c-c2760203bb1a",
               "isr": {
-                "dsid": "25b0d8c27acf58aa",
-                "dstp": "00-1afd38d934b24fae1af1db0162255532-16295c4aeffed6ab-00",
-                "tp": "00-1afd38d934b24fae1af1db0162255532-25b0d8c27acf58aa-01",
+                "dsid": "bdf8ce21d32de78d",
+                "dstp": "00-1fd1bb645a6baef4429a283c3f617308-db92342854a0d389-00",
+                "tp": "00-1fd1bb645a6baef4429a283c3f617308-bdf8ce21d32de78d-01",
                 "ts": ""
               },
               "name": "invoke-worker",
@@ -316,10 +316,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "af960bc0eec3f279",
-                  "traceparent": "00-7bec73a8e7cf728f37af3e609990614e-487aa9e42b874b27-01"
+                  "sid": "6b4ba4a37ce2564c",
+                  "traceparent": "00-8b56b1a4b9611d7195dfbea51dad7867-04a19bdad28bd2ad-01"
                 },
-                "ts": "2026-06-15T00:53:00.77218Z"
+                "ts": "2026-06-15T01:24:58.077508Z"
               }
             },
             "priority": "high",
@@ -334,14 +334,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4C8Z65CYJAGY93Z9PVN8PD.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                "expire": 1781484810771,
+                "correlation_id": "01KV4E3FHR4FWSRA8GJ6SQZAZ2.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                "expire": 1781486728073,
                 "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "6e191132-4f59-4729-a755-4885b5403bed",
+                "gid": "e3fd343f-053d-41f7-aa6c-c2760203bb1a",
                 "isr": {
-                  "dsid": "25b0d8c27acf58aa",
-                  "dstp": "00-1afd38d934b24fae1af1db0162255532-16295c4aeffed6ab-00",
-                  "tp": "00-1afd38d934b24fae1af1db0162255532-25b0d8c27acf58aa-01",
+                  "dsid": "bdf8ce21d32de78d",
+                  "dstp": "00-1fd1bb645a6baef4429a283c3f617308-db92342854a0d389-00",
+                  "tp": "00-1fd1bb645a6baef4429a283c3f617308-bdf8ce21d32de78d-01",
                   "ts": ""
                 },
                 "name": "invoke-worker",
@@ -350,10 +350,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "af960bc0eec3f279",
-                    "traceparent": "00-7bec73a8e7cf728f37af3e609990614e-487aa9e42b874b27-01"
+                    "sid": "6b4ba4a37ce2564c",
+                    "traceparent": "00-8b56b1a4b9611d7195dfbea51dad7867-04a19bdad28bd2ad-01"
                   },
-                  "ts": "2026-06-15T00:53:00.77218Z"
+                  "ts": "2026-06-15T01:24:58.077508Z"
                 }
               },
               "priority": "high",
@@ -494,6 +494,250 @@
             "id": "invoke-batch-worker"
           },
           "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step",
+      "path": "/examples/053-step-invoke-options",
+      "query": {
+        "fnId": "examples-053-step-invoke-options-worker-task",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "264c147f-9e82-5d6a-bbb6-30c6c7f216b6",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 4,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "correlation_id": "01KV4E3FHR4FWSRA8GJ6SQZAZ2.f7931d4debe848361c612c75928abab74294ff1b",
+              "expire": 1781486998554,
+              "fn_id": "examples-053-step-invoke-options-worker-task",
+              "gid": "4366af35-b4c7-48f2-9375-04e1e748c2f8",
+              "isr": {
+                "dsid": "0d45e65201d703da",
+                "dstp": "00-1fd1bb645a6baef4429a283c3f617308-db92342854a0d389-00",
+                "tp": "00-1fd1bb645a6baef4429a283c3f617308-0d45e65201d703da-01",
+                "ts": ""
+              },
+              "name": "invoke-batch-worker",
+              "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+              "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "393d683e568ca94c",
+                  "traceparent": "00-8b56b1a4b9611d7195dfbea51dad7867-04a19bdad28bd2ad-01"
+                },
+                "ts": "2026-06-15T01:24:58.554953Z"
+              }
+            },
+            "priority": "low",
+            "taskId": "task-053-batch"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "correlation_id": "01KV4E3FHR4FWSRA8GJ6SQZAZ2.f7931d4debe848361c612c75928abab74294ff1b",
+                "expire": 1781486998554,
+                "fn_id": "examples-053-step-invoke-options-worker-task",
+                "gid": "4366af35-b4c7-48f2-9375-04e1e748c2f8",
+                "isr": {
+                  "dsid": "0d45e65201d703da",
+                  "dstp": "00-1fd1bb645a6baef4429a283c3f617308-db92342854a0d389-00",
+                  "tp": "00-1fd1bb645a6baef4429a283c3f617308-0d45e65201d703da-01",
+                  "ts": ""
+                },
+                "name": "invoke-batch-worker",
+                "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                "source_fn_v": 1,
+                "tc": {
+                  "ctx": {
+                    "sid": "393d683e568ca94c",
+                    "traceparent": "00-8b56b1a4b9611d7195dfbea51dad7867-04a19bdad28bd2ad-01"
+                  },
+                  "ts": "2026-06-15T01:24:58.554953Z"
+                }
+              },
+              "priority": "low",
+              "taskId": "task-053-batch"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.invoked",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "completed": true,
+            "taskId": "task-053-batch"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
+      "path": "/examples/053-step-invoke-options",
+      "query": {
+        "fnId": "examples-053-step-invoke-options-orchestrator",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 2,
+            "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166", "f7931d4debe848361c612c75928abab74294ff1b"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "demo/orchestrate",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "taskId": "task-053"
+            },
+            "id": "<event-id>",
+            "name": "demo/orchestrate",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "98f60eef27694e38e56d53701e64d91e7b4b9166": {
+            "data": {
+              "completed": true,
+              "taskId": "task-053"
+            }
+          },
+          "f7931d4debe848361c612c75928abab74294ff1b": {
+            "data": {
+              "completed": true,
+              "taskId": "task-053-batch"
+            }
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "orchestrated": true,
+            "workerResult": {
+              "completed": true,
+              "taskId": "task-053"
+            },
+            "batchResult": {
+              "completed": true,
+              "taskId": "task-053-batch"
+            }
+          }
         }
       ]
     }

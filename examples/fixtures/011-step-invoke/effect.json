@@ -298,26 +298,26 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4C8KPH4VQFN75AGSDEPNPJ.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "expire": 1813020769004,
+              "correlation_id": "01KV4E3S6P8G81MXR0WEPBZTSB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "expire": 1813022707950,
               "fn_id": "examples-011-step-invoke-child-square",
-              "gid": "8231009e-b311-48d0-9b42-b238ce6b8721",
+              "gid": "ebb88f3f-2dda-46cb-8a0d-6573809d2294",
               "isr": {
-                "dsid": "91d9fa6ea843c1d2",
-                "dstp": "00-9d280b3a54b6f54310eb4053ea4906ea-eae54e7a19c1dde8-00",
-                "tp": "00-9d280b3a54b6f54310eb4053ea4906ea-91d9fa6ea843c1d2-01",
+                "dsid": "c460ebf53c2b0854",
+                "dstp": "00-f33119928e5008f9d779a1b3bfb66eb4-e4d2c57f15242848-00",
+                "tp": "00-f33119928e5008f9d779a1b3bfb66eb4-c460ebf53c2b0854-01",
                 "ts": ""
               },
               "name": "call-child",
               "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
               "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-              "source_fn_v": 2,
+              "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "0d56f9e6037d9e9d",
-                  "traceparent": "00-8a9abef1a263674e4349c6095ea921ff-b5a4f1f7ac8741dd-01"
+                  "sid": "2e87d65d2d98acb4",
+                  "traceparent": "00-2be4dd3eb9605739421dd8a2394965d5-572bbfe74de460c7-01"
                 },
-                "ts": "2026-06-15T00:52:49.004554Z"
+                "ts": "2026-06-15T01:25:07.951391Z"
               }
             },
             "value": 7
@@ -331,26 +331,26 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4C8KPH4VQFN75AGSDEPNPJ.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                "expire": 1813020769004,
+                "correlation_id": "01KV4E3S6P8G81MXR0WEPBZTSB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                "expire": 1813022707950,
                 "fn_id": "examples-011-step-invoke-child-square",
-                "gid": "8231009e-b311-48d0-9b42-b238ce6b8721",
+                "gid": "ebb88f3f-2dda-46cb-8a0d-6573809d2294",
                 "isr": {
-                  "dsid": "91d9fa6ea843c1d2",
-                  "dstp": "00-9d280b3a54b6f54310eb4053ea4906ea-eae54e7a19c1dde8-00",
-                  "tp": "00-9d280b3a54b6f54310eb4053ea4906ea-91d9fa6ea843c1d2-01",
+                  "dsid": "c460ebf53c2b0854",
+                  "dstp": "00-f33119928e5008f9d779a1b3bfb66eb4-e4d2c57f15242848-00",
+                  "tp": "00-f33119928e5008f9d779a1b3bfb66eb4-c460ebf53c2b0854-01",
                   "ts": ""
                 },
                 "name": "call-child",
                 "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
                 "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                "source_fn_v": 2,
+                "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "0d56f9e6037d9e9d",
-                    "traceparent": "00-8a9abef1a263674e4349c6095ea921ff-b5a4f1f7ac8741dd-01"
+                    "sid": "2e87d65d2d98acb4",
+                    "traceparent": "00-2be4dd3eb9605739421dd8a2394965d5-572bbfe74de460c7-01"
                   },
-                  "ts": "2026-06-15T00:52:49.004554Z"
+                  "ts": "2026-06-15T01:25:07.951391Z"
                 }
               },
               "value": 7

@@ -2,12 +2,14 @@
 
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { BunRuntime, BunServices } from "@effect/platform-bun";
+import { BunHttpClient, BunRuntime, BunServices } from "@effect/platform-bun";
 import { Command, Flag } from "effect/unstable/cli";
+import { HttpClient, HttpClientRequest, HttpMethod } from "effect/unstable/http";
 import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
+import * as Layer from "effect/Layer";
 import * as Path from "effect/Path";
 import * as Ref from "effect/Ref";
 import * as Stream from "effect/Stream";
@@ -25,7 +27,10 @@ interface ExampleCase {
     readonly eventKey?: string;
     readonly events: ReadonlyArray<Record<string, unknown>>;
   }>;
-  readonly expect?: ReadonlyArray<unknown>;
+  readonly expect?: ReadonlyArray<{
+    readonly functionId?: string;
+    readonly functionTag?: string;
+  }>;
 }
 
 interface ExampleManifestEntry {
@@ -55,10 +60,12 @@ interface Exchange {
 }
 
 interface RecordingState {
-  readonly exchanges: Ref.Ref<ReadonlyArray<Exchange>>;
+  readonly exchanges: Ref.Ref<Map<string, ReadonlyArray<Exchange>>>;
   readonly inFlight: Ref.Ref<number>;
   readonly idle: Ref.Ref<Deferred.Deferred<void>>;
+  readonly runToExample: Ref.Ref<Map<string, string>>;
   readonly sequence: Ref.Ref<number>;
+  readonly sequences: Ref.Ref<Map<string, number>>;
 }
 
 const examplesDir = dirname(fileURLToPath(import.meta.url));
@@ -92,12 +99,13 @@ const runtimes = {
     manifestPath: "/__native/examples",
     serverFile: join(examplesDir, "native", "server.ts"),
     env: (example?: ExampleManifestEntry) => ({
-      NATIVE_INNGEST_APP_ID: example ? appIdFor(example.id) : "examples",
       NATIVE_INNGEST_BASE_URL: recordedDevOrigin,
       NATIVE_INNGEST_EXAMPLE_IDS: example?.id ?? "",
       NATIVE_INNGEST_PORT: "19999",
       NATIVE_INNGEST_SERVE_ORIGIN: recordedSdkOrigin,
-      NATIVE_INNGEST_SERVE_PATH: example ? examplePath(example.id) : "/api/inngest",
+      ...(example
+        ? { NATIVE_INNGEST_APP_ID: appIdFor(example.id), NATIVE_INNGEST_SERVE_PATH: examplePath(example.id) }
+        : {}),
     }),
   },
 } as const;
@@ -106,21 +114,26 @@ const makeState = Effect.gen(function* () {
   const idle = yield* Deferred.make<void>();
   yield* Deferred.succeed(idle, undefined);
   return {
-    exchanges: yield* Ref.make<ReadonlyArray<Exchange>>([]),
+    exchanges: yield* Ref.make(new Map<string, ReadonlyArray<Exchange>>()),
     inFlight: yield* Ref.make(0),
     idle: yield* Ref.make(idle),
+    runToExample: yield* Ref.make(new Map<string, string>()),
     sequence: yield* Ref.make(0),
+    sequences: yield* Ref.make(new Map<string, number>()),
   } satisfies RecordingState;
 });
 
-const resetState = (state: RecordingState) =>
+const resetExampleState = (state: RecordingState, exampleId: string) =>
   Effect.gen(function* () {
-    const idle = yield* Deferred.make<void>();
-    yield* Deferred.succeed(idle, undefined);
-    yield* Ref.set(state.sequence, 0);
-    yield* Ref.set(state.exchanges, []);
-    yield* Ref.set(state.inFlight, 0);
-    yield* Ref.set(state.idle, idle);
+    yield* Ref.update(state.exchanges, (exchanges) => new Map(exchanges).set(exampleId, []));
+    yield* Ref.update(state.sequences, (sequences) => new Map(sequences).set(exampleId, 0));
+    yield* Ref.update(state.runToExample, (runs) => {
+      const next = new Map(runs);
+      for (const [runId, owner] of next) {
+        if (owner === exampleId) next.delete(runId);
+      }
+      return next;
+    });
   });
 
 const delay = (ms: number) =>
@@ -139,6 +152,54 @@ const markRequestStart = (state: RecordingState) =>
       yield* Ref.set(state.idle, yield* Deferred.make<void>());
     }
     return yield* Ref.updateAndGet(state.sequence, (n) => n + 1);
+  });
+
+const nextExampleSequence = (state: RecordingState, exampleId: string) =>
+  Ref.modify(state.sequences, (sequences) => {
+    const current = sequences.get(exampleId) ?? 0;
+    return [current + 1, new Map(sequences).set(exampleId, current + 1)] as const;
+  });
+
+const exampleIdFromPath = (path: string) => path.match(/^\/examples\/([^/]+)/u)?.[1];
+
+const appNameToExampleId = (appName: unknown) =>
+  typeof appName === "string" && appName.startsWith("examples-") ? appName.slice("examples-".length) : undefined;
+
+const rawBodyRunId = (body: unknown) => (isObject(body) && typeof body.run_id === "string" ? body.run_id : undefined);
+
+const rawBodyCtxRunId = (body: unknown) => {
+  if (!isObject(body) || !isObject(body.ctx) || typeof body.ctx.run_id !== "string") return undefined;
+  return body.ctx.run_id;
+};
+
+const identifyExchangeExample = (state: RecordingState, direction: Direction, path: string, body: unknown) =>
+  Effect.gen(function* () {
+    if (direction === "inbound") {
+      const exampleId = exampleIdFromPath(path);
+      const runId = rawBodyCtxRunId(body);
+      if (exampleId && runId) {
+        yield* Ref.update(state.runToExample, (runs) => new Map(runs).set(runId, exampleId));
+      }
+      return exampleId;
+    }
+
+    if (path === "/fn/register" && isObject(body)) {
+      return appNameToExampleId(body.appName);
+    }
+
+    const checkpointRunId = rawBodyRunId(body);
+    if (checkpointRunId) {
+      return (yield* Ref.get(state.runToExample)).get(checkpointRunId);
+    }
+
+    return undefined;
+  });
+
+const appendExchange = (state: RecordingState, exampleId: string, exchange: Exchange) =>
+  Ref.update(state.exchanges, (all) => {
+    const next = new Map(all);
+    next.set(exampleId, [...(next.get(exampleId) ?? []), exchange]);
+    return next;
   });
 
 const markRequestEnd = (state: RecordingState) =>
@@ -308,6 +369,58 @@ const sanitizeHeaders = (headers: Record<string, string>): Record<string, string
 const requestBody = (request: Request) =>
   ["GET", "HEAD"].includes(request.method) ? Effect.succeed("") : Effect.tryPromise(() => request.clone().text());
 
+const requestWithMethod = (method: HttpMethod.HttpMethod, url: string) => {
+  switch (method) {
+    case "DELETE":
+      return HttpClientRequest.delete(url);
+    case "GET":
+      return HttpClientRequest.get(url);
+    case "HEAD":
+      return HttpClientRequest.head(url);
+    case "OPTIONS":
+      return HttpClientRequest.options(url);
+    case "PATCH":
+      return HttpClientRequest.patch(url);
+    case "POST":
+      return HttpClientRequest.post(url);
+    case "PUT":
+      return HttpClientRequest.put(url);
+    case "TRACE":
+      return HttpClientRequest.trace(url);
+    default:
+      return method satisfies never;
+  }
+};
+
+const responseHeaders = (headers: Record<string, string | undefined>) =>
+  Object.fromEntries(Object.entries(headers).filter((entry): entry is [string, string] => entry[1] !== undefined));
+
+const effectHttpRequest = (
+  url: string,
+  options: {
+    readonly body?: string;
+    readonly headers?: HeadersInit;
+    readonly method?: string;
+    readonly timeoutMs?: number;
+  } = {},
+) => {
+  const method = options.method ?? "GET";
+  if (!HttpMethod.isHttpMethod(method)) return Effect.fail(new Error(`Unsupported HTTP method ${method}`));
+  const request = requestWithMethod(method, url).pipe(
+    HttpClientRequest.setHeaders(Object.fromEntries(new Headers(options.headers).entries())),
+    options.body !== undefined && HttpMethod.hasBody(method)
+      ? HttpClientRequest.bodyText(options.body, new Headers(options.headers).get("content-type") ?? undefined)
+      : (current: HttpClientRequest.HttpClientRequest) => current,
+  );
+
+  return HttpClient.execute(request).pipe(
+    Effect.timeoutOrElse({
+      duration: `${options.timeoutMs ?? 10_000} millis`,
+      orElse: () => Effect.fail(new Error(`${method} ${url} timed out after ${options.timeoutMs ?? 10_000}ms`)),
+    }),
+  );
+};
+
 const recordProxy = (
   state: RecordingState,
   opts: {
@@ -319,54 +432,57 @@ const recordProxy = (
   },
 ) =>
   Effect.acquireRelease(
-    Effect.sync(() => {
+    Effect.gen(function* () {
+      const httpClient = yield* HttpClient.HttpClient;
       const server = Bun.serve({
         hostname: "127.0.0.1",
         port: opts.port,
         fetch(request) {
           return Effect.runPromise(
             Effect.gen(function* () {
-              const sequence = yield* markRequestStart(state);
+              yield* markRequestStart(state);
               try {
                 const url = new URL(request.url);
                 const targetUrl = `${opts.targetOrigin}${url.pathname}${url.search}`;
                 const bodyText = yield* requestBody(request);
+                const rawBody = parseBody(bodyText);
                 const headers = new Headers(request.headers);
                 headers.delete("content-length");
                 headers.set("host", new URL(opts.targetOrigin).host);
+                const exampleId = yield* identifyExchangeExample(state, opts.direction, url.pathname, rawBody);
+                const localSequence = exampleId ? yield* nextExampleSequence(state, exampleId) : undefined;
                 const requestRecord = {
-                  sequence,
+                  ...(localSequence ? { sequence: localSequence } : {}),
                   method: request.method,
                   url: `${opts.proxyOrigin}${url.pathname}${url.search}`,
                   path: url.pathname,
                   query: Object.fromEntries(url.searchParams.entries()),
                   headers: sanitizeHeaders(Object.fromEntries(request.headers.entries())),
-                  body: sanitizeProtocolBody(parseBody(bodyText)),
+                  body: sanitizeProtocolBody(rawBody),
                 };
-                const upstream = yield* Effect.tryPromise(() =>
-                  fetch(targetUrl, {
-                    body: bodyText ? bodyText : undefined,
-                    headers,
-                    method: request.method,
-                    redirect: "manual",
-                  }),
-                );
-                const responseText = yield* Effect.tryPromise(() => upstream.text());
-                yield* Ref.update(state.exchanges, (items) => [
-                  ...items,
-                  {
-                    sequence,
+                const upstream = yield* effectHttpRequest(targetUrl, {
+                  body: bodyText ? bodyText : undefined,
+                  headers,
+                  method: request.method,
+                }).pipe(Effect.provideService(HttpClient.HttpClient, httpClient));
+                const responseText = yield* upstream.text;
+                if (exampleId && localSequence) {
+                  yield* appendExchange(state, exampleId, {
+                    sequence: localSequence,
                     direction: opts.direction,
                     proxy: opts.name,
                     request: requestRecord,
                     response: {
                       status: upstream.status,
-                      headers: sanitizeHeaders(Object.fromEntries(upstream.headers.entries())),
+                      headers: sanitizeHeaders(responseHeaders(upstream.headers)),
                       body: sanitizeProtocolBody(parseBody(responseText)),
                     },
-                  },
-                ]);
-                return new Response(responseText, { headers: upstream.headers, status: upstream.status });
+                  });
+                }
+                return new Response(responseText, {
+                  headers: responseHeaders(upstream.headers),
+                  status: upstream.status,
+                });
               } finally {
                 Effect.runSync(markRequestEnd(state));
               }
@@ -393,33 +509,13 @@ const http = (
     readonly method?: string;
     readonly timeoutMs?: number;
   } = {},
-) =>
-  Effect.gen(function* () {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), options.timeoutMs ?? 10_000);
-    try {
-      const response = yield* Effect.tryPromise({
-        try: () =>
-          fetch(url, {
-            body:
-              options.body !== undefined && !["GET", "HEAD"].includes(options.method ?? "GET")
-                ? options.body
-                : undefined,
-            headers: options.headers,
-            method: options.method ?? "GET",
-            signal: controller.signal,
-          }),
-        catch: (error) =>
-          error instanceof DOMException && error.name === "AbortError"
-            ? new Error(`${options.method ?? "GET"} ${url} timed out after ${options.timeoutMs ?? 10_000}ms`)
-            : error,
-      });
-      const body = yield* Effect.tryPromise(() => response.text());
-      return { body, status: response.status } satisfies HttpResult;
-    } finally {
-      clearTimeout(timeout);
-    }
+) => {
+  return Effect.gen(function* () {
+    const response = yield* effectHttpRequest(url, options);
+    const body = yield* response.text;
+    return { body, status: response.status } satisfies HttpResult;
   });
+};
 
 const json = (url: string, options?: Parameters<typeof http>[1]) =>
   Effect.gen(function* () {
@@ -554,30 +650,65 @@ const triggerCase = (
 const expectedExecutionCount = (example: ExampleManifestEntry) =>
   example.cases.reduce((total, caseData) => total + (caseData.expect?.length ?? 1), 0);
 
-const waitForExecutionRecordings = (
+const expectedRootFunctionIds = (example: ExampleManifestEntry) =>
+  new Set(
+    example.cases.flatMap((caseData) =>
+      (caseData.expect ?? []).flatMap((expected) => {
+        if (expected.functionId) return [expected.functionId];
+        if (expected.functionTag) return [`examples-${example.id}-${expected.functionTag}`];
+        return [];
+      }),
+    ),
+  );
+
+const isTerminalExecutionResponse = (body: unknown) =>
+  Array.isArray(body) &&
+  body.some(
+    (op) =>
+      isObject(op) &&
+      typeof op.op === "string" &&
+      (op.op === "RunComplete" || op.op === "StepError" || op.op === "StepFailed"),
+  );
+
+const terminalExecutionCount = (
+  exchanges: ReadonlyArray<Exchange>,
+  path: string,
+  expectedFunctionIds: ReadonlySet<string>,
+) =>
+  exchanges.filter(
+    (exchange) =>
+      exchange.direction === "inbound" &&
+      exchange.request.method === "POST" &&
+      exchange.request.path === path &&
+      (expectedFunctionIds.size === 0 || expectedFunctionIds.has(String((exchange.request.query as any)?.fnId))) &&
+      (exchange.request.query as any)?.stepId === "step" &&
+      isTerminalExecutionResponse(exchange.response.body),
+  ).length;
+
+const waitForTerminalExecutionRecordings = (
   state: RecordingState,
   server: ProcessHandle,
   path: string,
+  expectedFunctionIds: ReadonlySet<string>,
   expectedCount: number,
 ) =>
   withDeadline(
     Effect.gen(function* () {
+      const exampleId = exampleIdFromPath(path);
+      if (!exampleId) return yield* Effect.fail(new Error(`Cannot identify example from path ${path}`));
       while (true) {
         if (!(yield* server.handle.isRunning)) {
           return yield* Effect.fail(new Error(`${server.label} exited early\n${yield* server.getOutput}`));
         }
-        const exchanges = yield* Ref.get(state.exchanges);
-        const actualCount = exchanges.filter(
-          (exchange) =>
-            exchange.direction === "inbound" && exchange.request.method === "POST" && exchange.request.path === path,
-        ).length;
+        const exchanges = (yield* Ref.get(state.exchanges)).get(exampleId) ?? [];
+        const actualCount = terminalExecutionCount(exchanges, path, expectedFunctionIds);
         if (actualCount >= expectedCount) return;
         yield* waitForNetworkIdle(state);
         yield* delay(100);
       }
     }),
     30_000,
-    `Timed out waiting for ${expectedCount} execution recordings at ${path}`,
+    `Timed out waiting for ${expectedCount} terminal execution recordings at ${path}`,
   );
 
 const removeSyncedApp = (sdkUrl: string) =>
@@ -672,7 +803,7 @@ const writeFixture = (state: RecordingState, exampleId: string, runtimeName: Run
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
     const path = yield* Path.Path;
-    const exchanges = yield* Ref.get(state.exchanges);
+    const exchanges = (yield* Ref.get(state.exchanges)).get(exampleId) ?? [];
     const ordered = canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence));
     const outputFile = fixtureFile(exampleId, runtimeName);
     yield* fs.makeDirectory(path.dirname(outputFile), { recursive: true });
@@ -683,36 +814,43 @@ const matchesFilters = (example: ExampleManifestEntry, filters: ReadonlyArray<st
   filters.length === 0 || filters.some((filter) => example.id.includes(filter) || example.path?.includes(filter));
 
 const readExamples = (runtimeName: RuntimeName, filters: ReadonlyArray<string>) =>
-  Effect.scoped(
-    Effect.gen(function* () {
-      const runtime = runtimes[runtimeName];
-      yield* startRuntimeServer(runtimeName);
-      const manifest = (yield* json(`${realSdkOrigin}${runtime.manifestPath}`)) as {
-        readonly examples?: ReadonlyArray<ExampleManifestEntry>;
-      };
-      return (manifest.examples ?? []).filter((example) => matchesFilters(example, filters));
-    }),
-  );
+  Effect.gen(function* () {
+    const runtime = runtimes[runtimeName];
+    const manifest = (yield* json(`${realSdkOrigin}${runtime.manifestPath}`)) as {
+      readonly examples?: ReadonlyArray<ExampleManifestEntry>;
+    };
+    return (manifest.examples ?? []).filter((example) => matchesFilters(example, filters));
+  });
 
-const recordExample = (state: RecordingState, runtimeName: RuntimeName, example: ExampleManifestEntry) =>
+const recordExample = (
+  state: RecordingState,
+  server: ProcessHandle,
+  runtimeName: RuntimeName,
+  example: ExampleManifestEntry,
+) =>
   Effect.scoped(
     Effect.gen(function* () {
-      yield* resetState(state);
+      yield* resetExampleState(state, example.id);
       const sdkUrl = sdkUrlFor(example.id);
       yield* removeSyncedApp(sdkUrl);
-      const server = yield* startRuntimeServer(runtimeName, example);
       yield* http(sdkUrl, { method: "GET" }).pipe(Effect.flatMap((response) => assertOk("introspection", response)));
       yield* http(sdkUrl, { method: "PUT" }).pipe(Effect.flatMap((response) => assertOk("sync", response)));
       yield* waitForNetworkIdle(state);
       for (const [caseIndex, caseData] of example.cases.entries()) {
         yield* triggerCase(runtimeName, example, caseData, caseIndex);
       }
-      yield* waitForExecutionRecordings(state, server, examplePath(example.id), expectedExecutionCount(example));
+      yield* waitForTerminalExecutionRecordings(
+        state,
+        server,
+        examplePath(example.id),
+        expectedRootFunctionIds(example),
+        expectedExecutionCount(example),
+      );
       yield* waitForNetworkIdle(state);
       yield* removeSyncedApp(sdkUrl);
       yield* waitForNetworkIdle(state);
       yield* writeFixture(state, example.id, runtimeName);
-      const exchanges = yield* Ref.get(state.exchanges);
+      const exchanges = (yield* Ref.get(state.exchanges)).get(example.id) ?? [];
       console.log(
         `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,
       );
@@ -722,7 +860,11 @@ const recordExample = (state: RecordingState, runtimeName: RuntimeName, example:
 const selectedRuntimes = (runtime: RuntimeArg): ReadonlyArray<RuntimeName> =>
   runtime === "both" ? ["native", "effect"] : [runtime];
 
-const program = (input: { readonly runtime: RuntimeArg; readonly only: ReadonlyArray<string> }) =>
+const program = (input: {
+  readonly concurrency: number;
+  readonly runtime: RuntimeArg;
+  readonly only: ReadonlyArray<string>;
+}) =>
   Effect.scoped(
     Effect.gen(function* () {
       const state = yield* makeState;
@@ -746,14 +888,16 @@ const program = (input: { readonly runtime: RuntimeArg; readonly only: ReadonlyA
         targetOrigin: realDevOrigin,
       });
       for (const runtimeName of selectedRuntimes(input.runtime)) {
+        const server = yield* startRuntimeServer(runtimeName);
         const examples = yield* readExamples(runtimeName, input.only);
         if (examples.length === 0) {
           console.log(`no ${runtimeName} examples matched`);
           continue;
         }
-        for (const example of examples) {
-          yield* recordExample(state, runtimeName, example);
-        }
+        yield* Effect.forEach(examples, (example) => recordExample(state, server, runtimeName, example), {
+          concurrency: input.concurrency,
+          discard: true,
+        });
       }
     }),
   );
@@ -761,15 +905,18 @@ const program = (input: { readonly runtime: RuntimeArg; readonly only: ReadonlyA
 const command = Command.make(
   "record-protocol-effect",
   {
+    concurrency: Flag.integer("concurrency").pipe(Flag.withDefault(4)),
     runtime: Flag.choice("runtime", ["both", "native", "effect"] as const).pipe(Flag.withDefault("both" as const)),
     only: Flag.string("only").pipe(
       Flag.between(0, Number.MAX_SAFE_INTEGER),
       Flag.withDefault([] as ReadonlyArray<string>),
     ),
   },
-  ({ runtime, only }) => program({ runtime, only }),
+  ({ concurrency, runtime, only }) => program({ concurrency, runtime, only }),
 );
 
-const main = Command.run(command, { version: "0.0.0" }).pipe(Effect.provide(BunServices.layer));
+const main = Command.run(command, { version: "0.0.0" }).pipe(
+  Effect.provide(Layer.mergeAll(BunServices.layer, BunHttpClient.layer)),
+);
 
 BunRuntime.runMain(main, { disableErrorReporting: false });
