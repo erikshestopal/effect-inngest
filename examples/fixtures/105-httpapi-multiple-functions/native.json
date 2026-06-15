@@ -250,8 +250,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1K1Z1WDD27KB9MXB3TGT/async",
-      "path": "/v1/checkpoint/01KV4F1K1Z1WDD27KB9MXB3TGT/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4FZYK8M50WCKC4ZF9HTKH9/async",
+      "path": "/v1/checkpoint/01KV4FZYK8M50WCKC4ZF9HTKH9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -259,12 +259,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1K1Z1WDD27KB9MXB3TGT",
+        "run_id": "01KV4FZYK8M50WCKC4ZF9HTKH9",
         "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
         "qi_id": "MjQ4YThzZTNnczltcTo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1K27X3DSEJV3MMYA3AHD",
+        "request_id": "01KV4FZYKMX3DSEJV3MMYA3AHD",
         "generation_id": 1,
-        "request_started_at": 1781487684682,
+        "request_started_at": 1781488679545,
         "steps": [
           {
             "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
@@ -298,12 +298,12 @@
             },
             "transformedResultPromise": {},
             "timing": {
-              "a": 1781487684682000000,
+              "a": 1781488679545000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487684682
+        "ts": 1781488679545
       }
     },
     "response": {

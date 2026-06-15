@@ -225,8 +225,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGY1XC9JP1G3CBXX2RJ/async",
-      "path": "/v1/checkpoint/01KV4F1RGY1XC9JP1G3CBXX2RJ/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041RYC0007HWKAC8T8EX/async",
+      "path": "/v1/checkpoint/01KV4G041RYC0007HWKAC8T8EX/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -234,24 +234,51 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGY1XC9JP1G3CBXX2RJ",
+        "run_id": "01KV4G041RYC0007HWKAC8T8EX",
         "fn_id": "d5e11071-88a3-52ab-93b8-18296d5e47a6",
         "qi_id": "ZXB1cXA1Z3F0N3FyOjpkZWZhdWx0",
-        "request_id": "01KV4F1RHCH4NNAJZY4FVADDZE",
+        "request_id": "01KV4G041ZH4NNAJZY4FVADDZE",
         "generation_id": 1,
-        "request_started_at": 1781487690289,
+        "request_started_at": 1781488685125,
         "steps": [
           {
             "id": "3491af6b98f899d37b283dabc2d534c741bf3f74",
             "mode": "sync",
             "op": "StepRun",
             "name": "sendEvent",
-            "displayName": "sendEvent",
+            "displayName": "send-notifications",
             "userland": {
-              "id": "sendEvent"
+              "id": "send-notifications"
             },
-            "opts": {},
-            "rawArgs": ["sendEvent", null],
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "rawArgs": [
+              "send-notifications",
+              [
+                {
+                  "name": "demo/notification",
+                  "data": {
+                    "userId": "u1",
+                    "message": "First notification"
+                  }
+                },
+                {
+                  "name": "demo/notification",
+                  "data": {
+                    "userId": "u2",
+                    "message": "Second notification"
+                  }
+                },
+                {
+                  "name": "demo/notification",
+                  "data": {
+                    "userId": "u3",
+                    "message": "Third notification"
+                  }
+                }
+              ]
+            ],
             "hashedId": "3491af6b98f899d37b283dabc2d534c741bf3f74",
             "promise": {},
             "fulfilled": true,
@@ -262,10 +289,10 @@
                 "hashedId": "3491af6b98f899d37b283dabc2d534c741bf3f74",
                 "memoized": false,
                 "options": {
-                  "id": "sendEvent",
-                  "name": "sendEvent"
+                  "id": "send-notifications",
+                  "name": "send-notifications"
                 },
-                "stepType": "run"
+                "stepType": "sendEvent"
               }
             },
             "memoizationDeferred": {
@@ -273,16 +300,15 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV4F1RHN3X99ZKQVPD7YGDVP", "01KV4F1RHNYVVWNYGP0Z56MGAW", "01KV4F1RHNVNJ5YJBBWPJTRCHB"],
-              "status": 200
+              "ids": ["01KV4G0428CREAETZ55YVCMJW2", "01KV4G0429NG01FPAKXSVAC919", "01KV4G0429CM8DBFHSDAZA3PCF"]
             },
             "timing": {
-              "a": 1781487690296000000,
+              "a": 1781488685131000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690296
+        "ts": 1781488685131
       }
     },
     "response": {

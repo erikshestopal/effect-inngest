@@ -201,7 +201,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
     const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
 
-    expect(reg.concurrency).toEqual([{ limit: 10 }]);
+    expect(reg.concurrency).toEqual({ limit: 10 });
   });
 
   it("serializes concurrency as object", () => {
@@ -213,7 +213,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
     const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
 
-    expect(reg.concurrency).toEqual([{ limit: 5, key: "event.data.userId", scope: "fn" }]);
+    expect(reg.concurrency).toEqual({ limit: 5, key: "event.data.userId", scope: "fn" });
   });
 
   it("serializes concurrency as tuple", () => {

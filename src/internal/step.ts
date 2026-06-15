@@ -204,15 +204,16 @@ export const createStepTools = (
   request: Protocol.SDKRequestBody,
   appName: string,
   stepIdCounts: Ref.Ref<HashMap.HashMap<string, number>>,
+  rootFiberId: number,
   checkpoint: Option.Option<CheckpointState> = Option.none(),
 ): StepTools => {
   const ctx = request.ctx;
   const steps = request.steps as Record<string, unknown>;
-  const activeStepRuns = Ref.makeUnsafe(0);
   const stepOrder = Ref.makeUnsafe(0);
 
   const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => {
     const { id, name } = normalizeOpts(opts);
+    const rawStepArg = typeof opts === "string" ? opts : opts;
     return Effect.gen(function* () {
       const order = yield* Ref.modify(stepOrder, (current) => [current, current + 1]);
       const count = yield* Ref.modify(stepIdCounts, (map) => {
@@ -220,7 +221,7 @@ export const createStepTools = (
         return [current, HashMap.set(map, id, current + 1)];
       });
       const hash = yield* hashStepId(id, count);
-      return { id, name, hash, order };
+      return { id, name, hash, order, rawStepArg };
     });
   };
 
@@ -241,6 +242,11 @@ export const createStepTools = (
       onNone: () => Effect.void,
       onSome: (state) => state.planOpcode(op, order),
     });
+
+  const isParallelRootChild =
+    Option.isSome(checkpoint) && ctx.step_id === "step"
+      ? Effect.map(Effect.fiberId, (fiberId) => fiberId !== rootFiberId)
+      : Effect.succeed(false);
 
   const yieldPlannedIfRuntimeExceeded = (info: StepInfo): Effect.Effect<void, never> =>
     Option.match(checkpoint, {
@@ -268,13 +274,9 @@ export const createStepTools = (
         Match.tag("MemoNone", () =>
           Effect.gen(function* () {
             const opcode = Protocol.sleep(info, timeStr(duration));
-            if (Option.isSome(checkpoint) && ctx.step_id === "step") {
-              yield* Effect.yieldNow;
-              const active = yield* Ref.get(activeStepRuns);
-              if (active > 0) {
-                yield* planIfCheckpoint(opcode, info.order);
-                return;
-              }
+            if (yield* isParallelRootChild) {
+              yield* planIfCheckpoint(opcode, info.order);
+              return;
             }
             yield* flushIfCheckpoint;
             return yield* Effect.die(sleepInterrupt({ info, duration: timeStr(duration) }));
@@ -426,26 +428,17 @@ export const createStepTools = (
             return Effect.die(plannedInterrupt({ info }));
           }
 
-          const shouldDetectParallelCheckpoint = Option.isSome(checkpoint) && ctx.step_id === "step";
-          const enterStepRun = shouldDetectParallelCheckpoint
-            ? Effect.gen(function* () {
-                yield* Ref.update(activeStepRuns, (n) => n + 1);
-                yield* Effect.yieldNow;
-                const active = yield* Ref.get(activeStepRuns);
-                if (active > 1) {
-                  yield* planIfCheckpoint(Protocol.stepPlanned(info), info.order);
-                  return true;
-                }
-                return false;
-              })
-            : Effect.succeed(false);
-          const exitStepRun = shouldDetectParallelCheckpoint
-            ? Ref.update(activeStepRuns, (n) => Math.max(0, n - 1))
-            : Effect.void;
-
           return yieldPlannedIfRuntimeExceeded(info)
             .pipe(
-              Effect.flatMap(() => enterStepRun),
+              Effect.flatMap(() =>
+                Effect.gen(function* () {
+                  if (yield* isParallelRootChild) {
+                    yield* planIfCheckpoint(Protocol.stepPlanned(info), info.order);
+                    return true;
+                  }
+                  return false;
+                }),
+              ),
               Effect.flatMap((planned) =>
                 planned
                   ? Effect.succeed(undefined as unknown as StepRunOutput<A>)
@@ -467,9 +460,11 @@ export const createStepTools = (
                           );
                         },
                         onSuccess: (data) => {
-                          const encoded = options?.schema
-                            ? encodeJson(options.schema, data, info.id)
-                            : encodeUnknownJson(data, info.id);
+                          const encoded = Predicate.isUndefined(data)
+                            ? Effect.succeed(undefined)
+                            : options?.schema
+                              ? encodeJson(options.schema, data, info.id)
+                              : encodeUnknownJson(data, info.id);
 
                           return Effect.flatMap(encoded, (encodedData) =>
                             Option.match(checkpoint, {
@@ -487,7 +482,6 @@ export const createStepTools = (
                           );
                         },
                       }),
-                      Effect.ensuring(exitStepRun),
                     ),
               ),
             )
@@ -523,34 +517,27 @@ export const createStepTools = (
             return Effect.die(plannedInterrupt({ info }));
           }
 
-          const nativeInfo = { id: "sendEvent", name: "sendEvent", hash: info.hash };
-          const plannedInfo = { ...nativeInfo, id: info.id, name: info.name };
-          const shouldDetectParallelCheckpoint = Option.isSome(checkpoint) && ctx.step_id === "step";
-          const enterStepRun = shouldDetectParallelCheckpoint
-            ? Effect.gen(function* () {
-                yield* Ref.update(activeStepRuns, (n) => n + 1);
-                yield* Effect.yieldNow;
-                const active = yield* Ref.get(activeStepRuns);
-                if (active > 1) {
-                  yield* planIfCheckpoint(Protocol.stepPlanned(plannedInfo), info.order);
+          const plannedInfo = info;
+          const events = Arr.ensure(payload);
+          return yieldPlannedIfRuntimeExceeded(plannedInfo).pipe(
+            Effect.flatMap(() =>
+              Effect.gen(function* () {
+                if (yield* isParallelRootChild) {
+                  yield* planIfCheckpoint(Protocol.sendEventStepPlanned(plannedInfo), info.order);
                   return true;
                 }
                 return false;
-              })
-            : Effect.succeed(false);
-          const exitStepRun = shouldDetectParallelCheckpoint
-            ? Ref.update(activeStepRuns, (n) => Math.max(0, n - 1))
-            : Effect.void;
-
-          const events = Arr.ensure(payload);
-          return yieldPlannedIfRuntimeExceeded(plannedInfo).pipe(
-            Effect.flatMap(() => enterStepRun),
+              }),
+            ),
             Effect.flatMap((planned) =>
               planned
                 ? Effect.succeed({ ids: [] as ReadonlyArray<string> })
                 : Effect.flatMap(
                     Effect.forEach(events, (e) =>
-                      Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
+                      Effect.map(encodeTaggedEvent(e), (encoded) => ({
+                        name: e._tag,
+                        data: stripTopLevelTag(encoded),
+                      })),
                     ),
                     (eventPayloads) =>
                       InngestClient.use((client) =>
@@ -560,14 +547,28 @@ export const createStepTools = (
                           }),
                           Effect.flatMap((result) =>
                             Option.match(checkpoint, {
-                              onNone: () => Effect.die(runInterrupt({ info: nativeInfo, data: result })),
+                              onNone: () =>
+                                Effect.die(
+                                  StepInterrupt.make({
+                                    opcode: Protocol.sendEventStepRunResponse(plannedInfo, { ids: result.ids }),
+                                  }),
+                                ),
                               onSome: (state) =>
-                                Effect.as(state.bufferStep(Protocol.stepRun(nativeInfo, result)), result),
+                                Effect.as(
+                                  state.bufferStep(
+                                    Protocol.sendEventStepRun(
+                                      plannedInfo,
+                                      { ids: result.ids },
+                                      Arr.isArray(payload) ? eventPayloads : eventPayloads[0],
+                                    ),
+                                  ),
+                                  result,
+                                ),
                             }),
                           ),
                         ),
                       ),
-                  ).pipe(Effect.ensuring(exitStepRun)),
+                  ),
             ),
           );
         }),

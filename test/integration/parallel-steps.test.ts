@@ -373,7 +373,6 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
             {
               "displayName": "wait-briefly",
               "id": "0129ebf1d0b9a1f56d076639aeedcce17c7b1af5",
-              "mode": "async",
               "name": "5s",
               "op": "Sleep",
             },

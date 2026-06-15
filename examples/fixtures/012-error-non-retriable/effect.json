@@ -217,7 +217,7 @@
           "error": {
             "name": "NonRetriableError",
             "message": "No retry",
-            "stack": "Error: No retry\n    at non-retriable (/Users/erikshestopal/erik/effect-inngest/examples/012-error-non-retriable.ts:17:67)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "Error\n    at non-retriable (/Users/erikshestopal/erik/effect-inngest/examples/012-error-non-retriable.ts:17:67)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
           },
           "data": {
             "__serialized": true,
@@ -295,7 +295,7 @@
             "error": {
               "message": "No retry",
               "name": "NonRetriableError",
-              "stack": "Error: No retry\n    at non-retriable (/Users/erikshestopal/erik/effect-inngest/examples/012-error-non-retriable.ts:17:67)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              "stack": "Error\n    at non-retriable (/Users/erikshestopal/erik/effect-inngest/examples/012-error-non-retriable.ts:17:67)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
             }
           }
         },

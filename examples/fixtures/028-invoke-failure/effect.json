@@ -289,14 +289,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "expire": 1813023690064,
+              "correlation_id": "01KV4G03ST6D3WEMXYBGDFC8DR.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "expire": 1813024684902,
               "fn_id": "examples-028-invoke-failure-failing-child",
-              "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+              "gid": "36b466de-b2d2-4aef-8bf2-a2b62afca89c",
               "isr": {
-                "dsid": "576e1bc42f75b06e",
-                "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
-                "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                "dsid": "7568f512df7c41de",
+                "dstp": "00-520067978d730899b665ca08e40b801b-1b00ab5dfac7b38a-00",
+                "tp": "00-520067978d730899b665ca08e40b801b-7568f512df7c41de-01",
                 "ts": ""
               },
               "name": "call-child",
@@ -305,10 +305,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "ae127a61eaa27f9b",
-                  "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                  "sid": "b555ff52320b62bd",
+                  "traceparent": "00-c2db91dcaa5b371c762e5fcde233cc20-ff888b233b5d01eb-01"
                 },
-                "ts": "2026-06-15T01:41:30.064069Z"
+                "ts": "2026-06-15T01:58:04.902457Z"
               }
             }
           },
@@ -321,14 +321,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4F1R9461WES336Z3X2K1HB.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                "expire": 1813023690064,
+                "correlation_id": "01KV4G03ST6D3WEMXYBGDFC8DR.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                "expire": 1813024684902,
                 "fn_id": "examples-028-invoke-failure-failing-child",
-                "gid": "b0fecd02-0f97-45eb-bac6-d87a6a09879f",
+                "gid": "36b466de-b2d2-4aef-8bf2-a2b62afca89c",
                 "isr": {
-                  "dsid": "576e1bc42f75b06e",
-                  "dstp": "00-a1b6e08fe636b8e62c0058f15f9cb087-3922805aede82ee0-00",
-                  "tp": "00-a1b6e08fe636b8e62c0058f15f9cb087-576e1bc42f75b06e-01",
+                  "dsid": "7568f512df7c41de",
+                  "dstp": "00-520067978d730899b665ca08e40b801b-1b00ab5dfac7b38a-00",
+                  "tp": "00-520067978d730899b665ca08e40b801b-7568f512df7c41de-01",
                   "ts": ""
                 },
                 "name": "call-child",
@@ -337,10 +337,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "ae127a61eaa27f9b",
-                    "traceparent": "00-020bd125e5881ad288c6a58db0e140e0-cea1f98c4ffcde40-01"
+                    "sid": "b555ff52320b62bd",
+                    "traceparent": "00-c2db91dcaa5b371c762e5fcde233cc20-ff888b233b5d01eb-01"
                   },
-                  "ts": "2026-06-15T01:41:30.064069Z"
+                  "ts": "2026-06-15T01:58:04.902457Z"
                 }
               }
             },

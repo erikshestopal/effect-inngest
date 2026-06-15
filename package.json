@@ -127,9 +127,6 @@
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
   },
   "packageManager": "bun@1.3.13",
-  "patchedDependencies": {
-    "@effect/vitest@4.0.0-beta.83": "patches/@effect%2Fvitest@4.0.0-beta.83.patch"
-  },
   "trustedDependencies": [
     "@ast-grep/cli"
   ]

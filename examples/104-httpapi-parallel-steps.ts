@@ -18,10 +18,10 @@ const Group = InngestGroup.make(ParallelFn);
 const HandlersLive = Group.toLayer({
   "parallel-test": ({ event, step }) =>
     Effect.gen(function* () {
-      const [sum, product] = yield* Effect.all([
-        step.run("sum", Effect.succeed(event.a + event.b)),
-        step.run("product", Effect.succeed(event.a * event.b)),
-      ]);
+      const [sum, product] = yield* Effect.all(
+        [step.run("sum", Effect.succeed(event.a + event.b)), step.run("product", Effect.succeed(event.a * event.b))],
+        { concurrency: "unbounded" },
+      );
       return { sum, product };
     }),
 });

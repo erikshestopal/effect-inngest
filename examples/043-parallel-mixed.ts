@@ -22,13 +22,14 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       yield* Effect.log("Starting parallel mixed steps...");
 
-      const [computed, _sleptResult, _sentResult] = yield* Effect.all([
-        step.run("compute", Effect.succeed(42)),
-
-        step.sleep("short-wait", Duration.seconds(2)),
-
-        step.sendEvent("notify", new DemoSideEffect({ source: "parallel-mixed-function" })),
-      ]);
+      const [computed, _sleptResult, _sentResult] = yield* Effect.all(
+        [
+          step.run("compute", Effect.succeed(42)),
+          step.sleep("short-wait", Duration.seconds(2)),
+          step.sendEvent("notify", new DemoSideEffect({ source: "parallel-mixed-function" })),
+        ],
+        { concurrency: "unbounded" },
+      );
 
       yield* Effect.log(`Parallel steps complete! Computed: ${computed}`);
       return { computed, slept: true, sent: true };

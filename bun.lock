@@ -28,9 +28,6 @@
   "trustedDependencies": [
     "@ast-grep/cli",
   ],
-  "patchedDependencies": {
-    "@effect/vitest@4.0.0-beta.83": "patches/@effect%2Fvitest@4.0.0-beta.83.patch",
-  },
   "overrides": {
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest",

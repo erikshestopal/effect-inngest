@@ -115,8 +115,12 @@ export const execute = <F extends InngestFunction.Any, R>(
         }),
     });
 
-    const step = createStepTools(request, appName, stepIdCounts, checkpointState);
-    const context = yield* buildHandlerContext<F>(fn, step, request);
+    const runHandler: Effect.Effect<InngestFunction.Success<F>, unknown, R> = Effect.gen(function* () {
+      const rootFiberId = yield* Effect.fiberId;
+      const step = createStepTools(request, appName, stepIdCounts, rootFiberId, checkpointState);
+      const context = yield* buildHandlerContext<F>(fn, step, request);
+      return yield* handler(context);
+    });
 
     /**
      * Drain any unflushed buffered opcodes (no-op outside checkpoint mode).
@@ -140,10 +144,10 @@ export const execute = <F extends InngestFunction.Any, R>(
 
     type DeadlineResult = Option.Option<InngestFunction.Success<F>>;
     const handlerWithDeadline: Effect.Effect<DeadlineResult, unknown, R> = Option.match(checkpointState, {
-      onNone: () => Effect.map(handler(context), Option.some<InngestFunction.Success<F>>),
+      onNone: () => Effect.map(runHandler, Option.some<InngestFunction.Success<F>>),
       onSome: (state) =>
         Effect.raceFirst(
-          Effect.map(handler(context), Option.some<InngestFunction.Success<F>>),
+          Effect.map(runHandler, Option.some<InngestFunction.Success<F>>),
           Effect.sleep(state.config.maxRuntime).pipe(
             Effect.flatMap(() => state.markRuntimeExceeded),
             Effect.flatMap(() => Effect.sleep(state.config.maxRuntime)),

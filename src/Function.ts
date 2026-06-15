@@ -385,11 +385,17 @@ interface FunctionRegistration {
     readonly period: string;
     readonly timeout?: string;
   };
-  readonly concurrency?: ReadonlyArray<{
-    readonly key?: string;
-    readonly limit: number;
-    readonly scope?: string;
-  }>;
+  readonly concurrency?:
+    | {
+        readonly key?: string;
+        readonly limit: number;
+        readonly scope?: string;
+      }
+    | ReadonlyArray<{
+        readonly key?: string;
+        readonly limit: number;
+        readonly scope?: string;
+      }>;
   readonly priority?: { readonly run?: string };
   readonly singleton?: { readonly key?: string; readonly mode: string };
   readonly batchEvents?: {
@@ -511,15 +517,19 @@ const Proto = {
         }
       : undefined;
 
+    const serializeConcurrencyOption = (option: ConcurrencyOption) => ({
+      key: option.key,
+      limit: option.limit,
+      scope: option.scope,
+    });
+
     const concurrency =
       opts.concurrency != null
         ? Predicate.isNumber(opts.concurrency)
-          ? [{ limit: opts.concurrency }]
-          : Arr.ensure(opts.concurrency).map((c) => ({
-              key: c.key,
-              limit: c.limit,
-              scope: c.scope,
-            }))
+          ? { limit: opts.concurrency }
+          : Array.isArray(opts.concurrency)
+            ? (opts.concurrency as readonly [ConcurrencyOption, ConcurrencyOption]).map(serializeConcurrencyOption)
+            : serializeConcurrencyOption(opts.concurrency as ConcurrencyOption)
         : undefined;
 
     const priority = opts.priority ? { run: opts.priority.run } : undefined;

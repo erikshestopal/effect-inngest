@@ -139,6 +139,9 @@ class DemoEvent extends Schema.TaggedClass<DemoEvent>()("demo/event", { value: S
 class EmailSend extends Schema.TaggedClass<EmailSend>()("email/send", { to: Schema.String }) {}
 class InvoicePaid extends Schema.TaggedClass<InvoicePaid>()("demo/invoice-paid", { invoiceId: Schema.String }) {}
 class ChildInput extends Schema.TaggedClass<ChildInput>()("demo/child", { value: Schema.Number }) {}
+class TestProtocolError extends Schema.TaggedErrorClass<TestProtocolError>()("TestProtocolError", {
+  message: Schema.String,
+}) {}
 
 describe("native v4 protocol RED regressions", () => {
   it.effect("parallel step.run root request returns StepPlanned ops, not checkpointed StepRun ops", () =>
@@ -263,7 +266,7 @@ describe("native v4 protocol RED regressions", () => {
         const body = yield* responseOpcodes(response);
 
         expect(response.status).toBe(206);
-        expect(stepNames(body)).toEqual(["StepPlanned:compute", "Sleep:2s", "StepPlanned:notify"]);
+        expect(stepNames(body)).toEqual(["StepPlanned:compute", "Sleep:2s", "StepPlanned:sendEvent"]);
         expect(eventRequests(captures)).toHaveLength(0);
         expect(checkpointRequests(captures)).toHaveLength(0);
       } finally {
@@ -301,7 +304,7 @@ describe("native v4 protocol RED regressions", () => {
         expect(eventRequests(captures).map((request) => request.path)).toEqual(["/e/NO_EVENT_KEY_SET"]);
         expect(checkpoints).toHaveLength(1);
         expect((checkpoints[0]!.body as { steps: ReadonlyArray<Opcode> }).steps).toMatchObject([
-          { op: "StepRun", name: "sendEvent", displayName: "sendEvent", userland: { id: "sendEvent" } },
+          { op: "StepRun", name: "sendEvent", displayName: "send-notification", userland: { id: "send-notification" } },
         ]);
       } finally {
         yield* Effect.tryPromise(() => dispose());
@@ -474,7 +477,7 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "retry-final-native": ({ step }) =>
           Effect.gen(function* () {
-            return yield* step.run("always-fail", Effect.fail(new Error("boom")));
+            return yield* step.run("always-fail", Effect.fail(new TestProtocolError({ message: "boom" })));
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
@@ -514,7 +517,7 @@ describe("native v4 protocol RED regressions", () => {
         "step-catch-native": ({ step }) =>
           Effect.gen(function* () {
             const result = yield* step
-              .run("risky-step", Effect.fail(new Error("Something went wrong")))
+              .run("risky-step", Effect.fail(new TestProtocolError({ message: "Something went wrong" })))
               .pipe(Effect.catch((error: unknown) => Effect.succeed(`Caught error: ${String(error)}`)));
             return { result };
           }),

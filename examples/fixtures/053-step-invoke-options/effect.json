@@ -300,14 +300,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
-              "expire": 1781487720547,
+              "correlation_id": "01KV4G049JD89DBE9D53YHJGDX.98f60eef27694e38e56d53701e64d91e7b4b9166",
+              "expire": 1781488715373,
               "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+              "gid": "85fea73b-4d3e-428f-b79e-b0eba3ad4852",
               "isr": {
-                "dsid": "05236d9b91816707",
-                "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
-                "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                "dsid": "8a5e7faa5f9bbbf8",
+                "dstp": "00-69245164378a18f651a78b74b1abac7d-762858b797b0bbbf-00",
+                "tp": "00-69245164378a18f651a78b74b1abac7d-8a5e7faa5f9bbbf8-01",
                 "ts": ""
               },
               "name": "invoke-worker",
@@ -316,10 +316,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "d7ad81ad3d86ad96",
-                  "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                  "sid": "421c1b404fc26b77",
+                  "traceparent": "00-2dd279e9c7ddb61d31c0673face23370-9c371f94ffc9b561-01"
                 },
-                "ts": "2026-06-15T01:41:30.547195Z"
+                "ts": "2026-06-15T01:58:05.373965Z"
               }
             },
             "priority": "high",
@@ -334,14 +334,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                "expire": 1781487720547,
+                "correlation_id": "01KV4G049JD89DBE9D53YHJGDX.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                "expire": 1781488715373,
                 "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "d3eafc6f-d2a6-4098-8b19-8b53d987b0cc",
+                "gid": "85fea73b-4d3e-428f-b79e-b0eba3ad4852",
                 "isr": {
-                  "dsid": "05236d9b91816707",
-                  "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
-                  "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-05236d9b91816707-01",
+                  "dsid": "8a5e7faa5f9bbbf8",
+                  "dstp": "00-69245164378a18f651a78b74b1abac7d-762858b797b0bbbf-00",
+                  "tp": "00-69245164378a18f651a78b74b1abac7d-8a5e7faa5f9bbbf8-01",
                   "ts": ""
                 },
                 "name": "invoke-worker",
@@ -350,10 +350,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "d7ad81ad3d86ad96",
-                    "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                    "sid": "421c1b404fc26b77",
+                    "traceparent": "00-2dd279e9c7ddb61d31c0673face23370-9c371f94ffc9b561-01"
                   },
-                  "ts": "2026-06-15T01:41:30.547195Z"
+                  "ts": "2026-06-15T01:58:05.373965Z"
                 }
               },
               "priority": "high",
@@ -542,14 +542,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
-              "expire": 1781487991028,
+              "correlation_id": "01KV4G049JD89DBE9D53YHJGDX.f7931d4debe848361c612c75928abab74294ff1b",
+              "expire": 1781488985872,
               "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+              "gid": "cf5ec013-d043-48d8-82d4-b8ea9abab6c7",
               "isr": {
-                "dsid": "daaafe8d8e4fdc4d",
-                "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
-                "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                "dsid": "71983e00363d1c56",
+                "dstp": "00-69245164378a18f651a78b74b1abac7d-762858b797b0bbbf-00",
+                "tp": "00-69245164378a18f651a78b74b1abac7d-71983e00363d1c56-01",
                 "ts": ""
               },
               "name": "invoke-batch-worker",
@@ -558,10 +558,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "5ee9394918abb9ec",
-                  "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                  "sid": "3fcde0832d959c1d",
+                  "traceparent": "00-2dd279e9c7ddb61d31c0673face23370-9c371f94ffc9b561-01"
                 },
-                "ts": "2026-06-15T01:41:31.028249Z"
+                "ts": "2026-06-15T01:58:05.872127Z"
               }
             },
             "priority": "low",
@@ -576,14 +576,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4F1RRMVJRJFXW0NBCQ757M.f7931d4debe848361c612c75928abab74294ff1b",
-                "expire": 1781487991028,
+                "correlation_id": "01KV4G049JD89DBE9D53YHJGDX.f7931d4debe848361c612c75928abab74294ff1b",
+                "expire": 1781488985872,
                 "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "9fbb8e61-d8b2-4ac2-820c-707429c99fd2",
+                "gid": "cf5ec013-d043-48d8-82d4-b8ea9abab6c7",
                 "isr": {
-                  "dsid": "daaafe8d8e4fdc4d",
-                  "dstp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-52a07a95fe4ed742-00",
-                  "tp": "00-8f357f427ad9e6b91a4dc71867d0d9d6-daaafe8d8e4fdc4d-01",
+                  "dsid": "71983e00363d1c56",
+                  "dstp": "00-69245164378a18f651a78b74b1abac7d-762858b797b0bbbf-00",
+                  "tp": "00-69245164378a18f651a78b74b1abac7d-71983e00363d1c56-01",
                   "ts": ""
                 },
                 "name": "invoke-batch-worker",
@@ -592,10 +592,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "5ee9394918abb9ec",
-                    "traceparent": "00-7e9bf7fbed0a57336422790383f6089d-94e3da67eac9ef64-01"
+                    "sid": "3fcde0832d959c1d",
+                    "traceparent": "00-2dd279e9c7ddb61d31c0673face23370-9c371f94ffc9b561-01"
                   },
-                  "ts": "2026-06-15T01:41:31.028249Z"
+                  "ts": "2026-06-15T01:58:05.872127Z"
                 }
               },
               "priority": "low",

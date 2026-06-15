@@ -225,8 +225,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
-      "path": "/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
+      "path": "/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -234,12 +234,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS5HME11KB8NNHHQKV",
+        "run_id": "01KV4G041PNNPYDSVAXCJWZE91",
         "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
         "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1RH2NCA1P8KK8PFHPJZW",
+        "request_id": "01KV4G0421NCA1P8KK8PFHPJZW",
         "generation_id": 1,
-        "request_started_at": 1781487690280,
+        "request_started_at": 1781488685130,
         "steps": [
           {
             "id": "a9a7c9f9585dd5f2a0d3698cc51ac9bd949cd0af",
@@ -274,12 +274,12 @@
             "transformedResultPromise": {},
             "data": "basic",
             "timing": {
-              "a": 1781487690282000000,
+              "a": 1781488685131000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690282
+        "ts": 1781488685131
       }
     },
     "response": {
@@ -298,8 +298,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
-      "path": "/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
+      "path": "/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -307,12 +307,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS5HME11KB8NNHHQKV",
+        "run_id": "01KV4G041PNNPYDSVAXCJWZE91",
         "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
         "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1RH2NCA1P8KK8PFHPJZW",
+        "request_id": "01KV4G0421NCA1P8KK8PFHPJZW",
         "generation_id": 1,
-        "request_started_at": 1781487690280,
+        "request_started_at": 1781488685130,
         "steps": [
           {
             "id": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
@@ -324,7 +324,13 @@
               "id": "named-step"
             },
             "opts": {},
-            "rawArgs": ["named-step", null],
+            "rawArgs": [
+              {
+                "id": "named-step",
+                "name": "Named Step"
+              },
+              null
+            ],
             "hashedId": "a38798c5b95d6c7feb27acbe200d78966bec5ad7",
             "promise": {},
             "fulfilled": true,
@@ -347,12 +353,12 @@
             "transformedResultPromise": {},
             "data": "with-name",
             "timing": {
-              "a": 1781487690286000000,
+              "a": 1781488685134000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690286
+        "ts": 1781488685134
       }
     },
     "response": {
@@ -371,8 +377,8 @@
     "request": {
       "sequence": 7,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
-      "path": "/v1/checkpoint/01KV4F1RGS5HME11KB8NNHHQKV/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
+      "path": "/v1/checkpoint/01KV4G041PNNPYDSVAXCJWZE91/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -380,12 +386,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS5HME11KB8NNHHQKV",
+        "run_id": "01KV4G041PNNPYDSVAXCJWZE91",
         "fn_id": "98cca71e-f1c4-54e0-96ec-8f79c503418a",
         "qi_id": "MzBubTExNGV2bXBvNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1RH2NCA1P8KK8PFHPJZW",
+        "request_id": "01KV4G0421NCA1P8KK8PFHPJZW",
         "generation_id": 1,
-        "request_started_at": 1781487690280,
+        "request_started_at": 1781488685130,
         "steps": [
           {
             "id": "9a036a2c52b082f185b9157f03c119b0525afa65",
@@ -420,12 +426,12 @@
             "transformedResultPromise": {},
             "data": "completed",
             "timing": {
-              "a": 1781487690291000000,
+              "a": 1781488685137000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690291
+        "ts": 1781488685137
       }
     },
     "response": {

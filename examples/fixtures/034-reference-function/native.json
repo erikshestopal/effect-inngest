@@ -291,14 +291,14 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-              "expire": 1813023683238,
+              "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+              "expire": 1813024678052,
               "fn_id": "examples-034-reference-function-helper-function",
-              "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
+              "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
               "isr": {
-                "dsid": "0d7b2578eed4f1f7",
-                "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
+                "dsid": "c2c7cfd6f77b07dc",
+                "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
                 "ts": ""
               },
               "name": "call-helper",
@@ -307,10 +307,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "2c5d88bc924de5df",
-                  "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
+                  "sid": "66f13693e68b367e",
+                  "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
                 },
-                "ts": "2026-06-15T01:41:23.23873Z"
+                "ts": "2026-06-15T01:57:58.052345Z"
               }
             },
             "input": 21
@@ -324,14 +324,14 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                "expire": 1813023683238,
+                "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                "expire": 1813024678052,
                 "fn_id": "examples-034-reference-function-helper-function",
-                "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
+                "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
                 "isr": {
-                  "dsid": "0d7b2578eed4f1f7",
-                  "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                  "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
+                  "dsid": "c2c7cfd6f77b07dc",
+                  "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                  "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
                   "ts": ""
                 },
                 "name": "call-helper",
@@ -340,10 +340,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "2c5d88bc924de5df",
-                    "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
+                    "sid": "66f13693e68b367e",
+                    "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
                   },
-                  "ts": "2026-06-15T01:41:23.23873Z"
+                  "ts": "2026-06-15T01:57:58.052345Z"
                 }
               },
               "input": 21

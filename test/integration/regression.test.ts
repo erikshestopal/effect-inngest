@@ -347,17 +347,14 @@ describe("Regression: step.invoke payload must be event data directly", () => {
         	    "data": null,
         	    "displayName": "call-child",
         	    "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-        	    "mode": "async",
         	    "op": "InvokeFunction",
         	    "opts": {
         	      "function_id": "test-app-child-fn",
         	      "payload": {
         	        "data": {
-        	          "_tag": "test/child",
         	          "value": 42,
         	        },
         	      },
-        	      "timeout": "365d",
         	    },
         	    "userland": {
         	      "id": "call-child",
@@ -370,13 +367,12 @@ describe("Regression: step.invoke payload must be event data directly", () => {
         expect(invokeOp).toBeDefined();
         expect(invokeOp!.name).toBeUndefined();
 
-        expect(invokeOp!.opts?.payload).toEqual({ data: { _tag: "test/child", value: 42 } });
+        expect(invokeOp!.opts?.payload).toEqual({ data: { value: 42 } });
 
         expect(invokeOp!.opts?.payload).toHaveProperty("data");
         expect(invokeOp!.opts?.payload).toMatchInlineSnapshot(`
           {
             "data": {
-              "_tag": "test/child",
               "value": 42,
             },
           }
@@ -515,8 +511,7 @@ describe("Regression: Batch events handler receives array of event data", () => 
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
         "batch-fn": ({ event }) =>
-          Effect.gen(function* () {
-            // In batch mode, event should be an array
+          Effect.sync(() => {
             const events = event as unknown as ReadonlyArray<TestBatchEvent>;
             const items = events.map((e) => e.item);
             return { items, count: events.length };

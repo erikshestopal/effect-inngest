@@ -287,10 +287,10 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
       "query": {
-        "fnId": "examples-055-system-events-handle-failure",
+        "fnId": "examples-055-system-events-track-completion",
         "stepId": "step"
       },
       "headers": {
@@ -306,7 +306,7 @@
           "attempt": 0,
           "disable_immediate_execution": false,
           "env": "",
-          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
           "generation_id": 1,
           "job_id": "<job_id>",
           "max_attempts": 5,
@@ -324,89 +324,36 @@
         "event": {
           "data": {
             "_inngest": {
-              "status": "Failed"
-            },
-            "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-            "error": {
-              "error": "NonRetriableError",
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "status": "Completed"
             },
             "event": {
               "data": {
-                "_inngest": {
-                  "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                  "expire": 1813023682952,
-                  "fn_id": "examples-028-invoke-failure-failing-child",
-                  "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                  "isr": {
-                    "dsid": "d86ebfc94218ac5c",
-                    "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                    "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                    "ts": ""
-                  },
-                  "name": "call-child",
-                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "d067da73dfe19cf7",
-                      "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                    },
-                    "ts": "2026-06-15T01:41:22.953317Z"
-                  }
-                }
+                "shouldSkip": false
               },
-              "id": "01KV4F1HC923H4Y83G27PGVRAW",
-              "name": "inngest/function.invoked",
-              "ts": 1781487682953,
+              "id": "fixture-native-038-conditional-steps-0-0",
+              "name": "demo/conditional",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682952,
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                    "isr": {
-                      "dsid": "d86ebfc94218ac5c",
-                      "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                      "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d067da73dfe19cf7",
-                        "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.953317Z"
-                    }
-                  }
+                  "shouldSkip": false
                 },
-                "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682953
+                "id": "fixture-native-038-conditional-steps-0-0",
+                "name": "demo/conditional",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-028-invoke-failure-failing-child",
+            "function_id": "examples-038-conditional-steps-conditional-steps",
             "result": {
-              "__serialized": true,
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "path": "full",
+              "result": "processed-1,processed-2,processed-3"
             },
-            "run_id": "01KV4F1HKAT7N63S63ZENTH2SS"
+            "run_id": "01KV4FZX4G6CJ2DJ4S2YSSBFK4"
           },
           "id": "<event-id>",
-          "name": "inngest/function.failed",
+          "name": "inngest/function.finished",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -414,89 +361,36 @@
           {
             "data": {
               "_inngest": {
-                "status": "Failed"
-              },
-              "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "error": {
-                "error": "NonRetriableError",
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "status": "Completed"
               },
               "event": {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682952,
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                    "isr": {
-                      "dsid": "d86ebfc94218ac5c",
-                      "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                      "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d067da73dfe19cf7",
-                        "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.953317Z"
-                    }
-                  }
+                  "shouldSkip": false
                 },
-                "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682953,
+                "id": "fixture-native-038-conditional-steps-0-0",
+                "name": "demo/conditional",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "_inngest": {
-                      "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                      "expire": 1813023682952,
-                      "fn_id": "examples-028-invoke-failure-failing-child",
-                      "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                      "isr": {
-                        "dsid": "d86ebfc94218ac5c",
-                        "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                        "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                        "ts": ""
-                      },
-                      "name": "call-child",
-                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "d067da73dfe19cf7",
-                          "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                        },
-                        "ts": "2026-06-15T01:41:22.953317Z"
-                      }
-                    }
+                    "shouldSkip": false
                   },
-                  "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                  "name": "inngest/function.invoked",
-                  "ts": 1781487682953
+                  "id": "fixture-native-038-conditional-steps-0-0",
+                  "name": "demo/conditional",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-028-invoke-failure-failing-child",
+              "function_id": "examples-038-conditional-steps-conditional-steps",
               "result": {
-                "__serialized": true,
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "path": "full",
+                "result": "processed-1,processed-2,processed-3"
               },
-              "run_id": "01KV4F1HKAT7N63S63ZENTH2SS"
+              "run_id": "01KV4FZX4G6CJ2DJ4S2YSSBFK4"
             },
             "id": "<event-id>",
-            "name": "inngest/function.failed",
+            "name": "inngest/function.finished",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -521,8 +415,7 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "handled": true,
-            "failedFunctionId": "examples-028-invoke-failure-failing-child"
+            "tracked": true
           }
         }
       ]
@@ -575,30 +468,25 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "shouldSkip": false
-              },
-              "id": "fixture-native-038-conditional-steps-0-0",
-              "name": "demo/conditional",
-              "ts": 1781487683016,
+              "data": {},
+              "id": "fixture-native-042-sendEvent-batch-0-0",
+              "name": "demo/send-batch",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "shouldSkip": false
-                },
-                "id": "fixture-native-038-conditional-steps-0-0",
-                "name": "demo/conditional",
-                "ts": 1781487683016
+                "data": {},
+                "id": "fixture-native-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-038-conditional-steps-conditional-steps",
+            "function_id": "examples-042-sendEvent-batch-send-batch",
             "result": {
-              "path": "full",
-              "result": "processed-1,processed-2,processed-3"
+              "sentCount": 3
             },
-            "run_id": "01KV4F1HK4SRSKH2MXR3ZN68EQ"
+            "run_id": "01KV4FZX4KFCSWYSXCXBWFQ6E8"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -612,30 +500,25 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "shouldSkip": false
-                },
-                "id": "fixture-native-038-conditional-steps-0-0",
-                "name": "demo/conditional",
-                "ts": 1781487683016,
+                "data": {},
+                "id": "fixture-native-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "shouldSkip": false
-                  },
-                  "id": "fixture-native-038-conditional-steps-0-0",
-                  "name": "demo/conditional",
-                  "ts": 1781487683016
+                  "data": {},
+                  "id": "fixture-native-042-sendEvent-batch-0-0",
+                  "name": "demo/send-batch",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-038-conditional-steps-conditional-steps",
+              "function_id": "examples-042-sendEvent-batch-send-batch",
               "result": {
-                "path": "full",
-                "result": "processed-1,processed-2,processed-3"
+                "sentCount": 3
               },
-              "run_id": "01KV4F1HK4SRSKH2MXR3ZN68EQ"
+              "run_id": "01KV4FZX4KFCSWYSXCXBWFQ6E8"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -716,25 +599,30 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-042-sendEvent-batch-0-0",
-              "name": "demo/send-batch",
-              "ts": 1781487683016,
+              "data": {
+                "companyId": "company-047"
+              },
+              "id": "fixture-native-047-rate-limit-key-0-0",
+              "name": "demo/rate-keyed",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-042-sendEvent-batch-0-0",
-                "name": "demo/send-batch",
-                "ts": 1781487683016
+                "data": {
+                  "companyId": "company-047"
+                },
+                "id": "fixture-native-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-042-sendEvent-batch-send-batch",
+            "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
             "result": {
-              "sentCount": 3
+              "companyId": "company-047",
+              "processedAt": "2026-06-15T01:57:58.048Z"
             },
-            "run_id": "01KV4F1HK1CX8Q9JT42Z0G1AZZ"
+            "run_id": "01KV4FZX4JXZED932AJ6ZA0JQZ"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -748,25 +636,30 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-042-sendEvent-batch-0-0",
-                "name": "demo/send-batch",
-                "ts": 1781487683016,
+                "data": {
+                  "companyId": "company-047"
+                },
+                "id": "fixture-native-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-042-sendEvent-batch-0-0",
-                  "name": "demo/send-batch",
-                  "ts": 1781487683016
+                  "data": {
+                    "companyId": "company-047"
+                  },
+                  "id": "fixture-native-047-rate-limit-key-0-0",
+                  "name": "demo/rate-keyed",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-042-sendEvent-batch-send-batch",
+              "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
               "result": {
-                "sentCount": 3
+                "companyId": "company-047",
+                "processedAt": "2026-06-15T01:57:58.048Z"
               },
-              "run_id": "01KV4F1HK1CX8Q9JT42Z0G1AZZ"
+              "run_id": "01KV4FZX4JXZED932AJ6ZA0JQZ"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -846,77 +739,31 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
             "event": {
               "data": {
-                "_inngest": {
-                  "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                  "expire": 1813023682958,
-                  "fn_id": "examples-011-step-invoke-child-square",
-                  "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
-                  "isr": {
-                    "dsid": "b8a4fd4ac245b9cb",
-                    "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
-                    "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
-                    "ts": ""
-                  },
-                  "name": "call-child",
-                  "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                  "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "1ab304b3651881c0",
-                      "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
-                    },
-                    "ts": "2026-06-15T01:41:22.958632Z"
-                  }
-                },
-                "value": 7
+                "teamId": "team-046"
               },
-              "id": "01KV4F1HCEW927NDS9SZTM5DB8",
-              "name": "inngest/function.invoked",
-              "ts": 1781487682958,
+              "id": "fixture-native-046-throttle-key-0-0",
+              "name": "demo/throttle-keyed",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682958,
-                    "fn_id": "examples-011-step-invoke-child-square",
-                    "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
-                    "isr": {
-                      "dsid": "b8a4fd4ac245b9cb",
-                      "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
-                      "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "1ab304b3651881c0",
-                        "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.958632Z"
-                    }
-                  },
-                  "value": 7
+                  "teamId": "team-046"
                 },
-                "id": "01KV4F1HCEW927NDS9SZTM5DB8",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682958
+                "id": "fixture-native-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-011-step-invoke-child-square",
+            "function_id": "examples-046-throttle-key-throttle-keyed",
             "result": {
-              "squared": 49
+              "processedAt": "2026-06-15T01:57:58.056Z",
+              "teamId": "team-046"
             },
-            "run_id": "01KV4F1HKVKHRDE5PFTTXC3XZV"
+            "run_id": "01KV4FZX4J4YVGTPWJ70Y35EQK"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -929,77 +776,31 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
               "event": {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682958,
-                    "fn_id": "examples-011-step-invoke-child-square",
-                    "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
-                    "isr": {
-                      "dsid": "b8a4fd4ac245b9cb",
-                      "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
-                      "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "1ab304b3651881c0",
-                        "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.958632Z"
-                    }
-                  },
-                  "value": 7
+                  "teamId": "team-046"
                 },
-                "id": "01KV4F1HCEW927NDS9SZTM5DB8",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682958,
+                "id": "fixture-native-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "_inngest": {
-                      "correlation_id": "01KV4F1HBM598AS23QZDS8DGM5.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                      "expire": 1813023682958,
-                      "fn_id": "examples-011-step-invoke-child-square",
-                      "gid": "b97b8931-8e33-4052-92f5-d9fcce0b5eb7",
-                      "isr": {
-                        "dsid": "b8a4fd4ac245b9cb",
-                        "dstp": "00-9daad21cd03747e0124590e9b259816d-e51f89674391cc3b-00",
-                        "tp": "00-9daad21cd03747e0124590e9b259816d-b8a4fd4ac245b9cb-01",
-                        "ts": ""
-                      },
-                      "name": "call-child",
-                      "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                      "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "1ab304b3651881c0",
-                          "traceparent": "00-63bfb258a15b8780f14510e19e46a3cd-2f90f82701d50eb5-01"
-                        },
-                        "ts": "2026-06-15T01:41:22.958632Z"
-                      }
-                    },
-                    "value": 7
+                    "teamId": "team-046"
                   },
-                  "id": "01KV4F1HCEW927NDS9SZTM5DB8",
-                  "name": "inngest/function.invoked",
-                  "ts": 1781487682958
+                  "id": "fixture-native-046-throttle-key-0-0",
+                  "name": "demo/throttle-keyed",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-011-step-invoke-child-square",
+              "function_id": "examples-046-throttle-key-throttle-keyed",
               "result": {
-                "squared": 49
+                "processedAt": "2026-06-15T01:57:58.056Z",
+                "teamId": "team-046"
               },
-              "run_id": "01KV4F1HKVKHRDE5PFTTXC3XZV"
+              "run_id": "01KV4FZX4J4YVGTPWJ70Y35EQK"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1080,32 +881,30 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-040-step-return-types-0-0",
-              "name": "demo/return-types",
-              "ts": 1781487683017,
+              "data": {
+                "data": "payload-035"
+              },
+              "id": "fixture-native-035-event-with-id-0-0",
+              "name": "demo/idempotent-event",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-040-step-return-types-0-0",
-                "name": "demo/return-types",
-                "ts": 1781487683017
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-native-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-040-step-return-types-return-types-demo",
+            "function_id": "examples-035-event-with-id-idempotent-handler",
             "result": {
-              "arrayResult": [1, 2, 3, 4, 5],
-              "boolResult": true,
-              "numberResult": 42,
-              "objectResult": {
-                "count": 100,
-                "key": "test"
-              },
-              "stringResult": "hello"
+              "eventId": "01KV4FZX4EB45MYMHVYS7ZHX1Z",
+              "processed": true
             },
-            "run_id": "01KV4F1HK6GVYWPASSNE64WVTY"
+            "run_id": "01KV4FZX4EB45MYMHVYS7ZHX1Z"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1119,32 +918,30 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-040-step-return-types-0-0",
-                "name": "demo/return-types",
-                "ts": 1781487683017,
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-native-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-040-step-return-types-0-0",
-                  "name": "demo/return-types",
-                  "ts": 1781487683017
+                  "data": {
+                    "data": "payload-035"
+                  },
+                  "id": "fixture-native-035-event-with-id-0-0",
+                  "name": "demo/idempotent-event",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-040-step-return-types-return-types-demo",
+              "function_id": "examples-035-event-with-id-idempotent-handler",
               "result": {
-                "arrayResult": [1, 2, 3, 4, 5],
-                "boolResult": true,
-                "numberResult": 42,
-                "objectResult": {
-                  "count": 100,
-                  "key": "test"
-                },
-                "stringResult": "hello"
+                "eventId": "01KV4FZX4EB45MYMHVYS7ZHX1Z",
+                "processed": true
               },
-              "run_id": "01KV4F1HK6GVYWPASSNE64WVTY"
+              "run_id": "01KV4FZX4EB45MYMHVYS7ZHX1Z"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1225,28 +1022,49 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-037-nested-steps-0-0",
-              "name": "demo/nested",
-              "ts": 1781487683016,
+              "data": {
+                "items": [
+                  {
+                    "id": "a",
+                    "value": 1
+                  },
+                  {
+                    "id": "b",
+                    "value": 2
+                  }
+                ]
+              },
+              "id": "fixture-native-039-large-payload-0-0",
+              "name": "demo/large-payload",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-037-nested-steps-0-0",
-                "name": "demo/nested",
-                "ts": 1781487683016
+                "data": {
+                  "items": [
+                    {
+                      "id": "a",
+                      "value": 1
+                    },
+                    {
+                      "id": "b",
+                      "value": 2
+                    }
+                  ]
+                },
+                "id": "fixture-native-039-large-payload-0-0",
+                "name": "demo/large-payload",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-037-nested-steps-nested-steps-demo",
+            "function_id": "examples-039-large-payload-process-large-payload",
             "result": {
-              "final": 55,
-              "level1": 10,
-              "level2": 20,
-              "level3": 25
+              "itemCount": 2,
+              "processedIds": ["a", "b"],
+              "totalValue": 3
             },
-            "run_id": "01KV4F1HK4M8FY6R5AWCGVSDHS"
+            "run_id": "01KV4FZX4DEV078C25K8616JRE"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1260,28 +1078,49 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-037-nested-steps-0-0",
-                "name": "demo/nested",
-                "ts": 1781487683016,
+                "data": {
+                  "items": [
+                    {
+                      "id": "a",
+                      "value": 1
+                    },
+                    {
+                      "id": "b",
+                      "value": 2
+                    }
+                  ]
+                },
+                "id": "fixture-native-039-large-payload-0-0",
+                "name": "demo/large-payload",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-037-nested-steps-0-0",
-                  "name": "demo/nested",
-                  "ts": 1781487683016
+                  "data": {
+                    "items": [
+                      {
+                        "id": "a",
+                        "value": 1
+                      },
+                      {
+                        "id": "b",
+                        "value": 2
+                      }
+                    ]
+                  },
+                  "id": "fixture-native-039-large-payload-0-0",
+                  "name": "demo/large-payload",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-037-nested-steps-nested-steps-demo",
+              "function_id": "examples-039-large-payload-process-large-payload",
               "result": {
-                "final": 55,
-                "level1": 10,
-                "level2": 20,
-                "level3": 25
+                "itemCount": 2,
+                "processedIds": ["a", "b"],
+                "totalValue": 3
               },
-              "run_id": "01KV4F1HK4M8FY6R5AWCGVSDHS"
+              "run_id": "01KV4FZX4DEV078C25K8616JRE"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1362,34 +1201,25 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "amount": 600,
-                "customerId": "customer-052",
-                "orderId": "order-052"
-              },
-              "id": "fixture-native-052-trigger-if-filter-0-0",
-              "name": "order/placed",
-              "ts": 1781487683111,
+              "data": {},
+              "id": "fixture-native-036-step-run-with-options-0-0",
+              "name": "demo/step-options",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "amount": 600,
-                  "customerId": "customer-052",
-                  "orderId": "order-052"
-                },
-                "id": "fixture-native-052-trigger-if-filter-0-0",
-                "name": "order/placed",
-                "ts": 1781487683111
+                "data": {},
+                "id": "fixture-native-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-052-trigger-if-filter-process-high-value-order",
+            "function_id": "examples-036-step-run-with-options-step-options-demo",
             "result": {
-              "priority": "high",
-              "processed": true
+              "results": ["basic", "with-name", "completed"]
             },
-            "run_id": "01KV4F1HKB358YY8QZBA7DCKKJ"
+            "run_id": "01KV4FZX4H26YTCYPR293JAZCB"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1403,34 +1233,25 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "amount": 600,
-                  "customerId": "customer-052",
-                  "orderId": "order-052"
-                },
-                "id": "fixture-native-052-trigger-if-filter-0-0",
-                "name": "order/placed",
-                "ts": 1781487683111,
+                "data": {},
+                "id": "fixture-native-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "amount": 600,
-                    "customerId": "customer-052",
-                    "orderId": "order-052"
-                  },
-                  "id": "fixture-native-052-trigger-if-filter-0-0",
-                  "name": "order/placed",
-                  "ts": 1781487683111
+                  "data": {},
+                  "id": "fixture-native-036-step-run-with-options-0-0",
+                  "name": "demo/step-options",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-052-trigger-if-filter-process-high-value-order",
+              "function_id": "examples-036-step-run-with-options-step-options-demo",
               "result": {
-                "priority": "high",
-                "processed": true
+                "results": ["basic", "with-name", "completed"]
               },
-              "run_id": "01KV4F1HKB358YY8QZBA7DCKKJ"
+              "run_id": "01KV4FZX4H26YTCYPR293JAZCB"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1511,30 +1332,28 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "companyId": "company-047"
-              },
-              "id": "fixture-native-047-rate-limit-key-0-0",
-              "name": "demo/rate-keyed",
-              "ts": 1781487683017,
+              "data": {},
+              "id": "fixture-native-037-nested-steps-0-0",
+              "name": "demo/nested",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "companyId": "company-047"
-                },
-                "id": "fixture-native-047-rate-limit-key-0-0",
-                "name": "demo/rate-keyed",
-                "ts": 1781487683017
+                "data": {},
+                "id": "fixture-native-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+            "function_id": "examples-037-nested-steps-nested-steps-demo",
             "result": {
-              "companyId": "company-047",
-              "processedAt": "2026-06-15T01:41:23.216Z"
+              "final": 55,
+              "level1": 10,
+              "level2": 20,
+              "level3": 25
             },
-            "run_id": "01KV4F1HK1YB8AYWYKHDWTSPE7"
+            "run_id": "01KV4FZX4KQ8SYEW6YF9ECVZWP"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1548,30 +1367,28 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "companyId": "company-047"
-                },
-                "id": "fixture-native-047-rate-limit-key-0-0",
-                "name": "demo/rate-keyed",
-                "ts": 1781487683017,
+                "data": {},
+                "id": "fixture-native-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "companyId": "company-047"
-                  },
-                  "id": "fixture-native-047-rate-limit-key-0-0",
-                  "name": "demo/rate-keyed",
-                  "ts": 1781487683017
+                  "data": {},
+                  "id": "fixture-native-037-nested-steps-0-0",
+                  "name": "demo/nested",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+              "function_id": "examples-037-nested-steps-nested-steps-demo",
               "result": {
-                "companyId": "company-047",
-                "processedAt": "2026-06-15T01:41:23.216Z"
+                "final": 55,
+                "level1": 10,
+                "level2": 20,
+                "level3": 25
               },
-              "run_id": "01KV4F1HK1YB8AYWYKHDWTSPE7"
+              "run_id": "01KV4FZX4KQ8SYEW6YF9ECVZWP"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1649,86 +1466,35 @@
         "event": {
           "data": {
             "_inngest": {
-              "status": "Failed"
-            },
-            "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-            "error": {
-              "error": "NonRetriableError",
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "status": "Completed"
             },
             "event": {
-              "data": {
-                "_inngest": {
-                  "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                  "expire": 1813023682952,
-                  "fn_id": "examples-028-invoke-failure-failing-child",
-                  "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                  "isr": {
-                    "dsid": "d86ebfc94218ac5c",
-                    "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                    "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                    "ts": ""
-                  },
-                  "name": "call-child",
-                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "d067da73dfe19cf7",
-                      "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                    },
-                    "ts": "2026-06-15T01:41:22.953317Z"
-                  }
-                }
-              },
-              "id": "01KV4F1HC923H4Y83G27PGVRAW",
-              "name": "inngest/function.invoked",
-              "ts": 1781487682953,
+              "data": {},
+              "id": "fixture-native-040-step-return-types-0-0",
+              "name": "demo/return-types",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682952,
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                    "isr": {
-                      "dsid": "d86ebfc94218ac5c",
-                      "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                      "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d067da73dfe19cf7",
-                        "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.953317Z"
-                    }
-                  }
-                },
-                "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682953
+                "data": {},
+                "id": "fixture-native-040-step-return-types-0-0",
+                "name": "demo/return-types",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-028-invoke-failure-failing-child",
+            "function_id": "examples-040-step-return-types-return-types-demo",
             "result": {
-              "__serialized": true,
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "arrayResult": [1, 2, 3, 4, 5],
+              "boolResult": true,
+              "numberResult": 42,
+              "objectResult": {
+                "count": 100,
+                "key": "test"
+              },
+              "stringResult": "hello"
             },
-            "run_id": "01KV4F1HKAT7N63S63ZENTH2SS"
+            "run_id": "01KV4FZX4JM5Y8JATZ3BV89DJD"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1739,86 +1505,35 @@
           {
             "data": {
               "_inngest": {
-                "status": "Failed"
-              },
-              "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "error": {
-                "error": "NonRetriableError",
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "status": "Completed"
               },
               "event": {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                    "expire": 1813023682952,
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                    "isr": {
-                      "dsid": "d86ebfc94218ac5c",
-                      "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                      "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                      "ts": ""
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d067da73dfe19cf7",
-                        "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                      },
-                      "ts": "2026-06-15T01:41:22.953317Z"
-                    }
-                  }
-                },
-                "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                "name": "inngest/function.invoked",
-                "ts": 1781487682953,
+                "data": {},
+                "id": "fixture-native-040-step-return-types-0-0",
+                "name": "demo/return-types",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "_inngest": {
-                      "correlation_id": "01KV4F1HB9RR4397CBN3R25728.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                      "expire": 1813023682952,
-                      "fn_id": "examples-028-invoke-failure-failing-child",
-                      "gid": "1869a4ff-ba92-4d29-88c6-2c9e0be63c25",
-                      "isr": {
-                        "dsid": "d86ebfc94218ac5c",
-                        "dstp": "00-128d6aed7b4f36b4d06574803fb8990b-54904fb815b40c12-00",
-                        "tp": "00-128d6aed7b4f36b4d06574803fb8990b-d86ebfc94218ac5c-01",
-                        "ts": ""
-                      },
-                      "name": "call-child",
-                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "d067da73dfe19cf7",
-                          "traceparent": "00-a2c19df5b53378bebee894e95d0d7d72-c4027642f9c0ee2b-01"
-                        },
-                        "ts": "2026-06-15T01:41:22.953317Z"
-                      }
-                    }
-                  },
-                  "id": "01KV4F1HC923H4Y83G27PGVRAW",
-                  "name": "inngest/function.invoked",
-                  "ts": 1781487682953
+                  "data": {},
+                  "id": "fixture-native-040-step-return-types-0-0",
+                  "name": "demo/return-types",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-028-invoke-failure-failing-child",
+              "function_id": "examples-040-step-return-types-return-types-demo",
               "result": {
-                "__serialized": true,
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "arrayResult": [1, 2, 3, 4, 5],
+                "boolResult": true,
+                "numberResult": 42,
+                "objectResult": {
+                  "count": 100,
+                  "key": "test"
+                },
+                "stringResult": "hello"
               },
-              "run_id": "01KV4F1HKAT7N63S63ZENTH2SS"
+              "run_id": "01KV4FZX4JM5Y8JATZ3BV89DJD"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -1898,31 +1613,77 @@
             "_inngest": {
               "status": "Completed"
             },
+            "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
             "event": {
               "data": {
-                "data": "payload-035"
+                "_inngest": {
+                  "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813024677804,
+                  "fn_id": "examples-011-step-invoke-child-square",
+                  "gid": "11fdb709-f8ce-48ce-8c0b-5d1b17bb97c1",
+                  "isr": {
+                    "dsid": "493f3dee54028f92",
+                    "dstp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-84e2fe3cbd31e63a-00",
+                    "tp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-493f3dee54028f92-01",
+                    "ts": ""
+                  },
+                  "name": "call-child",
+                  "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                  "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "016608a3ec9159a4",
+                      "traceparent": "00-5bf5cf473269249d44883e0712e4ae00-cb9f4a22031862a2-01"
+                    },
+                    "ts": "2026-06-15T01:57:57.804188Z"
+                  }
+                },
+                "value": 7
               },
-              "id": "fixture-native-035-event-with-id-0-0",
-              "name": "demo/idempotent-event",
-              "ts": 1781487683017,
+              "id": "01KV4FZWXCJYK3GX19PG48E8BT",
+              "name": "inngest/function.invoked",
+              "ts": 1781488677804,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "data": "payload-035"
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677804,
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "11fdb709-f8ce-48ce-8c0b-5d1b17bb97c1",
+                    "isr": {
+                      "dsid": "493f3dee54028f92",
+                      "dstp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-84e2fe3cbd31e63a-00",
+                      "tp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-493f3dee54028f92-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "016608a3ec9159a4",
+                        "traceparent": "00-5bf5cf473269249d44883e0712e4ae00-cb9f4a22031862a2-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.804188Z"
+                    }
+                  },
+                  "value": 7
                 },
-                "id": "fixture-native-035-event-with-id-0-0",
-                "name": "demo/idempotent-event",
-                "ts": 1781487683017
+                "id": "01KV4FZWXCJYK3GX19PG48E8BT",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677804
               }
             ],
-            "function_id": "examples-035-event-with-id-idempotent-handler",
+            "function_id": "examples-011-step-invoke-child-square",
             "result": {
-              "eventId": "01KV4F1HK1WM5QJ23R5XT6J5CP",
-              "processed": true
+              "squared": 49
             },
-            "run_id": "01KV4F1HK1WM5QJ23R5XT6J5CP"
+            "run_id": "01KV4FZX4KB2M0F54VEHB30KRM"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -1935,31 +1696,77 @@
               "_inngest": {
                 "status": "Completed"
               },
+              "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
               "event": {
                 "data": {
-                  "data": "payload-035"
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677804,
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "11fdb709-f8ce-48ce-8c0b-5d1b17bb97c1",
+                    "isr": {
+                      "dsid": "493f3dee54028f92",
+                      "dstp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-84e2fe3cbd31e63a-00",
+                      "tp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-493f3dee54028f92-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "016608a3ec9159a4",
+                        "traceparent": "00-5bf5cf473269249d44883e0712e4ae00-cb9f4a22031862a2-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.804188Z"
+                    }
+                  },
+                  "value": 7
                 },
-                "id": "fixture-native-035-event-with-id-0-0",
-                "name": "demo/idempotent-event",
-                "ts": 1781487683017,
+                "id": "01KV4FZWXCJYK3GX19PG48E8BT",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677804,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "data": "payload-035"
+                    "_inngest": {
+                      "correlation_id": "01KV4FZWWM2V8WN7WSE9D6EDPS.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813024677804,
+                      "fn_id": "examples-011-step-invoke-child-square",
+                      "gid": "11fdb709-f8ce-48ce-8c0b-5d1b17bb97c1",
+                      "isr": {
+                        "dsid": "493f3dee54028f92",
+                        "dstp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-84e2fe3cbd31e63a-00",
+                        "tp": "00-7e5f0c30fc9ba0f3afee2df2acb3ff7f-493f3dee54028f92-01",
+                        "ts": ""
+                      },
+                      "name": "call-child",
+                      "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                      "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "016608a3ec9159a4",
+                          "traceparent": "00-5bf5cf473269249d44883e0712e4ae00-cb9f4a22031862a2-01"
+                        },
+                        "ts": "2026-06-15T01:57:57.804188Z"
+                      }
+                    },
+                    "value": 7
                   },
-                  "id": "fixture-native-035-event-with-id-0-0",
-                  "name": "demo/idempotent-event",
-                  "ts": 1781487683017
+                  "id": "01KV4FZWXCJYK3GX19PG48E8BT",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781488677804
                 }
               ],
-              "function_id": "examples-035-event-with-id-idempotent-handler",
+              "function_id": "examples-011-step-invoke-child-square",
               "result": {
-                "eventId": "01KV4F1HK1WM5QJ23R5XT6J5CP",
-                "processed": true
+                "squared": 49
               },
-              "run_id": "01KV4F1HK1WM5QJ23R5XT6J5CP"
+              "run_id": "01KV4FZX4KB2M0F54VEHB30KRM"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2037,28 +1844,86 @@
         "event": {
           "data": {
             "_inngest": {
-              "status": "Completed"
+              "status": "Failed"
+            },
+            "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-036-step-run-with-options-0-0",
-              "name": "demo/step-options",
-              "ts": 1781487683016,
+              "data": {
+                "_inngest": {
+                  "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813024677825,
+                  "fn_id": "examples-028-invoke-failure-failing-child",
+                  "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                  "isr": {
+                    "dsid": "6017f62378e9e3ec",
+                    "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                    "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                    "ts": ""
+                  },
+                  "name": "call-child",
+                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "6812a3415005e60a",
+                      "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                    },
+                    "ts": "2026-06-15T01:57:57.825066Z"
+                  }
+                }
+              },
+              "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+              "name": "inngest/function.invoked",
+              "ts": 1781488677825,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-036-step-run-with-options-0-0",
-                "name": "demo/step-options",
-                "ts": 1781487683016
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677825,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                    "isr": {
+                      "dsid": "6017f62378e9e3ec",
+                      "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                      "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "6812a3415005e60a",
+                        "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.825066Z"
+                    }
+                  }
+                },
+                "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677825
               }
             ],
-            "function_id": "examples-036-step-run-with-options-step-options-demo",
+            "function_id": "examples-028-invoke-failure-failing-child",
             "result": {
-              "results": ["basic", "with-name", "completed"]
+              "__serialized": true,
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
             },
-            "run_id": "01KV4F1HKE5RQSA7X78SXFE13T"
+            "run_id": "01KV4FZX4K2MTKR1P7VATF75CS"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -2069,28 +1934,86 @@
           {
             "data": {
               "_inngest": {
-                "status": "Completed"
+                "status": "Failed"
+              },
+              "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-036-step-run-with-options-0-0",
-                "name": "demo/step-options",
-                "ts": 1781487683016,
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677825,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                    "isr": {
+                      "dsid": "6017f62378e9e3ec",
+                      "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                      "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                      "ts": ""
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "6812a3415005e60a",
+                        "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.825066Z"
+                    }
+                  }
+                },
+                "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677825,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-036-step-run-with-options-0-0",
-                  "name": "demo/step-options",
-                  "ts": 1781487683016
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813024677825,
+                      "fn_id": "examples-028-invoke-failure-failing-child",
+                      "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                      "isr": {
+                        "dsid": "6017f62378e9e3ec",
+                        "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                        "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                        "ts": ""
+                      },
+                      "name": "call-child",
+                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "6812a3415005e60a",
+                          "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                        },
+                        "ts": "2026-06-15T01:57:57.825066Z"
+                      }
+                    }
+                  },
+                  "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781488677825
                 }
               ],
-              "function_id": "examples-036-step-run-with-options-step-options-demo",
+              "function_id": "examples-028-invoke-failure-failing-child",
               "result": {
-                "results": ["basic", "with-name", "completed"]
+                "__serialized": true,
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
               },
-              "run_id": "01KV4F1HKE5RQSA7X78SXFE13T"
+              "run_id": "01KV4FZX4K2MTKR1P7VATF75CS"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2131,10 +2054,10 @@
     "request": {
       "sequence": 16,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
       "path": "/examples/055-system-events",
       "query": {
-        "fnId": "examples-055-system-events-track-completion",
+        "fnId": "examples-055-system-events-handle-failure",
         "stepId": "step"
       },
       "headers": {
@@ -2150,7 +2073,7 @@
           "attempt": 0,
           "disable_immediate_execution": false,
           "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
           "generation_id": 1,
           "job_id": "<job_id>",
           "max_attempts": 5,
@@ -2168,55 +2091,89 @@
         "event": {
           "data": {
             "_inngest": {
-              "status": "Completed"
+              "status": "Failed"
+            },
+            "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
             },
             "event": {
               "data": {
-                "items": [
-                  {
-                    "id": "a",
-                    "value": 1
+                "_inngest": {
+                  "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                  "expire": 1813024677825,
+                  "fn_id": "examples-028-invoke-failure-failing-child",
+                  "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                  "isr": {
+                    "dsid": "6017f62378e9e3ec",
+                    "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                    "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                    "ts": ""
                   },
-                  {
-                    "id": "b",
-                    "value": 2
+                  "name": "call-child",
+                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "6812a3415005e60a",
+                      "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                    },
+                    "ts": "2026-06-15T01:57:57.825066Z"
                   }
-                ]
+                }
               },
-              "id": "fixture-native-039-large-payload-0-0",
-              "name": "demo/large-payload",
-              "ts": 1781487683016,
+              "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+              "name": "inngest/function.invoked",
+              "ts": 1781488677825,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "items": [
-                    {
-                      "id": "a",
-                      "value": 1
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677825,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                    "isr": {
+                      "dsid": "6017f62378e9e3ec",
+                      "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                      "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                      "ts": ""
                     },
-                    {
-                      "id": "b",
-                      "value": 2
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "6812a3415005e60a",
+                        "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.825066Z"
                     }
-                  ]
+                  }
                 },
-                "id": "fixture-native-039-large-payload-0-0",
-                "name": "demo/large-payload",
-                "ts": 1781487683016
+                "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677825
               }
             ],
-            "function_id": "examples-039-large-payload-process-large-payload",
+            "function_id": "examples-028-invoke-failure-failing-child",
             "result": {
-              "itemCount": 2,
-              "processedIds": ["a", "b"],
-              "totalValue": 3
+              "__serialized": true,
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
             },
-            "run_id": "01KV4F1HK1KYWBSTR3NC3KYNFZ"
+            "run_id": "01KV4FZX4K2MTKR1P7VATF75CS"
           },
           "id": "<event-id>",
-          "name": "inngest/function.finished",
+          "name": "inngest/function.failed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -2224,55 +2181,89 @@
           {
             "data": {
               "_inngest": {
-                "status": "Completed"
+                "status": "Failed"
+              },
+              "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
               },
               "event": {
                 "data": {
-                  "items": [
-                    {
-                      "id": "a",
-                      "value": 1
+                  "_inngest": {
+                    "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                    "expire": 1813024677825,
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                    "isr": {
+                      "dsid": "6017f62378e9e3ec",
+                      "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                      "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                      "ts": ""
                     },
-                    {
-                      "id": "b",
-                      "value": 2
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "6812a3415005e60a",
+                        "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                      },
+                      "ts": "2026-06-15T01:57:57.825066Z"
                     }
-                  ]
+                  }
                 },
-                "id": "fixture-native-039-large-payload-0-0",
-                "name": "demo/large-payload",
-                "ts": 1781487683016,
+                "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                "name": "inngest/function.invoked",
+                "ts": 1781488677825,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "items": [
-                      {
-                        "id": "a",
-                        "value": 1
+                    "_inngest": {
+                      "correlation_id": "01KV4FZWWV6H3VBSX8JZ843114.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                      "expire": 1813024677825,
+                      "fn_id": "examples-028-invoke-failure-failing-child",
+                      "gid": "998de7f1-e6a3-481e-a936-6fa34eb91541",
+                      "isr": {
+                        "dsid": "6017f62378e9e3ec",
+                        "dstp": "00-6ccef5ef8ee2ed5179afea4db255c059-3cbf80dce218c343-00",
+                        "tp": "00-6ccef5ef8ee2ed5179afea4db255c059-6017f62378e9e3ec-01",
+                        "ts": ""
                       },
-                      {
-                        "id": "b",
-                        "value": 2
+                      "name": "call-child",
+                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "6812a3415005e60a",
+                          "traceparent": "00-58e0d376f2ca51c7ed3679ca244affd3-43f2ca48005d1495-01"
+                        },
+                        "ts": "2026-06-15T01:57:57.825066Z"
                       }
-                    ]
+                    }
                   },
-                  "id": "fixture-native-039-large-payload-0-0",
-                  "name": "demo/large-payload",
-                  "ts": 1781487683016
+                  "id": "01KV4FZWY1J1A150TXWB5R3VE2",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781488677825
                 }
               ],
-              "function_id": "examples-039-large-payload-process-large-payload",
+              "function_id": "examples-028-invoke-failure-failing-child",
               "result": {
-                "itemCount": 2,
-                "processedIds": ["a", "b"],
-                "totalValue": 3
+                "__serialized": true,
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
               },
-              "run_id": "01KV4F1HK1KYWBSTR3NC3KYNFZ"
+              "run_id": "01KV4FZX4K2MTKR1P7VATF75CS"
             },
             "id": "<event-id>",
-            "name": "inngest/function.finished",
+            "name": "inngest/function.failed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -2297,7 +2288,8 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "tracked": true
+            "handled": true,
+            "failedFunctionId": "examples-028-invoke-failure-failing-child"
           }
         }
       ]
@@ -2349,34 +2341,77 @@
             "_inngest": {
               "status": "Completed"
             },
+            "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
             "event": {
               "data": {
-                "amount": 600,
-                "customerId": "customer-052",
-                "orderId": "order-052"
+                "_inngest": {
+                  "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                  "expire": 1813024678052,
+                  "fn_id": "examples-034-reference-function-helper-function",
+                  "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+                  "isr": {
+                    "dsid": "c2c7cfd6f77b07dc",
+                    "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                    "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
+                    "ts": ""
+                  },
+                  "name": "call-helper",
+                  "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                  "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "66f13693e68b367e",
+                      "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                    },
+                    "ts": "2026-06-15T01:57:58.052345Z"
+                  }
+                },
+                "input": 21
               },
-              "id": "fixture-native-052-trigger-if-filter-0-0",
-              "name": "order/placed",
-              "ts": 1781487683111,
+              "id": "01KV4FZX543S4HPDH59011TP9Q",
+              "name": "inngest/function.invoked",
+              "ts": 1781488678052,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "amount": 600,
-                  "customerId": "customer-052",
-                  "orderId": "order-052"
+                  "_inngest": {
+                    "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                    "expire": 1813024678052,
+                    "fn_id": "examples-034-reference-function-helper-function",
+                    "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+                    "isr": {
+                      "dsid": "c2c7cfd6f77b07dc",
+                      "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                      "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
+                      "ts": ""
+                    },
+                    "name": "call-helper",
+                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "66f13693e68b367e",
+                        "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                      },
+                      "ts": "2026-06-15T01:57:58.052345Z"
+                    }
+                  },
+                  "input": 21
                 },
-                "id": "fixture-native-052-trigger-if-filter-0-0",
-                "name": "order/placed",
-                "ts": 1781487683111
+                "id": "01KV4FZX543S4HPDH59011TP9Q",
+                "name": "inngest/function.invoked",
+                "ts": 1781488678052
               }
             ],
-            "function_id": "examples-052-trigger-if-filter-process-vip-order",
+            "function_id": "examples-034-reference-function-helper-function",
             "result": {
-              "vip": true
+              "doubled": 42
             },
-            "run_id": "01KV4F1HKDCJC3EVEG10F54Z1C"
+            "run_id": "01KV4FZXC90V3HK3XN0HSN52WX"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -2389,34 +2424,77 @@
               "_inngest": {
                 "status": "Completed"
               },
+              "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
               "event": {
                 "data": {
-                  "amount": 600,
-                  "customerId": "customer-052",
-                  "orderId": "order-052"
+                  "_inngest": {
+                    "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                    "expire": 1813024678052,
+                    "fn_id": "examples-034-reference-function-helper-function",
+                    "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+                    "isr": {
+                      "dsid": "c2c7cfd6f77b07dc",
+                      "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                      "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
+                      "ts": ""
+                    },
+                    "name": "call-helper",
+                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "66f13693e68b367e",
+                        "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                      },
+                      "ts": "2026-06-15T01:57:58.052345Z"
+                    }
+                  },
+                  "input": 21
                 },
-                "id": "fixture-native-052-trigger-if-filter-0-0",
-                "name": "order/placed",
-                "ts": 1781487683111,
+                "id": "01KV4FZX543S4HPDH59011TP9Q",
+                "name": "inngest/function.invoked",
+                "ts": 1781488678052,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "amount": 600,
-                    "customerId": "customer-052",
-                    "orderId": "order-052"
+                    "_inngest": {
+                      "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                      "expire": 1813024678052,
+                      "fn_id": "examples-034-reference-function-helper-function",
+                      "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+                      "isr": {
+                        "dsid": "c2c7cfd6f77b07dc",
+                        "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
+                        "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
+                        "ts": ""
+                      },
+                      "name": "call-helper",
+                      "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                      "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "66f13693e68b367e",
+                          "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                        },
+                        "ts": "2026-06-15T01:57:58.052345Z"
+                      }
+                    },
+                    "input": 21
                   },
-                  "id": "fixture-native-052-trigger-if-filter-0-0",
-                  "name": "order/placed",
-                  "ts": 1781487683111
+                  "id": "01KV4FZX543S4HPDH59011TP9Q",
+                  "name": "inngest/function.invoked",
+                  "ts": 1781488678052
                 }
               ],
-              "function_id": "examples-052-trigger-if-filter-process-vip-order",
+              "function_id": "examples-034-reference-function-helper-function",
               "result": {
-                "vip": true
+                "doubled": 42
               },
-              "run_id": "01KV4F1HKDCJC3EVEG10F54Z1C"
+              "run_id": "01KV4FZXC90V3HK3XN0HSN52WX"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2498,29 +2576,28 @@
             },
             "event": {
               "data": {
-                "teamId": "team-046"
+                "base": 10
               },
-              "id": "fixture-native-046-throttle-key-0-0",
-              "name": "demo/throttle-keyed",
-              "ts": 1781487683017,
+              "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+              "name": "demo/checkpoint-buffered",
+              "ts": 1781488678131,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "teamId": "team-046"
+                  "base": 10
                 },
-                "id": "fixture-native-046-throttle-key-0-0",
-                "name": "demo/throttle-keyed",
-                "ts": 1781487683017
+                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
+                "ts": 1781488678131
               }
             ],
-            "function_id": "examples-046-throttle-key-throttle-keyed",
+            "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
             "result": {
-              "processedAt": "2026-06-15T01:41:23.216Z",
-              "teamId": "team-046"
+              "total": 50
             },
-            "run_id": "01KV4F1HK09JGZCV8V0CPPG6QJ"
+            "run_id": "01KV4FZXCFHJZET4ECZNT66DFV"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -2535,29 +2612,28 @@
               },
               "event": {
                 "data": {
-                  "teamId": "team-046"
+                  "base": 10
                 },
-                "id": "fixture-native-046-throttle-key-0-0",
-                "name": "demo/throttle-keyed",
-                "ts": 1781487683017,
+                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
+                "ts": 1781488678131,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "teamId": "team-046"
+                    "base": 10
                   },
-                  "id": "fixture-native-046-throttle-key-0-0",
-                  "name": "demo/throttle-keyed",
-                  "ts": 1781487683017
+                  "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                  "name": "demo/checkpoint-buffered",
+                  "ts": 1781488678131
                 }
               ],
-              "function_id": "examples-046-throttle-key-throttle-keyed",
+              "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
               "result": {
-                "processedAt": "2026-06-15T01:41:23.216Z",
-                "teamId": "team-046"
+                "total": 50
               },
-              "run_id": "01KV4F1HK09JGZCV8V0CPPG6QJ"
+              "run_id": "01KV4FZXCFHJZET4ECZNT66DFV"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2643,7 +2719,7 @@
               },
               "id": "fixture-native-101-httpapi-hello-world-0-0",
               "name": "demo/hello",
-              "ts": 1781487683354,
+              "ts": 1781488678249,
               "user": {}
             },
             "events": [
@@ -2653,14 +2729,14 @@
                 },
                 "id": "fixture-native-101-httpapi-hello-world-0-0",
                 "name": "demo/hello",
-                "ts": 1781487683354
+                "ts": 1781488678249
               }
             ],
             "function_id": "examples-101-httpapi-hello-world-hello-world",
             "result": {
               "greeting": "Hello, Amp!"
             },
-            "run_id": "01KV4F1HVFS0GT9FJ12ZTXETNR"
+            "run_id": "01KV4FZXCFQJDH3F0SH6HHPYNW"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -2679,7 +2755,7 @@
                 },
                 "id": "fixture-native-101-httpapi-hello-world-0-0",
                 "name": "demo/hello",
-                "ts": 1781487683354,
+                "ts": 1781488678249,
                 "user": {}
               },
               "events": [
@@ -2689,14 +2765,14 @@
                   },
                   "id": "fixture-native-101-httpapi-hello-world-0-0",
                   "name": "demo/hello",
-                  "ts": 1781487683354
+                  "ts": 1781488678249
                 }
               ],
               "function_id": "examples-101-httpapi-hello-world-hello-world",
               "result": {
                 "greeting": "Hello, Amp!"
               },
-              "run_id": "01KV4F1HVFS0GT9FJ12ZTXETNR"
+              "run_id": "01KV4FZXCFQJDH3F0SH6HHPYNW"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2777,31 +2853,26 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "value": 4
-              },
-              "id": "fixture-native-060-checkpointing-basic-0-0",
-              "name": "demo/checkpoint-basic",
-              "ts": 1781487683317,
+              "data": {},
+              "id": "fixture-native-028-invoke-failure-0-0",
+              "name": "demo/invoke-failing",
+              "ts": 1781488677667,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "value": 4
-                },
-                "id": "fixture-native-060-checkpointing-basic-0-0",
-                "name": "demo/checkpoint-basic",
-                "ts": 1781487683317
+                "data": {},
+                "id": "fixture-native-028-invoke-failure-0-0",
+                "name": "demo/invoke-failing",
+                "ts": 1781488677667
               }
             ],
-            "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
+            "function_id": "examples-028-invoke-failure-parent-invoker",
             "result": {
-              "doubled": 8,
-              "total": 20,
-              "tripled": 12
+              "error": "Child always fails",
+              "status": "caught-error"
             },
-            "run_id": "01KV4F1HV35QA88KACBGBF1AJA"
+            "run_id": "01KV4FZWWV6H3VBSX8JZ843114"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -2815,31 +2886,26 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "value": 4
-                },
-                "id": "fixture-native-060-checkpointing-basic-0-0",
-                "name": "demo/checkpoint-basic",
-                "ts": 1781487683317,
+                "data": {},
+                "id": "fixture-native-028-invoke-failure-0-0",
+                "name": "demo/invoke-failing",
+                "ts": 1781488677667,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "value": 4
-                  },
-                  "id": "fixture-native-060-checkpointing-basic-0-0",
-                  "name": "demo/checkpoint-basic",
-                  "ts": 1781487683317
+                  "data": {},
+                  "id": "fixture-native-028-invoke-failure-0-0",
+                  "name": "demo/invoke-failing",
+                  "ts": 1781488677667
                 }
               ],
-              "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
+              "function_id": "examples-028-invoke-failure-parent-invoker",
               "result": {
-                "doubled": 8,
-                "total": 20,
-                "tripled": 12
+                "error": "Child always fails",
+                "status": "caught-error"
               },
-              "run_id": "01KV4F1HV35QA88KACBGBF1AJA"
+              "run_id": "01KV4FZWWV6H3VBSX8JZ843114"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -2919,77 +2985,30 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
             "event": {
               "data": {
-                "_inngest": {
-                  "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                  "expire": 1813023683238,
-                  "fn_id": "examples-034-reference-function-helper-function",
-                  "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
-                  "isr": {
-                    "dsid": "0d7b2578eed4f1f7",
-                    "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                    "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
-                    "ts": ""
-                  },
-                  "name": "call-helper",
-                  "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
-                  "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "2c5d88bc924de5df",
-                      "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
-                    },
-                    "ts": "2026-06-15T01:41:23.23873Z"
-                  }
-                },
-                "input": 21
+                "key": "override-064"
               },
-              "id": "01KV4F1HN652F574NS1R5238KH",
-              "name": "inngest/function.invoked",
-              "ts": 1781487683238,
+              "id": "fixture-native-064-checkpointing-fn-override-0-0",
+              "name": "demo/checkpoint-override",
+              "ts": 1781488678249,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                    "expire": 1813023683238,
-                    "fn_id": "examples-034-reference-function-helper-function",
-                    "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
-                    "isr": {
-                      "dsid": "0d7b2578eed4f1f7",
-                      "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                      "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
-                      "ts": ""
-                    },
-                    "name": "call-helper",
-                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
-                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "2c5d88bc924de5df",
-                        "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
-                      },
-                      "ts": "2026-06-15T01:41:23.23873Z"
-                    }
-                  },
-                  "input": 21
+                  "key": "override-064"
                 },
-                "id": "01KV4F1HN652F574NS1R5238KH",
-                "name": "inngest/function.invoked",
-                "ts": 1781487683238
+                "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
+                "ts": 1781488678249
               }
             ],
-            "function_id": "examples-034-reference-function-helper-function",
+            "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
             "result": {
-              "doubled": 42
+              "key": "override-064"
             },
-            "run_id": "01KV4F1HVJQQS2XS7M4E4KXSAZ"
+            "run_id": "01KV4FZXC67494RQMQT8GJ585T"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3002,77 +3021,30 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
               "event": {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                    "expire": 1813023683238,
-                    "fn_id": "examples-034-reference-function-helper-function",
-                    "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
-                    "isr": {
-                      "dsid": "0d7b2578eed4f1f7",
-                      "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                      "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
-                      "ts": ""
-                    },
-                    "name": "call-helper",
-                    "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
-                    "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "2c5d88bc924de5df",
-                        "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
-                      },
-                      "ts": "2026-06-15T01:41:23.23873Z"
-                    }
-                  },
-                  "input": 21
+                  "key": "override-064"
                 },
-                "id": "01KV4F1HN652F574NS1R5238KH",
-                "name": "inngest/function.invoked",
-                "ts": 1781487683238,
+                "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
+                "ts": 1781488678249,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "_inngest": {
-                      "correlation_id": "01KV4F1HKB1KME6SG956PQC7N3.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                      "expire": 1813023683238,
-                      "fn_id": "examples-034-reference-function-helper-function",
-                      "gid": "420db31e-fa06-4a1f-ab5f-64347ca46f80",
-                      "isr": {
-                        "dsid": "0d7b2578eed4f1f7",
-                        "dstp": "00-30f263aeb881d6ffee5a402163be0f97-2f24e17880320458-00",
-                        "tp": "00-30f263aeb881d6ffee5a402163be0f97-0d7b2578eed4f1f7-01",
-                        "ts": ""
-                      },
-                      "name": "call-helper",
-                      "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
-                      "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "2c5d88bc924de5df",
-                          "traceparent": "00-f8060c26f834472a9638d2474bd86231-dfb701f915f31a24-01"
-                        },
-                        "ts": "2026-06-15T01:41:23.23873Z"
-                      }
-                    },
-                    "input": 21
+                    "key": "override-064"
                   },
-                  "id": "01KV4F1HN652F574NS1R5238KH",
-                  "name": "inngest/function.invoked",
-                  "ts": 1781487683238
+                  "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                  "name": "demo/checkpoint-override",
+                  "ts": 1781488678249
                 }
               ],
-              "function_id": "examples-034-reference-function-helper-function",
+              "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
               "result": {
-                "doubled": 42
+                "key": "override-064"
               },
-              "run_id": "01KV4F1HVJQQS2XS7M4E4KXSAZ"
+              "run_id": "01KV4FZXC67494RQMQT8GJ585T"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3154,26 +3126,32 @@
             },
             "event": {
               "data": {
-                "shouldFail": false
+                "amount": 600,
+                "customerId": "customer-052",
+                "orderId": "order-052"
               },
-              "id": "fixture-native-055-system-events-0-0",
-              "name": "demo/trigger-failure",
-              "ts": 1781487683255,
+              "id": "fixture-native-052-trigger-if-filter-0-0",
+              "name": "order/placed",
+              "ts": 1781488678127,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "shouldFail": false
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
                 },
-                "id": "fixture-native-055-system-events-0-0",
-                "name": "demo/trigger-failure",
-                "ts": 1781487683255
+                "id": "fixture-native-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781488678127
               }
             ],
-            "function_id": "examples-055-system-events-trigger-failure",
-            "result": null,
-            "run_id": "01KV4F1HTW5H5A7KVVHNCPBS5E"
+            "function_id": "examples-052-trigger-if-filter-process-vip-order",
+            "result": {
+              "vip": true
+            },
+            "run_id": "01KV4FZXCFTNZWSF6JMZGNMW5Q"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3188,26 +3166,32 @@
               },
               "event": {
                 "data": {
-                  "shouldFail": false
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
                 },
-                "id": "fixture-native-055-system-events-0-0",
-                "name": "demo/trigger-failure",
-                "ts": 1781487683255,
+                "id": "fixture-native-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781488678127,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "shouldFail": false
+                    "amount": 600,
+                    "customerId": "customer-052",
+                    "orderId": "order-052"
                   },
-                  "id": "fixture-native-055-system-events-0-0",
-                  "name": "demo/trigger-failure",
-                  "ts": 1781487683255
+                  "id": "fixture-native-052-trigger-if-filter-0-0",
+                  "name": "order/placed",
+                  "ts": 1781488678127
                 }
               ],
-              "function_id": "examples-055-system-events-trigger-failure",
-              "result": null,
-              "run_id": "01KV4F1HTW5H5A7KVVHNCPBS5E"
+              "function_id": "examples-052-trigger-if-filter-process-vip-order",
+              "result": {
+                "vip": true
+              },
+              "run_id": "01KV4FZXCFTNZWSF6JMZGNMW5Q"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3288,26 +3272,27 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-028-invoke-failure-0-0",
-              "name": "demo/invoke-failing",
-              "ts": 1781487682796,
+              "data": {
+                "shouldFail": false
+              },
+              "id": "fixture-native-055-system-events-0-0",
+              "name": "demo/trigger-failure",
+              "ts": 1781488678127,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-028-invoke-failure-0-0",
-                "name": "demo/invoke-failing",
-                "ts": 1781487682796
+                "data": {
+                  "shouldFail": false
+                },
+                "id": "fixture-native-055-system-events-0-0",
+                "name": "demo/trigger-failure",
+                "ts": 1781488678127
               }
             ],
-            "function_id": "examples-028-invoke-failure-parent-invoker",
-            "result": {
-              "error": "Child always fails",
-              "status": "caught-error"
-            },
-            "run_id": "01KV4F1HB9RR4397CBN3R25728"
+            "function_id": "examples-055-system-events-trigger-failure",
+            "result": null,
+            "run_id": "01KV4FZXCB0PDHTD5SHX7WQZK0"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3321,26 +3306,27 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-028-invoke-failure-0-0",
-                "name": "demo/invoke-failing",
-                "ts": 1781487682796,
+                "data": {
+                  "shouldFail": false
+                },
+                "id": "fixture-native-055-system-events-0-0",
+                "name": "demo/trigger-failure",
+                "ts": 1781488678127,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-028-invoke-failure-0-0",
-                  "name": "demo/invoke-failing",
-                  "ts": 1781487682796
+                  "data": {
+                    "shouldFail": false
+                  },
+                  "id": "fixture-native-055-system-events-0-0",
+                  "name": "demo/trigger-failure",
+                  "ts": 1781488678127
                 }
               ],
-              "function_id": "examples-028-invoke-failure-parent-invoker",
-              "result": {
-                "error": "Child always fails",
-                "status": "caught-error"
-              },
-              "run_id": "01KV4F1HB9RR4397CBN3R25728"
+              "function_id": "examples-055-system-events-trigger-failure",
+              "result": null,
+              "run_id": "01KV4FZXCB0PDHTD5SHX7WQZK0"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3422,28 +3408,28 @@
             },
             "event": {
               "data": {
-                "number": 7
+                "tag": "opt-out-065"
               },
-              "id": "fixture-native-011-step-invoke-0-0",
-              "name": "demo/invoke-parent",
-              "ts": 1781487682795,
+              "id": "fixture-native-065-checkpointing-opt-out-0-0",
+              "name": "demo/checkpoint-opt-out",
+              "ts": 1781488678249,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "number": 7
+                  "tag": "opt-out-065"
                 },
-                "id": "fixture-native-011-step-invoke-0-0",
-                "name": "demo/invoke-parent",
-                "ts": 1781487682795
+                "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": 1781488678249
               }
             ],
-            "function_id": "examples-011-step-invoke-parent-invoke",
+            "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
             "result": {
-              "result": 49
+              "tag": "opt-out-065"
             },
-            "run_id": "01KV4F1HBM598AS23QZDS8DGM5"
+            "run_id": "01KV4FZXCCAN5J6KMKD9MFQS6Y"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3458,28 +3444,28 @@
               },
               "event": {
                 "data": {
-                  "number": 7
+                  "tag": "opt-out-065"
                 },
-                "id": "fixture-native-011-step-invoke-0-0",
-                "name": "demo/invoke-parent",
-                "ts": 1781487682795,
+                "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": 1781488678249,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "number": 7
+                    "tag": "opt-out-065"
                   },
-                  "id": "fixture-native-011-step-invoke-0-0",
-                  "name": "demo/invoke-parent",
-                  "ts": 1781487682795
+                  "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                  "name": "demo/checkpoint-opt-out",
+                  "ts": 1781488678249
                 }
               ],
-              "function_id": "examples-011-step-invoke-parent-invoke",
+              "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
               "result": {
-                "result": 49
+                "tag": "opt-out-065"
               },
-              "run_id": "01KV4F1HBM598AS23QZDS8DGM5"
+              "run_id": "01KV4FZXCCAN5J6KMKD9MFQS6Y"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3561,28 +3547,28 @@
             },
             "event": {
               "data": {
-                "value": 21
+                "number": 7
               },
-              "id": "fixture-native-102-httpapi-step-run-0-0",
-              "name": "demo/step-single",
-              "ts": 1781487683354,
+              "id": "fixture-native-011-step-invoke-0-0",
+              "name": "demo/invoke-parent",
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "value": 21
+                  "number": 7
                 },
-                "id": "fixture-native-102-httpapi-step-run-0-0",
-                "name": "demo/step-single",
-                "ts": 1781487683354
+                "id": "fixture-native-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": 1781488677666
               }
             ],
-            "function_id": "examples-102-httpapi-step-run-step-single",
+            "function_id": "examples-011-step-invoke-parent-invoke",
             "result": {
-              "doubled": 42
+              "result": 49
             },
-            "run_id": "01KV4F1HVK3X282D55DNM80SSK"
+            "run_id": "01KV4FZWWM2V8WN7WSE9D6EDPS"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3597,28 +3583,28 @@
               },
               "event": {
                 "data": {
-                  "value": 21
+                  "number": 7
                 },
-                "id": "fixture-native-102-httpapi-step-run-0-0",
-                "name": "demo/step-single",
-                "ts": 1781487683354,
+                "id": "fixture-native-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "value": 21
+                    "number": 7
                   },
-                  "id": "fixture-native-102-httpapi-step-run-0-0",
-                  "name": "demo/step-single",
-                  "ts": 1781487683354
+                  "id": "fixture-native-011-step-invoke-0-0",
+                  "name": "demo/invoke-parent",
+                  "ts": 1781488677666
                 }
               ],
-              "function_id": "examples-102-httpapi-step-run-step-single",
+              "function_id": "examples-011-step-invoke-parent-invoke",
               "result": {
-                "doubled": 42
+                "result": 49
               },
-              "run_id": "01KV4F1HVK3X282D55DNM80SSK"
+              "run_id": "01KV4FZWWM2V8WN7WSE9D6EDPS"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3700,28 +3686,33 @@
             },
             "event": {
               "data": {
-                "base": 10
+                "amount": 600,
+                "customerId": "customer-052",
+                "orderId": "order-052"
               },
-              "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-              "name": "demo/checkpoint-buffered",
-              "ts": 1781487683354,
+              "id": "fixture-native-052-trigger-if-filter-0-0",
+              "name": "order/placed",
+              "ts": 1781488678127,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "base": 10
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
                 },
-                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                "name": "demo/checkpoint-buffered",
-                "ts": 1781487683354
+                "id": "fixture-native-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781488678127
               }
             ],
-            "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+            "function_id": "examples-052-trigger-if-filter-process-high-value-order",
             "result": {
-              "total": 50
+              "priority": "high",
+              "processed": true
             },
-            "run_id": "01KV4F1HVK90AVGM40ZQ7E890P"
+            "run_id": "01KV4FZXCFWG96MDMNBRYK2PEV"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3736,28 +3727,33 @@
               },
               "event": {
                 "data": {
-                  "base": 10
+                  "amount": 600,
+                  "customerId": "customer-052",
+                  "orderId": "order-052"
                 },
-                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                "name": "demo/checkpoint-buffered",
-                "ts": 1781487683354,
+                "id": "fixture-native-052-trigger-if-filter-0-0",
+                "name": "order/placed",
+                "ts": 1781488678127,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "base": 10
+                    "amount": 600,
+                    "customerId": "customer-052",
+                    "orderId": "order-052"
                   },
-                  "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                  "name": "demo/checkpoint-buffered",
-                  "ts": 1781487683354
+                  "id": "fixture-native-052-trigger-if-filter-0-0",
+                  "name": "order/placed",
+                  "ts": 1781488678127
                 }
               ],
-              "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+              "function_id": "examples-052-trigger-if-filter-process-high-value-order",
               "result": {
-                "total": 50
+                "priority": "high",
+                "processed": true
               },
-              "run_id": "01KV4F1HVK90AVGM40ZQ7E890P"
+              "run_id": "01KV4FZXCFWG96MDMNBRYK2PEV"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3839,28 +3835,30 @@
             },
             "event": {
               "data": {
-                "tag": "opt-out-065"
+                "value": 4
               },
-              "id": "fixture-native-065-checkpointing-opt-out-0-0",
-              "name": "demo/checkpoint-opt-out",
-              "ts": 1781487683354,
+              "id": "fixture-native-060-checkpointing-basic-0-0",
+              "name": "demo/checkpoint-basic",
+              "ts": 1781488678127,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "tag": "opt-out-065"
+                  "value": 4
                 },
-                "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                "name": "demo/checkpoint-opt-out",
-                "ts": 1781487683354
+                "id": "fixture-native-060-checkpointing-basic-0-0",
+                "name": "demo/checkpoint-basic",
+                "ts": 1781488678127
               }
             ],
-            "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+            "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
             "result": {
-              "tag": "opt-out-065"
+              "doubled": 8,
+              "total": 20,
+              "tripled": 12
             },
-            "run_id": "01KV4F1HVK5N0NPMNFM9GF5D1F"
+            "run_id": "01KV4FZXC7GT4XV29A1N4DXDN2"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -3875,28 +3873,30 @@
               },
               "event": {
                 "data": {
-                  "tag": "opt-out-065"
+                  "value": 4
                 },
-                "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                "name": "demo/checkpoint-opt-out",
-                "ts": 1781487683354,
+                "id": "fixture-native-060-checkpointing-basic-0-0",
+                "name": "demo/checkpoint-basic",
+                "ts": 1781488678127,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "tag": "opt-out-065"
+                    "value": 4
                   },
-                  "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                  "name": "demo/checkpoint-opt-out",
-                  "ts": 1781487683354
+                  "id": "fixture-native-060-checkpointing-basic-0-0",
+                  "name": "demo/checkpoint-basic",
+                  "ts": 1781488678127
                 }
               ],
-              "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+              "function_id": "examples-060-checkpointing-basic-checkpoint-basic",
               "result": {
-                "tag": "opt-out-065"
+                "doubled": 8,
+                "total": 20,
+                "tripled": 12
               },
-              "run_id": "01KV4F1HVK5N0NPMNFM9GF5D1F"
+              "run_id": "01KV4FZXC7GT4XV29A1N4DXDN2"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -3977,29 +3977,25 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "key": "override-064"
-              },
-              "id": "fixture-native-064-checkpointing-fn-override-0-0",
-              "name": "demo/checkpoint-override",
-              "ts": 1781487683354,
+              "data": {},
+              "id": "fixture-native-034-reference-function-0-0",
+              "name": "demo/reference-invoke",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "key": "override-064"
-                },
-                "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                "name": "demo/checkpoint-override",
-                "ts": 1781487683354
+                "data": {},
+                "id": "fixture-native-034-reference-function-0-0",
+                "name": "demo/reference-invoke",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
+            "function_id": "examples-034-reference-function-invoke-by-reference",
             "result": {
-              "key": "override-064"
+              "result": 42
             },
-            "run_id": "01KV4F1HVKFBHTX8J0Y6M7WB6B"
+            "run_id": "01KV4FZX4JXXHSH4ZH43E51VS8"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -4013,29 +4009,25 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "key": "override-064"
-                },
-                "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                "name": "demo/checkpoint-override",
-                "ts": 1781487683354,
+                "data": {},
+                "id": "fixture-native-034-reference-function-0-0",
+                "name": "demo/reference-invoke",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "key": "override-064"
-                  },
-                  "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                  "name": "demo/checkpoint-override",
-                  "ts": 1781487683354
+                  "data": {},
+                  "id": "fixture-native-034-reference-function-0-0",
+                  "name": "demo/reference-invoke",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
+              "function_id": "examples-034-reference-function-invoke-by-reference",
               "result": {
-                "key": "override-064"
+                "result": 42
               },
-              "run_id": "01KV4F1HVKFBHTX8J0Y6M7WB6B"
+              "run_id": "01KV4FZX4JXXHSH4ZH43E51VS8"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -4115,18 +4107,18 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
+            "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
             "event": {
               "data": {
                 "_inngest": {
-                  "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                  "expire": 1781487713460,
+                  "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                  "expire": 1781488708328,
                   "fn_id": "examples-053-step-invoke-options-worker-task",
-                  "gid": "6e06fe29-2852-4ee8-9a19-ba32e2755ef3",
+                  "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
                   "isr": {
-                    "dsid": "c28f0e8d317b6cc7",
-                    "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                    "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c28f0e8d317b6cc7-01",
+                    "dsid": "8e67345a955241e5",
+                    "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                    "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
                     "ts": ""
                   },
                   "name": "invoke-worker",
@@ -4135,32 +4127,32 @@
                   "source_fn_v": 1,
                   "tc": {
                     "ctx": {
-                      "sid": "c3bdf9477f7700cd",
-                      "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                      "sid": "2b74a1ebf61ad937",
+                      "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                     },
-                    "ts": "2026-06-15T01:41:23.460456Z"
+                    "ts": "2026-06-15T01:57:58.328708Z"
                   }
                 },
                 "priority": "high",
                 "taskId": "task-053"
               },
-              "id": "01KV4F1HW427EHXBG6ZENRM1PE",
+              "id": "01KV4FZXDRWQ42Y3N331D2W9FT",
               "name": "inngest/function.invoked",
-              "ts": 1781487683460,
+              "ts": 1781488678328,
               "user": {}
             },
             "events": [
               {
                 "data": {
                   "_inngest": {
-                    "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                    "expire": 1781487713460,
+                    "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                    "expire": 1781488708328,
                     "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "6e06fe29-2852-4ee8-9a19-ba32e2755ef3",
+                    "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
                     "isr": {
-                      "dsid": "c28f0e8d317b6cc7",
-                      "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                      "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c28f0e8d317b6cc7-01",
+                      "dsid": "8e67345a955241e5",
+                      "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                      "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
                       "ts": ""
                     },
                     "name": "invoke-worker",
@@ -4169,18 +4161,18 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "c3bdf9477f7700cd",
-                        "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                        "sid": "2b74a1ebf61ad937",
+                        "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                       },
-                      "ts": "2026-06-15T01:41:23.460456Z"
+                      "ts": "2026-06-15T01:57:58.328708Z"
                     }
                   },
                   "priority": "high",
                   "taskId": "task-053"
                 },
-                "id": "01KV4F1HW427EHXBG6ZENRM1PE",
+                "id": "01KV4FZXDRWQ42Y3N331D2W9FT",
                 "name": "inngest/function.invoked",
-                "ts": 1781487683460
+                "ts": 1781488678328
               }
             ],
             "function_id": "examples-053-step-invoke-options-worker-task",
@@ -4188,7 +4180,7 @@
               "completed": true,
               "taskId": "task-053"
             },
-            "run_id": "01KV4F1J2T8AQ0YCKQJVESPEB0"
+            "run_id": "01KV4FZXM1WDBKDC56B0HS8Z5Z"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -4201,18 +4193,18 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
+              "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
               "event": {
                 "data": {
                   "_inngest": {
-                    "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                    "expire": 1781487713460,
+                    "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                    "expire": 1781488708328,
                     "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "6e06fe29-2852-4ee8-9a19-ba32e2755ef3",
+                    "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
                     "isr": {
-                      "dsid": "c28f0e8d317b6cc7",
-                      "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                      "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c28f0e8d317b6cc7-01",
+                      "dsid": "8e67345a955241e5",
+                      "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                      "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
                       "ts": ""
                     },
                     "name": "invoke-worker",
@@ -4221,32 +4213,32 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "c3bdf9477f7700cd",
-                        "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                        "sid": "2b74a1ebf61ad937",
+                        "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                       },
-                      "ts": "2026-06-15T01:41:23.460456Z"
+                      "ts": "2026-06-15T01:57:58.328708Z"
                     }
                   },
                   "priority": "high",
                   "taskId": "task-053"
                 },
-                "id": "01KV4F1HW427EHXBG6ZENRM1PE",
+                "id": "01KV4FZXDRWQ42Y3N331D2W9FT",
                 "name": "inngest/function.invoked",
-                "ts": 1781487683460,
+                "ts": 1781488678328,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
                     "_inngest": {
-                      "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                      "expire": 1781487713460,
+                      "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
+                      "expire": 1781488708328,
                       "fn_id": "examples-053-step-invoke-options-worker-task",
-                      "gid": "6e06fe29-2852-4ee8-9a19-ba32e2755ef3",
+                      "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
                       "isr": {
-                        "dsid": "c28f0e8d317b6cc7",
-                        "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                        "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c28f0e8d317b6cc7-01",
+                        "dsid": "8e67345a955241e5",
+                        "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                        "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
                         "ts": ""
                       },
                       "name": "invoke-worker",
@@ -4255,18 +4247,18 @@
                       "source_fn_v": 1,
                       "tc": {
                         "ctx": {
-                          "sid": "c3bdf9477f7700cd",
-                          "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                          "sid": "2b74a1ebf61ad937",
+                          "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                         },
-                        "ts": "2026-06-15T01:41:23.460456Z"
+                        "ts": "2026-06-15T01:57:58.328708Z"
                       }
                     },
                     "priority": "high",
                     "taskId": "task-053"
                   },
-                  "id": "01KV4F1HW427EHXBG6ZENRM1PE",
+                  "id": "01KV4FZXDRWQ42Y3N331D2W9FT",
                   "name": "inngest/function.invoked",
-                  "ts": 1781487683460
+                  "ts": 1781488678328
                 }
               ],
               "function_id": "examples-053-step-invoke-options-worker-task",
@@ -4274,7 +4266,7 @@
                 "completed": true,
                 "taskId": "task-053"
               },
-              "run_id": "01KV4F1J2T8AQ0YCKQJVESPEB0"
+              "run_id": "01KV4FZXM1WDBKDC56B0HS8Z5Z"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -4314,137 +4306,6 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 30,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {},
-              "id": "fixture-native-034-reference-function-0-0",
-              "name": "demo/reference-invoke",
-              "ts": 1781487683016,
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {},
-                "id": "fixture-native-034-reference-function-0-0",
-                "name": "demo/reference-invoke",
-                "ts": 1781487683016
-              }
-            ],
-            "function_id": "examples-034-reference-function-invoke-by-reference",
-            "result": {
-              "result": 42
-            },
-            "run_id": "01KV4F1HKB1KME6SG956PQC7N3"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {},
-                "id": "fixture-native-034-reference-function-0-0",
-                "name": "demo/reference-invoke",
-                "ts": 1781487683016,
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {},
-                  "id": "fixture-native-034-reference-function-0-0",
-                  "name": "demo/reference-invoke",
-                  "ts": 1781487683016
-                }
-              ],
-              "function_id": "examples-034-reference-function-invoke-by-reference",
-              "result": {
-                "result": 42
-              },
-              "run_id": "01KV4F1HKB1KME6SG956PQC7N3"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 31,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 31,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
       "path": "/examples/055-system-events",
@@ -4495,7 +4356,7 @@
               "data": {},
               "id": "fixture-native-013-retries-config-0-0",
               "name": "demo/retries-limited",
-              "ts": 1781487682795,
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
@@ -4503,7 +4364,7 @@
                 "data": {},
                 "id": "fixture-native-013-retries-config-0-0",
                 "name": "demo/retries-limited",
-                "ts": 1781487682795
+                "ts": 1781488677666
               }
             ],
             "function_id": "examples-013-retries-config-retries-limited",
@@ -4513,7 +4374,7 @@
               "name": "Error",
               "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
             },
-            "run_id": "01KV4F1HBHCJXP2E0T3DJS0C1W"
+            "run_id": "01KV4FZWWWT92216RX0J4NXH90"
           },
           "id": "<event-id>",
           "name": "inngest/function.failed",
@@ -4536,7 +4397,7 @@
                 "data": {},
                 "id": "fixture-native-013-retries-config-0-0",
                 "name": "demo/retries-limited",
-                "ts": 1781487682795,
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
@@ -4544,7 +4405,7 @@
                   "data": {},
                   "id": "fixture-native-013-retries-config-0-0",
                   "name": "demo/retries-limited",
-                  "ts": 1781487682795
+                  "ts": 1781488677666
                 }
               ],
               "function_id": "examples-013-retries-config-retries-limited",
@@ -4554,7 +4415,7 @@
                 "name": "Error",
                 "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
               },
-              "run_id": "01KV4F1HBHCJXP2E0T3DJS0C1W"
+              "run_id": "01KV4FZWWWT92216RX0J4NXH90"
             },
             "id": "<event-id>",
             "name": "inngest/function.failed",
@@ -4584,6 +4445,145 @@
           "data": {
             "handled": true,
             "failedFunctionId": "examples-013-retries-config-retries-limited"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 31,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 31,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "userId": "user-025"
+              },
+              "id": "fixture-native-025-concurrency-key-0-0",
+              "name": "demo/concurrent-keyed",
+              "ts": 1781488677667,
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-native-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
+                "ts": 1781488677667
+              }
+            ],
+            "function_id": "examples-025-concurrency-key-user-processor",
+            "result": {
+              "processed": "user-025"
+            },
+            "run_id": "01KV4FZWWWEE19AJMRWAYG84KQ"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-native-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
+                "ts": 1781488677667,
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "userId": "user-025"
+                  },
+                  "id": "fixture-native-025-concurrency-key-0-0",
+                  "name": "demo/concurrent-keyed",
+                  "ts": 1781488677667
+                }
+              ],
+              "function_id": "examples-025-concurrency-key-user-processor",
+              "result": {
+                "processed": "user-025"
+              },
+              "run_id": "01KV4FZWWWEE19AJMRWAYG84KQ"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
           }
         }
       ]
@@ -4645,7 +4645,7 @@
               "data": {},
               "id": "fixture-native-013-retries-config-0-0",
               "name": "demo/retries-limited",
-              "ts": 1781487682795,
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
@@ -4653,7 +4653,7 @@
                 "data": {},
                 "id": "fixture-native-013-retries-config-0-0",
                 "name": "demo/retries-limited",
-                "ts": 1781487682795
+                "ts": 1781488677666
               }
             ],
             "function_id": "examples-013-retries-config-retries-limited",
@@ -4663,7 +4663,7 @@
               "name": "Error",
               "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
             },
-            "run_id": "01KV4F1HBHCJXP2E0T3DJS0C1W"
+            "run_id": "01KV4FZWWWT92216RX0J4NXH90"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -4686,7 +4686,7 @@
                 "data": {},
                 "id": "fixture-native-013-retries-config-0-0",
                 "name": "demo/retries-limited",
-                "ts": 1781487682795,
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
@@ -4694,7 +4694,7 @@
                   "data": {},
                   "id": "fixture-native-013-retries-config-0-0",
                   "name": "demo/retries-limited",
-                  "ts": 1781487682795
+                  "ts": 1781488677666
                 }
               ],
               "function_id": "examples-013-retries-config-retries-limited",
@@ -4704,7 +4704,7 @@
                 "name": "Error",
                 "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
               },
-              "run_id": "01KV4F1HBHCJXP2E0T3DJS0C1W"
+              "run_id": "01KV4FZWWWT92216RX0J4NXH90"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -4786,29 +4786,28 @@
             },
             "event": {
               "data": {
-                "id": "concurrent-014"
+                "orderId": "order-008"
               },
-              "id": "fixture-native-014-concurrency-limit-0-0",
-              "name": "demo/concurrent",
-              "ts": 1781487682795,
+              "id": "fixture-native-008-step-waitForEvent-0-0",
+              "name": "demo/wait-start",
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "id": "concurrent-014"
+                  "orderId": "order-008"
                 },
-                "id": "fixture-native-014-concurrency-limit-0-0",
-                "name": "demo/concurrent",
-                "ts": 1781487682795
+                "id": "fixture-native-008-step-waitForEvent-0-0",
+                "name": "demo/wait-start",
+                "ts": 1781488677666
               }
             ],
-            "function_id": "examples-014-concurrency-limit-concurrent-fn",
+            "function_id": "examples-008-step-waitForEvent-wait-for-event",
             "result": {
-              "completedAt": "2026-06-15T01:41:23.965Z",
-              "id": "concurrent-014"
+              "receivedStatus": "approved"
             },
-            "run_id": "01KV4F1HBDJA0DAQ0AXFCNWA5M"
+            "run_id": "01KV4FZWWVT07XSW9TJV1RBJT5"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -4823,29 +4822,28 @@
               },
               "event": {
                 "data": {
-                  "id": "concurrent-014"
+                  "orderId": "order-008"
                 },
-                "id": "fixture-native-014-concurrency-limit-0-0",
-                "name": "demo/concurrent",
-                "ts": 1781487682795,
+                "id": "fixture-native-008-step-waitForEvent-0-0",
+                "name": "demo/wait-start",
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "id": "concurrent-014"
+                    "orderId": "order-008"
                   },
-                  "id": "fixture-native-014-concurrency-limit-0-0",
-                  "name": "demo/concurrent",
-                  "ts": 1781487682795
+                  "id": "fixture-native-008-step-waitForEvent-0-0",
+                  "name": "demo/wait-start",
+                  "ts": 1781488677666
                 }
               ],
-              "function_id": "examples-014-concurrency-limit-concurrent-fn",
+              "function_id": "examples-008-step-waitForEvent-wait-for-event",
               "result": {
-                "completedAt": "2026-06-15T01:41:23.965Z",
-                "id": "concurrent-014"
+                "receivedStatus": "approved"
               },
-              "run_id": "01KV4F1HBDJA0DAQ0AXFCNWA5M"
+              "run_id": "01KV4FZWWVT07XSW9TJV1RBJT5"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -4926,25 +4924,32 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-005-step-sleep-0-0",
-              "name": "demo/sleep",
-              "ts": 1781487682795,
+              "data": {
+                "itemId": "item-054",
+                "userId": "user-054"
+              },
+              "id": "fixture-native-054-concurrency-scope-0-0",
+              "name": "demo/process-item",
+              "ts": 1781488678127,
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-005-step-sleep-0-0",
-                "name": "demo/sleep",
-                "ts": 1781487682795
+                "data": {
+                  "itemId": "item-054",
+                  "userId": "user-054"
+                },
+                "id": "fixture-native-054-concurrency-scope-0-0",
+                "name": "demo/process-item",
+                "ts": 1781488678127
               }
             ],
-            "function_id": "examples-005-step-sleep-sleep-test",
+            "function_id": "examples-054-concurrency-scope-process-item",
             "result": {
-              "slept": true
+              "itemId": "item-054",
+              "processed": true
             },
-            "run_id": "01KV4F1HB719GX0E14D7T71JPH"
+            "run_id": "01KV4FZXC7GXPT99H8GJ11RCQK"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -4958,25 +4963,32 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-005-step-sleep-0-0",
-                "name": "demo/sleep",
-                "ts": 1781487682795,
+                "data": {
+                  "itemId": "item-054",
+                  "userId": "user-054"
+                },
+                "id": "fixture-native-054-concurrency-scope-0-0",
+                "name": "demo/process-item",
+                "ts": 1781488678127,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-005-step-sleep-0-0",
-                  "name": "demo/sleep",
-                  "ts": 1781487682795
+                  "data": {
+                    "itemId": "item-054",
+                    "userId": "user-054"
+                  },
+                  "id": "fixture-native-054-concurrency-scope-0-0",
+                  "name": "demo/process-item",
+                  "ts": 1781488678127
                 }
               ],
-              "function_id": "examples-005-step-sleep-sleep-test",
+              "function_id": "examples-054-concurrency-scope-process-item",
               "result": {
-                "slept": true
+                "itemId": "item-054",
+                "processed": true
               },
-              "run_id": "01KV4F1HB719GX0E14D7T71JPH"
+              "run_id": "01KV4FZXC7GXPT99H8GJ11RCQK"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5058,31 +5070,29 @@
             },
             "event": {
               "data": {
-                "itemId": "item-054",
-                "userId": "user-054"
+                "id": "concurrent-014"
               },
-              "id": "fixture-native-054-concurrency-scope-0-0",
-              "name": "demo/process-item",
-              "ts": 1781487683254,
+              "id": "fixture-native-014-concurrency-limit-0-0",
+              "name": "demo/concurrent",
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "itemId": "item-054",
-                  "userId": "user-054"
+                  "id": "concurrent-014"
                 },
-                "id": "fixture-native-054-concurrency-scope-0-0",
-                "name": "demo/process-item",
-                "ts": 1781487683254
+                "id": "fixture-native-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
+                "ts": 1781488677666
               }
             ],
-            "function_id": "examples-054-concurrency-scope-process-item",
+            "function_id": "examples-014-concurrency-limit-concurrent-fn",
             "result": {
-              "itemId": "item-054",
-              "processed": true
+              "completedAt": "2026-06-15T01:57:58.820Z",
+              "id": "concurrent-014"
             },
-            "run_id": "01KV4F1HV8TVWN7XQYXPNKB883"
+            "run_id": "01KV4FZWWVQKA1V5DFGCAMAE6H"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -5097,31 +5107,29 @@
               },
               "event": {
                 "data": {
-                  "itemId": "item-054",
-                  "userId": "user-054"
+                  "id": "concurrent-014"
                 },
-                "id": "fixture-native-054-concurrency-scope-0-0",
-                "name": "demo/process-item",
-                "ts": 1781487683254,
+                "id": "fixture-native-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "itemId": "item-054",
-                    "userId": "user-054"
+                    "id": "concurrent-014"
                   },
-                  "id": "fixture-native-054-concurrency-scope-0-0",
-                  "name": "demo/process-item",
-                  "ts": 1781487683254
+                  "id": "fixture-native-014-concurrency-limit-0-0",
+                  "name": "demo/concurrent",
+                  "ts": 1781488677666
                 }
               ],
-              "function_id": "examples-054-concurrency-scope-process-item",
+              "function_id": "examples-014-concurrency-limit-concurrent-fn",
               "result": {
-                "itemId": "item-054",
-                "processed": true
+                "completedAt": "2026-06-15T01:57:58.820Z",
+                "id": "concurrent-014"
               },
-              "run_id": "01KV4F1HV8TVWN7XQYXPNKB883"
+              "run_id": "01KV4FZWWVQKA1V5DFGCAMAE6H"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5202,29 +5210,25 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "userId": "user-025"
-              },
-              "id": "fixture-native-025-concurrency-key-0-0",
-              "name": "demo/concurrent-keyed",
-              "ts": 1781487682796,
+              "data": {},
+              "id": "fixture-native-005-step-sleep-0-0",
+              "name": "demo/sleep",
+              "ts": 1781488677666,
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "userId": "user-025"
-                },
-                "id": "fixture-native-025-concurrency-key-0-0",
-                "name": "demo/concurrent-keyed",
-                "ts": 1781487682796
+                "data": {},
+                "id": "fixture-native-005-step-sleep-0-0",
+                "name": "demo/sleep",
+                "ts": 1781488677666
               }
             ],
-            "function_id": "examples-025-concurrency-key-user-processor",
+            "function_id": "examples-005-step-sleep-sleep-test",
             "result": {
-              "processed": "user-025"
+              "slept": true
             },
-            "run_id": "01KV4F1HB9FWVDNAPNRY9933XN"
+            "run_id": "01KV4FZWWNB8B3S37SS0HKMYVD"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -5238,29 +5242,25 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "userId": "user-025"
-                },
-                "id": "fixture-native-025-concurrency-key-0-0",
-                "name": "demo/concurrent-keyed",
-                "ts": 1781487682796,
+                "data": {},
+                "id": "fixture-native-005-step-sleep-0-0",
+                "name": "demo/sleep",
+                "ts": 1781488677666,
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "userId": "user-025"
-                  },
-                  "id": "fixture-native-025-concurrency-key-0-0",
-                  "name": "demo/concurrent-keyed",
-                  "ts": 1781487682796
+                  "data": {},
+                  "id": "fixture-native-005-step-sleep-0-0",
+                  "name": "demo/sleep",
+                  "ts": 1781488677666
                 }
               ],
-              "function_id": "examples-025-concurrency-key-user-processor",
+              "function_id": "examples-005-step-sleep-sleep-test",
               "result": {
-                "processed": "user-025"
+                "slept": true
               },
-              "run_id": "01KV4F1HB9FWVDNAPNRY9933XN"
+              "run_id": "01KV4FZWWNB8B3S37SS0HKMYVD"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5344,7 +5344,7 @@
               "data": {},
               "id": "fixture-native-027-step-memoization-0-0",
               "name": "demo/memoized",
-              "ts": 1781487682796,
+              "ts": 1781488677667,
               "user": {}
             },
             "events": [
@@ -5352,15 +5352,15 @@
                 "data": {},
                 "id": "fixture-native-027-step-memoization-0-0",
                 "name": "demo/memoized",
-                "ts": 1781487682796
+                "ts": 1781488677667
               }
             ],
             "function_id": "examples-027-step-memoization-memoization-demo",
             "result": {
-              "randomValue": 0.8009823011806881,
-              "timestamp": 1781487682966
+              "randomValue": 0.27756292544295513,
+              "timestamp": 1781488677807
             },
-            "run_id": "01KV4F1HBDX040NXN7DSJK2FA4"
+            "run_id": "01KV4FZWWPEVS70GG8DQ5NJ292"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -5377,7 +5377,7 @@
                 "data": {},
                 "id": "fixture-native-027-step-memoization-0-0",
                 "name": "demo/memoized",
-                "ts": 1781487682796,
+                "ts": 1781488677667,
                 "user": {}
               },
               "events": [
@@ -5385,15 +5385,15 @@
                   "data": {},
                   "id": "fixture-native-027-step-memoization-0-0",
                   "name": "demo/memoized",
-                  "ts": 1781487682796
+                  "ts": 1781488677667
                 }
               ],
               "function_id": "examples-027-step-memoization-memoization-demo",
               "result": {
-                "randomValue": 0.8009823011806881,
-                "timestamp": 1781487682966
+                "randomValue": 0.27756292544295513,
+                "timestamp": 1781488677807
               },
-              "run_id": "01KV4F1HBDX040NXN7DSJK2FA4"
+              "run_id": "01KV4FZWWPEVS70GG8DQ5NJ292"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5475,28 +5475,29 @@
             },
             "event": {
               "data": {
-                "orderId": "order-008"
+                "invoiceId": "invoice-041"
               },
-              "id": "fixture-native-008-step-waitForEvent-0-0",
-              "name": "demo/wait-start",
-              "ts": 1781487682795,
+              "id": "fixture-native-041-waitForEvent-match-0-0",
+              "name": "demo/wait-match",
+              "ts": 1781488677887,
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "orderId": "order-008"
+                  "invoiceId": "invoice-041"
                 },
-                "id": "fixture-native-008-step-waitForEvent-0-0",
-                "name": "demo/wait-start",
-                "ts": 1781487682795
+                "id": "fixture-native-041-waitForEvent-match-0-0",
+                "name": "demo/wait-match",
+                "ts": 1781488677887
               }
             ],
-            "function_id": "examples-008-step-waitForEvent-wait-for-event",
+            "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
             "result": {
-              "receivedStatus": "approved"
+              "amount": 123.45,
+              "invoiceId": "invoice-041"
             },
-            "run_id": "01KV4F1HBFNYH831BBYCHRQ42Y"
+            "run_id": "01KV4FZX4KADQBZEX2XMV0S5C7"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -5511,28 +5512,29 @@
               },
               "event": {
                 "data": {
-                  "orderId": "order-008"
+                  "invoiceId": "invoice-041"
                 },
-                "id": "fixture-native-008-step-waitForEvent-0-0",
-                "name": "demo/wait-start",
-                "ts": 1781487682795,
+                "id": "fixture-native-041-waitForEvent-match-0-0",
+                "name": "demo/wait-match",
+                "ts": 1781488677887,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "orderId": "order-008"
+                    "invoiceId": "invoice-041"
                   },
-                  "id": "fixture-native-008-step-waitForEvent-0-0",
-                  "name": "demo/wait-start",
-                  "ts": 1781487682795
+                  "id": "fixture-native-041-waitForEvent-match-0-0",
+                  "name": "demo/wait-match",
+                  "ts": 1781488677887
                 }
               ],
-              "function_id": "examples-008-step-waitForEvent-wait-for-event",
+              "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
               "result": {
-                "receivedStatus": "approved"
+                "amount": 123.45,
+                "invoiceId": "invoice-041"
               },
-              "run_id": "01KV4F1HBFNYH831BBYCHRQ42Y"
+              "run_id": "01KV4FZX4KADQBZEX2XMV0S5C7"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5627,7 +5629,7 @@
               },
               "id": "fixture-native-050-complex-workflow-0-0",
               "name": "examples/050/order/placed",
-              "ts": 1781487683025,
+              "ts": 1781488677891,
               "user": {}
             },
             "events": [
@@ -5646,7 +5648,7 @@
                 },
                 "id": "fixture-native-050-complex-workflow-0-0",
                 "name": "examples/050/order/placed",
-                "ts": 1781487683025
+                "ts": 1781488677891
               }
             ],
             "function_id": "examples-050-complex-workflow-process-order",
@@ -5656,7 +5658,7 @@
               "status": "completed",
               "transactionId": "txn-050"
             },
-            "run_id": "01KV4F1HKCS6ENCRCRVJWX8M81"
+            "run_id": "01KV4FZX4GFZXTSB09FXXZJJ8V"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -5684,7 +5686,7 @@
                 },
                 "id": "fixture-native-050-complex-workflow-0-0",
                 "name": "examples/050/order/placed",
-                "ts": 1781487683025,
+                "ts": 1781488677891,
                 "user": {}
               },
               "events": [
@@ -5703,7 +5705,7 @@
                   },
                   "id": "fixture-native-050-complex-workflow-0-0",
                   "name": "examples/050/order/placed",
-                  "ts": 1781487683025
+                  "ts": 1781488677891
                 }
               ],
               "function_id": "examples-050-complex-workflow-process-order",
@@ -5713,7 +5715,7 @@
                 "status": "completed",
                 "transactionId": "txn-050"
               },
-              "run_id": "01KV4F1HKCS6ENCRCRVJWX8M81"
+              "run_id": "01KV4FZX4GFZXTSB09FXXZJJ8V"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",
@@ -5793,159 +5795,18 @@
             "_inngest": {
               "status": "Completed"
             },
-            "event": {
-              "data": {
-                "invoiceId": "invoice-041"
-              },
-              "id": "fixture-native-041-waitForEvent-match-0-0",
-              "name": "demo/wait-match",
-              "ts": 1781487683017,
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "invoiceId": "invoice-041"
-                },
-                "id": "fixture-native-041-waitForEvent-match-0-0",
-                "name": "demo/wait-match",
-                "ts": 1781487683017
-              }
-            ],
-            "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
-            "result": {
-              "amount": 123.45,
-              "invoiceId": "invoice-041"
-            },
-            "run_id": "01KV4F1HKS1T3CBCW9C2DCYNDN"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {
-                  "invoiceId": "invoice-041"
-                },
-                "id": "fixture-native-041-waitForEvent-match-0-0",
-                "name": "demo/wait-match",
-                "ts": 1781487683017,
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "invoiceId": "invoice-041"
-                  },
-                  "id": "fixture-native-041-waitForEvent-match-0-0",
-                  "name": "demo/wait-match",
-                  "ts": 1781487683017
-                }
-              ],
-              "function_id": "examples-041-waitForEvent-match-wait-for-invoice-payment",
-              "result": {
-                "amount": 123.45,
-                "invoiceId": "invoice-041"
-              },
-              "run_id": "01KV4F1HKS1T3CBCW9C2DCYNDN"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 41,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 41,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
+            "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
             "event": {
               "data": {
                 "_inngest": {
-                  "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
-                  "expire": 1781487983933,
+                  "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
+                  "expire": 1781488978791,
                   "fn_id": "examples-053-step-invoke-options-worker-task",
-                  "gid": "c2f2d6ba-89dd-430f-89e4-016c1d06f70f",
+                  "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
                   "isr": {
-                    "dsid": "c2994e322c13fdae",
-                    "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                    "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c2994e322c13fdae-01",
+                    "dsid": "cf9df7d797c8ed93",
+                    "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                    "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
                     "ts": ""
                   },
                   "name": "invoke-batch-worker",
@@ -5954,32 +5815,32 @@
                   "source_fn_v": 1,
                   "tc": {
                     "ctx": {
-                      "sid": "4468d88861ec3b55",
-                      "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                      "sid": "bbad5bdb11c1803c",
+                      "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                     },
-                    "ts": "2026-06-15T01:41:23.933177Z"
+                    "ts": "2026-06-15T01:57:58.791612Z"
                   }
                 },
                 "priority": "low",
                 "taskId": "task-053-batch"
               },
-              "id": "01KV4F1JAXA992B4YWHWFDATC6",
+              "id": "01KV4FZXW75EP1CG8DWS1W7EQJ",
               "name": "inngest/function.invoked",
-              "ts": 1781487683933,
+              "ts": 1781488678791,
               "user": {}
             },
             "events": [
               {
                 "data": {
                   "_inngest": {
-                    "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
-                    "expire": 1781487983933,
+                    "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
+                    "expire": 1781488978791,
                     "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "c2f2d6ba-89dd-430f-89e4-016c1d06f70f",
+                    "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
                     "isr": {
-                      "dsid": "c2994e322c13fdae",
-                      "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                      "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c2994e322c13fdae-01",
+                      "dsid": "cf9df7d797c8ed93",
+                      "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                      "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
                       "ts": ""
                     },
                     "name": "invoke-batch-worker",
@@ -5988,18 +5849,18 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "4468d88861ec3b55",
-                        "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                        "sid": "bbad5bdb11c1803c",
+                        "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                       },
-                      "ts": "2026-06-15T01:41:23.933177Z"
+                      "ts": "2026-06-15T01:57:58.791612Z"
                     }
                   },
                   "priority": "low",
                   "taskId": "task-053-batch"
                 },
-                "id": "01KV4F1JAXA992B4YWHWFDATC6",
+                "id": "01KV4FZXW75EP1CG8DWS1W7EQJ",
                 "name": "inngest/function.invoked",
-                "ts": 1781487683933
+                "ts": 1781488678791
               }
             ],
             "function_id": "examples-053-step-invoke-options-worker-task",
@@ -6007,7 +5868,7 @@
               "completed": true,
               "taskId": "task-053-batch"
             },
-            "run_id": "01KV4F1JJD2SXRV7BRPAVXHX5A"
+            "run_id": "01KV4FZY3QCHK994GB51EXN7AR"
           },
           "id": "<event-id>",
           "name": "inngest/function.finished",
@@ -6020,18 +5881,18 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
+              "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
               "event": {
                 "data": {
                   "_inngest": {
-                    "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
-                    "expire": 1781487983933,
+                    "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
+                    "expire": 1781488978791,
                     "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "c2f2d6ba-89dd-430f-89e4-016c1d06f70f",
+                    "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
                     "isr": {
-                      "dsid": "c2994e322c13fdae",
-                      "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                      "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c2994e322c13fdae-01",
+                      "dsid": "cf9df7d797c8ed93",
+                      "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                      "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
                       "ts": ""
                     },
                     "name": "invoke-batch-worker",
@@ -6040,32 +5901,32 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "4468d88861ec3b55",
-                        "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                        "sid": "bbad5bdb11c1803c",
+                        "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                       },
-                      "ts": "2026-06-15T01:41:23.933177Z"
+                      "ts": "2026-06-15T01:57:58.791612Z"
                     }
                   },
                   "priority": "low",
                   "taskId": "task-053-batch"
                 },
-                "id": "01KV4F1JAXA992B4YWHWFDATC6",
+                "id": "01KV4FZXW75EP1CG8DWS1W7EQJ",
                 "name": "inngest/function.invoked",
-                "ts": 1781487683933,
+                "ts": 1781488678791,
                 "user": {}
               },
               "events": [
                 {
                   "data": {
                     "_inngest": {
-                      "correlation_id": "01KV4F1HTW7E4Y23FQM42GVW9Q.f7931d4debe848361c612c75928abab74294ff1b",
-                      "expire": 1781487983933,
+                      "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
+                      "expire": 1781488978791,
                       "fn_id": "examples-053-step-invoke-options-worker-task",
-                      "gid": "c2f2d6ba-89dd-430f-89e4-016c1d06f70f",
+                      "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
                       "isr": {
-                        "dsid": "c2994e322c13fdae",
-                        "dstp": "00-d4e2ca15a0c67d651f092a9987b83418-fe069f9bc8b8e101-00",
-                        "tp": "00-d4e2ca15a0c67d651f092a9987b83418-c2994e322c13fdae-01",
+                        "dsid": "cf9df7d797c8ed93",
+                        "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
+                        "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
                         "ts": ""
                       },
                       "name": "invoke-batch-worker",
@@ -6074,18 +5935,18 @@
                       "source_fn_v": 1,
                       "tc": {
                         "ctx": {
-                          "sid": "4468d88861ec3b55",
-                          "traceparent": "00-d334b626a0324ce7a4a39bc370d9a6c6-31fc3286bd0f0fb7-01"
+                          "sid": "bbad5bdb11c1803c",
+                          "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
                         },
-                        "ts": "2026-06-15T01:41:23.933177Z"
+                        "ts": "2026-06-15T01:57:58.791612Z"
                       }
                     },
                     "priority": "low",
                     "taskId": "task-053-batch"
                   },
-                  "id": "01KV4F1JAXA992B4YWHWFDATC6",
+                  "id": "01KV4FZXW75EP1CG8DWS1W7EQJ",
                   "name": "inngest/function.invoked",
-                  "ts": 1781487683933
+                  "ts": 1781488678791
                 }
               ],
               "function_id": "examples-053-step-invoke-options-worker-task",
@@ -6093,7 +5954,7 @@
                 "completed": true,
                 "taskId": "task-053-batch"
               },
-              "run_id": "01KV4F1JJD2SXRV7BRPAVXHX5A"
+              "run_id": "01KV4FZY3QCHK994GB51EXN7AR"
             },
             "id": "<event-id>",
             "name": "inngest/function.finished",

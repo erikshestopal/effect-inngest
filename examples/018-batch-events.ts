@@ -18,7 +18,7 @@ const Group = InngestGroup.make(BatchedFn);
 const HandlersLive = Group.toLayer({
   "batched-fn": ({ event }) =>
     Effect.gen(function* () {
-      const events = [event] as ReadonlyArray<DemoBatched>;
+      const events = event as unknown as ReadonlyArray<DemoBatched>;
       yield* Effect.log(`Processing batch of ${events.length} events: ${JSON.stringify(events)}`);
       const sum = events.reduce((acc, e) => acc + e.n, 0);
       return { count: events.length, sum };

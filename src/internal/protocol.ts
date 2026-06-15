@@ -150,6 +150,7 @@ interface StepInfo {
   readonly id: string;
   readonly name: string;
   readonly hash: string;
+  readonly rawStepArg?: unknown;
 }
 
 const mkOpcode = (info: StepInfo, op: OpcodeValue, extra?: object): GeneratorOpcode =>
@@ -158,12 +159,20 @@ const mkOpcode = (info: StepInfo, op: OpcodeValue, extra?: object): GeneratorOpc
 export const stepPlanned = (info: StepInfo): GeneratorOpcode =>
   mkOpcode(info, Opcode.StepPlanned, { opts: {}, userland: { id: info.id }, data: null });
 
+export const sendEventStepPlanned = (info: StepInfo): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepPlanned, {
+    name: "sendEvent",
+    opts: { type: "step.sendEvent" },
+    userland: { id: info.id },
+    data: null,
+  });
+
 export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
   mkOpcode(info, Opcode.StepRun, {
     mode: "sync",
     opts: {},
     userland: { id: info.id },
-    rawArgs: [info.id, null],
+    rawArgs: [info.rawStepArg ?? info.id, null],
     hashedId: info.hash,
     fulfilled: true,
     hasStepState: true,
@@ -179,6 +188,32 @@ export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
     },
     memoizationDeferred: { promise: {} },
     transformedResultPromise: {},
+    ...(Predicate.isNotUndefined(data) ? { data } : {}),
+    timing: { a: Date.now() * 1_000_000, b: 0 },
+  });
+
+export const sendEventStepRun = (info: StepInfo, data: unknown, rawPayload: unknown): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepRun, {
+    name: "sendEvent",
+    mode: "sync",
+    userland: { id: info.id },
+    opts: { type: "step.sendEvent" },
+    rawArgs: [info.id, rawPayload],
+    hashedId: info.hash,
+    promise: {},
+    fulfilled: true,
+    hasStepState: true,
+    handled: true,
+    middleware: {
+      stepInfo: {
+        hashedId: info.hash,
+        memoized: false,
+        options: { id: info.id, name: info.name },
+        stepType: "sendEvent",
+      },
+    },
+    memoizationDeferred: { promise: {} },
+    transformedResultPromise: {},
     data,
     timing: { a: Date.now() * 1_000_000, b: 0 },
   });
@@ -187,8 +222,16 @@ export const stepRunResponse = (info: StepInfo, data: unknown): GeneratorOpcode 
   mkOpcode(info, Opcode.StepRun, {
     opts: {},
     userland: { id: info.id },
-    data,
+    ...(Predicate.isNotUndefined(data) ? { data } : {}),
     timing: { a: Date.now() * 1_000_000, b: 0 },
+  });
+
+export const sendEventStepRunResponse = (info: StepInfo, data: unknown): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepRun, {
+    name: "sendEvent",
+    opts: { type: "step.sendEvent" },
+    userland: { id: info.id },
+    data,
   });
 
 export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): GeneratorOpcode => {

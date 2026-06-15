@@ -18,6 +18,7 @@ export interface StepInfo {
   readonly name: string;
   readonly hash: string;
   readonly order?: number;
+  readonly rawStepArg?: unknown;
 }
 
 const toUserError = (error: unknown): typeof Protocol.UserError.Type =>

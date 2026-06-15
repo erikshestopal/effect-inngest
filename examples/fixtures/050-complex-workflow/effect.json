@@ -254,8 +254,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
-      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
+      "path": "/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -263,12 +263,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "run_id": "01KV4G041QQRFW429QE487XKG9",
         "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
         "qi_id": "M2hhamVpcnpvN2c2Zjo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1RH1DQB9WZ7XSPM3T5FJ",
+        "request_id": "01KV4G041ZDQB9WZ7XSPM3T5FJ",
         "generation_id": 1,
-        "request_started_at": 1781487690278,
+        "request_started_at": 1781488685124,
         "steps": [
           {
             "id": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
@@ -303,12 +303,12 @@
             "transformedResultPromise": {},
             "data": true,
             "timing": {
-              "a": 1781487690282000000,
+              "a": 1781488685127000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690282
+        "ts": 1781488685127
       }
     },
     "response": {
@@ -327,8 +327,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
-      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
+      "path": "/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -336,12 +336,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "run_id": "01KV4G041QQRFW429QE487XKG9",
         "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
         "qi_id": "M2hhamVpcnpvN2c2Zjo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1RH1DQB9WZ7XSPM3T5FJ",
+        "request_id": "01KV4G041ZDQB9WZ7XSPM3T5FJ",
         "generation_id": 1,
-        "request_started_at": 1781487690278,
+        "request_started_at": 1781488685124,
         "steps": [
           {
             "id": "380c861392c8f4e28e7463396b6828f1b81238f6",
@@ -376,12 +376,12 @@
             "transformedResultPromise": {},
             "data": true,
             "timing": {
-              "a": 1781487690285000000,
+              "a": 1781488685131000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690285
+        "ts": 1781488685131
       }
     },
     "response": {
@@ -487,7 +487,7 @@
             },
             "id": "fixture-effect-050-complex-workflow-0-after-0-0",
             "name": "examples/050/order/payment-received",
-            "ts": 1781487691187,
+            "ts": 1781488686033,
             "user": {}
           },
           "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d": {
@@ -529,8 +529,8 @@
     "request": {
       "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
-      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
+      "path": "/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -538,24 +538,36 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "run_id": "01KV4G041QQRFW429QE487XKG9",
         "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
         "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "request_id": "01KV4G0515DZ0B30NJQHZ1GWEW",
         "generation_id": 1,
-        "request_started_at": 1781487691274,
+        "request_started_at": 1781488686120,
         "steps": [
           {
             "id": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
             "mode": "sync",
             "op": "StepRun",
             "name": "sendEvent",
-            "displayName": "sendEvent",
+            "displayName": "send-confirmation",
             "userland": {
-              "id": "sendEvent"
+              "id": "send-confirmation"
             },
-            "opts": {},
-            "rawArgs": ["sendEvent", null],
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "rawArgs": [
+              "send-confirmation",
+              {
+                "name": "order/confirmed",
+                "data": {
+                  "orderId": "order-050",
+                  "userId": "user-050",
+                  "total": 20
+                }
+              }
+            ],
             "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
             "promise": {},
             "fulfilled": true,
@@ -566,10 +578,10 @@
                 "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
                 "memoized": false,
                 "options": {
-                  "id": "sendEvent",
-                  "name": "sendEvent"
+                  "id": "send-confirmation",
+                  "name": "send-confirmation"
                 },
-                "stepType": "run"
+                "stepType": "sendEvent"
               }
             },
             "memoizationDeferred": {
@@ -577,16 +589,15 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV4F1SGBMT370N47WM54JRV3"],
-              "status": 200
+              "ids": ["01KV4G051BPGAX2PF79JW88W03"]
             },
             "timing": {
-              "a": 1781487691275000000,
+              "a": 1781488686124000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487691275
+        "ts": 1781488686124
       }
     },
     "response": {
@@ -605,8 +616,8 @@
     "request": {
       "sequence": 9,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
-      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
+      "path": "/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -614,12 +625,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "run_id": "01KV4G041QQRFW429QE487XKG9",
         "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
         "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "request_id": "01KV4G0515DZ0B30NJQHZ1GWEW",
         "generation_id": 1,
-        "request_started_at": 1781487691274,
+        "request_started_at": 1781488686120,
         "steps": [
           {
             "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
@@ -654,12 +665,12 @@
             "transformedResultPromise": {},
             "data": "2026-06-19",
             "timing": {
-              "a": 1781487691278000000,
+              "a": 1781488686127000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487691278
+        "ts": 1781488686128
       }
     },
     "response": {
@@ -678,8 +689,8 @@
     "request": {
       "sequence": 10,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
-      "path": "/v1/checkpoint/01KV4F1RGS9FDVSAT11ARRS0QP/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
+      "path": "/v1/checkpoint/01KV4G041QQRFW429QE487XKG9/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -687,24 +698,35 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1RGS9FDVSAT11ARRS0QP",
+        "run_id": "01KV4G041QQRFW429QE487XKG9",
         "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
         "qi_id": "MmtzbGNmd3V3YzgwMjo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1SG7DZ0B30NJQHZ1GWEW",
+        "request_id": "01KV4G0515DZ0B30NJQHZ1GWEW",
         "generation_id": 1,
-        "request_started_at": 1781487691274,
+        "request_started_at": 1781488686120,
         "steps": [
           {
             "id": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
             "mode": "sync",
             "op": "StepRun",
             "name": "sendEvent",
-            "displayName": "sendEvent",
+            "displayName": "notify-delivery",
             "userland": {
-              "id": "sendEvent"
+              "id": "notify-delivery"
             },
-            "opts": {},
-            "rawArgs": ["sendEvent", null],
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "rawArgs": [
+              "notify-delivery",
+              {
+                "name": "delivery/scheduled",
+                "data": {
+                  "orderId": "order-050",
+                  "estimatedDelivery": "2026-06-19"
+                }
+              }
+            ],
             "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
             "promise": {},
             "fulfilled": true,
@@ -715,10 +737,10 @@
                 "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
                 "memoized": false,
                 "options": {
-                  "id": "sendEvent",
-                  "name": "sendEvent"
+                  "id": "notify-delivery",
+                  "name": "notify-delivery"
                 },
-                "stepType": "run"
+                "stepType": "sendEvent"
               }
             },
             "memoizationDeferred": {
@@ -726,16 +748,15 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV4F1SGHD0YDQEJK2HEX2KM7"],
-              "status": 200
+              "ids": ["01KV4G051JDJZAXYS447R3FGMY"]
             },
             "timing": {
-              "a": 1781487691281000000,
+              "a": 1781488686130000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487691281
+        "ts": 1781488686130
       }
     },
     "response": {

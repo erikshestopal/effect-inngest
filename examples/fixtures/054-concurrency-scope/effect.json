@@ -111,13 +111,11 @@
                 }
               }
             },
-            "concurrency": [
-              {
-                "key": "event.data.userId",
-                "limit": 5,
-                "scope": "fn"
-              }
-            ]
+            "concurrency": {
+              "key": "event.data.userId",
+              "limit": 5,
+              "scope": "fn"
+            }
           },
           {
             "id": "examples-054-concurrency-scope-send-notification",
@@ -137,13 +135,11 @@
                 }
               }
             },
-            "concurrency": [
-              {
-                "key": "event.data.userId",
-                "limit": 10,
-                "scope": "env"
-              }
-            ]
+            "concurrency": {
+              "key": "event.data.userId",
+              "limit": 10,
+              "scope": "env"
+            }
           },
           {
             "id": "examples-054-concurrency-scope-external-api-call",
@@ -163,13 +159,11 @@
                 }
               }
             },
-            "concurrency": [
-              {
-                "key": "event.data.userId",
-                "limit": 2,
-                "scope": "account"
-              }
-            ]
+            "concurrency": {
+              "key": "event.data.userId",
+              "limit": 2,
+              "scope": "account"
+            }
           }
         ],
         "sdk": "<sdk>",

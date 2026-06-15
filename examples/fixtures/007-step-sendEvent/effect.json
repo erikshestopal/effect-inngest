@@ -229,8 +229,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4F1R9415HM6NN73ZPAKTAR/async",
-      "path": "/v1/checkpoint/01KV4F1R9415HM6NN73ZPAKTAR/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G03SSFE0HQR2069NBVVPB/async",
+      "path": "/v1/checkpoint/01KV4G03SSFE0HQR2069NBVVPB/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -238,24 +238,35 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4F1R9415HM6NN73ZPAKTAR",
+        "run_id": "01KV4G03SSFE0HQR2069NBVVPB",
         "fn_id": "6212f880-d58b-5b5d-a3b2-8f87b6f9716a",
         "qi_id": "M3NhNHBudGM0eG83cDo6ZGVmYXVsdA==",
-        "request_id": "01KV4F1R9MWQJRCQH4SF9NZR2Z",
+        "request_id": "01KV4G03TBWQJRCQH4SF9NZR2Z",
         "generation_id": 1,
-        "request_started_at": 1781487690061,
+        "request_started_at": 1781488684893,
         "steps": [
           {
             "id": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
             "mode": "sync",
             "op": "StepRun",
             "name": "sendEvent",
-            "displayName": "sendEvent",
+            "displayName": "send-notification",
             "userland": {
-              "id": "sendEvent"
+              "id": "send-notification"
             },
-            "opts": {},
-            "rawArgs": ["sendEvent", null],
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "rawArgs": [
+              "send-notification",
+              {
+                "name": "demo/notification",
+                "data": {
+                  "userId": "u_001",
+                  "message": "Hello from step.sendEvent!"
+                }
+              }
+            ],
             "hashedId": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
             "promise": {},
             "fulfilled": true,
@@ -266,10 +277,10 @@
                 "hashedId": "030e3c663b8b979f2d164d53d1ae660b67e6894c",
                 "memoized": false,
                 "options": {
-                  "id": "sendEvent",
-                  "name": "sendEvent"
+                  "id": "send-notification",
+                  "name": "send-notification"
                 },
-                "stepType": "run"
+                "stepType": "sendEvent"
               }
             },
             "memoizationDeferred": {
@@ -277,16 +288,15 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV4F1RAGHWE73FVMR0S8JE84"],
-              "status": 200
+              "ids": ["01KV4G03V7B0548YS5SQ11QNJC"]
             },
             "timing": {
-              "a": 1781487690068000000,
+              "a": 1781488684913000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781487690068
+        "ts": 1781488684913
       }
     },
     "response": {
