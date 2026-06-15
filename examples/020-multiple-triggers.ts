@@ -1,15 +1,21 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class UserUpdated extends Schema.TaggedClass<UserUpdated>()("user/updated", {
-  userId: Schema.String,
-}) {}
+const UserUpdated = InngestEvent.make(
+  "user/updated",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const UserHandlerFn = InngestFunction.make("user-handler", {
   trigger: [{ event: UserCreated }, { event: UserUpdated }],
@@ -21,9 +27,9 @@ const Group = InngestGroup.make(UserHandlerFn);
 const HandlersLive = Group.toLayer({
   "user-handler": ({ event }) =>
     Effect.gen(function* () {
-      const action = event._tag === "user/created" ? "Created" : "Updated";
-      yield* Effect.log(`User ${action}: ${event.userId}`);
-      return { eventName: event._tag, userId: event.userId, action };
+      const action = event.name === "user/created" ? "Created" : "Updated";
+      yield* Effect.log(`User ${action}: ${event.data.userId}`);
+      return { eventName: event.name, userId: event.data.userId, action };
     }),
 });
 

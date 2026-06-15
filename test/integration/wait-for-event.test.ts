@@ -3,19 +3,25 @@ import * as Duration from "effect/Duration";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { WaitForEventOpcodeResponse } from "./_schemas.js";
 
-class OrderPending extends Schema.TaggedClass<OrderPending>()("order/pending", {
-  orderId: Schema.String,
-}) {}
+const OrderPending = InngestEvent.make(
+  "order/pending",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
-class OrderApproved extends Schema.TaggedClass<OrderApproved>()("order/approved", {
-  orderId: Schema.String,
-  approvedBy: Schema.String,
-}) {}
+const OrderApproved = InngestEvent.make(
+  "order/approved",
+  Schema.Struct({
+    orderId: Schema.String,
+    approvedBy: Schema.String,
+  }),
+);
 
 describe("TB-004: Wait For Event", () => {
   const ApprovalFlow = InngestFunction.make("approval-flow", {
@@ -43,13 +49,13 @@ describe("TB-004: Wait For Event", () => {
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
 
             if (Option.isNone(approval)) {
-              return { status: "timeout" as const, orderId: event.orderId };
+              return { status: "timeout" as const, orderId: event.data.orderId };
             }
-            return { status: "approved" as const, approvedBy: approval.value.approvedBy };
+            return { status: "approved" as const, approvedBy: approval.value.data.approvedBy };
           }),
       });
 
@@ -104,13 +110,13 @@ describe("TB-004: Wait For Event", () => {
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
 
             if (Option.isNone(approval)) {
-              return { status: "timeout" as const, orderId: event.orderId };
+              return { status: "timeout" as const, orderId: event.data.orderId };
             }
-            return { status: "approved" as const, approvedBy: approval.value.approvedBy };
+            return { status: "approved" as const, approvedBy: approval.value.data.approvedBy };
           }),
       });
 
@@ -152,13 +158,13 @@ describe("TB-004: Wait For Event", () => {
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
 
             if (Option.isNone(approval)) {
-              return { status: "timeout" as const, orderId: event.orderId };
+              return { status: "timeout" as const, orderId: event.data.orderId };
             }
-            return { status: "approved" as const, approvedBy: approval.value.approvedBy };
+            return { status: "approved" as const, approvedBy: approval.value.data.approvedBy };
           }),
       });
 
@@ -198,7 +204,7 @@ describe("TB-004: Wait For Event", () => {
             if (Option.isNone(approval)) {
               return { status: "timeout" as const, orderId: "" };
             }
-            return { status: "approved" as const, approvedBy: approval.value.approvedBy };
+            return { status: "approved" as const, approvedBy: approval.value.data.approvedBy };
           }),
       });
 

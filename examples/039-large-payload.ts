@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const ItemSchema = Schema.Struct({
@@ -8,9 +8,12 @@ const ItemSchema = Schema.Struct({
   value: Schema.Number,
 });
 
-class DemoLargePayload extends Schema.TaggedClass<DemoLargePayload>()("demo/large-payload", {
-  items: Schema.Array(ItemSchema),
-}) {}
+const DemoLargePayload = InngestEvent.make(
+  "demo/large-payload",
+  Schema.Struct({
+    items: Schema.Array(ItemSchema),
+  }),
+);
 
 const LargePayloadFn = InngestFunction.make("process-large-payload", {
   trigger: { event: DemoLargePayload },
@@ -29,7 +32,7 @@ const HandlersLive = Group.toLayer({
       const processedItems = yield* step.run(
         "process-all-items",
         Effect.succeed(
-          event.items.map((item) => ({
+          event.data.items.map((item) => ({
             id: item.id,
             processedValue: item.value * 2,
           })),
@@ -38,11 +41,11 @@ const HandlersLive = Group.toLayer({
 
       const totalValue = yield* step.run(
         "calculate-total",
-        Effect.succeed(event.items.reduce((sum, item) => sum + item.value, 0)),
+        Effect.succeed(event.data.items.reduce((sum, item) => sum + item.value, 0)),
       );
 
       return {
-        itemCount: event.items.length,
+        itemCount: event.data.items.length,
         totalValue,
         processedIds: processedItems.map((p) => p.id),
       };

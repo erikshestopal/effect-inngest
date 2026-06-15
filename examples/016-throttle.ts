@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoThrottled extends Schema.TaggedClass<DemoThrottled>()("demo/throttled", {
-  id: Schema.String,
-}) {}
+const DemoThrottled = InngestEvent.make(
+  "demo/throttled",
+  Schema.Struct({
+    id: Schema.String,
+  }),
+);
 
 const ThrottledFn = InngestFunction.make("throttled-fn", {
   trigger: { event: DemoThrottled },
@@ -18,8 +21,8 @@ const Group = InngestGroup.make(ThrottledFn);
 const HandlersLive = Group.toLayer({
   "throttled-fn": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing throttled event id: ${event.id}`);
-      return { id: event.id, processedAt: new Date().toISOString() };
+      yield* Effect.log(`Processing throttled event id: ${event.data.id}`);
+      return { id: event.data.id, processedAt: new Date().toISOString() };
     }),
 });
 

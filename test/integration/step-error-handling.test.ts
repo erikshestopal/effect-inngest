@@ -1,14 +1,17 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { failWith, makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepErrorResponse } from "./_schemas.js";
 
-class TestErrorStep extends Schema.TaggedClass<TestErrorStep>()("test/error-step", {
-  shouldFail: Schema.Boolean,
-}) {}
+const TestErrorStep = InngestEvent.make(
+  "test/error-step",
+  Schema.Struct({
+    shouldFail: Schema.Boolean,
+  }),
+);
 
 describe("TB-010: Step Error Handling", () => {
   const FailingStepFn = InngestFunction.make("failing-step-fn", {
@@ -193,13 +196,19 @@ describe("TB-010: Step Error Handling", () => {
   });
 
   describe("TB-010.3 Invoke Memoized Error", () => {
-    class TestInvoke extends Schema.TaggedClass<TestInvoke>()("test/invoke", {
-      targetId: Schema.String,
-    }) {}
+    const TestInvoke = InngestEvent.make(
+      "test/invoke",
+      Schema.Struct({
+        targetId: Schema.String,
+      }),
+    );
 
-    class TestTarget extends Schema.TaggedClass<TestTarget>()("test/target", {
-      value: Schema.Number,
-    }) {}
+    const TestTarget = InngestEvent.make(
+      "test/target",
+      Schema.Struct({
+        value: Schema.Number,
+      }),
+    );
 
     const TargetFn = InngestFunction.make("target-fn", {
       trigger: { event: TestTarget },
@@ -223,7 +232,7 @@ describe("TB-010: Step Error Handling", () => {
                 function: TargetFn,
                 data: TestTarget.make({ value: 100 }),
               });
-              return { targetId: event.targetId, result };
+              return { targetId: event.data.targetId, result };
             }),
         });
 
@@ -435,13 +444,19 @@ describe("TB-010: Step Error Handling", () => {
     });
 
     it("functions map contains all functions in multi-function group", () => {
-      class TestA extends Schema.TaggedClass<TestA>()("test/a", {
-        valueA: Schema.String,
-      }) {}
+      const TestA = InngestEvent.make(
+        "test/a",
+        Schema.Struct({
+          valueA: Schema.String,
+        }),
+      );
 
-      class TestB extends Schema.TaggedClass<TestB>()("test/b", {
-        valueB: Schema.Number,
-      }) {}
+      const TestB = InngestEvent.make(
+        "test/b",
+        Schema.Struct({
+          valueB: Schema.Number,
+        }),
+      );
 
       const FnA = InngestFunction.make("fn-a", {
         trigger: { event: TestA },

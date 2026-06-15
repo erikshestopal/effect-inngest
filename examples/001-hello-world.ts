@@ -1,16 +1,11 @@
 import * as Effect from "effect/Effect";
 import { Predicate } from "effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoHello extends Schema.TaggedClass<DemoHello>()("demo/hello", {
-  name: Schema.String,
-}) {}
-
-class DemoBye extends Schema.TaggedClass<DemoBye>()("demo/bye", {
-  lastName: Schema.Number,
-}) {}
+const DemoHello = InngestEvent.make("demo/hello", Schema.Struct({ name: Schema.String }));
+const DemoBye = InngestEvent.make("demo/bye", Schema.Struct({ lastName: Schema.Number }));
 
 const HelloFn = InngestFunction.make("hello-world", {
   trigger: [{ event: DemoHello }, { event: DemoBye }],
@@ -21,7 +16,7 @@ const Group = InngestGroup.make(HelloFn);
 
 const HelloFnHandler = Group.toLayerHandler("hello-world", ({ event }) =>
   Effect.gen(function* () {
-    const greetingName = Predicate.hasProperty(event, "name") ? event.name : "Guest";
+    const greetingName = event.name === "demo/hello" ? event.data.name : "Guest";
     yield* Effect.log(`hello-world greeting ${greetingName}`);
     return { greeting: `Hello, ${greetingName}!` };
   }).pipe(Effect.withSpan("example/hello-world"), Effect.withLogSpan("example/hello-world")),

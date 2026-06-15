@@ -9,11 +9,14 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
-class OverrideEvent extends Schema.TaggedClass<OverrideEvent>()("demo/checkpoint-override", {
-  key: Schema.String,
-}) {}
+const OverrideEvent = InngestEvent.make(
+  "demo/checkpoint-override",
+  Schema.Struct({
+    key: Schema.String,
+  }),
+);
 
 const Fn = InngestFunction.make("checkpoint-override", {
   trigger: { event: OverrideEvent },
@@ -30,7 +33,7 @@ const HandlersLive = Group.toLayer({
       yield* step.run("a", Effect.succeed("A"));
       yield* step.run("b", Effect.succeed("B"));
       yield* step.run("c", Effect.succeed("C"));
-      return { key: event.key };
+      return { key: event.data.key };
     }),
 });
 

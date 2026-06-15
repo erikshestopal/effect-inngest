@@ -10,11 +10,14 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
-class DeadlineEvent extends Schema.TaggedClass<DeadlineEvent>()("demo/checkpoint-deadline", {
-  runId: Schema.String,
-}) {}
+const DeadlineEvent = InngestEvent.make(
+  "demo/checkpoint-deadline",
+  Schema.Struct({
+    runId: Schema.String,
+  }),
+);
 
 const Fn = InngestFunction.make("checkpoint-deadline", {
   trigger: { event: DeadlineEvent },

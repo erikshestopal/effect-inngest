@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
@@ -10,11 +10,14 @@ class Page extends Schema.Class<Page>("SchemaCodecPage")({
   url: Schema.URL,
 }) {}
 
-class PageRequested extends Schema.TaggedClass<PageRequested>()("schema/page-requested", {
-  url: Schema.URL,
-}) {}
+const PageRequested = InngestEvent.make(
+  "schema/page-requested",
+  Schema.Struct({
+    url: Schema.URL,
+  }),
+);
 
-class WorkflowStarted extends Schema.TaggedClass<WorkflowStarted>()("schema/workflow-started", {}) {}
+const WorkflowStarted = InngestEvent.make("schema/workflow-started", Schema.Struct({}));
 
 const PathResult = Schema.Struct({ pathname: Schema.String });
 const pageJson = { url: "https://example.com/path" };
@@ -32,8 +35,8 @@ describe("Schema codec boundaries", () => {
       const HandlersLive = Group.toLayer({
         "schema-event-input": ({ event }) =>
           Effect.sync(() => {
-            expect(event.url).toBeInstanceOf(URL);
-            return { pathname: event.url.pathname };
+            expect(event.data.url).toBeInstanceOf(URL);
+            return { pathname: event.data.url.pathname };
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });

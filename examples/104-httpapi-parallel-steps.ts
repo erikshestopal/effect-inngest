@@ -1,12 +1,15 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoParallel extends Schema.TaggedClass<DemoParallel>()("examples/104/demo/parallel", {
-  a: Schema.Number,
-  b: Schema.Number,
-}) {}
+const DemoParallel = InngestEvent.make(
+  "examples/104/demo/parallel",
+  Schema.Struct({
+    a: Schema.Number,
+    b: Schema.Number,
+  }),
+);
 
 const ParallelFn = InngestFunction.make("parallel-test", {
   trigger: { event: DemoParallel },
@@ -19,7 +22,10 @@ const HandlersLive = Group.toLayer({
   "parallel-test": ({ event, step }) =>
     Effect.gen(function* () {
       const [sum, product] = yield* Effect.all(
-        [step.run("sum", Effect.succeed(event.a + event.b)), step.run("product", Effect.succeed(event.a * event.b))],
+        [
+          step.run("sum", Effect.succeed(event.data.a + event.data.b)),
+          step.run("product", Effect.succeed(event.data.a * event.data.b)),
+        ],
         { concurrency: "unbounded" },
       );
       return { sum, product };

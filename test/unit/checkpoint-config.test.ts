@@ -2,7 +2,7 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction } from "../../src/index.js";
+import { InngestFunction, InngestEvent } from "../../src/index.js";
 import * as Checkpoint from "../../src/internal/checkpoint.js";
 
 describe("Checkpoint config (spec §10.1)", () => {
@@ -88,7 +88,7 @@ describe("Checkpoint config (spec §10.1)", () => {
   });
 
   describe("Function registration payload", () => {
-    class Trigger extends Schema.TaggedClass<Trigger>()("ckpt/test", { v: Schema.String }) {}
+    const Trigger = InngestEvent.make("ckpt/test", Schema.Struct({ v: Schema.String }));
 
     it("serializes checkpoint config into registration payload", () => {
       const Fn = InngestFunction.make("ckpt-fn", {

@@ -17,7 +17,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 
 interface CapturedCheckpoint {
@@ -79,9 +79,12 @@ const makeRequest = (options: { readonly fnId: string; readonly eventName: strin
     ),
   });
 
-class MaxRuntimeEvent extends Schema.TaggedClass<MaxRuntimeEvent>()("ckpt/maxruntime", {
-  v: Schema.String,
-}) {}
+const MaxRuntimeEvent = InngestEvent.make(
+  "ckpt/maxruntime",
+  Schema.Struct({
+    v: Schema.String,
+  }),
+);
 
 describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () => {
   const Fn = InngestFunction.make("ckpt-deadline-fn", {

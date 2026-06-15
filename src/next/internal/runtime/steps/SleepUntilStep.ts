@@ -1,7 +1,8 @@
-import { DateTime, Effect, Predicate } from "effect";
+import { Effect, Predicate, Schema } from "effect";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
+import { InngestTimestamp } from "../../wire/Timestamp.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
 import * as StepOperation from "./StepOperation.js";
@@ -9,7 +10,7 @@ import * as StepOperation from "./StepOperation.js";
 export const sleepUntil = (args: {
   readonly input: ExecutionInput;
   readonly id: StepInput;
-  readonly timestamp: DateTime.Utc;
+  readonly timestamp: Date | number | string;
 }): Effect.Effect<void, never, StepIdentity | StepCommandSink> =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
@@ -24,5 +25,7 @@ export const sleepUntil = (args: {
       return yield* sink.submit(StepCommand.StepPlanned.make({ info, kind: "run" }));
     }
 
-    return yield* sink.submit(StepCommand.Sleep.make({ info, duration: DateTime.formatIso(args.timestamp) }));
+    return yield* sink.submit(
+      StepCommand.Sleep.make({ info, duration: Schema.decodeUnknownSync(InngestTimestamp)(args.timestamp) }),
+    );
   });

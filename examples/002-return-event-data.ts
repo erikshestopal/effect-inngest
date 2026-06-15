@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoEcho extends Schema.TaggedClass<DemoEcho>()("demo/echo", {
-  message: Schema.String,
-}) {}
+const DemoEcho = InngestEvent.make(
+  "demo/echo",
+  Schema.Struct({
+    message: Schema.String,
+  }),
+);
 
 const EchoFn = InngestFunction.make("echo-data", {
   trigger: { event: DemoEcho },
@@ -17,8 +20,8 @@ const Group = InngestGroup.make(EchoFn);
 const HandlersLive = Group.toLayer({
   "echo-data": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`echo-data received: ${event.message}`);
-      return { received: event.message };
+      yield* Effect.log(`echo-data received: ${event.data.message}`);
+      return { received: event.data.message };
     }).pipe(Effect.withSpan("example/echo-data")),
 });
 

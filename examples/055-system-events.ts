@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestEvents, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestEvent, InngestEvents, InngestFunction, InngestGroup } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoTriggerFailure extends Schema.TaggedClass<DemoTriggerFailure>()("demo/trigger-failure", {
-  shouldFail: Schema.Boolean,
-}) {}
+const DemoTriggerFailure = InngestEvent.make(
+  "demo/trigger-failure",
+  Schema.Struct({
+    shouldFail: Schema.Boolean,
+  }),
+);
 
 class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("IntentionalFailure", {
   message: Schema.String,
@@ -37,28 +40,28 @@ const Group = InngestGroup.make(TriggerFailure, HandleFailure, TrackCompletion, 
 const HandlersLive = Group.toLayer({
   "trigger-failure": ({ event }) =>
     Effect.gen(function* () {
-      if (event.shouldFail) {
+      if (event.data.shouldFail) {
         return yield* new IntentionalFailure({ message: "Intentional failure for testing" });
       }
     }),
 
   "handle-failure": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Function ${event.function_id} failed with error: ${event.error.message}`);
-      yield* Effect.log(`Original event: ${JSON.stringify(event.event)}`);
-      return { handled: true, failedFunctionId: event.function_id };
+      yield* Effect.log(`Function ${event.data.function_id} failed with error: ${event.data.error.message}`);
+      yield* Effect.log(`Original event: ${JSON.stringify(event.data.event)}`);
+      return { handled: true, failedFunctionId: event.data.function_id };
     }),
 
   "track-completion": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Function ${event.function_id} completed successfully`);
-      yield* Effect.log(`Result: ${JSON.stringify(event.result)}`);
+      yield* Effect.log(`Function ${event.data.function_id} completed successfully`);
+      yield* Effect.log(`Result: ${JSON.stringify(event.data.result)}`);
       return { tracked: true };
     }),
 
   "handle-cancellation": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Function ${event.function_id} was cancelled`);
+      yield* Effect.log(`Function ${event.data.function_id} was cancelled`);
       return { cleanedUp: true };
     }),
 });

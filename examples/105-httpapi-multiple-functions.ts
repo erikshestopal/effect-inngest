@@ -1,16 +1,22 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
-class UserDeleted extends Schema.TaggedClass<UserDeleted>()("user/deleted", {
-  userId: Schema.String,
-}) {}
+const UserDeleted = InngestEvent.make(
+  "user/deleted",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const OnUserCreated = InngestFunction.make("on-user-created", {
   trigger: { event: UserCreated },
@@ -27,12 +33,12 @@ const Group = InngestGroup.make(OnUserCreated, OnUserDeleted);
 const HandlersLive = Group.toLayer({
   "on-user-created": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("send-welcome", Effect.log(`Sending welcome to ${event.email}`));
+      yield* step.run("send-welcome", Effect.log(`Sending welcome to ${event.data.email}`));
       return { welcomed: true };
     }),
   "on-user-deleted": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("cleanup", Effect.log(`Cleaning up data for ${event.userId}`));
+      yield* step.run("cleanup", Effect.log(`Cleaning up data for ${event.data.userId}`));
       return { cleaned: true };
     }),
 });

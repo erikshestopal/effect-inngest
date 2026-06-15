@@ -4,12 +4,15 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient, InngestHttpApi } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestHttpApi, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 describe("TB-012: HttpApiGroup Integration", () => {
   const ProcessUser = InngestFunction.make("process-user", {

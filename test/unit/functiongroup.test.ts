@@ -4,23 +4,32 @@ import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 
 // Test Event Schemas (TaggedClass)
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
-class UserUpdated extends Schema.TaggedClass<UserUpdated>()("user/updated", {
-  userId: Schema.String,
-}) {}
+const UserUpdated = InngestEvent.make(
+  "user/updated",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
-  orderId: Schema.String,
-  total: Schema.Number,
-}) {}
+const OrderPlaced = InngestEvent.make(
+  "order/placed",
+  Schema.Struct({
+    orderId: Schema.String,
+    total: Schema.Number,
+  }),
+);
 
 // InngestFunction.make Tests
 
@@ -209,9 +218,12 @@ describe("InngestGroup.make", () => {
 // InngestGroup coverage tests (migrated from coverage-100.test.ts)
 
 describe("InngestGroup coverage", () => {
-  class TestEvent extends Schema.TaggedClass<TestEvent>()("test/event", {
-    userId: Schema.String,
-  }) {}
+  const TestEvent = InngestEvent.make(
+    "test/event",
+    Schema.Struct({
+      userId: Schema.String,
+    }),
+  );
 
   const TestFn = InngestFunction.make("test-fn", {
     trigger: { event: TestEvent },
@@ -232,7 +244,7 @@ describe("InngestGroup coverage", () => {
       const group = InngestGroup.make(TestFn);
 
       const layer = group.toLayer({
-        "test-fn": ({ event }) => Effect.succeed({ result: event.userId }),
+        "test-fn": ({ event }) => Effect.succeed({ result: event.data.userId }),
       });
 
       expect(Layer.isLayer(layer)).toBe(true);
@@ -253,7 +265,7 @@ describe("InngestGroup coverage", () => {
       const group = InngestGroup.make(TestFn);
 
       const handlersLayer = group.toLayer({
-        "test-fn": ({ event }) => Effect.succeed({ result: event.userId }),
+        "test-fn": ({ event }) => Effect.succeed({ result: event.data.userId }),
       });
 
       const clientLayer = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(
@@ -274,9 +286,12 @@ describe("InngestGroup coverage", () => {
 // InngestGroup.toLayerHandler coverage (migrated from coverage-100.test.ts)
 
 describe("InngestGroup.toLayerHandler coverage", () => {
-  class CoverageTestEvent extends Schema.TaggedClass<CoverageTestEvent>()("coverage/test", {
-    count: Schema.Number,
-  }) {}
+  const CoverageTestEvent = InngestEvent.make(
+    "coverage/test",
+    Schema.Struct({
+      count: Schema.Number,
+    }),
+  );
 
   const coverageTestFn = InngestFunction.make("coverage-test-fn", {
     trigger: { event: CoverageTestEvent },

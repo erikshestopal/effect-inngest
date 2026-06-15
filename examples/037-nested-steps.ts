@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoNested extends Schema.TaggedClass<DemoNested>()("demo/nested", {}) {}
+const DemoNested = InngestEvent.make("demo/nested", Schema.Struct({}));
 
 const NestedStepsFn = InngestFunction.make("nested-steps-demo", {
   trigger: { event: DemoNested },

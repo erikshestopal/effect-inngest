@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
@@ -12,9 +12,12 @@ const FetchUserDataResult = Schema.Struct({
   preferences: Schema.Struct({ theme: Schema.String }),
 });
 
-class UserRequested extends Schema.TaggedClass<UserRequested>()("user/requested", {
-  userId: Schema.String,
-}) {}
+const UserRequested = InngestEvent.make(
+  "user/requested",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 describe("TB-009: Parallel Step Execution", () => {
   const FetchUserData = InngestFunction.make("fetch-user-data", {
@@ -39,7 +42,7 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.userId, name: "Alice" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
@@ -103,7 +106,7 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.userId, name: "Alice" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
@@ -172,7 +175,7 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.userId, name: "Alice" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
@@ -242,7 +245,7 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.userId, name: "Alice" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
                 step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
                 step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
@@ -289,9 +292,12 @@ describe("TB-009: Parallel Step Execution", () => {
 
 // Mixed Parallel Steps - Different Opcode Types
 
-class TaskStarted extends Schema.TaggedClass<TaskStarted>()("task/started", {
-  taskId: Schema.String,
-}) {}
+const TaskStarted = InngestEvent.make(
+  "task/started",
+  Schema.Struct({
+    taskId: Schema.String,
+  }),
+);
 
 describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
   const MixedStepsResult = Schema.Struct({
@@ -333,7 +339,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.taskId}`)),
+                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },
@@ -391,7 +397,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.taskId}`)),
+                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },

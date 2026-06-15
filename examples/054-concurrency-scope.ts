@@ -1,18 +1,24 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoProcessItem extends Schema.TaggedClass<DemoProcessItem>()("demo/process-item", {
-  itemId: Schema.String,
-  userId: Schema.String,
-}) {}
+const DemoProcessItem = InngestEvent.make(
+  "demo/process-item",
+  Schema.Struct({
+    itemId: Schema.String,
+    userId: Schema.String,
+  }),
+);
 
-class DemoSendNotification extends Schema.TaggedClass<DemoSendNotification>()("demo/send-notification", {
-  userId: Schema.String,
-  channel: Schema.Literals(["email", "sms", "push"]),
-}) {}
+const DemoSendNotification = InngestEvent.make(
+  "demo/send-notification",
+  Schema.Struct({
+    userId: Schema.String,
+    channel: Schema.Literals(["email", "sms", "push"]),
+  }),
+);
 
 const ProcessItemFn = InngestFunction.make("process-item", {
   trigger: { event: DemoProcessItem },
@@ -49,21 +55,21 @@ const Group = InngestGroup.make(ProcessItemFn, SendNotificationFn, ExternalApiCa
 const HandlersLive = Group.toLayer({
   "process-item": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing item ${event.itemId} for user ${event.userId}`);
+      yield* Effect.log(`Processing item ${event.data.itemId} for user ${event.data.userId}`);
       yield* Effect.sleep(Duration.millis(500));
-      return { processed: true, itemId: event.itemId };
+      return { processed: true, itemId: event.data.itemId };
     }),
 
   "send-notification": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Sending ${event.channel} notification to ${event.userId}`);
+      yield* Effect.log(`Sending ${event.data.channel} notification to ${event.data.userId}`);
       yield* Effect.sleep(Duration.millis(200));
-      return { sent: true, channel: event.channel };
+      return { sent: true, channel: event.data.channel };
     }),
 
   "external-api-call": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Calling external API for item ${event.itemId}`);
+      yield* Effect.log(`Calling external API for item ${event.data.itemId}`);
       yield* Effect.sleep(Duration.seconds(1));
       return { apiCallComplete: true };
     }),

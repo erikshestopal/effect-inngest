@@ -2,7 +2,7 @@ import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class EmailService extends Context.Service<
@@ -19,9 +19,12 @@ const EmailServiceLive = Layer.succeed(EmailService, {
     }),
 });
 
-class DemoWithServices extends Schema.TaggedClass<DemoWithServices>()("demo/with-services", {
-  name: Schema.String,
-}) {}
+const DemoWithServices = InngestEvent.make(
+  "demo/with-services",
+  Schema.Struct({
+    name: Schema.String,
+  }),
+);
 
 const ServiceFn = InngestFunction.make("service-handler", {
   trigger: { event: DemoWithServices },
@@ -34,7 +37,7 @@ const HandlersLive = Group.toLayer({
   "service-handler": ({ event }) =>
     Effect.gen(function* () {
       const email = yield* EmailService;
-      yield* email.send("user@example.com", "Welcome!", `Hello ${event.name}, welcome to our service!`);
+      yield* email.send("user@example.com", "Welcome!", `Hello ${event.data.name}, welcome to our service!`);
       return { sent: true };
     }),
 }).pipe(Layer.provide(EmailServiceLive));

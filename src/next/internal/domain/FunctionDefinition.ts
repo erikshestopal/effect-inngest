@@ -16,10 +16,13 @@ const isEventTriggerShape = Schema.is(EventTriggerShape);
 const isEventTrigger = (trigger: InngestFunction.Any["triggers"][number]): trigger is EventTrigger<EventSchema> =>
   isEventTriggerShape(trigger);
 
+export const eventSchemas = (fn: InngestFunction.Any): ReadonlyArray<EventSchema> =>
+  fn.triggers.filter(isEventTrigger).map((trigger) => trigger.event);
+
 export const eventSchemaFor = (args: {
   readonly fn: InngestFunction.Any;
   readonly eventName: string;
 }): Option.Option<EventSchema> => {
-  const triggers = args.fn.triggers.filter(isEventTrigger);
-  return Option.fromNullishOr(triggers.find((trigger) => trigger.event.identifier === args.eventName)?.event);
+  const events = eventSchemas(args.fn);
+  return Option.fromNullishOr(events.find((event) => event.identifier === args.eventName));
 };

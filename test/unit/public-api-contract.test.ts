@@ -8,6 +8,7 @@ import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 import {
   InngestClient,
+  InngestEvent,
   InngestEvents,
   InngestFunction,
   InngestGroup,
@@ -15,13 +16,19 @@ import {
   RetryAfterError,
 } from "../../src/index.js";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class PaymentProcess extends Schema.TaggedClass<PaymentProcess>()("payment/process", {
-  orderId: Schema.String,
-}) {}
+const PaymentProcess = InngestEvent.make(
+  "payment/process",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
 const mockHttpClient = HttpClient.make((req) =>
   Effect.succeed(
@@ -121,12 +128,12 @@ describe("Public event exports", () => {
     const invoked = InngestEvents.FunctionInvoked.make({ data: { orderId: "order_1" } });
     const scheduled = InngestEvents.ScheduledTimer.make({ cron: "0 * * * *" });
 
-    expect(failed._tag).toBe("inngest/function.failed");
+    expect(failed.name).toBe("inngest/function.failed");
     expect(Schema.is(InngestEvents.FunctionFinished)(finishedError)).toBe(true);
     expect(Schema.is(InngestEvents.FunctionFinished)(finishedSuccess)).toBe(true);
-    expect(cancelled._tag).toBe("inngest/function.cancelled");
-    expect(invoked.data).toEqual({ orderId: "order_1" });
-    expect(scheduled.cron).toBe("0 * * * *");
+    expect(cancelled.name).toBe("inngest/function.cancelled");
+    expect(invoked.data.data).toEqual({ orderId: "order_1" });
+    expect(scheduled.data.cron).toBe("0 * * * *");
   });
 });
 
@@ -144,7 +151,8 @@ describe("Public handler contracts", () => {
         .toLayerHandler("process-user", ({ event }) =>
           Effect.gen(function* () {
             const service = yield* TestService;
-            return { received: `${service.prefix}:${event.userId}` };
+            expect(event.name).toBe("user/created");
+            return { received: `${service.prefix}:${event.data.userId}` };
           }),
         )
         .pipe(Layer.provide(Layer.succeed(TestService, { prefix: "svc" })));
@@ -179,7 +187,7 @@ describe("Public handler contracts", () => {
       });
       const group = InngestGroup.make(ProcessPayment);
       const handlers = group.toLayer({
-        "process-payment": ({ event }) => Effect.succeed({ orderId: event.orderId }),
+        "process-payment": ({ event }) => Effect.succeed({ orderId: event.data.orderId }),
       });
 
       const fullLayer = Layer.mergeAll(handlers, makeClientLayer(), httpLayer);

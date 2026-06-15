@@ -7,11 +7,14 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
-class SleepEvent extends Schema.TaggedClass<SleepEvent>()("demo/checkpoint-sleep", {
-  tag: Schema.String,
-}) {}
+const SleepEvent = InngestEvent.make(
+  "demo/checkpoint-sleep",
+  Schema.Struct({
+    tag: Schema.String,
+  }),
+);
 
 const Fn = InngestFunction.make("checkpoint-sleep", {
   trigger: { event: SleepEvent },
@@ -29,7 +32,7 @@ const HandlersLive = Group.toLayer({
       yield* step.run("prepare-a", Effect.succeed("a"));
       yield* step.run("prepare-b", Effect.succeed("b"));
       yield* step.sleep("nap", "2 seconds");
-      return { tag: event.tag };
+      return { tag: event.data.tag };
     }),
 });
 

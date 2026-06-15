@@ -2,17 +2,23 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoWaitMatch extends Schema.TaggedClass<DemoWaitMatch>()("demo/wait-match", {
-  invoiceId: Schema.String,
-}) {}
+const DemoWaitMatch = InngestEvent.make(
+  "demo/wait-match",
+  Schema.Struct({
+    invoiceId: Schema.String,
+  }),
+);
 
-class DemoInvoicePaid extends Schema.TaggedClass<DemoInvoicePaid>()("demo/invoice-paid", {
-  invoiceId: Schema.String,
-  amount: Schema.Number,
-}) {}
+const DemoInvoicePaid = InngestEvent.make(
+  "demo/invoice-paid",
+  Schema.Struct({
+    invoiceId: Schema.String,
+    amount: Schema.Number,
+  }),
+);
 
 const WaitMatchFn = InngestFunction.make("wait-for-invoice-payment", {
   trigger: { event: DemoWaitMatch },
@@ -24,20 +30,20 @@ const Group = InngestGroup.make(WaitMatchFn);
 const HandlersLive = Group.toLayer({
   "wait-for-invoice-payment": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Waiting for payment on invoice: ${event.invoiceId}`);
+      yield* Effect.log(`Waiting for payment on invoice: ${event.data.invoiceId}`);
 
       const paidEvent = yield* step.waitForEvent("wait-for-payment", DemoInvoicePaid, {
         timeout: Duration.seconds(30),
-        if: `async.data.invoiceId == "${event.invoiceId}"`,
+        if: `async.data.invoiceId == "${event.data.invoiceId}"`,
       });
 
       if (Option.isSome(paidEvent)) {
-        yield* Effect.log(`Invoice ${event.invoiceId} paid! Amount: ${paidEvent.value.amount}`);
-        return { invoiceId: event.invoiceId, amount: paidEvent.value.amount };
+        yield* Effect.log(`Invoice ${event.data.invoiceId} paid! Amount: ${paidEvent.value.data.amount}`);
+        return { invoiceId: event.data.invoiceId, amount: paidEvent.value.data.amount };
       }
 
-      yield* Effect.log(`Payment timeout for invoice: ${event.invoiceId}`);
-      return { invoiceId: event.invoiceId, amount: null };
+      yield* Effect.log(`Payment timeout for invoice: ${event.data.invoiceId}`);
+      return { invoiceId: event.data.invoiceId, amount: null };
     }),
 });
 

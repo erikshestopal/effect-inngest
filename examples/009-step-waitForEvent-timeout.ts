@@ -2,16 +2,22 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoWaitTimeout extends Schema.TaggedClass<DemoWaitTimeout>()("demo/wait-timeout", {
-  orderId: Schema.String,
-}) {}
+const DemoWaitTimeout = InngestEvent.make(
+  "demo/wait-timeout",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
-class DemoTimeoutSignal extends Schema.TaggedClass<DemoTimeoutSignal>()("demo/timeout-signal", {
-  orderId: Schema.String,
-}) {}
+const DemoTimeoutSignal = InngestEvent.make(
+  "demo/timeout-signal",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
 const WaitTimeoutFn = InngestFunction.make("wait-timeout", {
   trigger: { event: DemoWaitTimeout },
@@ -25,7 +31,7 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       const eventOption = yield* step.waitForEvent("wait-for-signal", DemoTimeoutSignal, {
         timeout: Duration.seconds(5),
-        if: `async.data.orderId == "${event.orderId}"`,
+        if: `async.data.orderId == "${event.data.orderId}"`,
       });
       return { timedOut: Option.isNone(eventOption) };
     }),

@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoRateKeyed extends Schema.TaggedClass<DemoRateKeyed>()("demo/rate-keyed", {
-  companyId: Schema.String,
-}) {}
+const DemoRateKeyed = InngestEvent.make(
+  "demo/rate-keyed",
+  Schema.Struct({
+    companyId: Schema.String,
+  }),
+);
 
 const RateLimitKeyedFn = InngestFunction.make("rate-limit-keyed", {
   trigger: { event: DemoRateKeyed },
@@ -22,9 +25,9 @@ const Group = InngestGroup.make(RateLimitKeyedFn);
 const HandlersLive = Group.toLayer({
   "rate-limit-keyed": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing rate-limited event for company: ${event.companyId}`);
+      yield* Effect.log(`Processing rate-limited event for company: ${event.data.companyId}`);
       return {
-        companyId: event.companyId,
+        companyId: event.data.companyId,
         processedAt: new Date().toISOString(),
       };
     }),

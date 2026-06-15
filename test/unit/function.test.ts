@@ -7,12 +7,15 @@ import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction } from "../../src/index.js";
+import { InngestFunction, InngestEvent } from "../../src/index.js";
 
 describe("InngestFunction coverage", () => {
-  class TestEvent extends Schema.TaggedClass<TestEvent>()("test/event", {
-    userId: Schema.String,
-  }) {}
+  const TestEvent = InngestEvent.make(
+    "test/event",
+    Schema.Struct({
+      userId: Schema.String,
+    }),
+  );
 
   describe("make", () => {
     it("creates function with event trigger", () => {
@@ -114,9 +117,12 @@ describe("InngestFunction coverage", () => {
 });
 
 describe("InngestFunction.toRegistration coverage", () => {
-  class TestEvent extends Schema.TaggedClass<TestEvent>()("test/event", {
-    userId: Schema.String,
-  }) {}
+  const TestEvent = InngestEvent.make(
+    "test/event",
+    Schema.Struct({
+      userId: Schema.String,
+    }),
+  );
 
   it("serializes function with cancelOn", () => {
     const fn = InngestFunction.make("cancel-fn", {

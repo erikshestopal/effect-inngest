@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
 
 // Type for introspection response body
 interface IntrospectionBody {
@@ -24,13 +24,19 @@ interface IntrospectionBody {
 
 // TB-007A: Introspection - Functions Array in Dev Mode
 
-class TestEventA extends Schema.TaggedClass<TestEventA>()("test/event.a", {
-  value: Schema.Number,
-}) {}
+const TestEventA = InngestEvent.make(
+  "test/event.data.a",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
-class TestEventB extends Schema.TaggedClass<TestEventB>()("test/event.b", {
-  name: Schema.String,
-}) {}
+const TestEventB = InngestEvent.make(
+  "test/event.data.b",
+  Schema.Struct({
+    name: Schema.String,
+  }),
+);
 
 describe("TB-007A: Introspection", () => {
   const FunctionA = InngestFunction.make("function-a", {

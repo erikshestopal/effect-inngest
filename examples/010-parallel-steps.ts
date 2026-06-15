@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoParallel extends Schema.TaggedClass<DemoParallel>()("demo/parallel", {}) {}
+const DemoParallel = InngestEvent.make("demo/parallel", Schema.Struct({}));
 
 const ParallelFn = InngestFunction.make("parallel-steps", {
   trigger: { event: DemoParallel },

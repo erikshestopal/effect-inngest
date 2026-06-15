@@ -1,10 +1,10 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoLongRunning extends Schema.TaggedClass<DemoLongRunning>()("demo/long-running", {}) {}
+const DemoLongRunning = InngestEvent.make("demo/long-running", Schema.Struct({}));
 
 const LongRunningFn = InngestFunction.make("long-running-task", {
   trigger: { event: DemoLongRunning },

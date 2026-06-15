@@ -13,14 +13,17 @@ import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
 import * as Driver from "../../src/internal/driver.js";
 import * as Handler from "../../src/internal/handler.js";
 
 // Shared test fixtures
-class CoverageTestEvent extends Schema.TaggedClass<CoverageTestEvent>()("coverage/test", {
-  count: Schema.Number,
-}) {}
+const CoverageTestEvent = InngestEvent.make(
+  "coverage/test",
+  Schema.Struct({
+    count: Schema.Number,
+  }),
+);
 
 const coverageTestFn = InngestFunction.make("coverage-test-fn", {
   trigger: { event: CoverageTestEvent },

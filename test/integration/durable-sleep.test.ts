@@ -2,14 +2,17 @@ import * as Effect from "effect/Effect";
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { SleepOpcodeResponse } from "./_schemas.js";
 
-class JobStart extends Schema.TaggedClass<JobStart>()("job/start", {
-  jobId: Schema.String,
-}) {}
+const JobStart = InngestEvent.make(
+  "job/start",
+  Schema.Struct({
+    jobId: Schema.String,
+  }),
+);
 
 describe("TB-003: Durable Sleep", () => {
   const DelayedProcess = InngestFunction.make("delayed-process", {

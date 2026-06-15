@@ -14,6 +14,8 @@ import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 import * as Memo from "../next/internal/domain/Memo.js";
 import * as EventPayload from "../next/internal/codec/EventPayload.js";
+import { eventSchemas } from "../next/internal/domain/FunctionDefinition.js";
+import type * as InngestEvent from "../Event.js";
 
 import {
   StepInterrupt,
@@ -100,11 +102,8 @@ type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F
   ? InvokeOptionsBase<F>
   : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventType<F> };
 
-type EventSchema<A = unknown> = JsonSchema<A> & { readonly identifier: string };
-type TaggedEvent = { readonly _tag: string };
-
-const withEventTag = (event: EventSchema, payload: unknown): unknown =>
-  Predicate.isObject(payload) ? { ...payload, _tag: event.identifier } : payload;
+type EventSchema = InngestEvent.EventDefinition;
+type InngestEventPayload = InngestEvent.EventType<InngestEvent.EventDefinition>;
 
 const stepDecodeError = (stepId: string, cause: unknown): StepError =>
   StepError.make({
@@ -133,17 +132,7 @@ const encodeUnknownJson = (value: unknown, stepId: string): Effect.Effect<Schema
         Effect.mapError((cause) => stepDecodeError(stepId, cause)),
       );
 
-const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, never> => {
-  const ctor = event.constructor;
-  if (Schema.isSchema(ctor)) {
-    return Schema.encodeEffect(Schema.toCodecJson(ctor as unknown as JsonSchema))(event as never).pipe(
-      Effect.orElseSucceed(() => event),
-    ) as Effect.Effect<unknown, never, never>;
-  }
-  return Effect.succeed(event);
-};
-
-const decodeLegacyEventData = <F extends InngestFunction.Any>(args: {
+const decodeEventData = <F extends InngestFunction.Any>(args: {
   readonly fn: F;
   readonly eventName: string;
   readonly eventData: unknown;
@@ -154,53 +143,54 @@ const decodeLegacyEventData = <F extends InngestFunction.Any>(args: {
       EventPayload.decodeSchema({
         event,
         eventName: args.eventName,
-        eventData: withEventTag(event, args.eventData),
+        eventData: args.eventData,
       }).pipe(Effect.map((decoded) => decoded as InngestFunction.EventType<F>)),
   });
 
-const decodeLegacyInvocation = <F extends InngestFunction.Any>(args: {
+const decodeInvocation = <F extends InngestFunction.Any>(args: {
   readonly fn: F;
   readonly request: Protocol.SDKRequestBody;
 }): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> => {
   if (Predicate.isNotNullish(args.fn.options?.batchEvents)) {
     return Effect.forEach(args.request.events, (event) =>
-      decodeLegacyEventData({ fn: args.fn, eventName: event.name, eventData: event.data }),
-    ).pipe(Effect.map((events) => events as InngestFunction.EventType<F>));
+      decodeEventData({ fn: args.fn, eventName: event.name, eventData: event.data }),
+    ).pipe(Effect.map((events) => events as unknown as InngestFunction.EventType<F>));
   }
 
   if (args.request.event.name === "inngest/function.invoked" && Predicate.isObject(args.request.event.data)) {
     const { _inngest, ...payload } = args.request.event.data;
-    return decodeLegacyEventData({ fn: args.fn, eventName: args.request.event.name, eventData: payload });
+    return Option.match(Arr.head(eventSchemas(args.fn)), {
+      onNone: () => Effect.succeed(payload as unknown as InngestFunction.EventType<F>),
+      onSome: (event) =>
+        EventPayload.decodeSchema({ event, eventName: event.identifier, eventData: payload }).pipe(
+          Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
+        ),
+    });
   }
 
-  return decodeLegacyEventData({
+  return decodeEventData({
     fn: args.fn,
     eventName: args.request.event.name,
     eventData: args.request.event.data,
   });
 };
 
-const stripTopLevelTag = (value: unknown): unknown =>
-  Predicate.isObject(value) && Predicate.hasProperty(value, "_tag")
-    ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== "_tag"))
-    : value;
-
 interface StepTools {
   readonly run: StepRun;
   readonly sleep: (id: StepOptionsOrId, duration: Duration.Input) => Effect.Effect<void>;
   readonly sleepUntil: (id: StepOptionsOrId, timestamp: Date | number | string) => Effect.Effect<void>;
-  readonly waitForEvent: <A>(
+  readonly waitForEvent: <E extends EventSchema>(
     id: StepOptionsOrId,
-    event: EventSchema<A>,
+    event: E,
     options: WaitForEventOptions,
-  ) => Effect.Effect<Option.Option<A>, StepError>;
+  ) => Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError>;
   readonly invoke: <F extends InngestFunction.Any>(
     id: StepOptionsOrId,
     options: InvokeOptions<F>,
   ) => Effect.Effect<InngestFunction.Success<F>, StepError>;
   readonly sendEvent: (
     id: StepOptionsOrId,
-    payload: TaggedEvent | ReadonlyArray<TaggedEvent>,
+    payload: InngestEventPayload | ReadonlyArray<InngestEventPayload>,
   ) => Effect.Effect<{ readonly ids: ReadonlyArray<string> }, SendEventError>;
 }
 
@@ -312,11 +302,11 @@ export const createStepTools = (
       ),
     );
 
-  const waitForEvent = <A>(
+  const waitForEvent = <E extends EventSchema>(
     opts: StepOptionsOrId,
-    event: EventSchema<A>,
+    event: E,
     options: WaitForEventOptions,
-  ): Effect.Effect<Option.Option<A>, StepInterrupt | StepError> =>
+  ): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepInterrupt | StepError> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
         memo(info),
@@ -326,17 +316,10 @@ export const createStepTools = (
           if (Predicate.isNullish(data)) {
             return Effect.succeed(Option.none());
           }
-          // Inngest returns full event { name, data, id, ts } - extract .data for payload
-          // Or may return payload directly - use .data if present, otherwise use data as-is
-          const rawEvent = data as { data?: unknown };
-          const payload = Predicate.isNotUndefined(rawEvent.data) ? rawEvent.data : data;
-          if (Predicate.isNullish(payload)) {
-            return Effect.succeed(Option.none());
-          }
           return EventPayload.decodeSchema({
             event,
             eventName: event.identifier,
-            eventData: withEventTag(event, payload),
+            eventData: Predicate.isObject(data) && Predicate.hasProperty(data, "data") ? data.data : data,
           }).pipe(
             Effect.map(Option.some),
             Effect.mapError((cause) => stepDecodeError(info.id, cause)),
@@ -379,25 +362,22 @@ export const createStepTools = (
         Match.tag("MemoTimeout", () => stepError(info.id, "Invoke timed out", { noRetry: true })),
         Match.tag("MemoInput", () => Effect.succeed(undefined as InngestFunction.Success<F>)),
         Match.tag("MemoNone", () => {
-          const rawData = Predicate.hasProperty(options, "data") ? (options.data as TaggedEvent) : undefined;
-          const encodeData = rawData ? encodeTaggedEvent(rawData) : Effect.void;
-          return Effect.flatMap(encodeData, (encodedData) =>
-            Effect.andThen(
-              flushIfCheckpoint,
-              Effect.die(
-                invokeInterrupt({
-                  info,
-                  functionId: `${appName}-${options.function._tag}`,
-                  payload: {
-                    data: stripTopLevelTag(encodedData),
-                    ...(Predicate.isNotUndefined(options.user) ? { user: options.user } : {}),
-                    ...(Predicate.isNotUndefined(options.v) ? { v: options.v } : {}),
-                  },
-                  timeout: options.timeout
-                    ? Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(options.timeout))
-                    : undefined,
-                }),
-              ),
+          const event = Predicate.hasProperty(options, "data") ? (options.data as InngestEventPayload) : undefined;
+          return Effect.andThen(
+            flushIfCheckpoint,
+            Effect.die(
+              invokeInterrupt({
+                info,
+                functionId: `${appName}-${options.function._tag}`,
+                payload: {
+                  data: event?.data,
+                  ...(Predicate.isNotUndefined(options.user) ? { user: options.user } : {}),
+                  ...(Predicate.isNotUndefined(options.v) ? { v: options.v } : {}),
+                },
+                timeout: options.timeout
+                  ? Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(options.timeout))
+                  : undefined,
+              }),
             ),
           );
         }),
@@ -506,7 +486,7 @@ export const createStepTools = (
 
   const sendEvent = (
     opts: StepOptionsOrId,
-    payload: TaggedEvent | ReadonlyArray<TaggedEvent>,
+    payload: InngestEventPayload | ReadonlyArray<InngestEventPayload>,
   ): Effect.Effect<{ readonly ids: ReadonlyArray<string> }, StepInterrupt | SendEventError, InngestClient> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
@@ -538,42 +518,33 @@ export const createStepTools = (
             Effect.flatMap((planned) =>
               planned
                 ? Effect.succeed({ ids: [] as ReadonlyArray<string> })
-                : Effect.flatMap(
-                    Effect.forEach(events, (e) =>
-                      Effect.map(encodeTaggedEvent(e), (encoded) => ({
-                        name: e._tag,
-                        data: stripTopLevelTag(encoded),
-                      })),
-                    ),
-                    (eventPayloads) =>
-                      InngestClient.use((client) =>
-                        client.sendEvent(eventPayloads).pipe(
-                          Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
-                            attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
-                          }),
-                          Effect.flatMap((result) =>
-                            Option.match(checkpoint, {
-                              onNone: () =>
-                                Effect.die(
-                                  StepInterrupt.make({
-                                    opcode: Protocol.sendEventStepRunResponse(plannedInfo, { ids: result.ids }),
-                                  }),
+                : InngestClient.use((client) =>
+                    client.sendEvent(events).pipe(
+                      Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
+                        attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
+                      }),
+                      Effect.flatMap((result) =>
+                        Option.match(checkpoint, {
+                          onNone: () =>
+                            Effect.die(
+                              StepInterrupt.make({
+                                opcode: Protocol.sendEventStepRunResponse(plannedInfo, { ids: result.ids }),
+                              }),
+                            ),
+                          onSome: (state) =>
+                            Effect.as(
+                              state.bufferStep(
+                                Protocol.sendEventStepRun(
+                                  plannedInfo,
+                                  { ids: result.ids },
+                                  Arr.isArray(payload) ? events : events[0],
                                 ),
-                              onSome: (state) =>
-                                Effect.as(
-                                  state.bufferStep(
-                                    Protocol.sendEventStepRun(
-                                      plannedInfo,
-                                      { ids: result.ids },
-                                      Arr.isArray(payload) ? eventPayloads : eventPayloads[0],
-                                    ),
-                                  ),
-                                  result,
-                                ),
-                            }),
-                          ),
-                        ),
+                              ),
+                              result,
+                            ),
+                        }),
                       ),
+                    ),
                   ),
             ),
           );
@@ -598,7 +569,7 @@ export const buildHandlerContext = <F extends InngestFunction.Any>(
   request: Protocol.SDKRequestBody,
 ): Effect.Effect<HandlerContext<F>> =>
   Effect.gen(function* () {
-    const event = yield* decodeLegacyInvocation({ fn, request }).pipe(Effect.orDie);
+    const event = yield* decodeInvocation({ fn, request }).pipe(Effect.orDie);
 
     return {
       event,

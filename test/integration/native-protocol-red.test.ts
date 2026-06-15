@@ -5,7 +5,14 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup, NonRetriableError, RetryAfterError } from "../../src/index.js";
+import {
+  InngestClient,
+  InngestFunction,
+  InngestGroup,
+  NonRetriableError,
+  RetryAfterError,
+  InngestEvent,
+} from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 
 interface CapturedRequest {
@@ -135,10 +142,10 @@ const makeLayer = <A, E, R>(handlers: Layer.Layer<A, E, R>, captures: Array<Capt
   return Layer.mergeAll(handlers, client, http);
 };
 
-class DemoEvent extends Schema.TaggedClass<DemoEvent>()("demo/event", { value: Schema.Number }) {}
-class EmailSend extends Schema.TaggedClass<EmailSend>()("email/send", { to: Schema.String }) {}
-class InvoicePaid extends Schema.TaggedClass<InvoicePaid>()("demo/invoice-paid", { invoiceId: Schema.String }) {}
-class ChildInput extends Schema.TaggedClass<ChildInput>()("demo/child", { value: Schema.Number }) {}
+const DemoEvent = InngestEvent.make("demo/event", Schema.Struct({ value: Schema.Number }));
+const EmailSend = InngestEvent.make("email/send", Schema.Struct({ to: Schema.String }));
+const InvoicePaid = InngestEvent.make("demo/invoice-paid", Schema.Struct({ invoiceId: Schema.String }));
+const ChildInput = InngestEvent.make("demo/child", Schema.Struct({ value: Schema.Number }));
 class TestProtocolError extends Schema.TaggedErrorClass<TestProtocolError>()("TestProtocolError", {
   message: Schema.String,
 }) {}
@@ -250,7 +257,7 @@ describe("native v4 protocol RED regressions", () => {
               [
                 step.run("compute", Effect.succeed("ok")),
                 step.sleep("wait", "2 seconds"),
-                step.sendEvent("notify", new EmailSend({ to: "a@example.com" })),
+                step.sendEvent("notify", EmailSend.make({ to: "a@example.com" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -286,7 +293,7 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "send-event-native": ({ step }) =>
           Effect.gen(function* () {
-            yield* step.sendEvent("send-notification", new EmailSend({ to: "a@example.com" }));
+            yield* step.sendEvent("send-notification", EmailSend.make({ to: "a@example.com" }));
             return { ok: true };
           }),
       });
@@ -324,8 +331,8 @@ describe("native v4 protocol RED regressions", () => {
         "send-event-batch-native": ({ step }) =>
           Effect.gen(function* () {
             yield* step.sendEvent("send-notifications", [
-              new EmailSend({ to: "a@example.com" }),
-              new EmailSend({ to: "b@example.com" }),
+              EmailSend.make({ to: "a@example.com" }),
+              EmailSend.make({ to: "b@example.com" }),
             ]);
             return { ok: true };
           }),
@@ -404,10 +411,13 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "invoke-parent-native": ({ step }) =>
           Effect.gen(function* () {
-            const child = yield* step.invoke("call-child", { function: Child, data: new ChildInput({ value: 7 }) });
+            const child = yield* step.invoke("call-child", {
+              function: Child,
+              data: ChildInput.make({ value: 7 }),
+            });
             return { result: child.squared };
           }),
-        "child-square": ({ event }) => Effect.succeed({ squared: event.value * event.value }),
+        "child-square": ({ event }) => Effect.succeed({ squared: event.data.value * event.data.value }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
 

@@ -1,12 +1,15 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoConcurrentKeyed extends Schema.TaggedClass<DemoConcurrentKeyed>()("demo/concurrent-keyed", {
-  userId: Schema.String,
-}) {}
+const DemoConcurrentKeyed = InngestEvent.make(
+  "demo/concurrent-keyed",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const KeyedConcurrentFn = InngestFunction.make("user-processor", {
   trigger: { event: DemoConcurrentKeyed },
@@ -19,9 +22,9 @@ const Group = InngestGroup.make(KeyedConcurrentFn);
 const HandlersLive = Group.toLayer({
   "user-processor": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("process", Effect.succeed(`Processing ${event.userId}`));
+      yield* step.run("process", Effect.succeed(`Processing ${event.data.userId}`));
       yield* step.sleep("simulate-work", Duration.seconds(1));
-      return { processed: event.userId };
+      return { processed: event.data.userId };
     }),
 });
 

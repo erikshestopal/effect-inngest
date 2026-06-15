@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoIdempotent extends Schema.TaggedClass<DemoIdempotent>()("demo/idempotent", {
-  cartId: Schema.String,
-}) {}
+const DemoIdempotent = InngestEvent.make(
+  "demo/idempotent",
+  Schema.Struct({
+    cartId: Schema.String,
+  }),
+);
 
 const IdempotentFn = InngestFunction.make("checkout-handler", {
   trigger: { event: DemoIdempotent },
@@ -16,7 +19,7 @@ const IdempotentFn = InngestFunction.make("checkout-handler", {
 const Group = InngestGroup.make(IdempotentFn);
 
 const HandlersLive = Group.toLayer({
-  "checkout-handler": ({ event }) => Effect.succeed({ checkoutId: `checkout-for-${event.cartId}` }),
+  "checkout-handler": ({ event }) => Effect.succeed({ checkoutId: `checkout-for-${event.data.cartId}` }),
 });
 
 export default defineExample({

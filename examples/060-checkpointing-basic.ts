@@ -9,11 +9,14 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
-class BasicEvent extends Schema.TaggedClass<BasicEvent>()("demo/checkpoint-basic", {
-  value: Schema.Number,
-}) {}
+const BasicEvent = InngestEvent.make(
+  "demo/checkpoint-basic",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
 const Fn = InngestFunction.make("checkpoint-basic", {
   trigger: { event: BasicEvent },
@@ -25,8 +28,8 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-basic": ({ event, step }) =>
     Effect.gen(function* () {
-      const doubled = yield* step.run("double", Effect.succeed(event.value * 2));
-      const tripled = yield* step.run("triple", Effect.succeed(event.value * 3));
+      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
+      const tripled = yield* step.run("triple", Effect.succeed(event.data.value * 3));
       const total = yield* step.run("sum", Effect.succeed(doubled + tripled));
       return { doubled, tripled, total };
     }),

@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoHello extends Schema.TaggedClass<DemoHello>()("demo/hello", {
-  name: Schema.String,
-}) {}
+const DemoHello = InngestEvent.make(
+  "demo/hello",
+  Schema.Struct({
+    name: Schema.String,
+  }),
+);
 
 const HelloFn = InngestFunction.make("hello-world", {
   trigger: { event: DemoHello },
@@ -15,7 +18,7 @@ const HelloFn = InngestFunction.make("hello-world", {
 const Group = InngestGroup.make(HelloFn);
 
 const HandlersLive = Group.toLayer({
-  "hello-world": ({ event }) => Effect.succeed({ greeting: `Hello, ${event.name}!` }),
+  "hello-world": ({ event }) => Effect.succeed({ greeting: `Hello, ${event.data.name}!` }),
 });
 
 export default defineExample({

@@ -1,12 +1,15 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoDebounceKeyed extends Schema.TaggedClass<DemoDebounceKeyed>()("demo/debounce-keyed", {
-  userId: Schema.String,
-  action: Schema.String,
-}) {}
+const DemoDebounceKeyed = InngestEvent.make(
+  "demo/debounce-keyed",
+  Schema.Struct({
+    userId: Schema.String,
+    action: Schema.String,
+  }),
+);
 
 const DebounceKeyedFn = InngestFunction.make("debounce-keyed", {
   trigger: { event: DemoDebounceKeyed },
@@ -22,10 +25,10 @@ const Group = InngestGroup.make(DebounceKeyedFn);
 const HandlersLive = Group.toLayer({
   "debounce-keyed": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing debounced action for user ${event.userId}: ${event.action}`);
+      yield* Effect.log(`Processing debounced action for user ${event.data.userId}: ${event.data.action}`);
       return {
-        userId: event.userId,
-        action: event.action,
+        userId: event.data.userId,
+        action: event.data.action,
         processedAt: new Date().toISOString(),
       };
     }),

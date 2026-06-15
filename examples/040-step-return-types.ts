@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoReturnTypes extends Schema.TaggedClass<DemoReturnTypes>()("demo/return-types", {}) {}
+const DemoReturnTypes = InngestEvent.make("demo/return-types", Schema.Struct({}));
 
 const ReturnTypesFn = InngestFunction.make("return-types-demo", {
   trigger: { event: DemoReturnTypes },

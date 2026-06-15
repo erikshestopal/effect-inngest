@@ -1,20 +1,29 @@
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoInvokeParent extends Schema.TaggedClass<DemoInvokeParent>()("demo/invoke-parent", {
-  number: Schema.Number,
-}) {}
+const DemoInvokeParent = InngestEvent.make(
+  "demo/invoke-parent",
+  Schema.Struct({
+    number: Schema.Number,
+  }),
+);
 
-class DemoInvokeChild extends Schema.TaggedClass<DemoInvokeChild>()("demo/invoke-child", {
-  value: Schema.Number,
-}) {}
+const DemoInvokeChild = InngestEvent.make(
+  "demo/invoke-child",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
-class DemoInvokeChild2 extends Schema.TaggedClass<DemoInvokeChild2>()("demo/invoke-child-2", {
-  test: Schema.String,
-}) {}
+const DemoInvokeChild2 = InngestEvent.make(
+  "demo/invoke-child-2",
+  Schema.Struct({
+    test: Schema.String,
+  }),
+);
 
 const ChildFn = InngestFunction.make("child-square", {
   trigger: [{ event: DemoInvokeChild }, { event: DemoInvokeChild2 }],
@@ -31,13 +40,13 @@ const Group = InngestGroup.make(ChildFn, ParentFn);
 const HandlersLive = Group.toLayer({
   "child-square": ({ event }) =>
     Effect.succeed({
-      squared: Predicate.hasProperty(event, "value") ? event.value * event.value : event.test.length,
+      squared: event.name === "demo/invoke-child" ? event.data.value * event.data.value : event.data.test.length,
     }),
   "parent-invoke": ({ event, step }) =>
     Effect.gen(function* () {
       const childResult = yield* step.invoke("call-child", {
         function: ChildFn,
-        data: DemoInvokeChild.make({ value: event.number }),
+        data: DemoInvokeChild.make({ value: event.data.number }),
       });
       return { result: childResult.squared };
     }),

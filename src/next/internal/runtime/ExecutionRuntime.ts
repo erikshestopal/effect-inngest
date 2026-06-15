@@ -8,6 +8,7 @@ import { StepTools } from "./StepTools.js";
 
 export interface Service {
   readonly input: ExecutionInput;
+  readonly step: StepTools.Service;
   readonly handlerContext: <F extends InngestFunction.Any>(args: {
     readonly fn: F;
   }) => Effect.Effect<HandlerContext.HandlerContext<F>, EventPayload.EventDecodeError>;
@@ -24,12 +25,13 @@ export class ExecutionRuntime extends Context.Service<ExecutionRuntime, Service>
     Layer.effect(
       this,
       Effect.gen(function* () {
-        const step = yield* StepTools;
+        const tools = yield* StepTools;
 
         return {
           input: args.input,
+          step: tools,
           handlerContext: ({ fn }) =>
-            HandlerContext.make({ fn, input: args.input }).pipe(Effect.provideService(StepTools, step)),
+            HandlerContext.make({ fn, input: args.input }).pipe(Effect.provideService(StepTools, tools)),
         };
       }),
     ).pipe(Layer.provide(StepTools.layer(args)));

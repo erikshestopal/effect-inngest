@@ -6,6 +6,7 @@ import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Checkpoint from "./internal/checkpoint.js";
 import type { CheckpointingOption } from "./internal/checkpoint.js";
 import { InngestDuration } from "./next/internal/wire/Duration.js";
+import type * as InngestEvent from "./Event.js";
 
 export type { CheckpointingOption } from "./internal/checkpoint.js";
 
@@ -21,7 +22,7 @@ export const TypeId: unique symbol = Symbol.for("effect-inngest/Function");
  */
 export type TypeId = typeof TypeId;
 
-type EventSchema = Schema.Top & { readonly identifier: string };
+type EventSchema = InngestEvent.EventDefinition;
 
 /**
  * An event-based trigger configuration.
@@ -445,7 +446,7 @@ export declare namespace InngestFunction {
   export type EventType<F> =
     F extends InngestFunction<any, infer T, any, any>
       ? T extends EventTrigger<infer E>
-        ? Schema.Schema.Type<E>
+        ? InngestEvent.EventType<E>
         : never
       : never;
 

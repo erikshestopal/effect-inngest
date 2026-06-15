@@ -1,11 +1,11 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { RetryAfterError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoRetryError extends Schema.TaggedClass<DemoRetryError>()("demo/retry-error", {}) {}
+const DemoRetryError = InngestEvent.make("demo/retry-error", Schema.Struct({}));
 
 const RetryFn = InngestFunction.make("retry-demo", {
   trigger: { event: DemoRetryError },

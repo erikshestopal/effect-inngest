@@ -7,19 +7,25 @@ import { Effect, Layer, Schema } from "effect";
 import { FetchHttpClient, HttpClient } from "effect/unstable/http";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 
 // Test Fixtures
 
-class TestEvent extends Schema.TaggedClass<TestEvent>()("test/event", {
-  userId: Schema.String,
-}) {}
+const TestEvent = InngestEvent.make(
+  "test/event",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class TestOther extends Schema.TaggedClass<TestOther>()("test/other", {
-  orderId: Schema.String,
-}) {}
+const TestOther = InngestEvent.make(
+  "test/other",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
 const testFunction = InngestFunction.make("test-fn", {
   trigger: { event: TestEvent },
@@ -35,8 +41,8 @@ const testGroup = InngestGroup.make(testFunction, testFunction2);
 
 // Handler layers for both functions
 const HandlersLayer = testGroup.toLayer({
-  "test-fn": ({ event }) => Effect.succeed({ received: event.userId }),
-  "test-fn-2": ({ event }) => Effect.succeed({ received: event.orderId }),
+  "test-fn": ({ event }) => Effect.succeed({ received: event.data.userId }),
+  "test-fn-2": ({ event }) => Effect.succeed({ received: event.data.orderId }),
 });
 
 // Dev mode client for tests that need to check dev-specific behavior.
@@ -228,9 +234,12 @@ describe("InngestGroup.toWebHandler POST /", () => {
   it.effect("returns error when handler not found", () =>
     Effect.gen(function* () {
       // Create a group with a function that has no handler registered
-      class NoHandlerEvent extends Schema.TaggedClass<NoHandlerEvent>()("no-handler/event", {
-        id: Schema.String,
-      }) {}
+      const NoHandlerEvent = InngestEvent.make(
+        "no-handler/event",
+        Schema.Struct({
+          id: Schema.String,
+        }),
+      );
       const noHandlerFn = InngestFunction.make("no-handler-fn", {
         trigger: { event: NoHandlerEvent },
         success: Schema.Void,

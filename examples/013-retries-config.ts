@@ -1,13 +1,13 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("IntentionalFailure", {
   message: Schema.String,
 }) {}
 
-class DemoRetriesLimited extends Schema.TaggedClass<DemoRetriesLimited>()("demo/retries-limited", {}) {}
+const DemoRetriesLimited = InngestEvent.make("demo/retries-limited", Schema.Struct({}));
 
 const RetriesLimitedFn = InngestFunction.make("retries-limited", {
   trigger: { event: DemoRetriesLimited },

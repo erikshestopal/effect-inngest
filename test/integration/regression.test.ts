@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from "@effect/vitest";
 import { Duration, Effect, Option, Schema } from "effect";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { NonRetriableError } from "../../src/index.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -84,9 +84,12 @@ describe("Regression: StepResult accepts null (sleep results)", () => {
   );
 });
 
-class TestParallelSleep extends Schema.TaggedClass<TestParallelSleep>()("test/parallel-sleep", {
-  taskId: Schema.String,
-}) {}
+const TestParallelSleep = InngestEvent.make(
+  "test/parallel-sleep",
+  Schema.Struct({
+    taskId: Schema.String,
+  }),
+);
 
 describe("Regression: Memoization handles null values (sleep in parallel)", () => {
   /**
@@ -120,7 +123,7 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
         "parallel-sleep": ({ event, step }) =>
           Effect.gen(function* () {
             const [data, _] = yield* Effect.all(
-              [step.run("fetch-data", Effect.succeed(`Data: ${event.taskId}`)), step.sleep("wait", "5 seconds")],
+              [step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`)), step.sleep("wait", "5 seconds")],
               { concurrency: "unbounded" },
             );
             return { data, sleepCompleted: true };
@@ -169,9 +172,12 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
   );
 });
 
-class TestMultiStep extends Schema.TaggedClass<TestMultiStep>()("test/multi-step", {
-  value: Schema.String,
-}) {}
+const TestMultiStep = InngestEvent.make(
+  "test/multi-step",
+  Schema.Struct({
+    value: Schema.String,
+  }),
+);
 
 describe("Regression: URL stepId must override body.ctx.step_id", () => {
   /**
@@ -272,13 +278,19 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
   );
 });
 
-class TestParent extends Schema.TaggedClass<TestParent>()("test/parent", {
-  value: Schema.Number,
-}) {}
+const TestParent = InngestEvent.make(
+  "test/parent",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
-class TestChild extends Schema.TaggedClass<TestChild>()("test/child", {
-  value: Schema.Number,
-}) {}
+const TestChild = InngestEvent.make(
+  "test/child",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
 describe("Regression: step.invoke payload must be event data directly", () => {
   /**
@@ -307,13 +319,13 @@ describe("Regression: step.invoke payload must be event data directly", () => {
           Effect.gen(function* () {
             const childResult = yield* step.invoke("call-child", {
               function: ChildFn,
-              data: TestChild.make({ value: event.value * 2 }),
+              data: TestChild.make({ value: event.data.value * 2 }),
             });
             return { result: childResult.doubled };
           }),
         "child-fn": ({ event, step }) =>
           Effect.gen(function* () {
-            const doubled = yield* step.run("double", Effect.succeed(event.value * 2));
+            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
             return { doubled };
           }),
       });
@@ -384,9 +396,12 @@ describe("Regression: step.invoke payload must be event data directly", () => {
   );
 });
 
-class TestNonRetriable extends Schema.TaggedClass<TestNonRetriable>()("test/non-retriable", {
-  shouldFail: Schema.Boolean,
-}) {}
+const TestNonRetriable = InngestEvent.make(
+  "test/non-retriable",
+  Schema.Struct({
+    shouldFail: Schema.Boolean,
+  }),
+);
 
 describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () => {
   /**
@@ -481,16 +496,19 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
   );
 });
 
-class TestBatchEvent extends Schema.TaggedClass<TestBatchEvent>()("test/batch", {
-  userId: Schema.String,
-  item: Schema.String,
-}) {}
+const TestBatchEvent = InngestEvent.make(
+  "test/batch",
+  Schema.Struct({
+    userId: Schema.String,
+    item: Schema.String,
+  }),
+);
 
 describe("Regression: Batch events handler receives array of event data", () => {
   /**
    * Bug: When batchEvents is configured, handler receives single event instead of array.
    * buildHandlerContext always used request.event.data even when request.events had multiple items.
-   * Error: events.map is not a function (In 'events.map((e) => e.item)', 'events.map' is undefined)
+   * Error: events.map is not a function (In 'events.map((e) => e.data.item)', 'events.map' is undefined)
    * Fix: Check if fn.options.batchEvents is configured, if so return array of event.data payloads.
    *
    * @see .research/048-batch-events-key.ts
@@ -512,8 +530,8 @@ describe("Regression: Batch events handler receives array of event data", () => 
       const HandlersLive = Group.toLayer({
         "batch-fn": ({ event }) =>
           Effect.sync(() => {
-            const events = event as unknown as ReadonlyArray<TestBatchEvent>;
-            const items = events.map((e) => e.item);
+            const events = event as unknown as ReadonlyArray<InngestEvent.EventType<typeof TestBatchEvent>>;
+            const items = events.map((e) => e.data.item);
             return { items, count: events.length };
           }),
       });
@@ -588,20 +606,26 @@ describe("Regression: Batch events handler receives array of event data", () => 
   );
 });
 
-class TestWaitEvent extends Schema.TaggedClass<TestWaitEvent>()("test/wait-trigger", {
-  orderId: Schema.String,
-}) {}
+const TestWaitEvent = InngestEvent.make(
+  "test/wait-trigger",
+  Schema.Struct({
+    orderId: Schema.String,
+  }),
+);
 
-class TestApprovalEvent extends Schema.TaggedClass<TestApprovalEvent>()("test/approval", {
-  orderId: Schema.String,
-  approvedBy: Schema.String,
-}) {}
+const TestApprovalEvent = InngestEvent.make(
+  "test/approval",
+  Schema.Struct({
+    orderId: Schema.String,
+    approvedBy: Schema.String,
+  }),
+);
 
 describe("Regression: waitForEvent returns event.data payload, not full event", () => {
   /**
    * Bug: waitForEvent MemoData handler returned the full event { name, data, id, ts }
    * but the schema type E only represents the payload (e.g., { orderId, approvedBy }).
-   * Handler expected approval.value.approvedBy but got approval.value.data.approvedBy.
+   * Handler expected approval.value.data.approvedBy but got approval.value.data.approvedBy.
    * Fix: Extract .data from the memoized event to return just the payload.
    *
    * @see test/integration/wait-for-event.test.ts
@@ -623,12 +647,12 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
               timeout: Duration.hours(1),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
             // approval should have approvedBy directly, not nested in .data
-            const approvedBy = Option.isSome(approval) ? approval.value.approvedBy : "none";
+            const approvedBy = Option.isSome(approval) ? approval.value.data.approvedBy : "none";
             return {
-              orderId: event.orderId,
+              orderId: event.data.orderId,
               approvedBy,
             };
           }),
@@ -682,7 +706,7 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
         expect(secondResponse.status).toBe(200);
 
         const result = yield* Effect.tryPromise(() => secondResponse.json());
-        // The handler should access approval.value.approvedBy directly
+        // The handler should access approval.value.data.approvedBy directly
         // Without the fix, this would fail because approvedBy would be at approval.value.data.approvedBy
         expect(result).toEqual({
           orderId: "order-123",
@@ -701,11 +725,11 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
               timeout: Duration.hours(1),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
-            const approvedBy = Option.isSome(approval) ? approval.value.approvedBy : "none";
+            const approvedBy = Option.isSome(approval) ? approval.value.data.approvedBy : "none";
             return {
-              orderId: event.orderId,
+              orderId: event.data.orderId,
               approvedBy,
             };
           }),
@@ -771,11 +795,11 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
           Effect.gen(function* () {
             const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
               timeout: Duration.hours(1),
-              if: `async.data.orderId == "${event.orderId}"`,
+              if: `async.data.orderId == "${event.data.orderId}"`,
             });
-            const approvedBy = Option.isSome(approval) ? approval.value.approvedBy : "timeout";
+            const approvedBy = Option.isSome(approval) ? approval.value.data.approvedBy : "timeout";
             return {
-              orderId: event.orderId,
+              orderId: event.data.orderId,
               approvedBy,
             };
           }),
@@ -827,9 +851,12 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
   );
 });
 
-class TestSequential extends Schema.TaggedClass<TestSequential>()("test/sequential", {
-  id: Schema.String,
-}) {}
+const TestSequential = InngestEvent.make(
+  "test/sequential",
+  Schema.Struct({
+    id: Schema.String,
+  }),
+);
 
 describe("Regression: disable_immediate_execution must not block target step", () => {
   /**

@@ -8,11 +8,14 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
-class BufferedEvent extends Schema.TaggedClass<BufferedEvent>()("demo/checkpoint-buffered", {
-  base: Schema.Number,
-}) {}
+const BufferedEvent = InngestEvent.make(
+  "demo/checkpoint-buffered",
+  Schema.Struct({
+    base: Schema.Number,
+  }),
+);
 
 const Fn = InngestFunction.make("checkpoint-buffered", {
   trigger: { event: BufferedEvent },
@@ -25,10 +28,10 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-buffered": ({ event, step }) =>
     Effect.gen(function* () {
-      const a = yield* step.run("a", Effect.succeed(event.base + 1));
-      const b = yield* step.run("b", Effect.succeed(event.base + 2));
-      const c = yield* step.run("c", Effect.succeed(event.base + 3));
-      const d = yield* step.run("d", Effect.succeed(event.base + 4));
+      const a = yield* step.run("a", Effect.succeed(event.data.base + 1));
+      const b = yield* step.run("b", Effect.succeed(event.data.base + 2));
+      const c = yield* step.run("c", Effect.succeed(event.data.base + 3));
+      const d = yield* step.run("d", Effect.succeed(event.data.base + 4));
       return { total: a + b + c + d };
     }),
 });

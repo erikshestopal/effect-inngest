@@ -3,14 +3,17 @@ import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 import { RetryAfterError } from "../../src/index.js";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { failWith, makeTestLayer } from "./_helpers.js";
 import { StepErrorResponse } from "./_schemas.js";
 
-class TestRetryAfter extends Schema.TaggedClass<TestRetryAfter>()("test/retry-after", {
-  value: Schema.Number,
-}) {}
+const TestRetryAfter = InngestEvent.make(
+  "test/retry-after",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
 describe("RetryAfterError Behavior", () => {
   const RetryAfterFn = InngestFunction.make("retry-after-fn", {

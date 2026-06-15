@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoStepSingle extends Schema.TaggedClass<DemoStepSingle>()("demo/step-single", {
-  value: Schema.Number,
-}) {}
+const DemoStepSingle = InngestEvent.make(
+  "demo/step-single",
+  Schema.Struct({
+    value: Schema.Number,
+  }),
+);
 
 const StepSingleFn = InngestFunction.make("step-single", {
   trigger: { event: DemoStepSingle },
@@ -17,7 +20,7 @@ const Group = InngestGroup.make(StepSingleFn);
 const HandlersLive = Group.toLayer({
   "step-single": ({ event, step }) =>
     Effect.gen(function* () {
-      const doubled = yield* step.run("double", Effect.succeed(event.value * 2));
+      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
       return { doubled };
     }),
 });

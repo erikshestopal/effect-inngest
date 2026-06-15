@@ -1,16 +1,22 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoSendSingle extends Schema.TaggedClass<DemoSendSingle>()("demo/send-single", {
-  userId: Schema.String,
-}) {}
+const DemoSendSingle = InngestEvent.make(
+  "demo/send-single",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class DemoNotification extends Schema.TaggedClass<DemoNotification>()("demo/notification", {
-  userId: Schema.String,
-  message: Schema.String,
-}) {}
+const DemoNotification = InngestEvent.make(
+  "demo/notification",
+  Schema.Struct({
+    userId: Schema.String,
+    message: Schema.String,
+  }),
+);
 
 const SendSingleFn = InngestFunction.make("send-single", {
   trigger: { event: DemoSendSingle },
@@ -24,7 +30,7 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       yield* step.sendEvent(
         "send-notification",
-        new DemoNotification({ userId: event.userId, message: "Hello from step.sendEvent!" }),
+        DemoNotification.make({ userId: event.data.userId, message: "Hello from step.sendEvent!" }),
       );
       return { sent: true };
     }),

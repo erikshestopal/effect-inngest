@@ -1,14 +1,17 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoParallelMixed extends Schema.TaggedClass<DemoParallelMixed>()("demo/parallel-mixed", {}) {}
+const DemoParallelMixed = InngestEvent.make("demo/parallel-mixed", Schema.Struct({}));
 
-class DemoSideEffect extends Schema.TaggedClass<DemoSideEffect>()("demo/side-effect", {
-  source: Schema.String,
-}) {}
+const DemoSideEffect = InngestEvent.make(
+  "demo/side-effect",
+  Schema.Struct({
+    source: Schema.String,
+  }),
+);
 
 const ParallelMixedFn = InngestFunction.make("parallel-mixed", {
   trigger: { event: DemoParallelMixed },
@@ -26,7 +29,7 @@ const HandlersLive = Group.toLayer({
         [
           step.run("compute", Effect.succeed(42)),
           step.sleep("short-wait", Duration.seconds(2)),
-          step.sendEvent("notify", new DemoSideEffect({ source: "parallel-mixed-function" })),
+          step.sendEvent("notify", DemoSideEffect.make({ source: "parallel-mixed-function" })),
         ],
         { concurrency: "unbounded" },
       );

@@ -4,7 +4,7 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
 
 // TB-007: Registration
 //
@@ -82,15 +82,21 @@ const makeFailingHttpClient = () =>
     ),
   );
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
-  orderId: Schema.String,
-  total: Schema.Number,
-}) {}
+const OrderPlaced = InngestEvent.make(
+  "order/placed",
+  Schema.Struct({
+    orderId: Schema.String,
+    total: Schema.Number,
+  }),
+);
 
 describe("TB-007: Registration", () => {
   const ProcessUser = InngestFunction.make("process-user", {
@@ -101,7 +107,7 @@ describe("TB-007: Registration", () => {
   const Group = InngestGroup.make(ProcessUser);
 
   const HandlersLive = Group.toLayer({
-    "process-user": ({ event }) => Effect.succeed({ processed: event.userId }),
+    "process-user": ({ event }) => Effect.succeed({ processed: event.data.userId }),
   });
 
   it("PUT / triggers registration POST to Inngest", async () => {

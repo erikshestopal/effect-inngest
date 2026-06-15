@@ -1,17 +1,23 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoOrchestrate extends Schema.TaggedClass<DemoOrchestrate>()("demo/orchestrate", {
-  taskId: Schema.String,
-}) {}
+const DemoOrchestrate = InngestEvent.make(
+  "demo/orchestrate",
+  Schema.Struct({
+    taskId: Schema.String,
+  }),
+);
 
-class DemoWorkerTask extends Schema.TaggedClass<DemoWorkerTask>()("demo/worker-task", {
-  taskId: Schema.String,
-  priority: Schema.optional(Schema.Literals(["low", "normal", "high"])),
-}) {}
+const DemoWorkerTask = InngestEvent.make(
+  "demo/worker-task",
+  Schema.Struct({
+    taskId: Schema.String,
+    priority: Schema.optional(Schema.Literals(["low", "normal", "high"])),
+  }),
+);
 
 const WorkerFn = InngestFunction.make("worker-task", {
   trigger: { event: DemoWorkerTask },
@@ -33,18 +39,18 @@ const Group = InngestGroup.make(WorkerFn, OrchestratorFn);
 const HandlersLive = Group.toLayer({
   "worker-task": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Worker processing task: ${event.taskId}, priority: ${event.priority ?? "normal"}`);
+      yield* Effect.log(`Worker processing task: ${event.data.taskId}, priority: ${event.data.priority ?? "normal"}`);
       yield* Effect.sleep(Duration.millis(100));
-      return { completed: true, taskId: event.taskId };
+      return { completed: true, taskId: event.data.taskId };
     }),
 
   orchestrator: ({ event, step }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Orchestrating task: ${event.taskId}`);
+      yield* Effect.log(`Orchestrating task: ${event.data.taskId}`);
 
       const result = yield* step.invoke("invoke-worker", {
         function: WorkerFn,
-        data: { taskId: event.taskId, priority: "high" as const } as never,
+        data: { taskId: event.data.taskId, priority: "high" as const } as never,
         timeout: Duration.seconds(30),
       });
 
@@ -52,7 +58,7 @@ const HandlersLive = Group.toLayer({
 
       const batchResult = yield* step.invoke("invoke-batch-worker", {
         function: WorkerFn,
-        data: { taskId: `${event.taskId}-batch`, priority: "low" as const } as never,
+        data: { taskId: `${event.data.taskId}-batch`, priority: "low" as const } as never,
         timeout: Duration.minutes(5),
       });
 

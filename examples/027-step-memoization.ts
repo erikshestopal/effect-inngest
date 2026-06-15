@@ -1,10 +1,10 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoMemoized extends Schema.TaggedClass<DemoMemoized>()("demo/memoized", {}) {}
+const DemoMemoized = InngestEvent.make("demo/memoized", Schema.Struct({}));
 
 const MemoizedFn = InngestFunction.make("memoization-demo", {
   trigger: { event: DemoMemoized },

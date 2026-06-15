@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoBatched extends Schema.TaggedClass<DemoBatched>()("demo/batched", {
-  n: Schema.Number,
-}) {}
+const DemoBatched = InngestEvent.make(
+  "demo/batched",
+  Schema.Struct({
+    n: Schema.Number,
+  }),
+);
 
 const BatchedFn = InngestFunction.make("batched-fn", {
   trigger: { event: DemoBatched },
@@ -18,9 +21,9 @@ const Group = InngestGroup.make(BatchedFn);
 const HandlersLive = Group.toLayer({
   "batched-fn": ({ event }) =>
     Effect.gen(function* () {
-      const events = event as unknown as ReadonlyArray<DemoBatched>;
+      const events = event as unknown as ReadonlyArray<InngestEvent.EventType<typeof DemoBatched>>;
       yield* Effect.log(`Processing batch of ${events.length} events: ${JSON.stringify(events)}`);
-      const sum = events.reduce((acc, e) => acc + e.n, 0);
+      const sum = events.reduce((acc, e) => acc + e.data.n, 0);
       return { count: events.length, sum };
     }),
 });

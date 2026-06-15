@@ -7,7 +7,7 @@ export default defineNativeExample((inngest) => {
       triggers: [{ event: "demo/hello" }, { event: "demo/bye" }],
     },
     async ({ event, logger }) => {
-      const name = typeof event.data.name === "string" ? event.data.name : "Guest";
+      const name = typeof event.name === "string" ? event.data.name : "Guest";
       logger.info(`hello-world greeting ${name}`);
       return { greeting: `Hello, ${name}!` };
     },

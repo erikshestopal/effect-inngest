@@ -41,6 +41,14 @@
 export * as InngestFunction from "./Function.js";
 
 /**
+ * Public event schema helpers.
+ *
+ * @module InngestEvent
+ * @since 0.1.0
+ */
+export * as InngestEvent from "./Event.js";
+
+/**
  * This module provides types and functions for grouping Inngest functions
  * and creating handler layers.
  *

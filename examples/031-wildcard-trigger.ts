@@ -1,15 +1,21 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user.created", {
-  userId: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user.created",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
-class UserDeleted extends Schema.TaggedClass<UserDeleted>()("user.deleted", {
-  userId: Schema.String,
-}) {}
+const UserDeleted = InngestEvent.make(
+  "user.deleted",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const UserEventsFn = InngestFunction.make("handle-user-events", {
   trigger: [{ event: UserCreated }, { event: UserDeleted }],
@@ -21,8 +27,8 @@ const Group = InngestGroup.make(UserEventsFn);
 const HandlersLive = Group.toLayer({
   "handle-user-events": ({ event }) =>
     Effect.succeed({
-      eventType: event._tag,
-      userId: event.userId,
+      eventType: event.name,
+      userId: event.data.userId,
     }),
 });
 

@@ -1,13 +1,13 @@
 import * as Effect from "effect/Effect";
 import { Predicate } from "effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { NonRetriableError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoInvokeFailing extends Schema.TaggedClass<DemoInvokeFailing>()("demo/invoke-failing", {}) {}
+const DemoInvokeFailing = InngestEvent.make("demo/invoke-failing", Schema.Struct({}));
 
-class DemoFailingChild extends Schema.TaggedClass<DemoFailingChild>()("demo/failing-child", {}) {}
+const DemoFailingChild = InngestEvent.make("demo/failing-child", Schema.Struct({}));
 
 const FailingChildFn = InngestFunction.make("failing-child", {
   trigger: { event: DemoFailingChild },

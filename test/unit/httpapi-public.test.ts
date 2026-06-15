@@ -8,11 +8,14 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup, InngestHttpApi } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestHttpApi, InngestEvent } from "../../src/index.js";
 
-class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
-  userId: Schema.String,
-}) {}
+const UserCreated = InngestEvent.make(
+  "user/created",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const ProcessUser = InngestFunction.make("process-user", {
   trigger: { event: UserCreated },
@@ -22,7 +25,7 @@ const ProcessUser = InngestFunction.make("process-user", {
 const Group = InngestGroup.make(ProcessUser);
 
 const handlersLayer = Group.toLayer({
-  "process-user": ({ event }) => Effect.succeed({ received: event.userId }),
+  "process-user": ({ event }) => Effect.succeed({ received: event.data.userId }),
 });
 
 // Mirror the executor's wire shape for /fn/register per spec §4.3.4.

@@ -4,7 +4,7 @@ import * as Layer from "effect/Layer";
 import * as Schedule from "effect/Schedule";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import type { CheckpointApiError } from "../../src/internal/checkpoint.js";
 
@@ -113,7 +113,7 @@ const makeClient = (
     : InngestClient.layer(config);
 };
 
-class TestEvent extends Schema.TaggedClass<TestEvent>()("ckpt/test", { value: Schema.String }) {}
+const TestEvent = InngestEvent.make("ckpt/test", Schema.Struct({ value: Schema.String }));
 
 describe("Checkpoint async integration (spec §10.4.1)", () => {
   const Fn = InngestFunction.make("ckpt-fn", {

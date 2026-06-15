@@ -1,16 +1,22 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class TaskStarted extends Schema.TaggedClass<TaskStarted>()("task/started", {
-  taskId: Schema.String,
-}) {}
+const TaskStarted = InngestEvent.make(
+  "task/started",
+  Schema.Struct({
+    taskId: Schema.String,
+  }),
+);
 
-export class TaskCancelled extends Schema.TaggedClass<TaskCancelled>()("task/cancelled", {
-  taskId: Schema.String,
-}) {}
+export const TaskCancelled = InngestEvent.make(
+  "task/cancelled",
+  Schema.Struct({
+    taskId: Schema.String,
+  }),
+);
 
 const LongTaskFn = InngestFunction.make("long-task", {
   trigger: { event: TaskStarted },
@@ -23,7 +29,7 @@ const Group = InngestGroup.make(LongTaskFn);
 const HandlersLive = Group.toLayer({
   "long-task": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("step-1", Effect.succeed(`Started task ${event.taskId}`));
+      yield* step.run("step-1", Effect.succeed(`Started task ${event.data.taskId}`));
       yield* step.sleep("wait-1", Duration.seconds(3));
       yield* step.run("step-2", Effect.succeed("Still running..."));
       yield* step.sleep("wait-2", Duration.seconds(3));

@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoThrottleKeyed extends Schema.TaggedClass<DemoThrottleKeyed>()("demo/throttle-keyed", {
-  teamId: Schema.String,
-}) {}
+const DemoThrottleKeyed = InngestEvent.make(
+  "demo/throttle-keyed",
+  Schema.Struct({
+    teamId: Schema.String,
+  }),
+);
 
 const ThrottleKeyedFn = InngestFunction.make("throttle-keyed", {
   trigger: { event: DemoThrottleKeyed },
@@ -22,9 +25,9 @@ const Group = InngestGroup.make(ThrottleKeyedFn);
 const HandlersLive = Group.toLayer({
   "throttle-keyed": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing throttled event for team: ${event.teamId}`);
+      yield* Effect.log(`Processing throttled event for team: ${event.data.teamId}`);
       return {
-        teamId: event.teamId,
+        teamId: event.data.teamId,
         processedAt: new Date().toISOString(),
       };
     }),

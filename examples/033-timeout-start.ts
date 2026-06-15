@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoSlowStart extends Schema.TaggedClass<DemoSlowStart>()("demo/slow-start", {}) {}
+const DemoSlowStart = InngestEvent.make("demo/slow-start", Schema.Struct({}));
 
 const SlowStartFn = InngestFunction.make("slow-start-task", {
   trigger: { event: DemoSlowStart },

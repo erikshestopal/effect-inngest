@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoConcurrent extends Schema.TaggedClass<DemoConcurrent>()("demo/concurrent", {
-  id: Schema.String,
-}) {}
+const DemoConcurrent = InngestEvent.make(
+  "demo/concurrent",
+  Schema.Struct({
+    id: Schema.String,
+  }),
+);
 
 const ConcurrentFn = InngestFunction.make("concurrent-fn", {
   trigger: { event: DemoConcurrent },
@@ -18,10 +21,10 @@ const Group = InngestGroup.make(ConcurrentFn);
 const HandlersLive = Group.toLayer({
   "concurrent-fn": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Starting execution for id: ${event.id}`);
+      yield* Effect.log(`Starting execution for id: ${event.data.id}`);
       yield* step.sleep("wait-1s", "1 second");
-      yield* Effect.log(`Completed execution for id: ${event.id}`);
-      return { id: event.id, completedAt: new Date().toISOString() };
+      yield* Effect.log(`Completed execution for id: ${event.data.id}`);
+      return { id: event.data.id, completedAt: new Date().toISOString() };
     }),
 });
 

@@ -1,14 +1,17 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoSendBatch extends Schema.TaggedClass<DemoSendBatch>()("demo/send-batch", {}) {}
+const DemoSendBatch = InngestEvent.make("demo/send-batch", Schema.Struct({}));
 
-class DemoNotification extends Schema.TaggedClass<DemoNotification>()("demo/notification", {
-  userId: Schema.String,
-  message: Schema.String,
-}) {}
+const DemoNotification = InngestEvent.make(
+  "demo/notification",
+  Schema.Struct({
+    userId: Schema.String,
+    message: Schema.String,
+  }),
+);
 
 const SendBatchFn = InngestFunction.make("send-batch", {
   trigger: { event: DemoSendBatch },
@@ -23,9 +26,9 @@ const HandlersLive = Group.toLayer({
       yield* Effect.log("Sending batch of notifications...");
 
       yield* step.sendEvent("send-notifications", [
-        new DemoNotification({ userId: "u1", message: "First notification" }),
-        new DemoNotification({ userId: "u2", message: "Second notification" }),
-        new DemoNotification({ userId: "u3", message: "Third notification" }),
+        DemoNotification.make({ userId: "u1", message: "First notification" }),
+        DemoNotification.make({ userId: "u2", message: "Second notification" }),
+        DemoNotification.make({ userId: "u3", message: "Third notification" }),
       ]);
 
       yield* Effect.log("Batch sent successfully!");

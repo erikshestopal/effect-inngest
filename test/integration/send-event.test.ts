@@ -4,7 +4,7 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestRequest } from "./_helpers.js";
 
@@ -78,16 +78,22 @@ const makeMockHttpClient = (
   );
 
 // Event definitions using TaggedClass
-class UserSignup extends Schema.TaggedClass<UserSignup>()("user/signup", {
-  email: Schema.String,
-  name: Schema.String,
-}) {}
+const UserSignup = InngestEvent.make(
+  "user/signup",
+  Schema.Struct({
+    email: Schema.String,
+    name: Schema.String,
+  }),
+);
 
-class EmailSend extends Schema.TaggedClass<EmailSend>()("email/send", {
-  to: Schema.String,
-  template: Schema.String,
-  userId: Schema.String,
-}) {}
+const EmailSend = InngestEvent.make(
+  "email/send",
+  Schema.Struct({
+    to: Schema.String,
+    template: Schema.String,
+    userId: Schema.String,
+  }),
+);
 
 describe("TB-006: Send Event", () => {
   const ProcessSignup = InngestFunction.make("process-signup", {
@@ -126,8 +132,8 @@ describe("TB-006: Send Event", () => {
 
             yield* step.sendEvent(
               "send-welcome",
-              new EmailSend({
-                to: event.email,
+              EmailSend.make({
+                to: event.data.email,
                 template: "welcome",
                 userId,
               }),
@@ -200,8 +206,8 @@ describe("TB-006: Send Event", () => {
           Effect.gen(function* () {
             // Send multiple events at once (array form)
             yield* step.sendEvent("send-batch", [
-              new EmailSend({ to: event.email, template: "welcome", userId: "u1" }),
-              new EmailSend({ to: event.email, template: "verify", userId: "u1" }),
+              EmailSend.make({ to: event.data.email, template: "welcome", userId: "u1" }),
+              EmailSend.make({ to: event.data.email, template: "verify", userId: "u1" }),
             ]);
 
             return { userId: "u1", status: "batch-sent" };
@@ -252,7 +258,7 @@ describe("TB-006: Send Event", () => {
           Effect.gen(function* () {
             yield* step.sendEvent(
               "send-welcome",
-              new EmailSend({
+              EmailSend.make({
                 to: "test@example.com",
                 template: "welcome",
                 userId: "u1",
@@ -304,7 +310,7 @@ describe("TB-006: Send Event", () => {
           Effect.gen(function* () {
             yield* step.sendEvent(
               "send-welcome",
-              new EmailSend({
+              EmailSend.make({
                 to: "test@example.com",
                 template: "welcome",
                 userId: "u1",

@@ -13,7 +13,7 @@ export default defineNativeExample((inngest) => {
       triggers: [{ event: "demo/with-services" }],
     },
     async ({ event }) => {
-      const name = typeof event.data.name === "string" ? event.data.name : "Guest";
+      const name = typeof event.name === "string" ? event.data.name : "Guest";
       emailService.send("user@example.com", "Welcome!", `Hello ${name}, welcome to our service!`);
       return { sent: true };
     },

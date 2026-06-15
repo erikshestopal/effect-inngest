@@ -1,23 +1,26 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { InvokeFunctionResponse } from "./_schemas.js";
 
-class OrderCreated extends Schema.TaggedClass<OrderCreated>()("order/created", {
-  orderId: Schema.String,
-  total: Schema.Number,
-}) {}
+const OrderCreated = InngestEvent.make(
+  "order/created",
+  Schema.Struct({
+    orderId: Schema.String,
+    total: Schema.Number,
+  }),
+);
 
-class PaymentProcess extends Schema.TaggedClass<PaymentProcess>()("payment/process", {
-  amount: Schema.Number,
-  orderId: Schema.String,
-}) {}
-
-// Helper type: Extract the data fields from a TaggedClass (excludes _tag)
-type EventData<E> = Omit<E, "_tag">;
+const PaymentProcess = InngestEvent.make(
+  "payment/process",
+  Schema.Struct({
+    amount: Schema.Number,
+    orderId: Schema.String,
+  }),
+);
 
 describe("TB-005: Invoke Function", () => {
   // Child function that will be invoked
@@ -49,15 +52,16 @@ describe("TB-005: Invoke Function", () => {
   it.effect("returns 206 with InvokeFunction opcode", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "process-payment": ({ event }) => Effect.succeed({ transactionId: `txn_${event.amount}`, status: "completed" }),
+        "process-payment": ({ event }) =>
+          Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
         "order-workflow": ({ event, step }) =>
           Effect.gen(function* () {
             const paymentResult = yield* step.invoke("charge-customer", {
               function: ProcessPayment,
-              data: PaymentProcess.make({ amount: event.total, orderId: event.orderId }),
+              data: PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId }),
             });
 
-            return { orderId: event.orderId, payment: paymentResult };
+            return { orderId: event.data.orderId, payment: paymentResult };
           }),
       });
 
@@ -114,16 +118,17 @@ describe("TB-005: Invoke Function", () => {
   it.effect("returns 200 with combined result when invoke completes", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "process-payment": ({ event }) => Effect.succeed({ transactionId: `txn_${event.amount}`, status: "completed" }),
+        "process-payment": ({ event }) =>
+          Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
         "order-workflow": ({ event, step }) =>
           Effect.gen(function* () {
-            const paymentData: EventData<PaymentProcess> = { amount: event.total, orderId: event.orderId };
+            const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
             const paymentResult = yield* (step.invoke as any)("charge-customer", {
               function: ProcessPayment,
               data: paymentData,
             });
 
-            return { orderId: event.orderId, payment: paymentResult };
+            return { orderId: event.data.orderId, payment: paymentResult };
           }),
       });
 
@@ -159,12 +164,13 @@ describe("TB-005: Invoke Function", () => {
   it.effect("handles undefined result when step has no data", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "process-payment": ({ event }) => Effect.succeed({ transactionId: `txn_${event.amount}`, status: "completed" }),
+        "process-payment": ({ event }) =>
+          Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
         "order-workflow": ({ event, step }) =>
           Effect.gen(function* () {
             // When memoized result has error, it may return undefined
             // This tests that behavior path
-            const paymentData: EventData<PaymentProcess> = { amount: event.total, orderId: event.orderId };
+            const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
             const paymentResult = yield* (step.invoke as any)("charge-customer", {
               function: ProcessPayment,
               data: paymentData,
@@ -172,10 +178,10 @@ describe("TB-005: Invoke Function", () => {
 
             // Handle undefined result
             if (paymentResult === undefined) {
-              return { orderId: event.orderId, status: "payment_pending" };
+              return { orderId: event.data.orderId, status: "payment_pending" };
             }
 
-            return { orderId: event.orderId, payment: paymentResult };
+            return { orderId: event.data.orderId, payment: paymentResult };
           }),
       });
 
@@ -216,15 +222,16 @@ describe("TB-005: Invoke Function", () => {
       const DifferentAppClient = InngestGroup.make(ProcessPayment, OrderWorkflow);
 
       const HandlersLive = DifferentAppClient.toLayer({
-        "process-payment": ({ event }) => Effect.succeed({ transactionId: `txn_${event.amount}`, status: "completed" }),
+        "process-payment": ({ event }) =>
+          Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
         "order-workflow": ({ event, step }) =>
           Effect.gen(function* () {
-            const paymentData: EventData<PaymentProcess> = { amount: event.total, orderId: event.orderId };
+            const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
             const paymentResult = yield* (step.invoke as any)("charge", {
               function: ProcessPayment,
               data: paymentData,
             });
-            return { orderId: event.orderId, payment: paymentResult };
+            return { orderId: event.data.orderId, payment: paymentResult };
           }),
       });
 

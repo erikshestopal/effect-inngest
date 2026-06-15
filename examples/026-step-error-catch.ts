@@ -1,13 +1,13 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
   message: Schema.String,
 }) {}
 
-class DemoStepCatch extends Schema.TaggedClass<DemoStepCatch>()("demo/step-catch", {}) {}
+const DemoStepCatch = InngestEvent.make("demo/step-catch", Schema.Struct({}));
 
 const StepCatchFn = InngestFunction.make("step-catch-handler", {
   trigger: { event: DemoStepCatch },

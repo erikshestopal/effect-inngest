@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoIdempotentEvent extends Schema.TaggedClass<DemoIdempotentEvent>()("demo/idempotent-event", {
-  data: Schema.String,
-}) {}
+const DemoIdempotentEvent = InngestEvent.make(
+  "demo/idempotent-event",
+  Schema.Struct({
+    data: Schema.String,
+  }),
+);
 
 const IdempotentFn = InngestFunction.make("idempotent-handler", {
   trigger: { event: DemoIdempotentEvent },

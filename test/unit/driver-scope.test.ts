@@ -13,23 +13,30 @@ import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestClient } from "../../src/index.js";
+import { InngestFunction, InngestClient, InngestEvent } from "../../src/index.js";
 import { execute } from "../../src/internal/driver.js";
-import { SDKRequestBody, InngestEvent, SDKRequestContext, FunctionStack } from "../../src/internal/protocol.js";
+import {
+  SDKRequestBody,
+  InngestEvent as ProtocolInngestEvent,
+  SDKRequestContext,
+  FunctionStack,
+} from "../../src/internal/protocol.js";
 
 // --- Fixtures ---
 
-class TestEvent extends Schema.TaggedClass<TestEvent>()("test/scope-event", {
-  userId: Schema.String,
-}) {}
+const TestEvent = InngestEvent.make(
+  "test/scope-event",
+  Schema.Struct({
+    userId: Schema.String,
+  }),
+);
 
 const testFn = InngestFunction.make("scope-test-fn", {
   trigger: { event: TestEvent },
   success: Schema.Void,
 });
 
-const makeEvent = () =>
-  InngestEvent.make({ name: "test/scope-event", data: { _tag: "test/scope-event", userId: "u1" }, id: "evt-1" });
+const makeEvent = () => ProtocolInngestEvent.make({ name: "test/scope-event", data: { userId: "u1" }, id: "evt-1" });
 
 const makeCtx = () =>
   SDKRequestContext.make({

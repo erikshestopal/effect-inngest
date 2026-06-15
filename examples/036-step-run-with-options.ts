@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoStepOptions extends Schema.TaggedClass<DemoStepOptions>()("demo/step-options", {}) {}
+const DemoStepOptions = InngestEvent.make("demo/step-options", Schema.Struct({}));
 
 const StepOptionsFn = InngestFunction.make("step-options-demo", {
   trigger: { event: DemoStepOptions },

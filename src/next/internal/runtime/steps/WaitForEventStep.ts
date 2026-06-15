@@ -1,4 +1,5 @@
 import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
+import type * as InngestEvent from "../../../../Event.js";
 import type * as EventPayload from "../../codec/EventPayload.js";
 import * as StepResult from "../../codec/StepResult.js";
 import { InngestDuration } from "../../wire/Duration.js";
@@ -21,12 +22,12 @@ const payloadFromMemo = (value: unknown): Option.Option<unknown> => {
   return Option.filter(payload, Predicate.isNotNullish);
 };
 
-export const waitForEvent = <A>(args: {
+export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
   readonly input: ExecutionInput;
   readonly id: StepInput;
-  readonly event: EventPayload.EventSchema<A>;
+  readonly event: E;
   readonly options: WaitForEventOptions;
-}): Effect.Effect<Option.Option<A>, StepError, StepIdentity | StepCommandSink> =>
+}): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError, StepIdentity | StepCommandSink> =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
@@ -38,10 +39,10 @@ export const waitForEvent = <A>(args: {
         Option.match(payloadFromMemo(data), {
           onNone: () => Effect.succeed(Option.none()),
           onSome: (payload) =>
-            Schema.decodeUnknownEffect(Schema.toCodecJson(args.event))(payload).pipe(
-              Effect.map(Option.some),
+            Schema.decodeUnknownEffect(Schema.toCodecJson(args.event as Schema.Top))(payload).pipe(
+              Effect.map((event) => Option.some(event as InngestEvent.EventType<E>)),
               Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
-            ),
+            ) as Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError>,
         }),
       ),
       Match.tag("MemoNone", () =>

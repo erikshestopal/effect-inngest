@@ -1,13 +1,16 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
-  orderId: Schema.String,
-  amount: Schema.Number,
-  customerId: Schema.optional(Schema.String),
-}) {}
+const OrderPlaced = InngestEvent.make(
+  "order/placed",
+  Schema.Struct({
+    orderId: Schema.String,
+    amount: Schema.Number,
+    customerId: Schema.optional(Schema.String),
+  }),
+);
 
 const HighValueOrderFn = InngestFunction.make("process-high-value-order", {
   trigger: {
@@ -30,14 +33,14 @@ const Group = InngestGroup.make(HighValueOrderFn, VipOrderFn);
 const HandlersLive = Group.toLayer({
   "process-high-value-order": ({ event }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing high-value order: ${event.orderId} ($${event.amount})`);
+      yield* Effect.log(`Processing high-value order: ${event.data.orderId} ($${event.data.amount})`);
       return { processed: true, priority: "high" };
     }),
 
   "process-vip-order": ({ event }) =>
     Effect.gen(function* () {
-      const customerId = event.customerId ?? "unknown";
-      yield* Effect.log(`VIP order: ${event.orderId} for customer ${customerId}`);
+      const customerId = event.data.customerId ?? "unknown";
+      yield* Effect.log(`VIP order: ${event.data.orderId} for customer ${customerId}`);
       return { vip: true };
     }),
 });

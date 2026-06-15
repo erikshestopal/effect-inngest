@@ -1,5 +1,6 @@
-import { Context, DateTime, Duration, Effect, Layer, Option, Schema, pipe } from "effect";
+import { Context, Duration, Effect, Layer, Option, Schema, pipe } from "effect";
 import { InngestClient } from "../../../Client.js";
+import type * as InngestEvent from "../../../Event.js";
 import type { InngestFunction } from "../../../Function.js";
 import type { SendEventError, StepError } from "../../../internal/errors.js";
 import type { CheckpointState } from "../../../internal/checkpoint.js";
@@ -60,15 +61,15 @@ export interface Sleep {
 }
 
 export interface SleepUntil {
-  (id: StepInput, timestamp: DateTime.Utc): Effect.Effect<void>;
+  (id: StepInput, timestamp: Date | number | string): Effect.Effect<void>;
 }
 
 export interface WaitForEvent {
-  <A>(
+  <E extends EventPayload.EventSchema>(
     id: StepInput,
-    event: EventPayload.EventSchema<A>,
+    event: E,
     options: WaitForEventOptions,
-  ): Effect.Effect<Option.Option<A>, StepError>;
+  ): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError>;
 }
 
 export interface Invoke {

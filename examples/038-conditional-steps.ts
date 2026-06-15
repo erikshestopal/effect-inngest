@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoConditional extends Schema.TaggedClass<DemoConditional>()("demo/conditional", {
-  shouldSkip: Schema.Boolean,
-}) {}
+const DemoConditional = InngestEvent.make(
+  "demo/conditional",
+  Schema.Struct({
+    shouldSkip: Schema.Boolean,
+  }),
+);
 
 const ConditionalFn = InngestFunction.make("conditional-steps", {
   trigger: { event: DemoConditional },
@@ -22,7 +25,7 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       yield* step.run("setup", Effect.succeed("initialized"));
 
-      if (event.shouldSkip) {
+      if (event.data.shouldSkip) {
         const quickResult = yield* step.run("quick-path", Effect.succeed("skipped heavy work"));
         return { path: "quick", result: quickResult };
       } else {

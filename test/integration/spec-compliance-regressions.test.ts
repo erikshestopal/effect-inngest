@@ -3,13 +3,16 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup, NonRetriableError } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, NonRetriableError, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 
-class TestEvent extends Schema.TaggedClass<TestEvent>()("spec/test.event", {
-  value: Schema.String,
-}) {}
+const TestEvent = InngestEvent.make(
+  "spec/test.event",
+  Schema.Struct({
+    value: Schema.String,
+  }),
+);
 
 const TestFn = InngestFunction.make("spec-test-fn", {
   trigger: { event: TestEvent },

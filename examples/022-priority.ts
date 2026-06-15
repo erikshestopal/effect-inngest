@@ -1,11 +1,14 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoPriority extends Schema.TaggedClass<DemoPriority>()("demo/priority", {
-  plan: Schema.String,
-}) {}
+const DemoPriority = InngestEvent.make(
+  "demo/priority",
+  Schema.Struct({
+    plan: Schema.String,
+  }),
+);
 
 const PriorityFn = InngestFunction.make("priority-handler", {
   trigger: { event: DemoPriority },
@@ -16,7 +19,7 @@ const PriorityFn = InngestFunction.make("priority-handler", {
 const Group = InngestGroup.make(PriorityFn);
 
 const HandlersLive = Group.toLayer({
-  "priority-handler": ({ event }) => Effect.succeed({ processed: `Processed ${event.plan} plan` }),
+  "priority-handler": ({ event }) => Effect.succeed({ processed: `Processed ${event.data.plan} plan` }),
 });
 
 export default defineExample({

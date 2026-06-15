@@ -1,9 +1,9 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoSleep extends Schema.TaggedClass<DemoSleep>()("demo/sleep", {}) {}
+const DemoSleep = InngestEvent.make("demo/sleep", Schema.Struct({}));
 
 const SleepFn = InngestFunction.make("sleep-test", {
   trigger: { event: DemoSleep },

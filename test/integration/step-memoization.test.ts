@@ -1,18 +1,21 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
 
 const ProcessOrderResult = Schema.Struct({ orderId: Schema.String, total: Schema.Number });
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
-  orderId: Schema.String,
-  price: Schema.Number,
-  quantity: Schema.Number,
-}) {}
+const OrderPlaced = InngestEvent.make(
+  "order/placed",
+  Schema.Struct({
+    orderId: Schema.String,
+    price: Schema.Number,
+    quantity: Schema.Number,
+  }),
+);
 
 describe("TB-002: Step Memoization", () => {
   const ProcessOrder = InngestFunction.make("process-order", {
@@ -35,8 +38,8 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.price * event.quantity));
-            return { orderId: event.orderId, total };
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            return { orderId: event.data.orderId, total };
           }),
       });
 
@@ -79,8 +82,8 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.price * event.quantity));
-            return { orderId: event.orderId, total };
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            return { orderId: event.data.orderId, total };
           }),
       });
 

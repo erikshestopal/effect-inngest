@@ -1,12 +1,15 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class DemoBatchKeyed extends Schema.TaggedClass<DemoBatchKeyed>()("demo/batch-keyed", {
-  userId: Schema.String,
-  item: Schema.String,
-}) {}
+const DemoBatchKeyed = InngestEvent.make(
+  "demo/batch-keyed",
+  Schema.Struct({
+    userId: Schema.String,
+    item: Schema.String,
+  }),
+);
 
 const BatchKeyedFn = InngestFunction.make("batch-keyed", {
   trigger: { event: DemoBatchKeyed },
@@ -23,9 +26,9 @@ const Group = InngestGroup.make(BatchKeyedFn);
 const HandlersLive = Group.toLayer({
   "batch-keyed": ({ event }) =>
     Effect.gen(function* () {
-      const events = event as unknown as ReadonlyArray<DemoBatchKeyed>;
-      const userId = events[0]?.userId ?? "unknown";
-      const items = events.map((e) => e.item);
+      const events = event as unknown as ReadonlyArray<InngestEvent.EventType<typeof DemoBatchKeyed>>;
+      const userId = events[0]?.data.userId ?? "unknown";
+      const items = events.map((e) => e.data.item);
 
       yield* Effect.log(`Processing batch for user ${userId}: ${items.join(", ")}`);
       return {
