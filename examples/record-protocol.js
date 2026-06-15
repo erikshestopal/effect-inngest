@@ -101,8 +101,83 @@ const sanitizeEventBody = (event) => {
   };
 };
 
+const orderObject = (value, keys) => {
+  const ordered = {};
+  for (const key of keys) {
+    if (Object.hasOwn(value, key)) ordered[key] = canonicalizeProtocolValue(value[key]);
+  }
+  for (const [key, child] of Object.entries(value)) {
+    if (!Object.hasOwn(ordered, key)) ordered[key] = canonicalizeProtocolValue(child);
+  }
+  return ordered;
+};
+
+const opcodeKeyOrder = (value) => {
+  if (value.op === "StepPlanned") return ["displayName", "op", "id", "name", "opts", "userland", "data"];
+  if (value.op === "StepRun" && Object.hasOwn(value, "rawArgs")) {
+    return [
+      "id",
+      "mode",
+      "op",
+      "name",
+      "displayName",
+      "userland",
+      "opts",
+      "rawArgs",
+      "hashedId",
+      "promise",
+      "fulfilled",
+      "hasStepState",
+      "handled",
+      "middleware",
+      "memoizationDeferred",
+      "transformedResultPromise",
+      "data",
+      "timing",
+    ];
+  }
+  if (value.op === "StepRun") return ["id", "op", "name", "opts", "displayName", "userland", "data", "timing"];
+  if (value.op === "RunComplete") return ["op", "id", "data"];
+  if (value.op === "InvokeFunction") return ["id", "op", "displayName", "mode", "opts", "userland", "data"];
+  if (value.op === "WaitForEvent") return ["id", "op", "name", "displayName", "mode", "opts"];
+  if (value.op === "Sleep") return ["id", "op", "name", "displayName", "mode", "opts"];
+  if (value.op === "StepError" || value.op === "StepFailed")
+    return ["id", "op", "name", "displayName", "error", "data"];
+  return ["op", "id", "name", "displayName", "mode", "opts", "userland", "data", "error", "timing"];
+};
+
+const canonicalizeProtocolValue = (value) => {
+  if (Array.isArray(value)) return value.map(canonicalizeProtocolValue);
+  if (!value || typeof value !== "object") return value;
+
+  if (typeof value.op === "string") return orderObject(value, opcodeKeyOrder(value));
+  if (Array.isArray(value.steps) && Object.hasOwn(value, "run_id")) {
+    return orderObject(value, [
+      "run_id",
+      "fn_id",
+      "qi_id",
+      "request_id",
+      "generation_id",
+      "request_started_at",
+      "steps",
+      "ts",
+    ]);
+  }
+  if (Object.hasOwn(value, "stepInfo")) return orderObject(value, ["stepInfo"]);
+  if (Object.hasOwn(value, "hashedId") && Object.hasOwn(value, "stepType")) {
+    return orderObject(value, ["hashedId", "memoized", "options", "stepType"]);
+  }
+  if (Object.hasOwn(value, "a") && Object.hasOwn(value, "b")) return orderObject(value, ["a", "b"]);
+  if (Object.hasOwn(value, "id") && Object.hasOwn(value, "name") && Object.keys(value).length === 2) {
+    return orderObject(value, ["id", "name"]);
+  }
+
+  return orderObject(value, []);
+};
+
 const sanitizeProtocolBody = (body) => {
-  if (!body || typeof body !== "object" || Array.isArray(body)) return body;
+  if (Array.isArray(body)) return canonicalizeProtocolValue(body);
+  if (!body || typeof body !== "object") return body;
 
   const sanitized = { ...body };
 
@@ -119,7 +194,7 @@ const sanitizeProtocolBody = (body) => {
   if (sanitized.event) sanitized.event = sanitizeEventBody(sanitized.event);
   if (Array.isArray(sanitized.events)) sanitized.events = sanitized.events.map(sanitizeEventBody);
 
-  return sanitized;
+  return canonicalizeProtocolValue(sanitized);
 };
 
 const omittedHeaders = new Set([
@@ -477,8 +552,97 @@ const removeSyncedApp = async (sdkUrl) => {
 
 const fixtureFile = (exampleId, runtimeName) => join(fixturesRoot, exampleId, `${runtimeName}.json`);
 
+const stepCompletionOrder = (exchange) => exchange?.request?.body?.ctx?.stack?.stack ?? [];
+
+const isRootParallelPlan = (exchange) =>
+  exchange?.direction === "inbound" &&
+  exchange?.request?.method === "POST" &&
+  exchange?.request?.query?.stepId === "step" &&
+  Array.isArray(exchange?.response?.body) &&
+  exchange.response.body.length > 1 &&
+  exchange.response.body.every((op) => op?.op === "StepPlanned" && typeof op.id === "string");
+
+const isParallelChildRequest = (exchange, orderByPath) =>
+  exchange?.direction === "inbound" &&
+  exchange?.request?.method === "POST" &&
+  typeof exchange?.request?.path === "string" &&
+  typeof exchange?.request?.query?.stepId === "string" &&
+  exchange.request.query.stepId !== "step" &&
+  orderByPath.has(exchange.request.path) &&
+  stepCompletionOrder(exchange).length === 0;
+
+const canonicalizeParallelChildOrder = (ordered) => {
+  const orderByPath = new Map();
+
+  for (const exchange of ordered) {
+    if (isRootParallelPlan(exchange)) {
+      orderByPath.set(
+        exchange.request.path,
+        new Map(exchange.response.body.map((op, index, ops) => [op.id, ops.length - index])),
+      );
+    }
+  }
+
+  if (orderByPath.size === 0) return ordered;
+
+  const normalizeExchange = (exchange) => {
+    const order = orderByPath.get(exchange?.request?.path);
+    const stack = stepCompletionOrder(exchange);
+    if (!order || stack.length <= 1 || !stack.every((id) => order.has(id))) return exchange;
+
+    return {
+      ...exchange,
+      request: {
+        ...exchange.request,
+        body: {
+          ...exchange.request.body,
+          ctx: {
+            ...exchange.request.body.ctx,
+            stack: {
+              ...exchange.request.body.ctx.stack,
+              stack: [...stack].sort((a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0)),
+            },
+          },
+        },
+      },
+    };
+  };
+
+  const canonical = [];
+  for (let index = 0; index < ordered.length; ) {
+    const exchange = normalizeExchange(ordered[index]);
+    if (!isParallelChildRequest(exchange, orderByPath)) {
+      canonical.push(exchange);
+      index++;
+      continue;
+    }
+
+    const path = exchange.request.path;
+    const group = [];
+    while (
+      index < ordered.length &&
+      ordered[index].request?.path === path &&
+      isParallelChildRequest(ordered[index], orderByPath)
+    ) {
+      group.push(normalizeExchange(ordered[index]));
+      index++;
+    }
+
+    const order = orderByPath.get(path);
+    canonical.push(
+      ...group.sort((a, b) => (order.get(a.request.query.stepId) ?? 0) - (order.get(b.request.query.stepId) ?? 0)),
+    );
+  }
+
+  return canonical.map((exchange, index) => ({
+    ...exchange,
+    sequence: index + 1,
+    request: { ...exchange.request, sequence: index + 1 },
+  }));
+};
+
 const writeFixture = async (exampleId, runtimeName) => {
-  const ordered = [...exchanges].sort((a, b) => a.sequence - b.sequence);
+  const ordered = canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence));
   const outputFile = fixtureFile(exampleId, runtimeName);
   await mkdir(dirname(outputFile), { recursive: true });
   await writeFile(outputFile, `${JSON.stringify(ordered, null, 2)}\n`);

@@ -48,6 +48,8 @@ const collectStepInterruptsFromCause = <E>(cause: Cause.Cause<E>): Chunk.Chunk<S
   for (const reason of cause.reasons) {
     if (Cause.isFailReason(reason) && isStepInterrupt(reason.error)) {
       interrupts.push(reason.error);
+    } else if (Cause.isDieReason(reason) && isStepInterrupt(reason.defect)) {
+      interrupts.push(reason.defect);
     }
   }
   return Chunk.fromIterable(interrupts);
@@ -114,7 +116,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     });
 
     const step = createStepTools(request, appName, stepIdCounts, checkpointState);
-    const context = buildHandlerContext<F>(fn, step, request);
+    const context = yield* buildHandlerContext<F>(fn, step, request);
 
     /**
      * Drain any unflushed buffered opcodes (no-op outside checkpoint mode).
@@ -125,6 +127,14 @@ export const execute = <F extends InngestFunction.Any, R>(
       {
         onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
         onSome: (state) => state.drain,
+      },
+    );
+
+    const drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Option.match(
+      checkpointState,
+      {
+        onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
+        onSome: (state) => state.drainPlanned,
       },
     );
 
@@ -153,6 +163,11 @@ export const execute = <F extends InngestFunction.Any, R>(
     const result = yield* Effect.scoped(handlerWithRace).pipe(
       Effect.flatMap((raced) =>
         Effect.gen(function* () {
+          const planned = yield* drainPlanned;
+          if (planned.length > 0) {
+            return ExecutionResult.make({ status: 206, body: encodeOpcodes(planned), headers });
+          }
+
           const drained = yield* drainBuffer;
           // Checkpoint mode: assemble [drained..., RunComplete | DiscoveryRequest]
           // even when buffer is empty — TS reference always emits RunComplete on
@@ -175,6 +190,11 @@ export const execute = <F extends InngestFunction.Any, R>(
       ),
       Effect.catchCause((cause) =>
         Effect.gen(function* () {
+          const planned = yield* drainPlanned;
+          if (planned.length > 0) {
+            return ExecutionResult.make({ status: 206, body: encodeOpcodes(planned), headers });
+          }
+
           // Drain buffer for inclusion in 206 / error response so step results
           // are never lost (spec §10.4.3 graceful fallback).
           const drained = yield* drainBuffer;
@@ -184,20 +204,28 @@ export const execute = <F extends InngestFunction.Any, R>(
 
           if (!Chunk.isEmpty(interrupts)) {
             const interruptArray = Chunk.toReadonlyArray(interrupts);
-            const opcodes = [...drained, ...interruptArray.map((interrupt) => interrupt.opcode)];
+            const targetedStepId = request.ctx.step_id === "step" ? undefined : request.ctx.step_id;
+            const interruptOpcodes = interruptArray
+              .map((interrupt) => interrupt.opcode)
+              .filter((opcode) => !targetedStepId || opcode.id === targetedStepId);
+            const opcodes = [...drained, ...interruptOpcodes];
 
             const hasNonRetriableError = opcodes.some(
               (op) =>
-                op.op === Protocol.Opcode.StepError &&
-                Predicate.isObject(op.error) &&
-                Predicate.hasProperty(op.error, "noRetry") &&
-                op.error.noRetry === true,
+                op.op === Protocol.Opcode.StepFailed ||
+                (op.op === Protocol.Opcode.StepError &&
+                  Predicate.isObject(op.error) &&
+                  Predicate.hasProperty(op.error, "noRetry") &&
+                  op.error.noRetry === true),
             );
 
             const retryAfterMs = interruptArray.find((i) => Predicate.isNotUndefined(i.retryAfterMs))?.retryAfterMs;
+            const hasRetriableStepError = opcodes.some((op) => op.op === Protocol.Opcode.StepError);
             const responseHeaders: Record<string, string> = hasNonRetriableError
               ? { ...headers, [Protocol.Headers.NoRetry]: "true" }
-              : headers;
+              : hasRetriableStepError
+                ? { ...headers, [Protocol.Headers.NoRetry]: "false" }
+                : headers;
             if (Predicate.isNotUndefined(retryAfterMs)) {
               responseHeaders[Protocol.Headers.RetryAfter] = String(Math.ceil(retryAfterMs / 1000));
               // Spec §4.4.3: "If `Retry-After` is set, an SDK MUST also set

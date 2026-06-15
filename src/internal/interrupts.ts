@@ -17,6 +17,7 @@ export interface StepInfo {
   readonly id: string;
   readonly name: string;
   readonly hash: string;
+  readonly order?: number;
 }
 
 const toUserError = (error: unknown): typeof Protocol.UserError.Type =>
@@ -52,7 +53,7 @@ export const plannedInterrupt = (opts: { info: StepInfo }) =>
 
 /** @internal */
 export const runInterrupt = (opts: { info: StepInfo; data: unknown }) =>
-  StepInterrupt.make({ opcode: Protocol.stepRun(opts.info, opts.data) });
+  StepInterrupt.make({ opcode: Protocol.stepRunResponse(opts.info, opts.data) });
 
 /** @internal */
 export const errorInterrupt = (opts: { info: StepInfo; error: unknown; noRetry?: boolean; retryAfterMs?: number }) =>
@@ -60,3 +61,7 @@ export const errorInterrupt = (opts: { info: StepInfo; error: unknown; noRetry?:
     opcode: Protocol.stepError(opts.info, toUserError(opts.error), opts.noRetry),
     retryAfterMs: opts.retryAfterMs,
   });
+
+/** @internal */
+export const failedInterrupt = (opts: { info: StepInfo; error: unknown }) =>
+  StepInterrupt.make({ opcode: Protocol.stepFailed(opts.info, toUserError(opts.error)) });

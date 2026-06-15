@@ -143,6 +143,7 @@ export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpc
   error: Schema.optional(UserError),
   displayName: Schema.optional(Schema.String),
   userland: Schema.optional(Schema.Struct({ id: Schema.String })),
+  timing: Schema.optional(Schema.Struct({ a: Schema.Number, b: Schema.Number })),
 }) {}
 
 interface StepInfo {
@@ -154,7 +155,8 @@ interface StepInfo {
 const mkOpcode = (info: StepInfo, op: OpcodeValue, extra?: object): GeneratorOpcode =>
   GeneratorOpcode.make({ op, id: info.hash, name: info.id, displayName: info.name, ...extra });
 
-export const stepPlanned = (info: StepInfo): GeneratorOpcode => mkOpcode(info, Opcode.StepPlanned);
+export const stepPlanned = (info: StepInfo): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepPlanned, { opts: {}, userland: { id: info.id }, data: null });
 
 export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
   mkOpcode(info, Opcode.StepRun, {
@@ -181,6 +183,14 @@ export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
     timing: { a: Date.now() * 1_000_000, b: 0 },
   });
 
+export const stepRunResponse = (info: StepInfo, data: unknown): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepRun, {
+    opts: {},
+    userland: { id: info.id },
+    data,
+    timing: { a: Date.now() * 1_000_000, b: 0 },
+  });
+
 export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): GeneratorOpcode => {
   // noRetry must be in the error object for Inngest executor to recognize it
   const errorWithNoRetry = Predicate.isNotUndefined(noRetry)
@@ -188,6 +198,19 @@ export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): 
     : error;
   return mkOpcode(info, Opcode.StepError, { error: errorWithNoRetry });
 };
+
+export const stepFailed = (info: StepInfo, error: UserError): GeneratorOpcode =>
+  mkOpcode(info, Opcode.StepFailed, {
+    opts: {},
+    userland: { id: info.id },
+    error,
+    data: {
+      __serialized: true,
+      name: error.name,
+      message: error.message,
+      stack: "",
+    },
+  });
 
 export const sleep = (info: StepInfo, duration: string): GeneratorOpcode =>
   // Spec §5.3.2 requires `opts.duration`. The Inngest executor also accepts
@@ -203,12 +226,28 @@ export const sleep = (info: StepInfo, duration: string): GeneratorOpcode =>
   });
 
 export const waitForEvent = (info: StepInfo, opts: { event: string; timeout: string; if?: string }): GeneratorOpcode =>
-  mkOpcode(info, Opcode.WaitForEvent, { mode: "async", opts });
+  GeneratorOpcode.make({
+    op: Opcode.WaitForEvent,
+    id: info.hash,
+    name: opts.event,
+    displayName: info.name,
+    mode: "async",
+    opts,
+  });
 
 export const invokeFunction = (
   info: StepInfo,
   opts: { function_id: string; payload: unknown; timeout: string },
-): GeneratorOpcode => mkOpcode(info, Opcode.InvokeFunction, { mode: "async", opts, userland: { id: info.id } });
+): GeneratorOpcode =>
+  GeneratorOpcode.make({
+    op: Opcode.InvokeFunction,
+    id: info.hash,
+    displayName: info.name,
+    mode: "async",
+    opts,
+    userland: { id: info.id },
+    data: null,
+  });
 
 /**
  * Terminal opcode emitted by the SDK in checkpoint mode when the function

@@ -231,29 +231,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
-          "name": "process-all-items",
-          "data": [
-            {
-              "id": "a",
-              "processedValue": 2
-            },
-            {
-              "id": "b",
-              "processedValue": 4
-            }
-          ],
-          "displayName": "process-all-items"
-        },
-        {
-          "op": "StepRun",
-          "id": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
-          "name": "calculate-total",
-          "data": 3,
-          "displayName": "calculate-total"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -263,6 +240,165 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "path": "/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2013111CS1TYMYQK8R1KHJ",
+        "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
+        "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
+        "request_id": "01KV20131CJQKYF1EEAN664A72",
+        "generation_id": 1,
+        "request_started_at": 1781404830770,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "name": "process-all-items",
+            "displayName": "process-all-items",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "process-all-items"
+            },
+            "rawArgs": ["process-all-items", null],
+            "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
+                "memoized": false,
+                "options": {
+                  "id": "process-all-items",
+                  "name": "process-all-items"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": [
+              {
+                "id": "a",
+                "processedValue": 2
+              },
+              {
+                "id": "b",
+                "processedValue": 4
+              }
+            ],
+            "timing": {
+              "a": 1781404830771000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404830772
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "path": "/v1/checkpoint/01KV2013111CS1TYMYQK8R1KHJ/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2013111CS1TYMYQK8R1KHJ",
+        "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
+        "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
+        "request_id": "01KV20131CJQKYF1EEAN664A72",
+        "generation_id": 1,
+        "request_started_at": 1781404830770,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "name": "calculate-total",
+            "displayName": "calculate-total",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "calculate-total"
+            },
+            "rawArgs": ["calculate-total", null],
+            "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
+                "memoized": false,
+                "options": {
+                  "id": "calculate-total",
+                  "name": "calculate-total"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 3,
+            "timing": {
+              "a": 1781404830774000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404830774
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

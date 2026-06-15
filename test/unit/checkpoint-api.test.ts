@@ -128,7 +128,7 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
     }),
   );
 
-  it.effect("sends bearer auth and SDK headers", () =>
+  it.effect("sends bearer auth and native checkpoint headers", () =>
     Effect.gen(function* () {
       const captures: Array<CapturedReq> = [];
       const httpLayer = makeMockHttpClient(captures, () => okResponse());
@@ -147,8 +147,8 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
 
       const headers = captures[0]!.headers;
       expect(headers["authorization"]).toBe(`Bearer ${expectedHash}`);
-      expect(headers["x-inngest-sdk"]).toMatch(/^effect-inngest:v/);
-      expect(headers["x-inngest-req-version"]).toBe("2");
+      expect(headers["x-inngest-sdk"]).toBeUndefined();
+      expect(headers["x-inngest-req-version"]).toBeUndefined();
       expect(headers["x-inngest-env"]).toBe("production");
       expect(headers["content-type"]).toContain("application/json");
     }),

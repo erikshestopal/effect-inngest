@@ -334,7 +334,7 @@ describe("Regression: step.invoke payload must be event data directly", () => {
         const opcodes = (yield* Effect.tryPromise(() => response.json())) as Array<{
           op: string;
           id: string;
-          name: string;
+          name?: string;
           opts?: {
             function_id?: string;
             payload?: unknown;
@@ -342,37 +342,35 @@ describe("Regression: step.invoke payload must be event data directly", () => {
         }>;
 
         expect(opcodes).toMatchInlineSnapshot(`
-          [
-            {
-              "displayName": "call-child",
-              "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "mode": "async",
-              "name": "call-child",
-              "op": "InvokeFunction",
-              "opts": {
-                "function_id": "test-app-child-fn",
-                "payload": {
-                  "data": {
-                    "_tag": "test/child",
-                    "value": 42,
-                  },
-                  "user": {},
-                  "v": "1",
-                },
-                "timeout": "365d",
-              },
-              "userland": {
-                "id": "call-child",
-              },
-            },
-          ]
+        	[
+        	  {
+        	    "data": null,
+        	    "displayName": "call-child",
+        	    "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+        	    "mode": "async",
+        	    "op": "InvokeFunction",
+        	    "opts": {
+        	      "function_id": "test-app-child-fn",
+        	      "payload": {
+        	        "data": {
+        	          "_tag": "test/child",
+        	          "value": 42,
+        	        },
+        	      },
+        	      "timeout": "365d",
+        	    },
+        	    "userland": {
+        	      "id": "call-child",
+        	    },
+        	  },
+        	]
         `);
 
         const invokeOp = opcodes.find((o) => o.op === "InvokeFunction");
         expect(invokeOp).toBeDefined();
-        expect(invokeOp!.name).toBe("call-child");
+        expect(invokeOp!.name).toBeUndefined();
 
-        expect(invokeOp!.opts?.payload).toEqual({ data: { _tag: "test/child", value: 42 }, user: {}, v: "1" });
+        expect(invokeOp!.opts?.payload).toEqual({ data: { _tag: "test/child", value: 42 } });
 
         expect(invokeOp!.opts?.payload).toHaveProperty("data");
         expect(invokeOp!.opts?.payload).toMatchInlineSnapshot(`
@@ -381,8 +379,6 @@ describe("Regression: step.invoke payload must be event data directly", () => {
               "_tag": "test/child",
               "value": 42,
             },
-            "user": {},
-            "v": "1",
           }
         `);
       } finally {
@@ -444,7 +440,7 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
     }),
   );
 
-  it.effect("step failure wraps NonRetriableError and sets noRetry in StepError opcode", () =>
+  it.effect("step failure emits native StepFailed opcode and sets no-retry header", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
         "non-retriable-fn": ({ step }) =>
@@ -465,23 +461,23 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
 
         const response = yield* Effect.tryPromise(() => handler(request));
 
-        // Step failures return 206 with StepError opcode
+        // Step failures return 206 with StepFailed opcode
         expect(response.status).toBe(206);
+        expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
 
         const body = (yield* Effect.tryPromise(() => response.json())) as ReadonlyArray<{
           op: string;
           name: string;
           error: { name: string; message: string; noRetry?: boolean };
+          data?: { name?: string; message?: string };
         }>;
 
         expect(body).toHaveLength(1);
         const opcode = body[0]!;
-        // NonRetriableError emits StepError with error.noRetry: true
-        // Inngest executor checks gen.Error.NoRetry to skip retries
-        expect(opcode.op).toBe("StepError");
+        expect(opcode.op).toBe("StepFailed");
         expect(opcode.error.name).toBe("NonRetriableError");
         expect(opcode.error.message).toBe("Step no retry");
-        expect(opcode.error.noRetry).toBe(true);
+        expect(opcode.data).toMatchObject({ name: "NonRetriableError", message: "Step no retry" });
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
@@ -890,22 +886,19 @@ describe("Regression: disable_immediate_execution must not block target step", (
           data?: unknown;
         }>;
 
-        expect(firstOpcodes).toMatchInlineSnapshot(`
-          [
-            {
-              "data": "first",
-              "displayName": "first",
-              "id": "e0996a37c13d44c3b06074939d43fa3759bd32c1",
-              "mode": "sync",
-              "name": "first",
-              "op": "StepRun",
-              "opts": {},
-              "userland": {
-                "id": "first",
-              },
-            },
-          ]
-        `);
+        expect(firstOpcodes).toMatchObject([
+          {
+            data: "first",
+            displayName: "first",
+            id: "e0996a37c13d44c3b06074939d43fa3759bd32c1",
+            name: "first",
+            op: "StepRun",
+            opts: {},
+            timing: { b: 0 },
+            userland: { id: "first" },
+          },
+        ]);
+        expect(typeof (firstOpcodes[0] as { timing?: { a?: unknown } }).timing?.a).toBe("number");
 
         const firstStep = firstOpcodes.find((o) => o.name === "first");
         expect(firstStep).toBeDefined();
@@ -932,14 +925,19 @@ describe("Regression: disable_immediate_execution must not block target step", (
         }>;
 
         expect(secondOpcodes).toMatchInlineSnapshot(`
-          [
-            {
-              "displayName": "second",
-              "id": "352f7829a2384b001cc12b0c2613c756454a1f6a",
-              "name": "second",
-              "op": "StepPlanned",
-            },
-          ]
+        	[
+        	  {
+        	    "data": null,
+        	    "displayName": "second",
+        	    "id": "352f7829a2384b001cc12b0c2613c756454a1f6a",
+        	    "name": "second",
+        	    "op": "StepPlanned",
+        	    "opts": {},
+        	    "userland": {
+        	      "id": "second",
+        	    },
+        	  },
+        	]
         `);
 
         // Second step should be StepPlanned (discovery phase)
@@ -991,22 +989,19 @@ describe("Regression: disable_immediate_execution must not block target step", (
           data?: unknown;
         }>;
 
-        expect(thirdOpcodes).toMatchInlineSnapshot(`
-          [
-            {
-              "data": "second",
-              "displayName": "second",
-              "id": "352f7829a2384b001cc12b0c2613c756454a1f6a",
-              "mode": "sync",
-              "name": "second",
-              "op": "StepRun",
-              "opts": {},
-              "userland": {
-                "id": "second",
-              },
-            },
-          ]
-        `);
+        expect(thirdOpcodes).toMatchObject([
+          {
+            data: "second",
+            displayName: "second",
+            id: "352f7829a2384b001cc12b0c2613c756454a1f6a",
+            name: "second",
+            op: "StepRun",
+            opts: {},
+            timing: { b: 0 },
+            userland: { id: "second" },
+          },
+        ]);
+        expect(typeof (thirdOpcodes[0] as { timing?: { a?: unknown } }).timing?.a).toBe("number");
 
         // NOW second step should EXECUTE (StepRun with data), not just StepPlanned
         const executedSecond = thirdOpcodes.find((o) => o.name === "second");

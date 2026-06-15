@@ -59,9 +59,10 @@ export const InvokeFunctionResponse = Schema.Array(
   Schema.Struct({
     op: Schema.String,
     id: Schema.String,
-    name: Schema.String,
+    name: Schema.optional(Schema.String),
     mode: Schema.String,
     displayName: Schema.String,
+    data: Schema.optional(Schema.Unknown),
     opts: Schema.Struct({
       function_id: Schema.String,
       payload: Schema.Struct({

@@ -138,6 +138,10 @@ export interface CheckpointState {
   readonly runId: string;
   readonly fnId: string;
   readonly qiId: string;
+  /** Append a planned/async opcode discovered during a root parallel pass. */
+  readonly planOpcode: (op: typeof Protocol.GeneratorOpcode.Type, order?: number) => Effect.Effect<void>;
+  /** Atomic snapshot + clear for planned opcodes; never sent via async checkpoint. */
+  readonly drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   /** Append a sync opcode; flush if `bufferedSteps` or `maxInterval` reached. */
   readonly bufferStep: (op: typeof Protocol.GeneratorOpcode.Type) => Effect.Effect<void>;
   /**
@@ -169,6 +173,9 @@ export const make = (args: {
 }): Effect.Effect<CheckpointState> =>
   Effect.sync(() => {
     const buffer = Ref.makeUnsafe<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>([]);
+    const planned = Ref.makeUnsafe<
+      ReadonlyArray<{ readonly op: typeof Protocol.GeneratorOpcode.Type; readonly order: number }>
+    >([]);
     const intervalStartedAt = Ref.makeUnsafe<Option.Option<number>>(Option.none());
     const runtimeExceeded = Ref.makeUnsafe(false);
 
@@ -223,11 +230,26 @@ export const make = (args: {
       [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>,
     ]);
 
+    const planOpcode = (
+      op: typeof Protocol.GeneratorOpcode.Type,
+      order: number = Number.MAX_SAFE_INTEGER,
+    ): Effect.Effect<void> => Ref.update(planned, (current) => [...current, { op, order }]);
+
+    const drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
+      planned,
+      (current) => [
+        [...current].sort((a, b) => a.order - b.order).map((entry) => entry.op),
+        [] as ReadonlyArray<{ readonly op: typeof Protocol.GeneratorOpcode.Type; readonly order: number }>,
+      ],
+    );
+
     return {
       config: args.config,
       runId: args.runId,
       fnId: args.fnId,
       qiId: args.qiId,
+      planOpcode,
+      drainPlanned,
       bufferStep,
       flush: flushInner,
       drain,

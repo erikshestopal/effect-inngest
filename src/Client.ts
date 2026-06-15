@@ -249,7 +249,7 @@ const makeClient = (
         );
       }
 
-      const key = config.eventKey ?? "local";
+      const key = config.eventKey ?? "NO_EVENT_KEY_SET";
       const url = new URL(`e/${key}`, eventBaseUrl).toString();
       const eventNames = events.map((e) => e.name);
       const now = yield* Clock.currentTimeMillis;
@@ -300,8 +300,6 @@ const makeClient = (
       const request = HttpClientRequest.post(url).pipe(
         HttpClientRequest.setHeaders({
           "Content-Type": "application/json",
-          [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
-          [Protocol.Headers.RequestVersion]: "2",
           ...(config.env ? { [Protocol.Headers.Env]: config.env } : {}),
         }),
         HttpClientRequest.bearerToken(hashedSigningKey),

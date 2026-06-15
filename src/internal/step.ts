@@ -30,9 +30,14 @@ import {
   plannedInterrupt,
   runInterrupt,
   errorInterrupt,
+  failedInterrupt,
 } from "./interrupts.js";
 
 export { StepInterrupt, type StepInfo } from "./interrupts.js";
+
+const isStepInterrupt: (u: unknown) => u is StepInterrupt = Predicate.isTagged("StepInterrupt") as (
+  u: unknown,
+) => u is StepInterrupt;
 
 /** @internal */
 const hashStepId = (id: string, repeatIndex: number = 0): Effect.Effect<string> => {
@@ -74,6 +79,31 @@ interface WaitForEventOptions {
   readonly if?: string;
 }
 
+type JsonSchema<A = unknown> = Schema.Codec<A, unknown, never, never>;
+type StepRunOutput<A> = [A] extends [never]
+  ? never
+  : [A] extends [void]
+    ? null
+    : A extends Schema.Json
+      ? A
+      : Schema.Json;
+
+interface StepRunOptions<S extends JsonSchema> {
+  readonly schema: S;
+}
+
+interface StepRun {
+  <A, Err, R>(
+    id: StepOptionsOrId,
+    effect: Effect.Effect<A, Err, R>,
+  ): Effect.Effect<StepRunOutput<A>, StepError | Err, R>;
+  <S extends JsonSchema, Err, R>(
+    id: StepOptionsOrId,
+    effect: Effect.Effect<Schema.Schema.Type<S>, Err, R>,
+    options: StepRunOptions<S>,
+  ): Effect.Effect<Schema.Schema.Type<S>, StepError | Err, R>;
+}
+
 interface InvokeOptionsBase<F extends InngestFunction.Any> {
   readonly function: F;
   readonly user?: Record<string, unknown>;
@@ -85,13 +115,43 @@ type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F
   ? InvokeOptionsBase<F>
   : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventType<F> };
 
-type EventSchema = Schema.Top & { readonly identifier: string };
+type EventSchema<A = unknown> = JsonSchema<A> & { readonly identifier: string };
 type TaggedEvent = { readonly _tag: string };
+
+const withEventTag = (event: EventSchema, payload: unknown): unknown =>
+  Predicate.isObject(payload) ? { ...payload, _tag: event.identifier } : payload;
+
+const stepDecodeError = (stepId: string, cause: unknown): StepError =>
+  StepError.make({
+    stepId,
+    message: Predicate.hasProperty(cause, "message") ? String(cause.message) : String(cause),
+    noRetry: true,
+    cause,
+  });
+
+const decodeJson = <A>(schema: JsonSchema<A>, value: unknown, stepId: string): Effect.Effect<A, StepError> =>
+  Schema.decodeUnknownEffect(Schema.toCodecJson(schema))(value).pipe(
+    Effect.mapError((cause) => stepDecodeError(stepId, cause)),
+  );
+
+const encodeJson = <A>(schema: JsonSchema<A>, value: A, stepId: string): Effect.Effect<unknown, StepError> =>
+  Schema.encodeEffect(Schema.toCodecJson(schema))(value).pipe(
+    Effect.mapError((cause) => stepDecodeError(stepId, cause)),
+  );
+
+const encodeUnknownJson = (value: unknown, stepId: string): Effect.Effect<Schema.Json, StepError> =>
+  Predicate.isUndefined(value)
+    ? Effect.succeed(null)
+    : Schema.encodeEffect(Schema.UnknownFromJsonString)(value).pipe(
+        Effect.flatMap(Schema.decodeEffect(Schema.UnknownFromJsonString)),
+        Effect.flatMap(Schema.decodeUnknownEffect(Schema.Json)),
+        Effect.mapError((cause) => stepDecodeError(stepId, cause)),
+      );
 
 const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, never> => {
   const ctor = event.constructor;
   if (Schema.isSchema(ctor)) {
-    return Schema.encodeEffect(ctor as unknown as Schema.Top)(event).pipe(
+    return Schema.encodeEffect(Schema.toCodecJson(ctor as unknown as JsonSchema))(event as never).pipe(
       Effect.orElseSucceed(() => event),
     ) as Effect.Effect<unknown, never, never>;
   }
@@ -99,17 +159,14 @@ const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, ne
 };
 
 interface StepTools {
-  readonly run: <A, Err, R>(
-    id: StepOptionsOrId,
-    effect: Effect.Effect<A, Err, R>,
-  ) => Effect.Effect<A, StepError | Err, R>;
+  readonly run: StepRun;
   readonly sleep: (id: StepOptionsOrId, duration: Duration.Input) => Effect.Effect<void>;
   readonly sleepUntil: (id: StepOptionsOrId, timestamp: Date | number | string) => Effect.Effect<void>;
-  readonly waitForEvent: <E extends EventSchema>(
+  readonly waitForEvent: <A>(
     id: StepOptionsOrId,
-    event: E,
+    event: EventSchema<A>,
     options: WaitForEventOptions,
-  ) => Effect.Effect<Option.Option<Schema.Schema.Type<E>>>;
+  ) => Effect.Effect<Option.Option<A>, StepError>;
   readonly invoke: <F extends InngestFunction.Any>(
     id: StepOptionsOrId,
     options: InvokeOptions<F>,
@@ -146,16 +203,20 @@ export const createStepTools = (
 ): StepTools => {
   const ctx = request.ctx;
   const steps = request.steps as Record<string, unknown>;
+  const activeStepRuns = Ref.makeUnsafe(0);
+  const stepOrder = Ref.makeUnsafe(0);
 
   const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => {
     const { id, name } = normalizeOpts(opts);
-    return Effect.flatMap(
-      Ref.modify(stepIdCounts, (map) => {
-        const count = Option.getOrElse(HashMap.get(map, id), () => 0);
-        return [count, HashMap.set(map, id, count + 1)];
-      }),
-      (count) => Effect.map(hashStepId(id, count), (hash) => ({ id, name, hash })),
-    );
+    return Effect.gen(function* () {
+      const order = yield* Ref.modify(stepOrder, (current) => [current, current + 1]);
+      const count = yield* Ref.modify(stepIdCounts, (map) => {
+        const current = Option.getOrElse(HashMap.get(map, id), () => 0);
+        return [current, HashMap.set(map, id, current + 1)];
+      });
+      const hash = yield* hashStepId(id, count);
+      return { id, name, hash, order };
+    });
   };
 
   const getMemo = (hash: string): Memo => decodeMemo(steps[hash]);
@@ -170,6 +231,12 @@ export const createStepTools = (
     onSome: (state) => state.flush,
   });
 
+  const planIfCheckpoint = (op: typeof Protocol.GeneratorOpcode.Type, order?: number): Effect.Effect<void> =>
+    Option.match(checkpoint, {
+      onNone: () => Effect.void,
+      onSome: (state) => state.planOpcode(op, order),
+    });
+
   const sleep = (opts: StepOptionsOrId, duration: Duration.Input): Effect.Effect<void, StepInterrupt> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
@@ -180,7 +247,19 @@ export const createStepTools = (
         Match.tag("MemoError", () => Effect.void),
         Match.tag("MemoInput", () => Effect.void),
         Match.tag("MemoNone", () =>
-          Effect.andThen(flushIfCheckpoint, Effect.fail(sleepInterrupt({ info, duration: timeStr(duration) }))).pipe(
+          Effect.gen(function* () {
+            const opcode = Protocol.sleep(info, timeStr(duration));
+            if (Option.isSome(checkpoint) && ctx.step_id === "step") {
+              yield* Effect.yieldNow;
+              const active = yield* Ref.get(activeStepRuns);
+              if (active > 0) {
+                yield* planIfCheckpoint(opcode, info.order);
+                return;
+              }
+            }
+            yield* flushIfCheckpoint;
+            return yield* Effect.die(sleepInterrupt({ info, duration: timeStr(duration) }));
+          }).pipe(
             Effect.withSpan(`inngest.step/sleep/${info.id}`, {
               attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleep" },
             }),
@@ -202,7 +281,7 @@ export const createStepTools = (
         Match.tag("MemoNone", () =>
           Effect.andThen(
             flushIfCheckpoint,
-            Effect.fail(sleepInterrupt({ info, duration: formatTimestamp(timestamp) })),
+            Effect.die(sleepInterrupt({ info, duration: formatTimestamp(timestamp) })),
           ).pipe(
             Effect.withSpan(`inngest.step/sleepUntil/${info.id}`, {
               attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleepUntil" },
@@ -213,28 +292,28 @@ export const createStepTools = (
       ),
     );
 
-  const waitForEvent = <E extends EventSchema>(
+  const waitForEvent = <A>(
     opts: StepOptionsOrId,
-    event: E,
+    event: EventSchema<A>,
     options: WaitForEventOptions,
-  ): Effect.Effect<Option.Option<Schema.Schema.Type<E>>, StepInterrupt> =>
+  ): Effect.Effect<Option.Option<A>, StepInterrupt | StepError> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
         getMemo(info.hash),
         Match.value,
         Match.tag("MemoData", ({ data }) => {
           // null/undefined = timeout (no matching event received)
-          if (data == null) {
+          if (Predicate.isNullish(data)) {
             return Effect.succeed(Option.none());
           }
           // Inngest returns full event { name, data, id, ts } - extract .data for payload
           // Or may return payload directly - use .data if present, otherwise use data as-is
-          const event = data as { data?: unknown };
-          const payload = Predicate.isNotUndefined(event.data) ? event.data : data;
-          if (payload == null) {
+          const rawEvent = data as { data?: unknown };
+          const payload = Predicate.isNotUndefined(rawEvent.data) ? rawEvent.data : data;
+          if (Predicate.isNullish(payload)) {
             return Effect.succeed(Option.none());
           }
-          return Effect.succeed(Option.some(payload as Schema.Schema.Type<E>));
+          return decodeJson(event, withEventTag(event, payload), info.id).pipe(Effect.map(Option.some));
         }),
         Match.tag("MemoTimeout", () => Effect.succeed(Option.none())),
         Match.tag("MemoError", () => Effect.succeed(Option.none())),
@@ -242,7 +321,7 @@ export const createStepTools = (
         Match.tag("MemoNone", () =>
           Effect.andThen(
             flushIfCheckpoint,
-            Effect.fail(
+            Effect.die(
               waitForEventInterrupt({
                 info,
                 event: event.identifier,
@@ -264,7 +343,9 @@ export const createStepTools = (
       pipe(
         getMemo(info.hash),
         Match.value,
-        Match.tag("MemoData", ({ data }) => Effect.succeed(data as InngestFunction.Success<F>)),
+        Match.tag("MemoData", ({ data }) =>
+          decodeJson(options.function.success as JsonSchema<InngestFunction.Success<F>>, data, info.id),
+        ),
         Match.tag("MemoError", ({ error }) =>
           stepError(info.id, Predicate.hasProperty(error, "message") ? String(error.message) : "Invoke failed", {
             cause: error,
@@ -274,18 +355,18 @@ export const createStepTools = (
         Match.tag("MemoInput", () => Effect.succeed(undefined as InngestFunction.Success<F>)),
         Match.tag("MemoNone", () => {
           const rawData = Predicate.hasProperty(options, "data") ? (options.data as TaggedEvent) : undefined;
-          const encodeData = rawData ? encodeTaggedEvent(rawData) : Effect.succeed(undefined);
+          const encodeData = rawData ? encodeTaggedEvent(rawData) : Effect.void;
           return Effect.flatMap(encodeData, (encodedData) =>
             Effect.andThen(
               flushIfCheckpoint,
-              Effect.fail(
+              Effect.die(
                 invokeInterrupt({
                   info,
                   functionId: `${appName}-${options.function._tag}`,
                   payload: {
                     data: encodedData,
-                    user: options.user ?? {},
-                    v: options.v ?? "1",
+                    ...(Predicate.isNotUndefined(options.user) ? { user: options.user } : {}),
+                    ...(Predicate.isNotUndefined(options.v) ? { v: options.v } : {}),
                   },
                   timeout: options.timeout ? timeStr(options.timeout) : "365d",
                 }),
@@ -300,12 +381,15 @@ export const createStepTools = (
   const run = <A, Err, R>(
     opts: StepOptionsOrId,
     effect: Effect.Effect<A, Err, R>,
-  ): Effect.Effect<A, StepInterrupt | StepError | Err, R> =>
+    options?: StepRunOptions<JsonSchema<A>>,
+  ): Effect.Effect<A | StepRunOutput<A>, StepInterrupt | StepError | Err, R> =>
     Effect.flatMap(getInfo(opts), (info) =>
       pipe(
         getMemo(info.hash),
         Match.value,
-        Match.tag("MemoData", ({ data }) => Effect.succeed(data as A)),
+        Match.tag("MemoData", ({ data }) =>
+          options?.schema ? decodeJson(options.schema, data, info.id) : Effect.succeed(data as StepRunOutput<A>),
+        ),
         Match.tag("MemoError", ({ error }) =>
           // Spec §5.2.2: an uncaught memoized step error MUST be treated as
           // non-retriable. If the user wanted to recover they would have
@@ -320,36 +404,74 @@ export const createStepTools = (
         Match.tag("MemoInput", () => stepError(info.id, "Unexpected step result type: input")),
         Match.tag("MemoNone", () => {
           if (isBlocked(info.hash) || !canExecute(info.hash)) {
-            return Effect.fail(plannedInterrupt({ info }));
+            return Effect.die(plannedInterrupt({ info }));
           }
 
-          return effect.pipe(
-            Effect.withSpan(`inngest.step/run/${info.id}`, {
-              attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "run" },
-            }),
-            Effect.matchEffect({
-              onFailure: (err) => {
-                const noRetry = isNonRetriableError(err) ? true : undefined;
-                const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
-                return Effect.andThen(
-                  Effect.annotateCurrentSpan(errorOtelAttributes(err)),
-                  Effect.fail(errorInterrupt({ info, error: err, noRetry, retryAfterMs })),
-                );
-              },
-              onSuccess: (data) =>
-                Option.match(checkpoint, {
-                  // Async (non-checkpoint) mode: surface result via interrupt — driver
-                  // returns 206 with a single StepRun and yields back to executor.
-                  onNone: () => Effect.fail(runInterrupt({ info, data })),
-                  // Checkpoint mode: buffer the StepRun (best-effort flush handled by
-                  // bufferStep) and continue execution with the value (spec §10.4.1).
-                  onSome: (state) => Effect.as(state.bufferStep(Protocol.stepRun(info, data)), data as A),
-                }),
-            }),
+          const shouldDetectParallelCheckpoint = Option.isSome(checkpoint) && ctx.step_id === "step";
+          const enterStepRun = shouldDetectParallelCheckpoint
+            ? Effect.gen(function* () {
+                yield* Ref.update(activeStepRuns, (n) => n + 1);
+                yield* Effect.yieldNow;
+                const active = yield* Ref.get(activeStepRuns);
+                if (active > 1) {
+                  yield* planIfCheckpoint(Protocol.stepPlanned(info), info.order);
+                  return true;
+                }
+                return false;
+              })
+            : Effect.succeed(false);
+          const exitStepRun = shouldDetectParallelCheckpoint
+            ? Ref.update(activeStepRuns, (n) => Math.max(0, n - 1))
+            : Effect.void;
+
+          return Effect.flatMap(enterStepRun, (planned) =>
+            planned
+              ? Effect.succeed(undefined as unknown as StepRunOutput<A>)
+              : effect.pipe(
+                  Effect.withSpan(`inngest.step/run/${info.id}`, {
+                    attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "run" },
+                  }),
+                  Effect.matchEffect({
+                    onFailure: (err) => {
+                      const noRetry = isNonRetriableError(err) ? true : undefined;
+                      const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
+                      const interrupt =
+                        noRetry === true || ctx.attempt >= ctx.max_attempts - 1
+                          ? failedInterrupt({ info, error: err })
+                          : errorInterrupt({ info, error: err, noRetry, retryAfterMs });
+                      return Effect.andThen(
+                        Effect.annotateCurrentSpan(errorOtelAttributes(err)),
+                        Effect.die(interrupt),
+                      );
+                    },
+                    onSuccess: (data) => {
+                      const encoded = options?.schema
+                        ? encodeJson(options.schema, data, info.id)
+                        : encodeUnknownJson(data, info.id);
+
+                      return Effect.flatMap(encoded, (encodedData) =>
+                        Option.match(checkpoint, {
+                          // Async (non-checkpoint) mode: surface result via interrupt — driver
+                          // returns 206 with a single StepRun and yields back to executor.
+                          onNone: () => Effect.die(runInterrupt({ info, data: encodedData })),
+                          // Checkpoint mode: buffer the StepRun (best-effort flush handled by
+                          // bufferStep) and continue execution with the value (spec §10.4.1).
+                          onSome: (state) =>
+                            Effect.as(
+                              state.bufferStep(Protocol.stepRun(info, encodedData)),
+                              options?.schema ? data : (encodedData as StepRunOutput<A>),
+                            ),
+                        }),
+                      );
+                    },
+                  }),
+                  Effect.ensuring(exitStepRun),
+                ),
+          ).pipe(
             Effect.catchDefect((defect) =>
               Effect.andThen(
                 Effect.annotateCurrentSpan(errorOtelAttributes(defect)),
-                Effect.fail(errorInterrupt({ info, error: defect })),
+                isStepInterrupt(defect) ? Effect.die(defect) : Effect.die(errorInterrupt({ info, error: defect })),
               ),
             ),
           );
@@ -374,28 +496,54 @@ export const createStepTools = (
         Match.tag("MemoInput", () => Effect.succeed({ ids: [] as ReadonlyArray<string> })),
         Match.tag("MemoNone", () => {
           if (isBlocked(info.hash) || !canExecute(info.hash)) {
-            return Effect.fail(plannedInterrupt({ info }));
+            return Effect.die(plannedInterrupt({ info }));
           }
 
+          const nativeInfo = { id: "sendEvent", name: "sendEvent", hash: info.hash };
+          const shouldDetectParallelCheckpoint = Option.isSome(checkpoint) && ctx.step_id === "step";
+          const enterStepRun = shouldDetectParallelCheckpoint
+            ? Effect.gen(function* () {
+                yield* Ref.update(activeStepRuns, (n) => n + 1);
+                yield* Effect.yieldNow;
+                const active = yield* Ref.get(activeStepRuns);
+                if (active > 1) {
+                  yield* planIfCheckpoint(
+                    Protocol.stepPlanned({ ...nativeInfo, id: info.id, name: info.name }),
+                    info.order,
+                  );
+                  return true;
+                }
+                return false;
+              })
+            : Effect.succeed(false);
+          const exitStepRun = shouldDetectParallelCheckpoint
+            ? Ref.update(activeStepRuns, (n) => Math.max(0, n - 1))
+            : Effect.void;
+
           const events = Arr.ensure(payload);
-          return Effect.flatMap(
-            Effect.forEach(events, (e) =>
-              Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
-            ),
-            (eventPayloads) =>
-              InngestClient.use((client) =>
-                client.sendEvent(eventPayloads).pipe(
-                  Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
-                    attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
-                  }),
-                  Effect.flatMap((result) =>
-                    Option.match(checkpoint, {
-                      onNone: () => Effect.fail(runInterrupt({ info, data: result })),
-                      onSome: (state) => Effect.as(state.bufferStep(Protocol.stepRun(info, result)), result),
-                    }),
+          return Effect.flatMap(enterStepRun, (planned) =>
+            planned
+              ? Effect.succeed({ ids: [] as ReadonlyArray<string> })
+              : Effect.flatMap(
+                  Effect.forEach(events, (e) =>
+                    Effect.map(encodeTaggedEvent(e), (encoded) => ({ name: e._tag, data: encoded })),
                   ),
-                ),
-              ),
+                  (eventPayloads) =>
+                    InngestClient.use((client) =>
+                      client.sendEvent(eventPayloads).pipe(
+                        Effect.withSpan(`inngest.step/sendEvent/${info.id}`, {
+                          attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sendEvent" },
+                        }),
+                        Effect.flatMap((result) =>
+                          Option.match(checkpoint, {
+                            onNone: () => Effect.die(runInterrupt({ info: nativeInfo, data: result })),
+                            onSome: (state) =>
+                              Effect.as(state.bufferStep(Protocol.stepRun(nativeInfo, result)), result),
+                          }),
+                        ),
+                      ),
+                    ),
+                ).pipe(Effect.ensuring(exitStepRun)),
           );
         }),
         Match.exhaustive,
@@ -412,17 +560,68 @@ export const createStepTools = (
   };
 };
 
+const triggerEventSchema = (args: {
+  readonly fn: InngestFunction.Any;
+  readonly eventName: string;
+}): Option.Option<EventSchema> => {
+  const triggers = args.fn.triggers.filter((trigger): trigger is { readonly event: EventSchema } =>
+    Predicate.hasProperty(trigger, "event"),
+  );
+  return Option.fromNullishOr(
+    triggers.find((trigger) => trigger.event.identifier === args.eventName)?.event ?? triggers[0]?.event,
+  );
+};
+
+const decodeEventData = <F extends InngestFunction.Any>(args: {
+  readonly fn: F;
+  readonly eventName: string;
+  readonly eventData: unknown;
+}): Effect.Effect<InngestFunction.EventType<F>> =>
+  Option.match(triggerEventSchema({ fn: args.fn, eventName: args.eventName }), {
+    onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
+    onSome: (event) =>
+      Schema.decodeUnknownEffect(Schema.toCodecJson(event))(withEventTag(event, args.eventData)).pipe(
+        Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
+        Effect.orDie,
+      ),
+  });
+
 export const buildHandlerContext = <F extends InngestFunction.Any>(
   fn: F,
   step: StepTools,
   request: Protocol.SDKRequestBody,
-): HandlerContext<F> => {
-  // Batch mode: function has batchEvents configured - always return array of event data payloads
-  const isBatchMode = fn.options?.batchEvents != null;
-  if (isBatchMode) {
-    const eventDataArray = request.events.map((e) => e.data);
+): Effect.Effect<HandlerContext<F>> =>
+  Effect.gen(function* () {
+    // Batch mode: function has batchEvents configured - always return array of event data payloads
+    const isBatchMode = Predicate.isNotNullish(fn.options?.batchEvents);
+    if (isBatchMode) {
+      const eventDataArray = yield* Effect.forEach(request.events, (event) =>
+        decodeEventData({ fn, eventName: event.name, eventData: event.data }),
+      );
+      return {
+        event: eventDataArray as InngestFunction.EventType<F>,
+        step,
+        run: {
+          id: request.ctx.run_id,
+          attempt: request.ctx.attempt,
+          maxAttempts: request.ctx.max_attempts,
+        },
+      };
+    }
+
+    // When invoked via step.invoke, Inngest sends "inngest/function.invoked" event
+    // The payload is in event.data but mixed with _inngest metadata - extract just the user data
+    let eventData = request.event.data;
+    if (request.event.name === "inngest/function.invoked" && Predicate.isObject(eventData)) {
+      // Remove _inngest metadata, keep only the invoke payload
+      const { _inngest, ...payload } = eventData as Record<string, unknown>;
+      eventData = payload;
+    }
+
+    const event = yield* decodeEventData({ fn, eventName: request.event.name, eventData });
+
     return {
-      event: eventDataArray as InngestFunction.EventType<F>,
+      event,
       step,
       run: {
         id: request.ctx.run_id,
@@ -430,24 +629,4 @@ export const buildHandlerContext = <F extends InngestFunction.Any>(
         maxAttempts: request.ctx.max_attempts,
       },
     };
-  }
-
-  // When invoked via step.invoke, Inngest sends "inngest/function.invoked" event
-  // The payload is in event.data but mixed with _inngest metadata - extract just the user data
-  let eventData = request.event.data;
-  if (request.event.name === "inngest/function.invoked" && typeof eventData === "object" && eventData !== null) {
-    // Remove _inngest metadata, keep only the invoke payload
-    const { _inngest, ...payload } = eventData as Record<string, unknown>;
-    eventData = payload;
-  }
-
-  return {
-    event: eventData as InngestFunction.EventType<F>,
-    step,
-    run: {
-      id: request.ctx.run_id,
-      attempt: request.ctx.attempt,
-      maxAttempts: request.ctx.max_attempts,
-    },
-  };
-};
+  });

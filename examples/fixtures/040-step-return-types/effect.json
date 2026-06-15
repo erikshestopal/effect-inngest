@@ -209,51 +209,6 @@
       },
       "body": [
         {
-          "op": "StepRun",
-          "id": "bb8954f975022ace90365e99e5913d001543e1d1",
-          "name": "return-string",
-          "data": "hello",
-          "displayName": "return-string"
-        },
-        {
-          "op": "StepRun",
-          "id": "f414d0a95357a1dbdf860042fb912e738830905d",
-          "name": "return-number",
-          "data": 42,
-          "displayName": "return-number"
-        },
-        {
-          "op": "StepRun",
-          "id": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
-          "name": "return-object",
-          "data": {
-            "key": "test",
-            "count": 100
-          },
-          "displayName": "return-object"
-        },
-        {
-          "op": "StepRun",
-          "id": "698ac4257503dbbbd154caf355a547bc18cea62a",
-          "name": "return-array",
-          "data": [1, 2, 3, 4, 5],
-          "displayName": "return-array"
-        },
-        {
-          "op": "StepRun",
-          "id": "df87611b931013d235001d63a109c5fa00312c33",
-          "name": "return-boolean",
-          "data": true,
-          "displayName": "return-boolean"
-        },
-        {
-          "op": "StepRun",
-          "id": "271e04c6282f37df0262a993c4942fc3ce7e4825",
-          "name": "use-all-types",
-          "data": "hello-42-test-5-true",
-          "displayName": "use-all-types"
-        },
-        {
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
@@ -268,6 +223,459 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "bb8954f975022ace90365e99e5913d001543e1d1",
+            "name": "return-string",
+            "displayName": "return-string",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "return-string"
+            },
+            "rawArgs": ["return-string", null],
+            "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
+                "memoized": false,
+                "options": {
+                  "id": "return-string",
+                  "name": "return-string"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "hello",
+            "timing": {
+              "a": 1781404833524000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833524
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "f414d0a95357a1dbdf860042fb912e738830905d",
+            "name": "return-number",
+            "displayName": "return-number",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "return-number"
+            },
+            "rawArgs": ["return-number", null],
+            "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
+                "memoized": false,
+                "options": {
+                  "id": "return-number",
+                  "name": "return-number"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": 42,
+            "timing": {
+              "a": 1781404833527000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833527
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+            "name": "return-object",
+            "displayName": "return-object",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "return-object"
+            },
+            "rawArgs": ["return-object", null],
+            "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+                "memoized": false,
+                "options": {
+                  "id": "return-object",
+                  "name": "return-object"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": {
+              "key": "test",
+              "count": 100
+            },
+            "timing": {
+              "a": 1781404833529000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833529
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "698ac4257503dbbbd154caf355a547bc18cea62a",
+            "name": "return-array",
+            "displayName": "return-array",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "return-array"
+            },
+            "rawArgs": ["return-array", null],
+            "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
+                "memoized": false,
+                "options": {
+                  "id": "return-array",
+                  "name": "return-array"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": [1, 2, 3, 4, 5],
+            "timing": {
+              "a": 1781404833530000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833530
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "df87611b931013d235001d63a109c5fa00312c33",
+            "name": "return-boolean",
+            "displayName": "return-boolean",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "return-boolean"
+            },
+            "rawArgs": ["return-boolean", null],
+            "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
+                "memoized": false,
+                "options": {
+                  "id": "return-boolean",
+                  "name": "return-boolean"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": true,
+            "timing": {
+              "a": 1781404833532000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833532
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "outbound",
+    "proxy": "sdk-to-inngest",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "path": "/v1/checkpoint/01KV2015Q2HSC39014VXEQF3K1/async",
+      "query": {},
+      "headers": {
+        "authorization": "<redacted>",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>"
+      },
+      "body": {
+        "run_id": "01KV2015Q2HSC39014VXEQF3K1",
+        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
+        "qi_id": "MnlhZzNvNDJsMDFyMzo6ZGVmYXVsdA==",
+        "request_id": "01KV2015QBQV270RB7WD30X062",
+        "generation_id": 1,
+        "request_started_at": 1781404833522,
+        "steps": [
+          {
+            "op": "StepRun",
+            "id": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+            "name": "use-all-types",
+            "displayName": "use-all-types",
+            "mode": "sync",
+            "opts": {},
+            "userland": {
+              "id": "use-all-types"
+            },
+            "rawArgs": ["use-all-types", null],
+            "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+            "fulfilled": true,
+            "hasStepState": true,
+            "handled": true,
+            "promise": {},
+            "middleware": {
+              "stepInfo": {
+                "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+                "memoized": false,
+                "options": {
+                  "id": "use-all-types",
+                  "name": "use-all-types"
+                },
+                "stepType": "run"
+              }
+            },
+            "memoizationDeferred": {
+              "promise": {}
+            },
+            "transformedResultPromise": {},
+            "data": "hello-42-test-5-true",
+            "timing": {
+              "a": 1781404833533000000,
+              "b": 0
+            }
+          }
+        ],
+        "ts": 1781404833533
+      }
+    },
+    "response": {
+      "status": 200,
+      "headers": {
+        "content-type": "application/json",
+        "x-inngest-server-kind": "dev"
+      },
+      "body": null
     }
   }
 ]

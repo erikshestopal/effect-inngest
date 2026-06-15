@@ -260,7 +260,10 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
   //   - ctx.disable_immediate_execution false (executor allowed it)
   //   - resolved per-fn or per-client config not opted out
   const enterCheckpoint =
-    !requestedStepId && effectiveBody.ctx.fn_id !== "" && !effectiveBody.ctx.disable_immediate_execution;
+    !requestedStepId &&
+    effectiveBody.ctx.fn_id !== "" &&
+    !effectiveBody.ctx.disable_immediate_execution &&
+    effectiveBody.ctx.attempt === 0;
   const checkpointConfig = enterCheckpoint
     ? Option.fromNullishOr(Checkpoint.resolveConfig(fn.options.checkpointing, client.config.checkpointing))
     : Option.none<Checkpoint.CheckpointConfig>();

@@ -229,8 +229,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1Q9H76QH193X1JK88KYR5Y/async",
-      "path": "/v1/checkpoint/01KV1Q9H76QH193X1JK88KYR5Y/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV49JXX81ZVDJ1620QBYW61N/async",
+      "path": "/v1/checkpoint/01KV49JXX81ZVDJ1620QBYW61N/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -238,12 +238,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV1Q9H76QH193X1JK88KYR5Y",
+        "run_id": "01KV49JXX81ZVDJ1620QBYW61N",
         "fn_id": "ec9fcbd7-3dca-58a7-abca-e1a8ab8e6177",
         "qi_id": "MmdzdWpkNjU2ZThidTo6ZGVmYXVsdA==",
-        "request_id": "01KV1Q9H7AGVYPQHQX96BV5A85",
+        "request_id": "01KV49JXXMGVYPQHQX96BV5A85",
         "generation_id": 1,
-        "request_started_at": 1781395670255,
+        "request_started_at": 1781481961401,
         "steps": [
           {
             "id": "bdb36bb22deb169275b3094ba9005a29eeddd195",
@@ -278,12 +278,12 @@
             "transformedResultPromise": {},
             "data": 42,
             "timing": {
-              "a": 1781395670260000000,
+              "a": 1781481961409000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781395670261
+        "ts": 1781481961410
       }
     },
     "response": {
