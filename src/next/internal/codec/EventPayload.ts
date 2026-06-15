@@ -1,6 +1,7 @@
 import { Array as Arr, Effect, Option, Predicate, Schema } from "effect";
 import type { InngestFunction } from "../../../Function.js";
 import type * as InngestEvent from "../../../Event.js";
+import * as InngestEvents from "../../../Events.js";
 import type { ExecutionInput } from "../domain/ExecutionInput.js";
 import { eventSchemaFor, eventSchemas } from "../domain/FunctionDefinition.js";
 
@@ -11,7 +12,7 @@ export class EventDecodeError extends Schema.TaggedErrorClass<EventDecodeError>(
   cause: Schema.Unknown,
 }) {}
 
-export const schemaFor = eventSchemaFor;
+export const isFunctionInvoked = Schema.is(InngestEvents.FunctionInvoked);
 
 export const decodeSchema = <E extends EventSchema>(args: {
   readonly event: E;
@@ -50,7 +51,7 @@ export const decodeInvocation = <F extends InngestFunction.Any>(args: {
     );
   }
 
-  if (input.event.name === "inngest/function.invoked" && Predicate.isObject(input.event.data)) {
+  if (isFunctionInvoked(input.event)) {
     const { _inngest, ...payload } = input.event.data;
     return Option.match(Arr.head(eventSchemas(fn)), {
       onNone: () => Effect.succeed(payload as unknown as InngestFunction.EventType<F>),

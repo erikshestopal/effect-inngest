@@ -87,9 +87,12 @@ export const FunctionCancelled = InngestEvent.make(
  */
 export const FunctionInvoked = InngestEvent.make(
   "inngest/function.invoked",
-  Schema.Struct({
-    data: Schema.optional(Schema.Record(Schema.String, Schema.Unknown)),
-  }),
+  Schema.StructWithRest(
+    Schema.Struct({
+      _inngest: Schema.optionalKey(Schema.Record(Schema.String, Schema.Unknown)),
+    }),
+    [Schema.Record(Schema.String, Schema.Unknown)],
+  ),
 );
 
 /**

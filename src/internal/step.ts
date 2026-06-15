@@ -14,7 +14,7 @@ import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 import * as Memo from "../next/internal/domain/Memo.js";
 import * as EventPayload from "../next/internal/codec/EventPayload.js";
-import { eventSchemas } from "../next/internal/domain/FunctionDefinition.js";
+import { eventSchemaFor, eventSchemas } from "../next/internal/domain/FunctionDefinition.js";
 import type * as InngestEvent from "../Event.js";
 
 import {
@@ -137,7 +137,7 @@ const decodeEventData = <F extends InngestFunction.Any>(args: {
   readonly eventName: string;
   readonly eventData: unknown;
 }): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> =>
-  Option.match(EventPayload.schemaFor({ fn: args.fn, eventName: args.eventName }), {
+  Option.match(eventSchemaFor({ fn: args.fn, eventName: args.eventName }), {
     onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
     onSome: (event) =>
       EventPayload.decodeSchema({
@@ -157,7 +157,7 @@ const decodeInvocation = <F extends InngestFunction.Any>(args: {
     ).pipe(Effect.map((events) => events as unknown as InngestFunction.EventType<F>));
   }
 
-  if (args.request.event.name === "inngest/function.invoked" && Predicate.isObject(args.request.event.data)) {
+  if (EventPayload.isFunctionInvoked(args.request.event)) {
     const { _inngest, ...payload } = args.request.event.data;
     return Option.match(Arr.head(eventSchemas(args.fn)), {
       onNone: () => Effect.succeed(payload as unknown as InngestFunction.EventType<F>),
