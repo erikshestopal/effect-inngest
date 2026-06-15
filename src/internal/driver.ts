@@ -10,12 +10,10 @@ import * as Clock from "effect/Clock";
 import * as Context from "effect/Context";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
-import * as HashMap from "effect/HashMap";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import { pipe } from "effect/Function";
 import * as Predicate from "effect/Predicate";
-import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import type { InngestFunction } from "../Function.js";
 import { InngestClient } from "../Client.js";
@@ -26,6 +24,7 @@ import * as Protocol from "./protocol.js";
 import { StepInterrupt } from "./interrupts.js";
 import { createStepTools, buildHandlerContext, type HandlerContext } from "./step.js";
 import { OtelAttributes } from "./constants.js";
+import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 
 /** Trace context headers extracted from incoming request */
 export interface TraceHeaders {
@@ -84,7 +83,6 @@ export const execute = <F extends InngestFunction.Any, R>(
 ): Effect.Effect<ExecutionResult, never, R | InngestClient> =>
   Effect.gen(function* () {
     const client = yield* InngestClient;
-    const stepIdCounts = yield* Ref.make(HashMap.empty<string, number>());
     const headers = baseHeaders(client.config.framework);
     const requestStartedAt = yield* Clock.currentTimeMillis;
 
@@ -115,9 +113,10 @@ export const execute = <F extends InngestFunction.Any, R>(
         }),
     });
 
-    const runHandler: Effect.Effect<InngestFunction.Success<F>, unknown, R> = Effect.gen(function* () {
+    const runHandler = Effect.gen(function* () {
       const rootFiberId = yield* Effect.fiberId;
-      const step = createStepTools(request, appName, stepIdCounts, rootFiberId, checkpointState);
+      const identity = yield* StepIdentity;
+      const step = createStepTools(request, appName, identity, rootFiberId, checkpointState);
       const context = yield* buildHandlerContext<F>(fn, step, request);
       return yield* handler(context);
     });
@@ -126,24 +125,17 @@ export const execute = <F extends InngestFunction.Any, R>(
      * Drain any unflushed buffered opcodes (no-op outside checkpoint mode).
      * Used at every terminal branch so step results are never lost.
      */
-    const drainBuffer: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Option.match(
-      checkpointState,
-      {
-        onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
-        onSome: (state) => state.drain,
-      },
-    );
+    const drainBuffer = Option.match(checkpointState, {
+      onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
+      onSome: (state) => state.drain,
+    });
 
-    const drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Option.match(
-      checkpointState,
-      {
-        onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
-        onSome: (state) => state.drainPlanned,
-      },
-    );
+    const drainPlanned = Option.match(checkpointState, {
+      onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
+      onSome: (state) => state.drainPlanned,
+    });
 
-    type DeadlineResult = Option.Option<InngestFunction.Success<F>>;
-    const handlerWithDeadline: Effect.Effect<DeadlineResult, unknown, R> = Option.match(checkpointState, {
+    const handlerWithDeadline = Option.match(checkpointState, {
       onNone: () => Effect.map(runHandler, Option.some<InngestFunction.Success<F>>),
       onSome: (state) =>
         Effect.raceFirst(
@@ -157,6 +149,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     });
 
     const result = yield* Effect.scoped(handlerWithDeadline).pipe(
+      Effect.provide(StepIdentity.layer),
       Effect.flatMap((maybeValue) =>
         Effect.gen(function* () {
           const planned = yield* drainPlanned;

@@ -284,6 +284,8 @@ Responsibilities:
 
 The public `ctx.step` object remains the user-facing API. Any internal `Step` service is an implementation detail, not a new user requirement.
 
+Do not treat the current `createStepTools(request, appName, identity, rootFiberId, checkpointState)` factory shape as the target architecture. It is only a compatibility seam while `step.ts` is being strangled. The runtime should eventually provide a request-scoped step-tools service/layer that reads its dependencies from context instead of having the driver manually collect services and thread them through a factory argument list.
+
 ### `internal/client`
 
 Client modules perform Inngest API calls and adapt `HttpClient`.
@@ -384,6 +386,8 @@ New owner: internal/runtime/StepIdentity.ts
 Compatibility seam: step.ts getInfo delegates to StepIdentity
 First production call site: every step operation through createStepTools
 Validation: memo tests, protocol step ordering tests, native protocol parity tests
+
+Follow-up: replace the temporary createStepTools factory seam with a request-scoped runtime service/layer. Driver-level code should not manually assemble StepIdentity, root fiber id, checkpoint state, request body, and app name into an ad hoc factory call.
 
 Behavior: interpret memoized step state
 Current owner: internal/memo.ts plus internal/step.ts getMemo branching

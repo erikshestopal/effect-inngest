@@ -5,11 +5,9 @@
 import * as Arr from "effect/Array";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
-import * as HashMap from "effect/HashMap";
 import * as Match from "effect/Match";
 import * as Option from "effect/Option";
 import * as Predicate from "effect/Predicate";
-import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import { pipe } from "effect/Function";
 import { InngestClient } from "../Client.js";
@@ -21,6 +19,7 @@ import { OtelAttributes } from "./constants.js";
 import { decodeMemo, type Memo } from "./memo.js";
 import { InngestDuration } from "../next/internal/wire/Duration.js";
 import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
+import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 
 import {
   StepInterrupt,
@@ -39,15 +38,6 @@ export { StepInterrupt, type StepInfo } from "./interrupts.js";
 const isStepInterrupt: (u: unknown) => u is StepInterrupt = Predicate.isTagged("StepInterrupt") as (
   u: unknown,
 ) => u is StepInterrupt;
-
-/** @internal */
-const hashStepId = (id: string, repeatIndex: number = 0): Effect.Effect<string> => {
-  const effectiveId = repeatIndex > 0 ? `${id}:${repeatIndex}` : id;
-  return Effect.map(
-    Effect.promise(() => globalThis.crypto.subtle.digest("SHA-1", new TextEncoder().encode(effectiveId))),
-    (buffer) => new Uint8Array(buffer).toHex(),
-  );
-};
 
 const errorOtelAttributes = (err: unknown): Record<string, string> => {
   const attrs: Record<string, string> = {};
@@ -195,36 +185,20 @@ export interface HandlerContext<F extends InngestFunction.Any> {
   readonly run: RunContext;
 }
 
-const normalizeOpts = (opts: StepOptionsOrId): { id: string; name: string } =>
-  Predicate.isString(opts) ? { id: opts, name: opts } : { id: opts.id, name: opts.name ?? opts.id };
-
 const stepError = (stepId: string, message: string, opts?: { noRetry?: boolean; cause?: unknown }) =>
   Effect.fail(StepError.make({ stepId, message, noRetry: opts?.noRetry, cause: opts?.cause }));
 
 export const createStepTools = (
   request: Protocol.SDKRequestBody,
   appName: string,
-  stepIdCounts: Ref.Ref<HashMap.HashMap<string, number>>,
+  identity: StepIdentity["Service"],
   rootFiberId: number,
   checkpoint: Option.Option<CheckpointState> = Option.none(),
 ): StepTools => {
   const ctx = request.ctx;
   const steps = request.steps as Record<string, unknown>;
-  const stepOrder = Ref.makeUnsafe(0);
 
-  const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => {
-    const { id, name } = normalizeOpts(opts);
-    const rawStepArg = opts;
-    return Effect.gen(function* () {
-      const order = yield* Ref.modify(stepOrder, (current) => [current, current + 1]);
-      const count = yield* Ref.modify(stepIdCounts, (map) => {
-        const current = Option.getOrElse(HashMap.get(map, id), () => 0);
-        return [current, HashMap.set(map, id, current + 1)];
-      });
-      const hash = yield* hashStepId(id, count);
-      return { id, name, hash, order, rawStepArg };
-    });
-  };
+  const getInfo = (opts: StepOptionsOrId): Effect.Effect<StepInfo> => identity.resolve(opts);
 
   const getMemo = (hash: string): Memo => decodeMemo(steps[hash]);
   const canExecute = (hash: string) => ctx.step_id === hash || ctx.step_id === "step";
