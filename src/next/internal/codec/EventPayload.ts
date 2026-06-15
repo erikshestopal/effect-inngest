@@ -1,6 +1,7 @@
 import { Effect, Option, Predicate, Schema } from "effect";
 import type { InngestFunction } from "../../../Function.js";
 import type { ExecutionInput } from "../domain/ExecutionInput.js";
+import { eventSchemaFor } from "../domain/FunctionDefinition.js";
 
 export type EventSchema<A = unknown> = Schema.Codec<A, unknown, never, never> & {
   readonly identifier: string;
@@ -11,22 +12,10 @@ export class EventDecodeError extends Schema.TaggedErrorClass<EventDecodeError>(
   cause: Schema.Unknown,
 }) {}
 
-const isEventTrigger = (trigger: InngestFunction.Any["triggers"][number]): trigger is { readonly event: EventSchema } =>
-  Predicate.hasProperty(trigger, "event");
-
 export const schemaFor = (args: {
   readonly fn: InngestFunction.Any;
   readonly eventName: string;
-}): Option.Option<EventSchema> => {
-  const { fn, eventName } = args;
-  const triggers = fn.triggers.filter(isEventTrigger);
-  return Option.fromNullishOr(
-    triggers.find((trigger) => trigger.event.identifier === eventName)?.event ?? triggers[0]?.event,
-  );
-};
-
-const withEventTag = (args: { readonly event: EventSchema; readonly payload: unknown }): unknown =>
-  Predicate.isObject(args.payload) ? { ...args.payload, _tag: args.event.identifier } : args.payload;
+}): Option.Option<EventSchema> => eventSchemaFor(args);
 
 export const decode = <F extends InngestFunction.Any>(args: {
   readonly fn: F;
@@ -36,7 +25,7 @@ export const decode = <F extends InngestFunction.Any>(args: {
   Option.match(schemaFor(args), {
     onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
     onSome: (event) =>
-      Schema.decodeUnknownEffect(Schema.toCodecJson(event))(withEventTag({ event, payload: args.eventData })).pipe(
+      Schema.decodeUnknownEffect(Schema.toCodecJson(event))(args.eventData).pipe(
         Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
         Effect.mapError((cause) => EventDecodeError.make({ eventName: args.eventName, cause })),
       ),

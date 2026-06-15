@@ -17,6 +17,10 @@ rule:
         any:
           - pattern: $VALUE.pipe($$$ARGS)
           - pattern: Effect.forEach($$$ARGS)
+          - pattern: Effect.andThen($$$ARGS)
           - pattern: Effect.provideService($$$ARGS)
+          - pattern: Match.tag($$$ARGS)
           - pattern: MutableHashMap.set($$$ARGS)
+          - pattern: Protocol.sendEventStepRun($$$ARGS)
           - pattern: Schema.decodeUnknownEffect($$$ARGS)
+          - pattern: $STATE.planOpcode($$$ARGS)
