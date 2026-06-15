@@ -7,14 +7,7 @@
  *
  * @internal
  */
-import * as Clock from "effect/Clock";
-import * as Duration from "effect/Duration";
-import * as Effect from "effect/Effect";
-import * as Option from "effect/Option";
-import * as Predicate from "effect/Predicate";
-import * as Ref from "effect/Ref";
-import * as Result from "effect/Result";
-import * as Schema from "effect/Schema";
+import { Clock, Duration, Effect, Option, Predicate, Ref, Result, Schema } from "effect";
 import { InngestDuration } from "../next/internal/wire/Duration.js";
 import type * as Protocol from "./protocol.js";
 

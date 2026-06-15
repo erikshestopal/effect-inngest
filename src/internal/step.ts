@@ -2,14 +2,7 @@
  * Internal step tools implementation.
  * @internal
  */
-import * as Arr from "effect/Array";
-import * as Duration from "effect/Duration";
-import * as Effect from "effect/Effect";
-import * as Match from "effect/Match";
-import * as Option from "effect/Option";
-import * as Predicate from "effect/Predicate";
-import * as Schema from "effect/Schema";
-import { pipe } from "effect/Function";
+import { Array as Arr, Duration, Effect, Match, Option, Predicate, Schema, pipe } from "effect";
 import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
 import type { CheckpointState } from "./checkpoint.js";

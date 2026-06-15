@@ -2,8 +2,7 @@
  * Internal error types for the Effect Inngest SDK.
  * @internal
  */
-import * as Predicate from "effect/Predicate";
-import * as Schema from "effect/Schema";
+import { Predicate, Schema } from "effect";
 
 /**
  * @internal

@@ -4,10 +4,7 @@
  */
 import * as Headers from "effect/unstable/http/Headers";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as Effect from "effect/Effect";
-import { dual } from "effect/Function";
-import * as Option from "effect/Option";
-import * as Schema from "effect/Schema";
+import { Effect, Function, Option, Schema } from "effect";
 import * as Protocol from "../protocol.js";
 import { Signature, SignatureError, SignatureHeader, SignedPayload } from "../signature.js";
 export { SignatureError } from "../signature.js";
@@ -21,7 +18,7 @@ export const bodyUint8Array = Effect.fn("effect-inngest/serve/request/bodyUint8A
 export const verifySignature: {
   (request: HttpServerRequest.HttpServerRequest): (body: Uint8Array) => Effect.Effect<void, SignatureError, Signature>;
   (body: Uint8Array, request: HttpServerRequest.HttpServerRequest): Effect.Effect<void, SignatureError, Signature>;
-} = dual(2, (body: Uint8Array, request: HttpServerRequest.HttpServerRequest) =>
+} = Function.dual(2, (body: Uint8Array, request: HttpServerRequest.HttpServerRequest) =>
   Effect.gen(function* () {
     const sig = yield* Signature;
     const signature = yield* Option.match(Headers.get(request.headers, Protocol.Headers.Signature), {

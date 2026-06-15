@@ -3,14 +3,7 @@
  * @internal
  */
 import * as NodeCrypto from "node:crypto";
-import * as Arr from "effect/Array";
-import * as Context from "effect/Context";
-import * as DateTime from "effect/DateTime";
-import * as Encoding from "effect/Encoding";
-import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
-import * as Option from "effect/Option";
-import * as Schema from "effect/Schema";
+import { Array as Arr, Context, DateTime, Encoding, Effect, Layer, Option, Schema } from "effect";
 import { InngestClient } from "../Client.js";
 
 export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {

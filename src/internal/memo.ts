@@ -2,10 +2,7 @@
  * Step memoization schemas for decoding cached step results.
  * @internal
  */
-import * as Option from "effect/Option";
-import * as Predicate from "effect/Predicate";
-import * as Schema from "effect/Schema";
-import * as SchemaTransformation from "effect/SchemaTransformation";
+import { Option, Predicate, Schema, SchemaTransformation } from "effect";
 
 // Wire format: require property KEY to exist (not just value to be defined)
 const hasKey =

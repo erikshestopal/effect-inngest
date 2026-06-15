@@ -2,7 +2,7 @@
  * SDK execution request interpreter boundary.
  * @internal
  */
-import * as Schema from "effect/Schema";
+import { Schema } from "effect";
 
 export class FunctionExecutionNotFound extends Schema.TaggedErrorClass<FunctionExecutionNotFound>()(
   "FunctionExecutionNotFound",

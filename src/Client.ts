@@ -4,16 +4,7 @@
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
-import * as Clock from "effect/Clock";
-import * as Config from "effect/Config";
-import * as Context from "effect/Context";
-import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
-import * as Option from "effect/Option";
-import * as Predicate from "effect/Predicate";
-import * as Ref from "effect/Ref";
-import * as Schedule from "effect/Schedule";
-import * as Schema from "effect/Schema";
+import { Clock, Config, Context, Effect, Layer, Option, Predicate, Ref, Schedule, Schema } from "effect";
 import { CheckpointApiError, type CheckpointingOption } from "./internal/checkpoint.js";
 import * as Protocol from "./internal/protocol.js";
 import { hashSigningKey } from "./internal/signature.js";

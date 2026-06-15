@@ -1,9 +1,7 @@
 /**
  * @since 0.1.0
  */
-import * as Context from "effect/Context";
-import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
+import { Context, Effect, Layer } from "effect";
 import type { InngestFunction } from "./Function.js";
 import * as ServeHttp from "./internal/serve/http.js";
 

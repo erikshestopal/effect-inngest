@@ -2,8 +2,7 @@
  * StepInterrupt schema and factory functions.
  * @internal
  */
-import * as Predicate from "effect/Predicate";
-import * as Schema from "effect/Schema";
+import { Predicate, Schema } from "effect";
 import * as Protocol from "./protocol.js";
 
 /** @internal */

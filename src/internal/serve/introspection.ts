@@ -2,7 +2,7 @@
  * Function introspection boundary.
  * @internal
  */
-import * as Schema from "effect/Schema";
+import { Schema } from "effect";
 import * as Protocol from "../protocol.js";
 
 export class IntrospectionSucceeded extends Schema.Class<IntrospectionSucceeded>(

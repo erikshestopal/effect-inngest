@@ -2,8 +2,7 @@
  * Wire protocol schemas and opcode factories for Inngest communication.
  * @internal
  */
-import { Effect, Predicate, SchemaTransformation, Struct } from "effect";
-import * as Schema from "effect/Schema";
+import { Effect, Predicate, SchemaTransformation, Struct, Schema } from "effect";
 
 const stripTopLevelTag = (value: unknown): unknown => {
   if (Predicate.isObject(value)) {

@@ -4,17 +4,7 @@
  */
 import * as Headers from "effect/unstable/http/Headers";
 import * as HttpTraceContext from "effect/unstable/http/HttpTraceContext";
-import * as Cause from "effect/Cause";
-import * as Chunk from "effect/Chunk";
-import * as Clock from "effect/Clock";
-import * as Context from "effect/Context";
-import * as Duration from "effect/Duration";
-import * as Effect from "effect/Effect";
-import * as Layer from "effect/Layer";
-import * as Option from "effect/Option";
-import { pipe } from "effect/Function";
-import * as Predicate from "effect/Predicate";
-import * as Schema from "effect/Schema";
+import { Cause, Chunk, Clock, Context, Duration, Effect, Layer, Option, pipe, Predicate, Schema } from "effect";
 import type { InngestFunction } from "../Function.js";
 import { InngestClient } from "../Client.js";
 import * as Checkpoint from "./checkpoint.js";

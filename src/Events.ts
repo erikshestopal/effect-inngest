@@ -3,7 +3,7 @@
  * Use these as triggers to react to function lifecycle events.
  * @since 0.1.0
  */
-import * as Schema from "effect/Schema";
+import { Schema } from "effect";
 
 /**
  * Error structure used in internal Inngest events.
