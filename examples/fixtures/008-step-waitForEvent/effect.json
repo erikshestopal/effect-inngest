@@ -285,16 +285,18 @@
       },
       "body": [
         {
-          "op": "WaitForEvent",
           "id": "530a9d53676b712ef28992a4ad38a5b729ae2491",
-          "name": "wait-for-complete",
-          "mode": "async",
+          "op": "WaitForEvent",
+          "name": "demo/wait-complete",
+          "displayName": "wait-for-complete",
           "opts": {
-            "event": "demo/wait-complete",
             "timeout": "5m",
             "if": "async.data.orderId == \"order-008\""
           },
-          "displayName": "wait-for-complete"
+          "data": null,
+          "userland": {
+            "id": "wait-for-complete"
+          }
         }
       ]
     }
@@ -440,7 +442,7 @@
             },
             "id": "fixture-effect-008-step-waitForEvent-0-after-0-0",
             "name": "demo/wait-complete",
-            "ts": 1781404742743,
+            "ts": 1781484639521,
             "user": {}
           }
         },

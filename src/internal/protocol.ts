@@ -213,16 +213,14 @@ export const stepFailed = (info: StepInfo, error: UserError): GeneratorOpcode =>
   });
 
 export const sleep = (info: StepInfo, duration: string): GeneratorOpcode =>
-  // Spec §5.3.2 requires `opts.duration`. The Inngest executor also accepts
-  // `name: duration` (de facto inngest-js behavior); we emit both so both
-  // the spec-strict path and the official-SDK-lenient path see a value.
   GeneratorOpcode.make({
     op: Opcode.Sleep,
     id: info.hash,
     name: duration,
     displayName: info.name,
-    mode: "async",
-    opts: { duration },
+    opts: {},
+    userland: { id: info.id },
+    data: null,
   });
 
 export const waitForEvent = (info: StepInfo, opts: { event: string; timeout: string; if?: string }): GeneratorOpcode =>
@@ -231,20 +229,27 @@ export const waitForEvent = (info: StepInfo, opts: { event: string; timeout: str
     id: info.hash,
     name: opts.event,
     displayName: info.name,
-    mode: "async",
-    opts,
+    opts: {
+      timeout: opts.timeout,
+      ...(Predicate.isNotUndefined(opts.if) ? { if: opts.if } : {}),
+    },
+    userland: { id: info.id },
+    data: null,
   });
 
 export const invokeFunction = (
   info: StepInfo,
-  opts: { function_id: string; payload: unknown; timeout: string },
+  opts: { function_id: string; payload: unknown; timeout?: string },
 ): GeneratorOpcode =>
   GeneratorOpcode.make({
     op: Opcode.InvokeFunction,
     id: info.hash,
     displayName: info.name,
-    mode: "async",
-    opts,
+    opts: {
+      payload: opts.payload,
+      function_id: opts.function_id,
+      ...(Predicate.isNotUndefined(opts.timeout) ? { timeout: opts.timeout } : {}),
+    },
     userland: { id: info.id },
     data: null,
   });

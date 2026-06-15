@@ -679,8 +679,8 @@ const recordExample = async (runtimeName, example) => {
     }
 
     await waitForExecutionRecordings(server, examplePath(example.id), expectedExecutionCount(example));
-    await removeSyncedApp(sdkUrl);
     await sleep(drainDelayMs(example));
+    await removeSyncedApp(sdkUrl);
     await writeFixture(example.id, runtimeName);
     console.log(
       `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,

@@ -228,9 +228,9 @@
       },
       "body": [
         {
-          "displayName": "call-child",
-          "op": "InvokeFunction",
           "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+          "op": "InvokeFunction",
+          "displayName": "call-child",
           "opts": {
             "payload": {
               "data": {}
@@ -251,6 +251,135 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-failing-child&stepId=step",
+      "path": "/examples/028-invoke-failure",
+      "query": {
+        "fnId": "examples-028-invoke-failure-failing-child",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "b469a03b-9aa5-51f5-878b-747134678d2c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "correlation_id": "01KV4BY3S5QD4MFHPM8PYQFPSJ.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+              "expire": 1813020425031,
+              "fn_id": "examples-028-invoke-failure-failing-child",
+              "gid": "3627d7bf-b973-4ff5-9ba5-30d1dad8ed7e",
+              "isr": {
+                "dsid": "c6ff894c97a0b9cd",
+                "dstp": "00-c951a65d579bcef56040857483da2841-6276a8538ad4c1f6-00",
+                "tp": "00-c951a65d579bcef56040857483da2841-c6ff894c97a0b9cd-01",
+                "ts": ""
+              },
+              "name": "call-child",
+              "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+              "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "d26f07e4bd59ce60",
+                  "traceparent": "00-9fee5c54351d184a390edb84d350c106-7d8977260173c1de-01"
+                },
+                "ts": "2026-06-15T00:47:05.031893Z"
+              }
+            }
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "correlation_id": "01KV4BY3S5QD4MFHPM8PYQFPSJ.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+                "expire": 1813020425031,
+                "fn_id": "examples-028-invoke-failure-failing-child",
+                "gid": "3627d7bf-b973-4ff5-9ba5-30d1dad8ed7e",
+                "isr": {
+                  "dsid": "c6ff894c97a0b9cd",
+                  "dstp": "00-c951a65d579bcef56040857483da2841-6276a8538ad4c1f6-00",
+                  "tp": "00-c951a65d579bcef56040857483da2841-c6ff894c97a0b9cd-01",
+                  "ts": ""
+                },
+                "name": "call-child",
+                "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                "source_fn_v": 1,
+                "tc": {
+                  "ctx": {
+                    "sid": "d26f07e4bd59ce60",
+                    "traceparent": "00-9fee5c54351d184a390edb84d350c106-7d8977260173c1de-01"
+                  },
+                  "ts": "2026-06-15T00:47:05.031893Z"
+                }
+              }
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.invoked",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 400,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-no-retry": "true",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": {
+        "name": "Error",
+        "message": "Child always fails",
+        "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)",
+        "__serialized": true
+      }
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step",
       "path": "/examples/028-invoke-failure",
@@ -305,8 +434,10 @@
         "steps": {
           "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
             "error": {
-              "message": "could not find function with ID: examples-028-invoke-failure-failing-child",
-              "name": "Error"
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
             }
           }
         },
@@ -330,7 +461,7 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "status": "caught-error",
-            "error": "could not find function with ID: examples-028-invoke-failure-failing-child"
+            "error": "Child always fails"
           }
         }
       ]

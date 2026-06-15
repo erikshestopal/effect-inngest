@@ -209,14 +209,15 @@
       },
       "body": [
         {
-          "op": "Sleep",
           "id": "daaad336276d15594d0e765f96c17cd746bf4971",
+          "op": "Sleep",
           "name": "1s",
-          "mode": "async",
-          "opts": {
-            "duration": "1s"
-          },
-          "displayName": "wait"
+          "displayName": "wait",
+          "opts": {},
+          "data": null,
+          "userland": {
+            "id": "wait"
+          }
         }
       ]
     }

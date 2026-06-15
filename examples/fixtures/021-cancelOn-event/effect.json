@@ -219,14 +219,15 @@
       },
       "body": [
         {
-          "op": "Sleep",
           "id": "859e1632ab0214dcec1dc35596a5a8d8169a433d",
+          "op": "Sleep",
           "name": "3s",
-          "mode": "async",
-          "opts": {
-            "duration": "3s"
-          },
-          "displayName": "wait-1"
+          "displayName": "wait-1",
+          "opts": {},
+          "data": null,
+          "userland": {
+            "id": "wait-1"
+          }
         }
       ]
     }
@@ -238,40 +239,38 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1ZZHMTGYPS619E8ZZYTYVT/async",
-      "path": "/v1/checkpoint/01KV1ZZHMTGYPS619E8ZZYTYVT/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4C89K4V9AWJZV7TNPHZJ71/async",
+      "path": "/v1/checkpoint/01KV4C89K4V9AWJZV7TNPHZJ71/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
         "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>"
+        "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV1ZZHMTGYPS619E8ZZYTYVT",
+        "run_id": "01KV4C89K4V9AWJZV7TNPHZJ71",
         "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
         "qi_id": "Z2V3NWNmdnZhY3N6OjpkZWZhdWx0",
-        "request_id": "01KV1ZZHN2ESFG43CFKHPDRBJ3",
+        "request_id": "01KV4C89KDESFG43CFKHPDRBJ3",
         "generation_id": 1,
-        "request_started_at": 1781404780206,
+        "request_started_at": 1781484758643,
         "steps": [
           {
-            "op": "StepRun",
             "id": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
+            "mode": "sync",
+            "op": "StepRun",
             "name": "step-1",
             "displayName": "step-1",
-            "mode": "sync",
-            "opts": {},
             "userland": {
               "id": "step-1"
             },
+            "opts": {},
             "rawArgs": ["step-1", null],
             "hashedId": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
+            "promise": {},
             "fulfilled": true,
             "hasStepState": true,
             "handled": true,
-            "promise": {},
             "middleware": {
               "stepInfo": {
                 "hashedId": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
@@ -289,12 +288,12 @@
             "transformedResultPromise": {},
             "data": "Started task task-021",
             "timing": {
-              "a": 1781404780208000000,
+              "a": 1781484758645000000,
               "b": 0
             }
           }
         ],
-        "ts": 1781404780209
+        "ts": 1781484758646
       }
     },
     "response": {

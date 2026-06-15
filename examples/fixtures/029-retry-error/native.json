@@ -217,22 +217,22 @@
           "id": "89eb82ebf637b47026f61e0cd02e76a1fdb88aae",
           "op": "StepError",
           "name": "flaky-step",
-          "opts": {},
           "displayName": "flaky-step",
-          "userland": {
-            "id": "flaky-step"
-          },
           "error": {
             "name": "Error",
             "message": "Attempt 0 failed",
             "stack": "RetryAfterError: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/029-retry-error.ts:16:21)\n    at processTicksAndRejections (native:7:39)",
             "__serialized": true
           },
-          "timing": {
-            "a": 1781395939903000000,
-            "b": 0
+          "data": null,
+          "opts": {},
+          "userland": {
+            "id": "flaky-step"
           },
-          "data": null
+          "timing": {
+            "a": 1781484430031000000,
+            "b": 0
+          }
         }
       ]
     }
@@ -321,7 +321,7 @@
           },
           "data": 2,
           "timing": {
-            "a": 1781395940004000000,
+            "a": 1781484431006000000,
             "b": 0
           }
         }

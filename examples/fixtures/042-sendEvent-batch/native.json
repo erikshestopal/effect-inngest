@@ -231,7 +231,7 @@
       "headers": {
         "content-type": "application/json",
         "user-agent": "<sdk>",
-        "x-inngest-event-id-seed": "1781396062675,Me/lzfaN6Ol+Vg==",
+        "x-inngest-event-id-seed": "1781484493365,QCjREr3vD5Qwxg==",
         "x-inngest-framework": "bun",
         "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
@@ -243,7 +243,7 @@
             "userId": "u1",
             "message": "First notification"
           },
-          "ts": 1781396062675
+          "ts": 1781484493365
         },
         {
           "name": "demo/notification",
@@ -251,7 +251,7 @@
             "userId": "u2",
             "message": "Second notification"
           },
-          "ts": 1781396062675
+          "ts": 1781484493365
         },
         {
           "name": "demo/notification",
@@ -259,7 +259,7 @@
             "userId": "u3",
             "message": "Third notification"
           },
-          "ts": 1781396062675
+          "ts": 1781484493365
         }
       ]
     },
@@ -270,7 +270,7 @@
         "x-inngest-server-kind": "dev"
       },
       "body": {
-        "ids": ["01KV1QNGEK67QYBKFPHQMEJZJQ", "01KV1QNGEK67QYBKFPHQMEJZJR", "01KV1QNGEK67QYBKFPHQMEJZJS"],
+        "ids": ["01KV4C06HN80MD24NXXW7S8C67", "01KV4C06HN80MD24NXXW7S8C68", "01KV4C06HN80MD24NXXW7S8C69"],
         "status": 200
       }
     }
@@ -282,8 +282,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV1QNGDNWRY47WHMEDZAJ19P/async",
-      "path": "/v1/checkpoint/01KV1QNGDNWRY47WHMEDZAJ19P/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4C06H4TJCFWAFPJRVTRR3Q/async",
+      "path": "/v1/checkpoint/01KV4C06H4TJCFWAFPJRVTRR3Q/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -291,12 +291,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV1QNGDNWRY47WHMEDZAJ19P",
+        "run_id": "01KV4C06H4TJCFWAFPJRVTRR3Q",
         "fn_id": "d5e11071-88a3-52ab-93b8-18296d5e47a6",
         "qi_id": "MjEyNXIycDI1YWFpMTo6ZGVmYXVsdA==",
-        "request_id": "01KV1QNGE3C3ZZTMFQ65YX7Z4K",
+        "request_id": "01KV4C06HAC3ZZTMFQ65YX7Z4K",
         "generation_id": 1,
-        "request_started_at": 1781396062665,
+        "request_started_at": 1781484493357,
         "steps": [
           {
             "id": "3491af6b98f899d37b283dabc2d534c741bf3f74",
@@ -304,11 +304,11 @@
             "op": "StepRun",
             "name": "sendEvent",
             "displayName": "send-notifications",
-            "opts": {
-              "type": "step.sendEvent"
-            },
             "userland": {
               "id": "send-notifications"
+            },
+            "opts": {
+              "type": "step.sendEvent"
             },
             "rawArgs": [
               "send-notifications",
@@ -357,15 +357,15 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV1QNGEK67QYBKFPHQMEJZJQ", "01KV1QNGEK67QYBKFPHQMEJZJR", "01KV1QNGEK67QYBKFPHQMEJZJS"]
+              "ids": ["01KV4C06HN80MD24NXXW7S8C67", "01KV4C06HN80MD24NXXW7S8C68", "01KV4C06HN80MD24NXXW7S8C69"]
             },
             "timing": {
-              "a": 1781396062674000000,
+              "a": 1781484493364000000,
               "b": 3000000
             }
           }
         ],
-        "ts": 1781396062678
+        "ts": 1781484493368
       }
     },
     "response": {

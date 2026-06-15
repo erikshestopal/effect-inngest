@@ -213,26 +213,26 @@
           "id": "a602e216eb44a3ac5e096036eeaaef6bb9159677",
           "op": "StepFailed",
           "name": "fail",
-          "opts": {},
           "displayName": "fail",
-          "userland": {
-            "id": "fail"
-          },
           "error": {
             "name": "Error",
             "message": "No retry",
             "stack": "NonRetriableError: No retry\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/012-error-non-retriable.ts:12:19)\n    at processTicksAndRejections (native:7:39)",
             "__serialized": true
           },
-          "timing": {
-            "a": 1781395761337000000,
-            "b": 0
-          },
           "data": {
             "__serialized": true,
             "name": "Error",
             "message": "No retry",
             "stack": ""
+          },
+          "opts": {},
+          "userland": {
+            "id": "fail"
+          },
+          "timing": {
+            "a": 1781484345129000000,
+            "b": 0
           }
         }
       ]

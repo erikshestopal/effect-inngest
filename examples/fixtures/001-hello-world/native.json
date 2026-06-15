@@ -4,6 +4,7 @@
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
+      "sequence": 1,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/001-hello-world",
       "path": "/examples/001-hello-world",
@@ -40,6 +41,7 @@
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
+      "sequence": 2,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/001-hello-world",
       "path": "/examples/001-hello-world",
@@ -71,6 +73,7 @@
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
+      "sequence": 3,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -140,8 +143,9 @@
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
+      "sequence": 4,
       "method": "POST",
-      "url": "http://localhost:19998/examples/001-hello-world?fnId=examples-001-hello-world-hello-world&stepId=step",
+      "url": "http://127.0.0.1:19998/examples/001-hello-world?fnId=examples-001-hello-world-hello-world&stepId=step",
       "path": "/examples/001-hello-world",
       "query": {
         "fnId": "examples-001-hello-world-hello-world",

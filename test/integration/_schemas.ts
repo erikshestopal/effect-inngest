@@ -27,15 +27,16 @@ export const StepErrorResponse = Schema.Array(
   }),
 );
 
-/** Sleep opcode response — spec §5.3.2 requires `opts.duration` */
+/** Sleep opcode response — native SDK v4 uses `name` for the duration/timestamp. */
 export const SleepOpcodeResponse = Schema.Array(
   Schema.Struct({
     op: Schema.String,
     id: Schema.String,
     name: Schema.String,
     displayName: Schema.String,
-    mode: Schema.Literal("async"),
-    opts: Schema.Struct({ duration: Schema.String }),
+    opts: Schema.Record(Schema.String, Schema.Never),
+    userland: Schema.Struct({ id: Schema.String }),
+    data: Schema.Null,
   }),
 );
 
@@ -47,10 +48,11 @@ export const WaitForEventOpcodeResponse = Schema.Array(
     name: Schema.String,
     displayName: Schema.String,
     opts: Schema.Struct({
-      event: Schema.String,
       timeout: Schema.String,
       if: Schema.optional(Schema.String),
     }),
+    userland: Schema.Struct({ id: Schema.String }),
+    data: Schema.Null,
   }),
 );
 
@@ -59,16 +61,15 @@ export const InvokeFunctionResponse = Schema.Array(
   Schema.Struct({
     op: Schema.String,
     id: Schema.String,
-    name: Schema.optional(Schema.String),
-    mode: Schema.String,
     displayName: Schema.String,
-    data: Schema.optional(Schema.Unknown),
+    data: Schema.Null,
+    userland: Schema.Struct({ id: Schema.String }),
     opts: Schema.Struct({
       function_id: Schema.String,
       payload: Schema.Struct({
         data: Schema.Unknown,
       }),
-      timeout: Schema.String,
+      timeout: Schema.optional(Schema.String),
     }),
   }),
 );

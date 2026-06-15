@@ -213,22 +213,22 @@
           "id": "3517117e68ff1d5e54b6c980def4df01e09941ea",
           "op": "StepError",
           "name": "risky-step",
-          "opts": {},
           "displayName": "risky-step",
-          "userland": {
-            "id": "risky-step"
-          },
           "error": {
             "name": "Error",
             "message": "Something went wrong",
             "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
             "__serialized": true
           },
-          "timing": {
-            "a": 1781395900370000000,
-            "b": 0
+          "data": null,
+          "opts": {},
+          "userland": {
+            "id": "risky-step"
           },
-          "data": null
+          "timing": {
+            "a": 1781484415253000000,
+            "b": 0
+          }
         }
       ]
     }
@@ -311,22 +311,22 @@
           "id": "3517117e68ff1d5e54b6c980def4df01e09941ea",
           "op": "StepError",
           "name": "risky-step",
-          "opts": {},
           "displayName": "risky-step",
-          "userland": {
-            "id": "risky-step"
-          },
           "error": {
             "name": "Error",
             "message": "Something went wrong",
             "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
             "__serialized": true
           },
-          "timing": {
-            "a": 1781395901384000000,
-            "b": 0
+          "data": null,
+          "opts": {},
+          "userland": {
+            "id": "risky-step"
           },
-          "data": null
+          "timing": {
+            "a": 1781484416259000000,
+            "b": 0
+          }
         }
       ]
     }

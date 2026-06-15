@@ -220,10 +220,10 @@
           "data": null
         },
         {
-          "displayName": "short-wait",
-          "op": "Sleep",
           "id": "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
+          "op": "Sleep",
           "name": "2s",
+          "displayName": "short-wait",
           "opts": {},
           "userland": {
             "id": "short-wait"
@@ -331,10 +331,10 @@
             "id": "notify"
           },
           "data": {
-            "ids": ["01KV1QNR2FXCEGQ76ETMFHXYRT"]
+            "ids": ["01KV4C0B77EW5EFEPE22K8H24M"]
           },
           "timing": {
-            "a": 1781396070479000000,
+            "a": 1781484498151000000,
             "b": 4000000
           }
         }
@@ -425,7 +425,7 @@
           },
           "data": 42,
           "timing": {
-            "a": 1781396070482000000,
+            "a": 1781484498153000000,
             "b": 0
           }
         }
@@ -445,7 +445,7 @@
       "headers": {
         "content-type": "application/json",
         "user-agent": "<sdk>",
-        "x-inngest-event-id-seed": "1781396070479,6x0LnM7VHx77GQ==",
+        "x-inngest-event-id-seed": "1781484498151,dwrnus4QpoiIkw==",
         "x-inngest-framework": "bun",
         "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
@@ -456,7 +456,7 @@
           "data": {
             "source": "parallel-mixed-function"
           },
-          "ts": 1781396070479
+          "ts": 1781484498151
         }
       ]
     },
@@ -467,7 +467,7 @@
         "x-inngest-server-kind": "dev"
       },
       "body": {
-        "ids": ["01KV1QNR2FXCEGQ76ETMFHXYRT"],
+        "ids": ["01KV4C0B77EW5EFEPE22K8H24M"],
         "status": 200
       }
     }

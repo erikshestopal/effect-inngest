@@ -378,7 +378,7 @@ describe("native v4 protocol RED regressions", () => {
           op: "WaitForEvent",
           name: "demo/invoice-paid",
           displayName: "wait-for-payment",
-          opts: { event: "demo/invoice-paid", timeout: "1h" },
+          opts: { timeout: "1h" },
         });
       } finally {
         yield* Effect.tryPromise(() => dispose());

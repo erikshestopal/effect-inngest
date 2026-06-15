@@ -158,6 +158,11 @@ const encodeTaggedEvent = (event: TaggedEvent): Effect.Effect<unknown, never, ne
   return Effect.succeed(event);
 };
 
+const stripTopLevelTag = (value: unknown): unknown =>
+  Predicate.isObject(value) && Predicate.hasProperty(value, "_tag")
+    ? Object.fromEntries(Object.entries(value).filter(([key]) => key !== "_tag"))
+    : value;
+
 interface StepTools {
   readonly run: StepRun;
   readonly sleep: (id: StepOptionsOrId, duration: Duration.Input) => Effect.Effect<void>;
@@ -364,11 +369,11 @@ export const createStepTools = (
                   info,
                   functionId: `${appName}-${options.function._tag}`,
                   payload: {
-                    data: encodedData,
+                    data: stripTopLevelTag(encodedData),
                     ...(Predicate.isNotUndefined(options.user) ? { user: options.user } : {}),
                     ...(Predicate.isNotUndefined(options.v) ? { v: options.v } : {}),
                   },
-                  timeout: options.timeout ? timeStr(options.timeout) : "365d",
+                  timeout: options.timeout ? timeStr(options.timeout) : undefined,
                 }),
               ),
             ),

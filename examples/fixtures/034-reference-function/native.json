@@ -228,9 +228,9 @@
       },
       "body": [
         {
-          "displayName": "call-helper",
-          "op": "InvokeFunction",
           "id": "0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+          "op": "InvokeFunction",
+          "displayName": "call-helper",
           "opts": {
             "payload": {
               "data": {
@@ -253,6 +253,139 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-helper-function&stepId=step",
+      "path": "/examples/034-reference-function",
+      "query": {
+        "fnId": "examples-034-reference-function-helper-function",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "6ee3e9fe-bbf6-5994-a859-b46413bb129f",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "correlation_id": "01KV4BYZX3NP4CGTHBTMQP2TVE.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+              "expire": 1813020453818,
+              "fn_id": "examples-034-reference-function-helper-function",
+              "gid": "5d3a6750-885b-4309-a0ef-23fb57dfb5f4",
+              "isr": {
+                "dsid": "d46e72d45e483c22",
+                "dstp": "00-715de3a914b807a52c3ab7be054c0dde-ccde5a4824e60f42-00",
+                "tp": "00-715de3a914b807a52c3ab7be054c0dde-d46e72d45e483c22-01",
+                "ts": ""
+              },
+              "name": "call-helper",
+              "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+              "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "d1229f9c85947e20",
+                  "traceparent": "00-ec62b7f8461dfbb1dc3ed9d801c7c9e2-11c53fdd9fd853f0-01"
+                },
+                "ts": "2026-06-15T00:47:33.818498Z"
+              }
+            },
+            "input": 21
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "correlation_id": "01KV4BYZX3NP4CGTHBTMQP2TVE.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
+                "expire": 1813020453818,
+                "fn_id": "examples-034-reference-function-helper-function",
+                "gid": "5d3a6750-885b-4309-a0ef-23fb57dfb5f4",
+                "isr": {
+                  "dsid": "d46e72d45e483c22",
+                  "dstp": "00-715de3a914b807a52c3ab7be054c0dde-ccde5a4824e60f42-00",
+                  "tp": "00-715de3a914b807a52c3ab7be054c0dde-d46e72d45e483c22-01",
+                  "ts": ""
+                },
+                "name": "call-helper",
+                "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
+                "source_fn_id": "85308d81-c7ed-52e2-9812-c0ad902dd319",
+                "source_fn_v": 1,
+                "tc": {
+                  "ctx": {
+                    "sid": "d1229f9c85947e20",
+                    "traceparent": "00-ec62b7f8461dfbb1dc3ed9d801c7c9e2-11c53fdd9fd853f0-01"
+                  },
+                  "ts": "2026-06-15T00:47:33.818498Z"
+                }
+              },
+              "input": 21
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.invoked",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "doubled": 42
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/034-reference-function?fnId=examples-034-reference-function-invoke-by-reference&stepId=step",
       "path": "/examples/034-reference-function",
@@ -306,9 +439,8 @@
         ],
         "steps": {
           "0468d60916f8c6bb90279b321e3dd5afde1e9e55": {
-            "error": {
-              "message": "could not find function with ID: examples-034-reference-function-helper-function",
-              "name": "Error"
+            "data": {
+              "doubled": 42
             }
           }
         },
@@ -317,22 +449,24 @@
       }
     },
     "response": {
-      "status": 400,
+      "status": 206,
       "headers": {
         "content-type": "application/json",
         "user-agent": "<sdk>",
         "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
         "x-inngest-req-version": "2",
         "x-inngest-sdk": "<sdk>",
         "x-inngest-sdk-handled": "true"
       },
-      "body": {
-        "name": "Error",
-        "message": "could not find function with ID: examples-034-reference-function-helper-function",
-        "stack": "",
-        "__serialized": true
-      }
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "result": 42
+          }
+        }
+      ]
     }
   }
 ]

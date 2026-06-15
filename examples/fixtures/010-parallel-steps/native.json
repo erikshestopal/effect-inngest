@@ -328,7 +328,7 @@
           },
           "data": 3,
           "timing": {
-            "a": 1781481970937000000,
+            "a": 1781484335620000000,
             "b": 0
           }
         }
@@ -419,7 +419,7 @@
           },
           "data": 2,
           "timing": {
-            "a": 1781481970939000000,
+            "a": 1781484335622000000,
             "b": 0
           }
         }
@@ -510,7 +510,7 @@
           },
           "data": 1,
           "timing": {
-            "a": 1781481970940000000,
+            "a": 1781484335624000000,
             "b": 0
           }
         }
@@ -523,6 +523,82 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
+      "path": "/examples/009-step-waitForEvent-timeout",
+      "query": {
+        "fnId": "examples-009-step-waitForEvent-timeout-wait-timeout",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "5e39f98b-bb38-5fbe-80eb-b94299089214",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["dd4654a352d46a6f4b313e0b0dd326be36e5004c"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "orderId": "timeout-009"
+          },
+          "id": "<event-id>",
+          "name": "demo/wait-timeout",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "orderId": "timeout-009"
+            },
+            "id": "<event-id>",
+            "name": "demo/wait-timeout",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "dd4654a352d46a6f4b313e0b0dd326be36e5004c": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain;charset=utf-8"
+      },
+      "body": "Not found"
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 9,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/010-parallel-steps?fnId=examples-010-parallel-steps-parallel-steps&stepId=step",
       "path": "/examples/010-parallel-steps",
@@ -612,6 +688,82 @@
           }
         }
       ]
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
+      "path": "/examples/009-step-waitForEvent-timeout",
+      "query": {
+        "fnId": "examples-009-step-waitForEvent-timeout-wait-timeout",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "2",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 1,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "5e39f98b-bb38-5fbe-80eb-b94299089214",
+          "generation_id": 2,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["dd4654a352d46a6f4b313e0b0dd326be36e5004c"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "orderId": "timeout-009"
+          },
+          "id": "<event-id>",
+          "name": "demo/wait-timeout",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "orderId": "timeout-009"
+            },
+            "id": "<event-id>",
+            "name": "demo/wait-timeout",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "dd4654a352d46a6f4b313e0b0dd326be36e5004c": null
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 404,
+      "headers": {
+        "content-type": "text/plain;charset=utf-8"
+      },
+      "body": "Not found"
     }
   }
 ]

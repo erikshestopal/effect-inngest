@@ -68,7 +68,7 @@ describe("TB-004: Wait For Event", () => {
         const opcode = body[0]!;
         expect(opcode.op).toBe(Protocol.Opcode.WaitForEvent);
         expect(opcode.name).toBe("order/approved");
-        expect(opcode.opts.event).toBe("order/approved");
+        expect(opcode.userland).toEqual({ id: "wait-approval" });
         expect(opcode.opts.timeout).toBe("1d");
         expect(typeof opcode.id).toBe("string");
         expect(opcode.id.length).toBe(40);
@@ -76,14 +76,17 @@ describe("TB-004: Wait For Event", () => {
         expect(body).toMatchInlineSnapshot(`
         	[
         	  {
+        	    "data": null,
         	    "displayName": "wait-approval",
         	    "id": "df213fbba68cded20d69d058d0047d7233586642",
         	    "name": "order/approved",
         	    "op": "WaitForEvent",
         	    "opts": {
-        	      "event": "order/approved",
         	      "if": "async.data.orderId == "order_123"",
         	      "timeout": "1d",
+        	    },
+        	    "userland": {
+        	      "id": "wait-approval",
         	    },
         	  },
         	]
@@ -211,7 +214,7 @@ describe("TB-004: Wait For Event", () => {
         );
 
         const opcode = body[0]!;
-        expect(opcode.opts.event).toBe("order/approved");
+        expect(opcode.name).toBe("order/approved");
         expect(opcode.opts.timeout).toBe("30m");
         expect(opcode.opts.if).toBeUndefined();
       } finally {

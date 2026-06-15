@@ -47,6 +47,12 @@ const isEventIdOrTimestampPath = (path: ReadonlyArray<string>) => {
   if (path.length >= 4 && path[path.length - 3] === "body" && isNumericSegment(path[path.length - 2] ?? "")) {
     return pathEndsWith(path.slice(0, -3), ["request"]);
   }
+  if (path.length >= 5 && path[path.length - 4] === "steps" && path[path.length - 2] === "data") {
+    return pathEndsWith(path.slice(0, -4), ["request", "body"]);
+  }
+  if (path.length >= 4 && path[path.length - 3] === "steps") {
+    return pathEndsWith(path.slice(0, -3), ["request", "body"]);
+  }
 
   return false;
 };
@@ -55,6 +61,25 @@ const normalizeUrlString = (value: string) =>
   value
     .replace("http://localhost:", "http://127.0.0.1:")
     .replace(/\/v1\/checkpoint\/[^/]+\/async/u, "/v1/checkpoint/<run_id>/async");
+
+const isIsoTimestamp = (value: string) => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/u.test(value);
+
+const isDevInvokeMetadataPath = (path: ReadonlyArray<string>) => {
+  if (!path.includes("_inngest")) return false;
+  const leaf = path.at(-1);
+  return (
+    leaf === "correlation_id" ||
+    leaf === "expire" ||
+    leaf === "gid" ||
+    leaf === "dsid" ||
+    leaf === "dstp" ||
+    leaf === "tp" ||
+    leaf === "sid" ||
+    leaf === "source_fn_v" ||
+    leaf === "traceparent" ||
+    leaf === "ts"
+  );
+};
 
 const normalizeLeaf = (value: Json, path: ReadonlyArray<string>): Json => {
   if (pathEndsWith(path, ["request", "path"]) || pathEndsWith(path, ["request", "url"])) {
@@ -73,7 +98,9 @@ const normalizeLeaf = (value: Json, path: ReadonlyArray<string>): Json => {
   if (pathEndsWith(path, ["body", "ts"])) return "<checkpoint_ts>";
 
   if (path.includes("timing") && typeof value === "number") return "<timing>";
+  if (isDevInvokeMetadataPath(path)) return `<${path.at(-1) ?? "metadata"}>`;
   if (isEventIdOrTimestampPath(path)) return path.at(-1) === "id" ? "<event-id>" : "<event-ts>";
+  if (pathEndsWith(path, ["name"]) && typeof value === "string" && isIsoTimestamp(value)) return "<iso-timestamp>";
 
   return value;
 };

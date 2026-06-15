@@ -54,20 +54,21 @@ describe("TB-003: Durable Sleep", () => {
         // BUG FIX: Duration now goes in `name` field (matches official SDK)
         expect(opcode.name).toBe("5s");
         expect(opcode.displayName).toBe("wait-5s");
-        expect(opcode.mode).toBe("async");
+        expect(opcode.userland).toEqual({ id: "wait-5s" });
         expect(typeof opcode.id).toBe("string");
         expect(opcode.id.length).toBe(40);
 
         expect(body).toMatchInlineSnapshot(`
           [
             {
+              "data": null,
               "displayName": "wait-5s",
               "id": "56af4c0dbbfd57f3b5cf799d6b506eaaab6c4bd6",
-              "mode": "async",
               "name": "5s",
               "op": "Sleep",
-              "opts": {
-                "duration": "5s",
+              "opts": {},
+              "userland": {
+                "id": "wait-5s",
               },
             },
           ]
@@ -137,18 +138,19 @@ describe("TB-003: Durable Sleep", () => {
         // BUG FIX: ISO timestamp now goes in `name` field (matches official SDK)
         expect(opcode.name).toBe("2025-12-31T23:59:59.000Z");
         expect(opcode.displayName).toBe("wait-until-new-year");
-        expect(opcode.mode).toBe("async");
+        expect(opcode.userland).toEqual({ id: "wait-until-new-year" });
 
         expect(body).toMatchInlineSnapshot(`
           [
             {
+              "data": null,
               "displayName": "wait-until-new-year",
               "id": "4b453441a75a26aae48434715f6a221596f312eb",
-              "mode": "async",
               "name": "2025-12-31T23:59:59.000Z",
               "op": "Sleep",
-              "opts": {
-                "duration": "2025-12-31T23:59:59.000Z",
+              "opts": {},
+              "userland": {
+                "id": "wait-until-new-year",
               },
             },
           ]

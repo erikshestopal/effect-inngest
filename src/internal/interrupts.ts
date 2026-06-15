@@ -38,7 +38,7 @@ export const waitForEventInterrupt = (opts: { info: StepInfo; event: string; tim
   });
 
 /** @internal */
-export const invokeInterrupt = (opts: { info: StepInfo; functionId: string; payload: unknown; timeout: string }) =>
+export const invokeInterrupt = (opts: { info: StepInfo; functionId: string; payload: unknown; timeout?: string }) =>
   StepInterrupt.make({
     opcode: Protocol.invokeFunction(opts.info, {
       function_id: opts.functionId,

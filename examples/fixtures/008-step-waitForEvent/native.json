@@ -1,10 +1,10 @@
 [
   {
-    "sequence": 1,
+    "sequence": 2,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 1,
+      "sequence": 2,
       "method": "GET",
       "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent",
       "path": "/examples/008-step-waitForEvent",
@@ -37,11 +37,11 @@
     }
   },
   {
-    "sequence": 2,
+    "sequence": 3,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 2,
+      "sequence": 3,
       "method": "PUT",
       "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent",
       "path": "/examples/008-step-waitForEvent",
@@ -69,11 +69,11 @@
     }
   },
   {
-    "sequence": 3,
+    "sequence": 4,
     "direction": "outbound",
     "proxy": "sdk-to-inngest",
     "request": {
-      "sequence": 3,
+      "sequence": 4,
       "method": "POST",
       "url": "http://127.0.0.1:18289/fn/register",
       "path": "/fn/register",
@@ -136,11 +136,11 @@
     }
   },
   {
-    "sequence": 4,
+    "sequence": 5,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 4,
+      "sequence": 5,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent?fnId=examples-008-step-waitForEvent-wait-for-event&stepId=step",
       "path": "/examples/008-step-waitForEvent",
@@ -213,10 +213,10 @@
       },
       "body": [
         {
-          "displayName": "wait-for-complete",
-          "op": "WaitForEvent",
           "id": "530a9d53676b712ef28992a4ad38a5b729ae2491",
+          "op": "WaitForEvent",
           "name": "demo/wait-complete",
+          "displayName": "wait-for-complete",
           "opts": {
             "timeout": "5m",
             "if": "async.data.orderId == \"order-008\""
@@ -225,6 +225,104 @@
             "id": "wait-for-complete"
           },
           "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/008-step-waitForEvent?fnId=examples-008-step-waitForEvent-wait-for-event&stepId=step",
+      "path": "/examples/008-step-waitForEvent",
+      "query": {
+        "fnId": "examples-008-step-waitForEvent-wait-for-event",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "fa0588d5-1f76-598b-8f34-62a604a0fee7",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 1,
+            "stack": ["530a9d53676b712ef28992a4ad38a5b729ae2491"]
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "orderId": "order-008"
+          },
+          "id": "<event-id>",
+          "name": "demo/wait-start",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "orderId": "order-008"
+            },
+            "id": "<event-id>",
+            "name": "demo/wait-start",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {
+          "530a9d53676b712ef28992a4ad38a5b729ae2491": {
+            "data": {
+              "orderId": "order-008",
+              "status": "approved"
+            },
+            "id": "fixture-native-008-step-waitForEvent-0-after-0-0",
+            "name": "demo/wait-complete",
+            "ts": 1781484325587,
+            "user": {}
+          }
+        },
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "receivedStatus": "approved"
+          }
         }
       ]
     }

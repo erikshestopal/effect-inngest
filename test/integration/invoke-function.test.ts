@@ -77,11 +77,11 @@ describe("TB-005: Invoke Function", () => {
 
         // CRITICAL ASSERTIONS - verify the contract
         expect(opcode.op).toBe(Protocol.Opcode.InvokeFunction);
-        expect(opcode.name).toBeUndefined();
-        expect(opcode.mode).toBe("async"); // Required for Inngest to process invoke
+        expect(opcode).not.toHaveProperty("name");
+        expect(opcode).not.toHaveProperty("mode");
         // function_id format: "{app-id}-{fn-tag}"
         expect(opcode.opts.function_id).toBe("test-app-process-payment");
-        expect(opcode.opts.payload.data).toEqual({ _tag: "payment/process", amount: 100, orderId: "order_123" });
+        expect(opcode.opts.payload.data).toEqual({ amount: 100, orderId: "order_123" });
 
         expect(body).toMatchInlineSnapshot(`
         	[
@@ -89,18 +89,18 @@ describe("TB-005: Invoke Function", () => {
         	    "data": null,
         	    "displayName": "charge-customer",
         	    "id": "ed1c8e6090d4016334d5c49881153cf45c413dee",
-        	    "mode": "async",
         	    "op": "InvokeFunction",
         	    "opts": {
         	      "function_id": "test-app-process-payment",
         	      "payload": {
         	        "data": {
-        	          "_tag": "payment/process",
         	          "amount": 100,
         	          "orderId": "order_123",
         	        },
         	      },
-        	      "timeout": "365d",
+        	    },
+        	    "userland": {
+        	      "id": "charge-customer",
         	    },
         	  },
         	]
