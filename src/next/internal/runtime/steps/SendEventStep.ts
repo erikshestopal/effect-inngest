@@ -1,5 +1,4 @@
 import { Array as Arr, Effect, Match } from "effect";
-import { InngestClient } from "../../../../Client.js";
 import { SendEventError } from "../../../../internal/errors.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";

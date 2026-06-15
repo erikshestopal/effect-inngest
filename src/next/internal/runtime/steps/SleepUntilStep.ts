@@ -1,8 +1,10 @@
-import { Effect, Predicate, Schema } from "effect";
+import { Effect, Option, Predicate, Schema } from "effect";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import { InngestTimestamp } from "../../wire/Timestamp.js";
+import { CurrentCheckpoint } from "../CheckpointContext.js";
+import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
 import * as StepOperation from "./StepOperation.js";
@@ -22,13 +24,18 @@ export const sleepUntil = (args: {
       return;
     }
 
-    if (StepOperation.shouldPlan({ input: args.input, info })) {
-      return yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
-    }
-
     const command = StepCommand.Sleep.make({
       info,
       duration: Schema.decodeUnknownSync(InngestTimestamp)(args.timestamp),
     });
+
+    const checkpoint = yield* CurrentCheckpoint;
+    const scope = yield* HandlerFiberScope;
+    const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
+
+    if (args.input.stepId === "step" && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
+      return yield* sink.planCommand(command);
+    }
+
     return yield* sink.yieldCommand(command);
   });

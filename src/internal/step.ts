@@ -10,13 +10,13 @@ import * as Protocol from "./protocol.js";
 import { StepError, SendEventError, isNonRetriableError, isRetryAfterError } from "./errors.js";
 import { OtelAttributes } from "./constants.js";
 import { InngestDuration } from "../next/internal/wire/Duration.js";
-import { InngestTimestamp } from "../next/internal/wire/Timestamp.js";
 import { CurrentCheckpoint } from "../next/internal/runtime/CheckpointContext.js";
 import { HandlerFiberScope } from "../next/internal/runtime/HandlerFiberScope.js";
 import { StepCommandSink } from "../next/internal/runtime/StepCommandSink.js";
 import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
 import { fromSdkRequestBody } from "../next/internal/domain/ExecutionInput.js";
 import * as SleepStep from "../next/internal/runtime/steps/SleepStep.js";
+import * as SleepUntilStep from "../next/internal/runtime/steps/SleepUntilStep.js";
 import * as Memo from "../next/internal/domain/Memo.js";
 import * as EventPayload from "../next/internal/codec/EventPayload.js";
 import { eventSchemaFor, eventSchemas } from "../next/internal/domain/FunctionDefinition.js";
@@ -25,7 +25,6 @@ import type * as InngestEvent from "../Event.js";
 import {
   StepInterrupt,
   type StepInfo,
-  sleepInterrupt,
   waitForEventInterrupt,
   invokeInterrupt,
   plannedInterrupt,
@@ -275,23 +274,11 @@ export const createStepTools = (
     );
 
   const sleepUntil = (opts: StepOptionsOrId, timestamp: Date | number | string): Effect.Effect<void, StepInterrupt> =>
-    Effect.flatMap(getInfo(opts), (info) =>
-      pipe(
-        memo(info),
-        Match.value,
-        Match.tag("MemoData", "MemoTimeout", "MemoError", "MemoInput", () => Effect.void),
-        Match.tag("MemoNone", () =>
-          Effect.andThen(
-            flushIfCheckpoint,
-            Effect.die(sleepInterrupt({ info, duration: Schema.decodeUnknownSync(InngestTimestamp)(timestamp) })),
-          ).pipe(
-            Effect.withSpan(`inngest.step/sleepUntil/${info.id}`, {
-              attributes: { [OtelAttributes.StepId]: info.id, [OtelAttributes.StepType]: "sleepUntil" },
-            }),
-          ),
-        ),
-        Match.exhaustive,
-      ),
+    SleepUntilStep.sleepUntil({ input, id: opts, timestamp }).pipe(
+      Effect.provideService(StepIdentity, identity),
+      Effect.provideService(CurrentCheckpoint, checkpoint),
+      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
+      Effect.provide(StepCommandSink.layer),
     );
 
   const waitForEvent = <E extends EventSchema>(
