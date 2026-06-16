@@ -1,13 +1,18 @@
-import { Effect, Match, Predicate, Schema } from "effect";
-import { StepError } from "../../../../internal/errors.js";
+import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
+import { isNonRetriableError, isRetryAfterError, StepError } from "../../../../internal/errors.js";
+import { errorInterrupt, failedInterrupt, StepInterrupt } from "../../../../internal/interrupts.js";
 import * as StepResult from "../../codec/StepResult.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
+import { CurrentCheckpoint } from "../CheckpointContext.js";
+import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import type { JsonSchema, RunOptions, RunOutput } from "../StepTools.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
 import * as StepOperation from "./StepOperation.js";
+
+const isStepInterrupt = Schema.is(StepInterrupt);
 
 export const run = <A, Err, R>(args: {
   readonly input: ExecutionInput;
@@ -52,17 +57,52 @@ export const run = <A, Err, R>(args: {
             return yield* Effect.void;
           }
 
-          const value = yield* args.effect;
-          const data = Predicate.isUndefined(value)
-            ? undefined
-            : args.options?.schema
-              ? yield* Schema.encodeEffect(Schema.toCodecJson(args.options.schema))(value).pipe(
-                  Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
-                )
-              : yield* StepResult.encodeUnknownJson({ value, stepId: info.id });
+          const checkpoint = yield* CurrentCheckpoint;
+          if (
+            Option.isSome(checkpoint) &&
+            args.input.stepId === "step" &&
+            (yield* checkpoint.value.isRuntimeExceeded)
+          ) {
+            yield* checkpoint.value.flush;
+            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            return yield* Effect.void;
+          }
 
-          yield* sink.recordResult(StepCommand.StepRunResult.make({ info, data }));
-          return args.options?.schema ? value : (data as RunOutput<A>);
+          const scope = yield* HandlerFiberScope;
+          if (args.input.stepId === "step" && Option.isSome(checkpoint) && (yield* scope.isForkedFromHandlerRoot)) {
+            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            return yield* Effect.void;
+          }
+
+          return yield* args.effect.pipe(
+            Effect.matchEffect({
+              onFailure: (err) => {
+                const noRetry = isNonRetriableError(err) ? true : undefined;
+                const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
+                return Effect.die(
+                  noRetry === true || args.input.run.attempt >= args.input.run.maxAttempts - 1
+                    ? failedInterrupt({ info, error: err })
+                    : errorInterrupt({ info, error: err, noRetry, retryAfterMs }),
+                );
+              },
+              onSuccess: (value) =>
+                Effect.gen(function* () {
+                  const data = Predicate.isUndefined(value)
+                    ? undefined
+                    : args.options?.schema
+                      ? yield* Schema.encodeEffect(Schema.toCodecJson(args.options.schema))(value).pipe(
+                          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
+                        )
+                      : yield* StepResult.encodeUnknownJson({ value, stepId: info.id });
+
+                  yield* sink.recordResult(StepCommand.StepRunResult.make({ info, data }));
+                  return args.options?.schema ? value : (data as RunOutput<A>);
+                }),
+            }),
+            Effect.catchDefect((defect) =>
+              isStepInterrupt(defect) ? Effect.die(defect) : Effect.die(errorInterrupt({ info, error: defect })),
+            ),
+          );
         }),
       ),
       Match.exhaustive,

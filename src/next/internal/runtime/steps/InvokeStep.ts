@@ -44,19 +44,14 @@ export const invoke = <F extends InngestFunction.Any>(args: {
       Match.tag("MemoInput", () => Effect.succeed(undefined)),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
-          if (StepOperation.shouldPlan({ input: args.input, info })) {
-            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
-            return yield* Effect.void;
-          }
-
-          const data = Predicate.hasProperty(args.options, "data") ? args.options.data : undefined;
+          const event = Predicate.hasProperty(args.options, "data") ? args.options.data : undefined;
 
           yield* sink.yieldCommand(
             StepCommand.InvokeFunction.make({
               info,
               functionId: `${args.appName}-${args.options.function._tag}`,
               payload: {
-                data,
+                data: event?.data,
                 ...(Predicate.isNotUndefined(args.options.user) ? { user: args.options.user } : {}),
                 ...(Predicate.isNotUndefined(args.options.v) ? { v: args.options.v } : {}),
               },

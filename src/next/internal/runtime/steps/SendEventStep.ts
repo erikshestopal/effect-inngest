@@ -1,9 +1,11 @@
-import { Array as Arr, Effect, Match } from "effect";
+import { Array as Arr, Effect, Match, Option } from "effect";
 import { SendEventError } from "../../../../internal/errors.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
+import { CurrentCheckpoint } from "../CheckpointContext.js";
 import { EventApi, type OutgoingEvent } from "../EventApi.js";
+import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
 import * as StepOperation from "./StepOperation.js";
@@ -28,6 +30,13 @@ export const sendEvent = (args: {
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (StepOperation.shouldPlan({ input: args.input, info })) {
+            yield* sink.planCommand(StepCommand.SendEventPlanned.make({ info }));
+            return { ids: [] };
+          }
+
+          const checkpoint = yield* CurrentCheckpoint;
+          const scope = yield* HandlerFiberScope;
+          if (args.input.stepId === "step" && Option.isSome(checkpoint) && (yield* scope.isForkedFromHandlerRoot)) {
             yield* sink.planCommand(StepCommand.SendEventPlanned.make({ info }));
             return { ids: [] };
           }

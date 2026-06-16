@@ -621,12 +621,11 @@ const TestApprovalEvent = InngestEvent.make(
   }),
 );
 
-describe("Regression: waitForEvent returns event.data payload, not full event", () => {
+describe("Regression: waitForEvent returns typed event envelope", () => {
   /**
-   * Bug: waitForEvent MemoData handler returned the full event { name, data, id, ts }
-   * but the schema type E only represents the payload (e.g., { orderId, approvedBy }).
-   * Handler expected approval.value.data.approvedBy but got approval.value.data.approvedBy.
-   * Fix: Extract .data from the memoized event to return just the payload.
+   * Inngest memoizes waitForEvent results as an event envelope:
+   * { name, data, id?, ts?, v? }. The SDK should decode that envelope with the
+   * declared event schema and expose typed event.data to handlers.
    *
    * @see test/integration/wait-for-event.test.ts
    */
@@ -640,7 +639,7 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
 
   const Group = InngestGroup.make(WaitFn);
 
-  it.effect("waitForEvent result has payload fields directly accessible", () =>
+  it.effect("waitForEvent result exposes typed event data", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
         "wait-fn": ({ event, step }) =>
@@ -649,7 +648,6 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
               timeout: Duration.hours(1),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
-            // approval should have approvedBy directly, not nested in .data
             const approvedBy = Option.isSome(approval) ? approval.value.data.approvedBy : "none";
             return {
               orderId: event.data.orderId,
@@ -697,78 +695,6 @@ describe("Regression: waitForEvent returns event.data payload, not full event", 
                     id: "evt_approval",
                     ts: Date.now(),
                   },
-                },
-              },
-            }),
-          ),
-        );
-
-        expect(secondResponse.status).toBe(200);
-
-        const result = yield* Effect.tryPromise(() => secondResponse.json());
-        // The handler should access approval.value.data.approvedBy directly
-        // Without the fix, this would fail because approvedBy would be at approval.value.data.approvedBy
-        expect(result).toEqual({
-          orderId: "order-123",
-          approvedBy: "admin@example.com",
-        });
-      } finally {
-        yield* Effect.tryPromise(() => dispose());
-      }
-    }),
-  );
-
-  it.effect("waitForEvent works when Inngest sends payload directly (not wrapped in event)", () =>
-    Effect.gen(function* () {
-      const HandlersLive = Group.toLayer({
-        "wait-fn": ({ event, step }) =>
-          Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
-              timeout: Duration.hours(1),
-              if: `async.data.orderId == "${event.data.orderId}"`,
-            });
-            const approvedBy = Option.isSome(approval) ? approval.value.data.approvedBy : "none";
-            return {
-              orderId: event.data.orderId,
-              approvedBy,
-            };
-          }),
-      });
-
-      const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });
-
-      try {
-        const firstResponse = yield* Effect.tryPromise(() =>
-          handler(
-            makeTestRequest({
-              fnId: "wait-fn",
-              eventName: "test/wait-trigger",
-              eventData: { orderId: "order-123" },
-              steps: {},
-            }),
-          ),
-        );
-        expect(firstResponse.status).toBe(206);
-
-        const opcodes = (yield* Effect.tryPromise(() => firstResponse.json())) as Array<{
-          op: string;
-          id: string;
-        }>;
-        const waitOp = opcodes.find((o) => o.op === "WaitForEvent");
-        expect(waitOp).toBeDefined();
-
-        // Second call - Inngest sends payload DIRECTLY (not wrapped in full event)
-        // This is an alternative format Inngest may use
-        const secondResponse = yield* Effect.tryPromise(() =>
-          handler(
-            makeTestRequest({
-              fnId: "wait-fn",
-              eventName: "test/wait-trigger",
-              eventData: { orderId: "order-123" },
-              steps: {
-                [waitOp!.id]: {
-                  // Payload directly in data, NOT wrapped in { name, data, id, ts }
-                  data: { orderId: "order-123", approvedBy: "admin@example.com" },
                 },
               },
             }),

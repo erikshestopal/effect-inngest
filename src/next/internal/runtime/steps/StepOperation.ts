@@ -6,4 +6,4 @@ export const memoFor = (args: { readonly input: ExecutionInput; readonly info: S
   Memo.decode(args.input.steps[args.info.hash]);
 
 export const shouldPlan = (args: { readonly input: ExecutionInput; readonly info: StepInfo }): boolean =>
-  args.input.disableImmediateExecution || (args.input.stepId !== "step" && args.input.stepId !== args.info.hash);
+  args.input.stepId !== args.info.hash && (args.input.disableImmediateExecution || args.input.stepId !== "step");
