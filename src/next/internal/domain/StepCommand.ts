@@ -39,10 +39,20 @@ export class SendEventPlanned extends Schema.TaggedClass<SendEventPlanned>()("Se
   info: StepInfo,
 }) {}
 
+export class StepRunError extends Schema.TaggedClass<StepRunError>()("StepRunError", {
+  info: StepInfo,
+  error: Schema.Unknown,
+  noRetry: Schema.optional(Schema.Boolean),
+  retryAfterMs: Schema.optional(Schema.Number),
+}) {}
+
+export class StepRunFailed extends Schema.TaggedClass<StepRunFailed>()("StepRunFailed", {
+  info: StepInfo,
+  error: Schema.Unknown,
+}) {}
+
 export type YieldCommand = Sleep | WaitForEvent | InvokeFunction;
-
 export type ResultCommand = StepRunResult | SendEventResult;
-
 export type PlanCommand = YieldCommand | StepRunPlanned | SendEventPlanned;
-
-export type StepCommand = YieldCommand | ResultCommand | PlanCommand;
+export type ErrorCommand = StepRunError | StepRunFailed;
+export type StepCommand = YieldCommand | ResultCommand | PlanCommand | ErrorCommand;

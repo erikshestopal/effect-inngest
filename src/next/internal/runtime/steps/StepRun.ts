@@ -1,6 +1,5 @@
 import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
 import { isNonRetriableError, isRetryAfterError, StepError } from "../../../../internal/errors.js";
-import { errorInterrupt, failedInterrupt, StepInterrupt } from "../../../../internal/interrupts.js";
 import * as StepResult from "../../codec/StepResult.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import type { StepInput } from "../../domain/StepInput.js";
@@ -10,8 +9,6 @@ import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import type { JsonSchema, RunOptions, RunOutput } from "../StepTools.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
-
-const isStepInterrupt = Schema.is(StepInterrupt);
 
 export const run = <A, Err, R>(args: {
   readonly input: ExecutionInput;
@@ -78,11 +75,9 @@ export const run = <A, Err, R>(args: {
               onFailure: (err) => {
                 const noRetry = isNonRetriableError(err) ? true : undefined;
                 const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
-                return Effect.die(
-                  noRetry === true || args.input.run.attempt >= args.input.run.maxAttempts - 1
-                    ? failedInterrupt({ info, error: err })
-                    : errorInterrupt({ info, error: err, noRetry, retryAfterMs }),
-                );
+                return noRetry === true || args.input.run.attempt >= args.input.run.maxAttempts - 1
+                  ? sink.failCommand(StepCommand.StepRunFailed.make({ info, error: err }))
+                  : sink.failCommand(StepCommand.StepRunError.make({ info, error: err, noRetry, retryAfterMs }));
               },
               onSuccess: (value) =>
                 Effect.gen(function* () {
@@ -98,9 +93,7 @@ export const run = <A, Err, R>(args: {
                   return args.options?.schema ? value : (data as RunOutput<A>);
                 }),
             }),
-            Effect.catchDefect((defect) =>
-              isStepInterrupt(defect) ? Effect.die(defect) : Effect.die(errorInterrupt({ info, error: defect })),
-            ),
+            Effect.catchDefect((defect) => sink.failCommand(StepCommand.StepRunError.make({ info, error: defect }))),
           );
         }),
       ),

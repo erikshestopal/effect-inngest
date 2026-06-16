@@ -8,6 +8,7 @@ import { describe, expect, it } from "@effect/vitest";
 import { InngestClient } from "../../src/index.js";
 import { CheckpointApiError } from "../../src/internal/checkpoint.js";
 import * as Protocol from "../../src/internal/protocol.js";
+import { StepInfo } from "../../src/next/internal/domain/StepInfo.js";
 
 // Zero-delay retry schedule for tests; production uses exponential backoff.
 const instantRetry: Schedule.Schedule<unknown, CheckpointApiError> = Schedule.recurs(5).pipe(
@@ -70,7 +71,10 @@ const sha256Hex = (input: string): string => Crypto.createHash("sha256").update(
 const okResponse = () => new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
 
 const sampleSteps: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type> = [
-  Protocol.stepRun({ id: "a", name: "a", hash: "0".repeat(40) }, { value: 1 }),
+  Protocol.GeneratorOpcode.stepRun({
+    info: StepInfo.make({ id: "a", name: "a", hash: "0".repeat(40), order: 0, rawStepArg: "a" }),
+    data: { value: 1 },
+  }),
 ];
 
 describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {

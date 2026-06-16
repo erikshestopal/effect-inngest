@@ -340,7 +340,7 @@ describe("TB-006: Send Event", () => {
 
         // When disableImmediateExecution is false and step_id is "step",
         // canExecute returns true for all steps, so sendEvent should execute
-        expect(response.status).toBe(206); // Still 206 because it returns runInterrupt
+        expect(response.status).toBe(206);
 
         // Verify URL format: {eventBaseUrl}/e/{eventKey}. Checkpointing may
         // issue additional HTTP requests; only the event send URL matters here.

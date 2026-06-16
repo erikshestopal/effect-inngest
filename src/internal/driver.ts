@@ -117,8 +117,10 @@ export const execute = <F extends InngestFunction.Any, R>(
       Layer.succeed(InngestConfig, client.config),
       Layer.effect(StepIdentity, StepIdentity.make),
     );
+    const commandSink = yield* StepCommandSink.make;
+
     const stepToolsLayer = Layer.effect(StepTools, StepTools.make).pipe(
-      Layer.provide(StepCommandSink.layer),
+      Layer.provide(Layer.succeed(StepCommandSink, commandSink)),
       Layer.provide(EventApi.layer),
       Layer.provide(executionContextLayer),
     );
@@ -177,7 +179,9 @@ export const execute = <F extends InngestFunction.Any, R>(
           if (Option.isSome(checkpointState)) {
             const state = checkpointState.value;
             const exceeded = (yield* state.isRuntimeExceeded) || Option.isNone(maybeValue);
-            const terminal = exceeded ? Protocol.discoveryRequest() : Protocol.runComplete(maybeValue.value);
+            const terminal = exceeded
+              ? Protocol.GeneratorOpcode.discoveryRequest()
+              : Protocol.GeneratorOpcode.runComplete(maybeValue.value);
             const opcodes = [...drained, terminal];
             return ExecutionResult.make({ status: 206, body: encodeOpcodes(opcodes), headers });
           }
@@ -199,6 +203,36 @@ export const execute = <F extends InngestFunction.Any, R>(
           // Drain buffer for inclusion in 206 / error response so step results
           // are never lost (spec §10.4.3 graceful fallback).
           const drained = yield* drainBuffer;
+
+          const yielded = yield* commandSink.currentYields;
+          if (yielded.length > 0 && Cause.hasInterruptsOnly(cause)) {
+            const opcodes = [...drained, ...yielded.map((entry) => entry.opcode)];
+            const hasNonRetriableError = opcodes.some(
+              (op) =>
+                op.op === Protocol.Opcode.StepFailed ||
+                (op.op === Protocol.Opcode.StepError &&
+                  Predicate.isObject(op.error) &&
+                  Predicate.hasProperty(op.error, "noRetry") &&
+                  op.error.noRetry === true),
+            );
+            const retryAfterMs =
+              yielded.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs ?? Option.none();
+            const hasRetriableStepError = opcodes.some((op) => op.op === Protocol.Opcode.StepError);
+            const responseHeaders: Record<string, string> = hasNonRetriableError
+              ? { ...headers, [Protocol.Headers.NoRetry]: "true" }
+              : hasRetriableStepError
+                ? { ...headers, [Protocol.Headers.NoRetry]: "false" }
+                : headers;
+            if (Option.isSome(retryAfterMs)) {
+              responseHeaders[Protocol.Headers.RetryAfter] = String(Math.ceil(retryAfterMs.value / 1000));
+              responseHeaders[Protocol.Headers.NoRetry] = "false";
+            }
+            return ExecutionResult.make({
+              status: 206,
+              body: encodeOpcodes(opcodes),
+              headers: responseHeaders,
+            });
+          }
 
           // Collect all step interrupts from the cause (handles parallel failures)
           const interrupts = collectStepInterruptsFromCause(cause);

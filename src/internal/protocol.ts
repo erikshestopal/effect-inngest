@@ -3,6 +3,7 @@
  * @internal
  */
 import { Effect, Predicate, SchemaTransformation, Struct, Schema } from "effect";
+import type { StepInfo } from "../next/internal/domain/StepInfo.js";
 
 const stripTopLevelTag = (value: unknown): unknown => {
   if (Predicate.isObject(value)) {
@@ -51,7 +52,15 @@ export class UserError extends Schema.Class<UserError>("UserError")({
   data: Schema.optional(Schema.Unknown),
   noRetry: Schema.optional(Schema.Boolean),
   cause: Schema.optional(Schema.Unknown),
-}) {}
+}) {
+  static fromUnknown(error: unknown): UserError {
+    return UserError.make({
+      name: Predicate.hasProperty(error, "name") ? String(error.name) : "Error",
+      message: Predicate.hasProperty(error, "message") ? String(error.message) : String(error),
+      stack: Predicate.hasProperty(error, "stack") ? String(error.stack) : undefined,
+    });
+  }
+}
 
 export const StepResult = Schema.NullOr(
   Schema.Record(Schema.String, Schema.Unknown).pipe(Schema.annotate({ identifier: "StepResultObject" })),
@@ -143,174 +152,227 @@ export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpc
   displayName: Schema.optional(Schema.String),
   userland: Schema.optional(Schema.Struct({ id: Schema.String })),
   timing: Schema.optional(Schema.Struct({ a: Schema.Number, b: Schema.Number })),
-}) {}
+}) {
+  static makeStep(args: {
+    readonly info: StepInfo;
+    readonly op: OpcodeValue;
+    readonly extra?: object;
+  }): GeneratorOpcode {
+    return GeneratorOpcode.make({
+      op: args.op,
+      id: args.info.hash,
+      name: args.info.id,
+      displayName: args.info.name,
+      ...args.extra,
+    });
+  }
 
-interface StepInfo {
-  readonly id: string;
-  readonly name: string;
-  readonly hash: string;
-  readonly rawStepArg?: unknown;
+  static stepPlanned(info: StepInfo): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info,
+      op: Opcode.StepPlanned,
+      extra: { opts: {}, userland: { id: info.id }, data: null },
+    });
+  }
+
+  static sendEventStepPlanned(info: StepInfo): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info,
+      op: Opcode.StepPlanned,
+      extra: {
+        name: "sendEvent",
+        opts: { type: "step.sendEvent" },
+        userland: { id: info.id },
+        data: null,
+      },
+    });
+  }
+
+  static stepRun(args: { readonly info: StepInfo; readonly data: unknown }): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info: args.info,
+      op: Opcode.StepRun,
+      extra: {
+        mode: "sync",
+        opts: {},
+        userland: { id: args.info.id },
+        rawArgs: [args.info.rawStepArg ?? args.info.id, null],
+        hashedId: args.info.hash,
+        fulfilled: true,
+        hasStepState: true,
+        handled: true,
+        promise: {},
+        middleware: {
+          stepInfo: {
+            hashedId: args.info.hash,
+            memoized: false,
+            options: { id: args.info.id, name: args.info.name },
+            stepType: "run",
+          },
+        },
+        memoizationDeferred: { promise: {} },
+        transformedResultPromise: {},
+        ...(Predicate.isNotUndefined(args.data) ? { data: args.data } : {}),
+        timing: { a: Date.now() * 1_000_000, b: 0 },
+      },
+    });
+  }
+
+  static sendEventStepRun(args: {
+    readonly info: StepInfo;
+    readonly data: unknown;
+    readonly rawPayload: unknown;
+  }): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info: args.info,
+      op: Opcode.StepRun,
+      extra: {
+        name: "sendEvent",
+        mode: "sync",
+        userland: { id: args.info.id },
+        opts: { type: "step.sendEvent" },
+        rawArgs: [args.info.id, args.rawPayload],
+        hashedId: args.info.hash,
+        promise: {},
+        fulfilled: true,
+        hasStepState: true,
+        handled: true,
+        middleware: {
+          stepInfo: {
+            hashedId: args.info.hash,
+            memoized: false,
+            options: { id: args.info.id, name: args.info.name },
+            stepType: "sendEvent",
+          },
+        },
+        memoizationDeferred: { promise: {} },
+        transformedResultPromise: {},
+        data: args.data,
+        timing: { a: Date.now() * 1_000_000, b: 0 },
+      },
+    });
+  }
+
+  static stepRunResponse(args: { readonly info: StepInfo; readonly data: unknown }): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info: args.info,
+      op: Opcode.StepRun,
+      extra: {
+        opts: {},
+        userland: { id: args.info.id },
+        ...(Predicate.isNotUndefined(args.data) ? { data: args.data } : {}),
+        timing: { a: Date.now() * 1_000_000, b: 0 },
+      },
+    });
+  }
+
+  static sendEventStepRunResponse(args: { readonly info: StepInfo; readonly data: unknown }): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info: args.info,
+      op: Opcode.StepRun,
+      extra: {
+        name: "sendEvent",
+        opts: { type: "step.sendEvent" },
+        userland: { id: args.info.id },
+        data: args.data,
+      },
+    });
+  }
+
+  static stepError(args: {
+    readonly info: StepInfo;
+    readonly error: UserError;
+    readonly noRetry?: boolean;
+  }): GeneratorOpcode {
+    const error = Predicate.isNotUndefined(args.noRetry)
+      ? UserError.make({
+          name: args.error.name,
+          message: args.error.message,
+          stack: args.error.stack,
+          noRetry: args.noRetry,
+        })
+      : args.error;
+    return GeneratorOpcode.makeStep({ info: args.info, op: Opcode.StepError, extra: { error } });
+  }
+
+  static stepFailed(args: { readonly info: StepInfo; readonly error: UserError }): GeneratorOpcode {
+    return GeneratorOpcode.makeStep({
+      info: args.info,
+      op: Opcode.StepFailed,
+      extra: {
+        opts: {},
+        userland: { id: args.info.id },
+        error: args.error,
+        data: {
+          __serialized: true,
+          name: args.error.name,
+          message: args.error.message,
+          stack: "",
+        },
+      },
+    });
+  }
+
+  static sleep(args: { readonly info: StepInfo; readonly duration: string }): GeneratorOpcode {
+    return GeneratorOpcode.make({
+      op: Opcode.Sleep,
+      id: args.info.hash,
+      name: args.duration,
+      displayName: args.info.name,
+      opts: {},
+      userland: { id: args.info.id },
+      data: null,
+    });
+  }
+
+  static waitForEvent(args: {
+    readonly info: StepInfo;
+    readonly event: string;
+    readonly timeout: string;
+    readonly if?: string;
+  }): GeneratorOpcode {
+    return GeneratorOpcode.make({
+      op: Opcode.WaitForEvent,
+      id: args.info.hash,
+      name: args.event,
+      displayName: args.info.name,
+      opts: {
+        timeout: args.timeout,
+        ...(Predicate.isNotUndefined(args.if) ? { if: args.if } : {}),
+      },
+      userland: { id: args.info.id },
+      data: null,
+    });
+  }
+
+  static invokeFunction(args: {
+    readonly info: StepInfo;
+    readonly functionId: string;
+    readonly payload: unknown;
+    readonly timeout?: string;
+  }): GeneratorOpcode {
+    return GeneratorOpcode.make({
+      op: Opcode.InvokeFunction,
+      id: args.info.hash,
+      displayName: args.info.name,
+      opts: {
+        payload: args.payload,
+        function_id: args.functionId,
+        ...(Predicate.isNotUndefined(args.timeout) ? { timeout: args.timeout } : {}),
+      },
+      userland: { id: args.info.id },
+      data: null,
+    });
+  }
+
+  static runComplete(data: unknown): GeneratorOpcode {
+    return GeneratorOpcode.make({ op: Opcode.RunComplete, id: RUN_COMPLETE_ID, data });
+  }
+
+  static discoveryRequest(): GeneratorOpcode {
+    return GeneratorOpcode.make({ op: Opcode.DiscoveryRequest, id: "step", name: "step" });
+  }
 }
-
-const mkOpcode = (info: StepInfo, op: OpcodeValue, extra?: object): GeneratorOpcode =>
-  GeneratorOpcode.make({ op, id: info.hash, name: info.id, displayName: info.name, ...extra });
-
-export const stepPlanned = (info: StepInfo): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepPlanned, { opts: {}, userland: { id: info.id }, data: null });
-
-export const sendEventStepPlanned = (info: StepInfo): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepPlanned, {
-    name: "sendEvent",
-    opts: { type: "step.sendEvent" },
-    userland: { id: info.id },
-    data: null,
-  });
-
-export const stepRun = (info: StepInfo, data: unknown): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepRun, {
-    mode: "sync",
-    opts: {},
-    userland: { id: info.id },
-    rawArgs: [info.rawStepArg ?? info.id, null],
-    hashedId: info.hash,
-    fulfilled: true,
-    hasStepState: true,
-    handled: true,
-    promise: {},
-    middleware: {
-      stepInfo: {
-        hashedId: info.hash,
-        memoized: false,
-        options: { id: info.id, name: info.name },
-        stepType: "run",
-      },
-    },
-    memoizationDeferred: { promise: {} },
-    transformedResultPromise: {},
-    ...(Predicate.isNotUndefined(data) ? { data } : {}),
-    timing: { a: Date.now() * 1_000_000, b: 0 },
-  });
-
-export const sendEventStepRun = (info: StepInfo, data: unknown, rawPayload: unknown): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepRun, {
-    name: "sendEvent",
-    mode: "sync",
-    userland: { id: info.id },
-    opts: { type: "step.sendEvent" },
-    rawArgs: [info.id, rawPayload],
-    hashedId: info.hash,
-    promise: {},
-    fulfilled: true,
-    hasStepState: true,
-    handled: true,
-    middleware: {
-      stepInfo: {
-        hashedId: info.hash,
-        memoized: false,
-        options: { id: info.id, name: info.name },
-        stepType: "sendEvent",
-      },
-    },
-    memoizationDeferred: { promise: {} },
-    transformedResultPromise: {},
-    data,
-    timing: { a: Date.now() * 1_000_000, b: 0 },
-  });
-
-export const stepRunResponse = (info: StepInfo, data: unknown): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepRun, {
-    opts: {},
-    userland: { id: info.id },
-    ...(Predicate.isNotUndefined(data) ? { data } : {}),
-    timing: { a: Date.now() * 1_000_000, b: 0 },
-  });
-
-export const sendEventStepRunResponse = (info: StepInfo, data: unknown): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepRun, {
-    name: "sendEvent",
-    opts: { type: "step.sendEvent" },
-    userland: { id: info.id },
-    data,
-  });
-
-export const stepError = (info: StepInfo, error: UserError, noRetry?: boolean): GeneratorOpcode => {
-  // noRetry must be in the error object for Inngest executor to recognize it
-  const errorWithNoRetry = Predicate.isNotUndefined(noRetry)
-    ? UserError.make({ name: error.name, message: error.message, stack: error.stack, noRetry })
-    : error;
-  return mkOpcode(info, Opcode.StepError, { error: errorWithNoRetry });
-};
-
-export const stepFailed = (info: StepInfo, error: UserError): GeneratorOpcode =>
-  mkOpcode(info, Opcode.StepFailed, {
-    opts: {},
-    userland: { id: info.id },
-    error,
-    data: {
-      __serialized: true,
-      name: error.name,
-      message: error.message,
-      stack: "",
-    },
-  });
-
-export const sleep = (info: StepInfo, duration: string): GeneratorOpcode =>
-  GeneratorOpcode.make({
-    op: Opcode.Sleep,
-    id: info.hash,
-    name: duration,
-    displayName: info.name,
-    opts: {},
-    userland: { id: info.id },
-    data: null,
-  });
-
-export const waitForEvent = (info: StepInfo, opts: { event: string; timeout: string; if?: string }): GeneratorOpcode =>
-  GeneratorOpcode.make({
-    op: Opcode.WaitForEvent,
-    id: info.hash,
-    name: opts.event,
-    displayName: info.name,
-    opts: {
-      timeout: opts.timeout,
-      ...(Predicate.isNotUndefined(opts.if) ? { if: opts.if } : {}),
-    },
-    userland: { id: info.id },
-    data: null,
-  });
-
-export const invokeFunction = (
-  info: StepInfo,
-  opts: { function_id: string; payload: unknown; timeout?: string },
-): GeneratorOpcode =>
-  GeneratorOpcode.make({
-    op: Opcode.InvokeFunction,
-    id: info.hash,
-    displayName: info.name,
-    opts: {
-      payload: opts.payload,
-      function_id: opts.function_id,
-      ...(Predicate.isNotUndefined(opts.timeout) ? { timeout: opts.timeout } : {}),
-    },
-    userland: { id: info.id },
-    data: null,
-  });
-
-/**
- * Terminal opcode emitted by the SDK in checkpoint mode when the function
- * completes successfully. The executor uses this to correlate run completion
- * (spec §10.4.1).
- */
-export const runComplete = (data: unknown): GeneratorOpcode =>
-  GeneratorOpcode.make({ op: Opcode.RunComplete, id: RUN_COMPLETE_ID, data });
-
-/**
- * Yield opcode emitted by the SDK in checkpoint mode when `maxRuntime` is
- * exceeded. Tells the executor to schedule a new Call Request to continue
- * execution (spec §10.4.1).
- */
-export const discoveryRequest = (): GeneratorOpcode =>
-  GeneratorOpcode.make({ op: Opcode.DiscoveryRequest, id: "step", name: "step" });
 
 const IntrospectionBase = Schema.Struct({
   function_count: Schema.Number,
