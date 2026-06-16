@@ -286,7 +286,7 @@ const canonicalizeProtocolValue = (value: unknown): unknown => {
   if (!isObject(value)) return value;
 
   if (Object.hasOwn(value, "a") && Object.hasOwn(value, "b") && Object.keys(value).length === 2) {
-    return orderObject({ ...value, a: "<timing-a>" }, ["a", "b"]);
+    return orderObject({ ...value, a: "<timing-a>", b: "<timing-b>" }, ["a", "b"]);
   }
 
   if (typeof value.op === "string") return orderObject(value, opcodeKeyOrder(value));
@@ -312,9 +312,16 @@ const canonicalizeProtocolValue = (value: unknown): unknown => {
   return orderObject(value, []);
 };
 
+const isoTimestamp = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/u;
+
+const sanitizeProtocolScalar = (value: unknown): unknown => {
+  if (typeof value === "string" && isoTimestamp.test(value)) return "<timestamp>";
+  return value;
+};
+
 const sanitizeVolatileProtocolFields = (value: unknown): unknown => {
   if (Array.isArray(value)) return value.map(sanitizeVolatileProtocolFields);
-  if (!isObject(value)) return value;
+  if (!isObject(value)) return sanitizeProtocolScalar(value);
 
   const sanitized: Record<string, unknown> = {};
   for (const [key, child] of Object.entries(value)) {
@@ -332,8 +339,13 @@ const sanitizeVolatileProtocolFields = (value: unknown): unknown => {
   if (sanitized.gid !== undefined) sanitized.gid = "<gid>";
   if (sanitized.dsid !== undefined) sanitized.dsid = "<dsid>";
   if (sanitized.dstp !== undefined) sanitized.dstp = "<dstp>";
+  if (sanitized.sid !== undefined) sanitized.sid = "<sid>";
   if (sanitized.tp !== undefined) sanitized.tp = "<traceparent>";
   if (sanitized.traceparent !== undefined) sanitized.traceparent = "<traceparent>";
+  if (typeof sanitized.stack === "string") sanitized.stack = "<stack>";
+  if (Array.isArray(sanitized.ids) && sanitized.ids.every((id) => typeof id === "string")) {
+    sanitized.ids = sanitized.ids.map(() => "<event-id>");
+  }
 
   return sanitized;
 };

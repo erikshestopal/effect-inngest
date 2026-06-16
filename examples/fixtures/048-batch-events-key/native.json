@@ -183,7 +183,7 @@
         "defers": {},
         "event": {
           "data": {
-            "item": "b",
+            "item": "a",
             "userId": "user-048"
           },
           "id": "<event-id>",
@@ -194,7 +194,7 @@
         "events": [
           {
             "data": {
-              "item": "b",
+              "item": "a",
               "userId": "user-048"
             },
             "id": "<event-id>",
@@ -204,7 +204,7 @@
           },
           {
             "data": {
-              "item": "a",
+              "item": "b",
               "userId": "user-048"
             },
             "id": "<event-id>",
@@ -234,7 +234,7 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "userId": "user-048",
-            "items": ["b", "a"],
+            "items": ["a", "b"],
             "count": 2
           }
         }

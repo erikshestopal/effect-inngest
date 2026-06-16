@@ -276,7 +276,7 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781631804889,
+            "data": 1781638818470,
             "timing": {
               "a": "<timing-a>",
               "b": 0
@@ -349,7 +349,7 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.8394501111141841,
+            "data": 0.19170778872074346,
             "timing": {
               "a": "<timing-a>",
               "b": 0
@@ -432,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.8394501111141841
+            "data": 0.19170778872074346
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781631804889
+            "data": 1781638818470
           }
         },
         "use_api": false,
@@ -458,7 +458,7 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "timestamp": "<timestamp>",
-            "randomValue": 0.8394501111141841
+            "randomValue": 0.19170778872074346
           }
         }
       ]

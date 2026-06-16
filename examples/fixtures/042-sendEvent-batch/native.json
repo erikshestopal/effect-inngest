@@ -300,11 +300,11 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV8RFH919AFMB86R2Q8A4QHB", "01KV8RFH919AFMB86R2Q8A4QHC", "01KV8RFH919AFMB86R2Q8A4QHD"]
+              "ids": ["01KV8Z5KWECTCNT8CHBR58E03C", "01KV8Z5KWECTCNT8CHBR58E03D", "01KV8Z5KWECTCNT8CHBR58E03E"]
             },
             "timing": {
               "a": "<timing-a>",
-              "b": 6000000
+              "b": 2000000
             }
           }
         ],
