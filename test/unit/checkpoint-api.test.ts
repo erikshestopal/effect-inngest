@@ -9,23 +9,14 @@ import { InngestClient } from "../../src/index.js";
 import { CheckpointApiError } from "../../src/internal/checkpoint.js";
 import * as Protocol from "../../src/internal/protocol.js";
 
-// Reach the test-only factory via its globally-registered symbol. Not a
-// public API — the factory isn't a named export, so it's not in
-// `InngestClient.*` autocomplete.
-const TEST_FACTORY_KEY = Symbol.for("effect-inngest/internal/test-retry-schedule-factory");
-const layerWithRetrySchedule = (InngestClient.InngestClient as unknown as Record<symbol, unknown>)[
-  TEST_FACTORY_KEY
-] as (
-  config: Parameters<typeof InngestClient.layer>[0],
-  retrySchedule: Schedule.Schedule<unknown, CheckpointApiError>,
-) => Layer.Layer<InngestClient.InngestClient, never, HttpClient.HttpClient>;
-
 // Zero-delay retry schedule for tests; production uses exponential backoff.
 const instantRetry: Schedule.Schedule<unknown, CheckpointApiError> = Schedule.recurs(5).pipe(
   Schedule.while(
     (m: Schedule.Metadata<unknown, CheckpointApiError>) => m.input.status === undefined || m.input.status >= 500,
   ),
 );
+
+const retryLayer = Layer.succeed(InngestClient.CheckpointRetrySchedule, instantRetry);
 
 interface CapturedReq {
   readonly method: string;
@@ -163,7 +154,8 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
         }
         return okResponse();
       });
-      const clientLayer = layerWithRetrySchedule({ id: "app", signingKey: "signkey-prod-abc" }, instantRetry).pipe(
+      const clientLayer = InngestClient.layer({ id: "app", signingKey: "signkey-prod-abc" }).pipe(
+        Layer.provide(retryLayer),
         Layer.provide(httpLayer),
       );
 
@@ -180,7 +172,8 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
     Effect.gen(function* () {
       const captures: Array<CapturedReq> = [];
       const httpLayer = makeMockHttpClient(captures, () => new Response("nope", { status: 503 }));
-      const clientLayer = layerWithRetrySchedule({ id: "app", signingKey: "signkey-prod-abc" }, instantRetry).pipe(
+      const clientLayer = InngestClient.layer({ id: "app", signingKey: "signkey-prod-abc" }).pipe(
+        Layer.provide(retryLayer),
         Layer.provide(httpLayer),
       );
 

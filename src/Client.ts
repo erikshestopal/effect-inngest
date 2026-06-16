@@ -33,7 +33,7 @@ const SDK_VERSION = "2.0.0";
 
 type ClientMode = "dev" | "cloud";
 
-interface ClientConfig {
+export interface ClientConfig {
   /**
    * The ID of this instance, most commonly a reference to the application it
    * resides in.
@@ -194,6 +194,17 @@ export class InngestClient extends Context.Service<InngestClient, InngestClientS
   "effect-inngest/InngestClient",
 ) {}
 
+/**
+ * Static Inngest application configuration.
+ *
+ * This is the narrow dependency for internals that need app settings but not
+ * client behavior such as event sending or checkpoint API calls.
+ *
+ * @since 0.1.0
+ * @category context
+ */
+export class InngestConfig extends Context.Service<InngestConfig, ClientConfig>()("effect-inngest/InngestConfig") {}
+
 const resolveMode = (config: ClientConfig): ClientMode => config.mode ?? "dev";
 
 const resolveEventBaseUrl = (config: ClientConfig, mode: ClientMode): string =>
@@ -213,15 +224,17 @@ const defaultCheckpointRetrySchedule: Schedule.Schedule<unknown, CheckpointApiEr
   Schedule.while((m: Schedule.Metadata<unknown, CheckpointApiError>) => isRetriable(m.input)),
 );
 
-const makeClient = (
-  config: ClientConfig,
-  httpClient: HttpClient.HttpClient,
-  retrySchedule: Schedule.Schedule<unknown, CheckpointApiError> = defaultCheckpointRetrySchedule,
-): Effect.Effect<InngestClientService> =>
+export const CheckpointRetrySchedule = Context.Reference<Schedule.Schedule<unknown, CheckpointApiError>>(
+  "effect-inngest/internal/CheckpointRetrySchedule",
+  { defaultValue: () => defaultCheckpointRetrySchedule },
+);
+
+const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Effect.Effect<InngestClientService> =>
   Effect.gen(function* () {
     const mode = resolveMode(config);
     const eventBaseUrl = resolveEventBaseUrl(config, mode);
     const apiBaseUrl = resolveApiBaseUrl(config, mode);
+    const retrySchedule = yield* CheckpointRetrySchedule;
 
     /**
      * One-way switch: once the fallback signing key succeeds for any
@@ -389,30 +402,16 @@ const makeClient = (
  * })
  * ```
  */
-export const layer = (config: ClientConfig): Layer.Layer<InngestClient, never, HttpClient.HttpClient> =>
-  Layer.effect(
-    InngestClient,
-    Effect.gen(function* () {
-      const httpClient = yield* HttpClient.HttpClient;
-      return yield* makeClient(config, httpClient);
-    }),
-  );
-
-// Test-only factory attached via Symbol.for; not a named export, not in
-// TypeScript autocomplete, not in the public `InngestClient.*` namespace.
-// Tests retrieve it by re-deriving the same global symbol. Do not use from
-// application code.
-const TEST_FACTORY_KEY = Symbol.for("effect-inngest/internal/test-retry-schedule-factory");
-(InngestClient as unknown as Record<symbol, unknown>)[TEST_FACTORY_KEY] = (
-  config: ClientConfig,
-  retrySchedule: Schedule.Schedule<unknown, CheckpointApiError>,
-): Layer.Layer<InngestClient, never, HttpClient.HttpClient> =>
-  Layer.effect(
-    InngestClient,
-    Effect.gen(function* () {
-      const httpClient = yield* HttpClient.HttpClient;
-      return yield* makeClient(config, httpClient, retrySchedule);
-    }),
+export const layer = (config: ClientConfig): Layer.Layer<InngestClient | InngestConfig, never, HttpClient.HttpClient> =>
+  Layer.mergeAll(
+    Layer.succeed(InngestConfig, config),
+    Layer.effect(
+      InngestClient,
+      Effect.gen(function* () {
+        const httpClient = yield* HttpClient.HttpClient;
+        return yield* makeClient(config, httpClient);
+      }),
+    ),
   );
 
 /**
@@ -423,13 +422,11 @@ const TEST_FACTORY_KEY = Symbol.for("effect-inngest/internal/test-retry-schedule
  */
 export const layerConfig = (
   config: Config.Wrap<ClientConfig>,
-): Layer.Layer<InngestClient, Config.ConfigError, HttpClient.HttpClient> =>
-  Layer.effect(
-    InngestClient,
+): Layer.Layer<InngestClient | InngestConfig, Config.ConfigError, HttpClient.HttpClient> =>
+  Layer.unwrap(
     Effect.gen(function* () {
       const resolvedConfig = yield* Config.unwrap(config);
-      const httpClient = yield* HttpClient.HttpClient;
-      return yield* makeClient(resolvedConfig, httpClient);
+      return layer(resolvedConfig);
     }),
   );
 
@@ -446,14 +443,15 @@ export const layerConfig = (
  * @since 0.1.0
  * @category layers
  */
-export const layerFromEnv: Layer.Layer<InngestClient, Config.ConfigError, HttpClient.HttpClient> = layerConfig(
-  Config.all({
-    id: Config.string("INNGEST_APP_ID").pipe(Config.withDefault("app")),
-    eventKey: Config.string("INNGEST_EVENT_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
-    signingKey: Config.string("INNGEST_SIGNING_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
-    signingKeyFallback: Config.string("INNGEST_SIGNING_KEY_FALLBACK").pipe(
-      Config.option,
-      Config.map(Option.getOrUndefined),
-    ),
-  }),
-);
+export const layerFromEnv: Layer.Layer<InngestClient | InngestConfig, Config.ConfigError, HttpClient.HttpClient> =
+  layerConfig(
+    Config.all({
+      id: Config.string("INNGEST_APP_ID").pipe(Config.withDefault("app")),
+      eventKey: Config.string("INNGEST_EVENT_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
+      signingKey: Config.string("INNGEST_SIGNING_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
+      signingKeyFallback: Config.string("INNGEST_SIGNING_KEY_FALLBACK").pipe(
+        Config.option,
+        Config.map(Option.getOrUndefined),
+      ),
+    }),
+  );

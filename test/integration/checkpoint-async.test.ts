@@ -86,14 +86,6 @@ const makeRequest = (options: {
   });
 };
 
-const TEST_FACTORY_KEY = Symbol.for("effect-inngest/internal/test-retry-schedule-factory");
-const layerWithRetrySchedule = (InngestClient.InngestClient as unknown as Record<symbol, unknown>)[
-  TEST_FACTORY_KEY
-] as (
-  config: Parameters<typeof InngestClient.layer>[0],
-  retrySchedule: Schedule.Schedule<unknown, CheckpointApiError>,
-) => Layer.Layer<InngestClient.InngestClient, never, HttpClient.HttpClient>;
-
 const makeClient = (
   overrides: Partial<{
     checkpointing: unknown;
@@ -108,9 +100,12 @@ const makeClient = (
     signingKey: overrides.signingKey ?? "signkey-prod-deadbeef",
     checkpointing: (overrides.checkpointing ?? true) as never,
   };
+  const clientLayer = InngestClient.layer(config);
   return overrides.checkpointRetrySchedule
-    ? layerWithRetrySchedule(config, overrides.checkpointRetrySchedule)
-    : InngestClient.layer(config);
+    ? clientLayer.pipe(
+        Layer.provide(Layer.succeed(InngestClient.CheckpointRetrySchedule, overrides.checkpointRetrySchedule)),
+      )
+    : clientLayer;
 };
 
 const TestEvent = InngestEvent.make("ckpt/test", Schema.Struct({ value: Schema.String }));
