@@ -316,7 +316,7 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "f97e655b7252f24b",
+                  "sid": "<sid>",
                   "traceparent": "<traceparent>"
                 },
                 "ts": "<event-ts>"
@@ -350,7 +350,7 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "f97e655b7252f24b",
+                    "sid": "<sid>",
                     "traceparent": "<traceparent>"
                   },
                   "ts": "<event-ts>"
@@ -558,7 +558,7 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "abac4d4829b6f050",
+                  "sid": "<sid>",
                   "traceparent": "<traceparent>"
                 },
                 "ts": "<event-ts>"
@@ -592,7 +592,7 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "abac4d4829b6f050",
+                    "sid": "<sid>",
                     "traceparent": "<traceparent>"
                   },
                   "ts": "<event-ts>"

@@ -305,7 +305,7 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "3bb2fc3016ee518c",
+                  "sid": "<sid>",
                   "traceparent": "<traceparent>"
                 },
                 "ts": "<event-ts>"
@@ -337,7 +337,7 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "3bb2fc3016ee518c",
+                    "sid": "<sid>",
                     "traceparent": "<traceparent>"
                   },
                   "ts": "<event-ts>"
@@ -369,7 +369,7 @@
       "body": {
         "name": "NonRetriableError",
         "message": "Child always fails",
-        "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+        "stack": "<stack>"
       }
     }
   },
@@ -436,7 +436,7 @@
               "error": "NonRetriableError",
               "message": "Child always fails",
               "name": "NonRetriableError",
-              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              "stack": "<stack>"
             }
           }
         },

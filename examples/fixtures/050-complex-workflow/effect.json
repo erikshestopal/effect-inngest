@@ -304,7 +304,7 @@
             "data": true,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -377,7 +377,7 @@
             "data": true,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -589,11 +589,11 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV8Z5VVGX7GVA38VZWR4Z1E1"]
+              "ids": ["<event-id>"]
             },
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -666,7 +666,7 @@
             "data": "2026-06-20",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -748,11 +748,11 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV8Z5VVS572DTHXB6KHJ6FAW"]
+              "ids": ["<event-id>"]
             },
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

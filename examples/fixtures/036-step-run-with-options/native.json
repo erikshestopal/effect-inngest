@@ -275,7 +275,7 @@
             "data": "basic",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -354,7 +354,7 @@
             "data": "with-name",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -427,7 +427,7 @@
             "data": "completed",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

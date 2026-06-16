@@ -283,7 +283,7 @@
             "data": "a",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           },
           {
@@ -320,7 +320,7 @@
             "data": "b",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

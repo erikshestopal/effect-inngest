@@ -278,7 +278,7 @@
             "data": 10,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -351,7 +351,7 @@
             "data": 20,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -424,7 +424,7 @@
             "data": 25,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -497,7 +497,7 @@
             "data": 55,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

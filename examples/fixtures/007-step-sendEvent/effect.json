@@ -288,11 +288,11 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV8Z5TNP7DXW428D18MGZGTS"]
+              "ids": ["<event-id>"]
             },
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

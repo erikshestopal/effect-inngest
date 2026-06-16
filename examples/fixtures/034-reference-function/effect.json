@@ -307,7 +307,7 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "afa1447a4a088fe4",
+                  "sid": "<sid>",
                   "traceparent": "<traceparent>"
                 },
                 "ts": "<event-ts>"
@@ -340,7 +340,7 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "afa1447a4a088fe4",
+                    "sid": "<sid>",
                     "traceparent": "<traceparent>"
                   },
                   "ts": "<event-ts>"

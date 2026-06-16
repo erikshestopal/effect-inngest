@@ -276,10 +276,10 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781638811292,
+            "data": 1781639118327,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -349,10 +349,10 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.14880804301690975,
+            "data": 0.7077282531086655,
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],
@@ -432,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.14880804301690975
+            "data": 0.7077282531086655
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781638811292
+            "data": 1781639118327
           }
         },
         "use_api": false,
@@ -458,7 +458,7 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "timestamp": "<timestamp>",
-            "randomValue": 0.14880804301690975
+            "randomValue": 0.7077282531086655
           }
         }
       ]
@@ -520,7 +520,7 @@
             "transformedResultPromise": {},
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

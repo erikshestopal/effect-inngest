@@ -282,7 +282,7 @@
             "data": "Phase 1 done",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

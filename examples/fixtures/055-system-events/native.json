@@ -241,239 +241,6 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "<correlation_id>",
-            "event": {
-              "data": {
-                "_inngest": {
-                  "correlation_id": "<correlation_id>",
-                  "expire": "<expire>",
-                  "fn_id": "examples-011-step-invoke-child-square",
-                  "gid": "<gid>",
-                  "isr": {
-                    "dsid": "<dsid>",
-                    "dstp": "<dstp>",
-                    "tp": "<traceparent>",
-                    "ts": "<event-ts>"
-                  },
-                  "name": "call-child",
-                  "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                  "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "d21dd866b696486e",
-                      "traceparent": "<traceparent>"
-                    },
-                    "ts": "<event-ts>"
-                  }
-                },
-                "value": 7
-              },
-              "id": "01KV8Z5KMXSAJJJ89HYQEGFZPD",
-              "name": "inngest/function.invoked",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-011-step-invoke-child-square",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "call-child",
-                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d21dd866b696486e",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  },
-                  "value": 7
-                },
-                "id": "01KV8Z5KMXSAJJJ89HYQEGFZPD",
-                "name": "inngest/function.invoked",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-011-step-invoke-child-square",
-            "result": {
-              "squared": 49
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "correlation_id": "<correlation_id>",
-              "event": {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-011-step-invoke-child-square",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "call-child",
-                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "d21dd866b696486e",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  },
-                  "value": 7
-                },
-                "id": "01KV8Z5KMXSAJJJ89HYQEGFZPD",
-                "name": "inngest/function.invoked",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "_inngest": {
-                      "correlation_id": "<correlation_id>",
-                      "expire": "<expire>",
-                      "fn_id": "examples-011-step-invoke-child-square",
-                      "gid": "<gid>",
-                      "isr": {
-                        "dsid": "<dsid>",
-                        "dstp": "<dstp>",
-                        "tp": "<traceparent>",
-                        "ts": "<event-ts>"
-                      },
-                      "name": "call-child",
-                      "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                      "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "d21dd866b696486e",
-                          "traceparent": "<traceparent>"
-                        },
-                        "ts": "<event-ts>"
-                      }
-                    },
-                    "value": 7
-                  },
-                  "id": "01KV8Z5KMXSAJJJ89HYQEGFZPD",
-                  "name": "inngest/function.invoked",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-011-step-invoke-child-square",
-              "result": {
-                "squared": 49
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
             "event": {
               "data": {
                 "items": [
@@ -608,11 +375,1025 @@
     }
   },
   {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-handle-failure",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Failed"
+            },
+            "correlation_id": "<correlation_id>",
+            "error": {
+              "error": "NonRetriableError",
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "<stack>"
+            },
+            "event": {
+              "data": {
+                "_inngest": {
+                  "correlation_id": "<correlation_id>",
+                  "expire": "<expire>",
+                  "fn_id": "examples-028-invoke-failure-failing-child",
+                  "gid": "<gid>",
+                  "isr": {
+                    "dsid": "<dsid>",
+                    "dstp": "<dstp>",
+                    "tp": "<traceparent>",
+                    "ts": "<event-ts>"
+                  },
+                  "name": "call-child",
+                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "<sid>",
+                      "traceparent": "<traceparent>"
+                    },
+                    "ts": "<event-ts>"
+                  }
+                }
+              },
+              "id": "01KV8ZEZF5T9G72JKCPMV3746V",
+              "name": "inngest/function.invoked",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  }
+                },
+                "id": "01KV8ZEZF5T9G72JKCPMV3746V",
+                "name": "inngest/function.invoked",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-028-invoke-failure-failing-child",
+            "result": {
+              "__serialized": true,
+              "message": "Child always fails",
+              "name": "Error",
+              "stack": "<stack>"
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.failed",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Failed"
+              },
+              "correlation_id": "<correlation_id>",
+              "error": {
+                "error": "NonRetriableError",
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "<stack>"
+              },
+              "event": {
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-028-invoke-failure-failing-child",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "call-child",
+                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  }
+                },
+                "id": "01KV8ZEZF5T9G72JKCPMV3746V",
+                "name": "inngest/function.invoked",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "<correlation_id>",
+                      "expire": "<expire>",
+                      "fn_id": "examples-028-invoke-failure-failing-child",
+                      "gid": "<gid>",
+                      "isr": {
+                        "dsid": "<dsid>",
+                        "dstp": "<dstp>",
+                        "tp": "<traceparent>",
+                        "ts": "<event-ts>"
+                      },
+                      "name": "call-child",
+                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
+                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "<sid>",
+                          "traceparent": "<traceparent>"
+                        },
+                        "ts": "<event-ts>"
+                      }
+                    }
+                  },
+                  "id": "01KV8ZEZF5T9G72JKCPMV3746V",
+                  "name": "inngest/function.invoked",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-028-invoke-failure-failing-child",
+              "result": {
+                "__serialized": true,
+                "message": "Child always fails",
+                "name": "Error",
+                "stack": "<stack>"
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.failed",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "handled": true,
+            "failedFunctionId": "examples-028-invoke-failure-failing-child"
+          }
+        }
+      ]
+    }
+  },
+  {
     "sequence": 6,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-trigger-failure&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-trigger-failure",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "6fa4d944-7699-5e6d-a092-76f961af4de2",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "shouldFail": false
+          },
+          "id": "<event-id>",
+          "name": "demo/trigger-failure",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "shouldFail": false
+            },
+            "id": "<event-id>",
+            "name": "demo/trigger-failure",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": null
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 7,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 7,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "data": "payload-035"
+              },
+              "id": "fixture-native-035-event-with-id-0-0",
+              "name": "demo/idempotent-event",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-native-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-035-event-with-id-idempotent-handler",
+            "result": {
+              "eventId": "01KV8ZEZPBD821WTECQY2NJ5M7",
+              "processed": true
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "data": "payload-035"
+                },
+                "id": "fixture-native-035-event-with-id-0-0",
+                "name": "demo/idempotent-event",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "data": "payload-035"
+                  },
+                  "id": "fixture-native-035-event-with-id-0-0",
+                  "name": "demo/idempotent-event",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-035-event-with-id-idempotent-handler",
+              "result": {
+                "eventId": "01KV8ZEZPBD821WTECQY2NJ5M7",
+                "processed": true
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 8,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 8,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-native-042-sendEvent-batch-0-0",
+              "name": "demo/send-batch",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-native-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-042-sendEvent-batch-send-batch",
+            "result": {
+              "sentCount": 3
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-native-042-sendEvent-batch-0-0",
+                "name": "demo/send-batch",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-native-042-sendEvent-batch-0-0",
+                  "name": "demo/send-batch",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-042-sendEvent-batch-send-batch",
+              "result": {
+                "sentCount": 3
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 9,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 9,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "teamId": "team-046"
+              },
+              "id": "fixture-native-046-throttle-key-0-0",
+              "name": "demo/throttle-keyed",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "teamId": "team-046"
+                },
+                "id": "fixture-native-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-046-throttle-key-throttle-keyed",
+            "result": {
+              "processedAt": "<timestamp>",
+              "teamId": "team-046"
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "teamId": "team-046"
+                },
+                "id": "fixture-native-046-throttle-key-0-0",
+                "name": "demo/throttle-keyed",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "teamId": "team-046"
+                  },
+                  "id": "fixture-native-046-throttle-key-0-0",
+                  "name": "demo/throttle-keyed",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-046-throttle-key-throttle-keyed",
+              "result": {
+                "processedAt": "<timestamp>",
+                "teamId": "team-046"
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 10,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 10,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-native-037-nested-steps-0-0",
+              "name": "demo/nested",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-native-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-037-nested-steps-nested-steps-demo",
+            "result": {
+              "final": 55,
+              "level1": 10,
+              "level2": 20,
+              "level3": 25
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-native-037-nested-steps-0-0",
+                "name": "demo/nested",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-native-037-nested-steps-0-0",
+                  "name": "demo/nested",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-037-nested-steps-nested-steps-demo",
+              "result": {
+                "final": 55,
+                "level1": 10,
+                "level2": 20,
+                "level3": 25
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 11,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 11,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {},
+              "id": "fixture-native-036-step-run-with-options-0-0",
+              "name": "demo/step-options",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {},
+                "id": "fixture-native-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-036-step-run-with-options-step-options-demo",
+            "result": {
+              "results": ["basic", "with-name", "completed"]
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {},
+                "id": "fixture-native-036-step-run-with-options-0-0",
+                "name": "demo/step-options",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {},
+                  "id": "fixture-native-036-step-run-with-options-0-0",
+                  "name": "demo/step-options",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-036-step-run-with-options-step-options-demo",
+              "result": {
+                "results": ["basic", "with-name", "completed"]
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 12,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 12,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -753,16 +1534,16 @@
     }
   },
   {
-    "sequence": 7,
+    "sequence": 13,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 7,
+      "sequence": 13,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-handle-failure&stepId=step",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
       "query": {
-        "fnId": "examples-055-system-events-handle-failure",
+        "fnId": "examples-055-system-events-track-completion",
         "stepId": "step"
       },
       "headers": {
@@ -778,7 +1559,7 @@
           "attempt": 0,
           "disable_immediate_execution": false,
           "env": "",
-          "fn_id": "1b54cae4-2b01-58c8-8d2f-ff5280e28172",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
           "generation_id": 1,
           "job_id": "<job_id>",
           "max_attempts": 5,
@@ -803,7 +1584,7 @@
               "error": "NonRetriableError",
               "message": "Child always fails",
               "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "event": {
               "data": {
@@ -824,14 +1605,14 @@
                   "source_fn_v": 1,
                   "tc": {
                     "ctx": {
-                      "sid": "0bf76189d2e9fb26",
+                      "sid": "<sid>",
                       "traceparent": "<traceparent>"
                     },
                     "ts": "<event-ts>"
                   }
                 }
               },
-              "id": "01KV8Z5KN3YVYET6G8JSJBK843",
+              "id": "01KV8ZEZF5T9G72JKCPMV3746V",
               "name": "inngest/function.invoked",
               "ts": "<event-ts>",
               "user": {}
@@ -856,14 +1637,14 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "0bf76189d2e9fb26",
+                        "sid": "<sid>",
                         "traceparent": "<traceparent>"
                       },
                       "ts": "<event-ts>"
                     }
                   }
                 },
-                "id": "01KV8Z5KN3YVYET6G8JSJBK843",
+                "id": "01KV8ZEZF5T9G72JKCPMV3746V",
                 "name": "inngest/function.invoked",
                 "ts": "<event-ts>"
               }
@@ -873,12 +1654,12 @@
               "__serialized": true,
               "message": "Child always fails",
               "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "run_id": "<run_id>"
           },
           "id": "<event-id>",
-          "name": "inngest/function.failed",
+          "name": "inngest/function.finished",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -893,7 +1674,7 @@
                 "error": "NonRetriableError",
                 "message": "Child always fails",
                 "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "event": {
                 "data": {
@@ -914,14 +1695,14 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "0bf76189d2e9fb26",
+                        "sid": "<sid>",
                         "traceparent": "<traceparent>"
                       },
                       "ts": "<event-ts>"
                     }
                   }
                 },
-                "id": "01KV8Z5KN3YVYET6G8JSJBK843",
+                "id": "01KV8ZEZF5T9G72JKCPMV3746V",
                 "name": "inngest/function.invoked",
                 "ts": "<event-ts>",
                 "user": {}
@@ -946,14 +1727,14 @@
                       "source_fn_v": 1,
                       "tc": {
                         "ctx": {
-                          "sid": "0bf76189d2e9fb26",
+                          "sid": "<sid>",
                           "traceparent": "<traceparent>"
                         },
                         "ts": "<event-ts>"
                       }
                     }
                   },
-                  "id": "01KV8Z5KN3YVYET6G8JSJBK843",
+                  "id": "01KV8ZEZF5T9G72JKCPMV3746V",
                   "name": "inngest/function.invoked",
                   "ts": "<event-ts>"
                 }
@@ -963,12 +1744,12 @@
                 "__serialized": true,
                 "message": "Child always fails",
                 "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "run_id": "<run_id>"
             },
             "id": "<event-id>",
-            "name": "inngest/function.failed",
+            "name": "inngest/function.finished",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -993,104 +1774,18 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "handled": true,
-            "failedFunctionId": "examples-028-invoke-failure-failing-child"
+            "tracked": true
           }
         }
       ]
     }
   },
   {
-    "sequence": 8,
+    "sequence": 14,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-trigger-failure&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-trigger-failure",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "6fa4d944-7699-5e6d-a092-76f961af4de2",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 1,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "shouldFail": false
-          },
-          "id": "<event-id>",
-          "name": "demo/trigger-failure",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "shouldFail": false
-            },
-            "id": "<event-id>",
-            "name": "demo/trigger-failure",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": null
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 9,
+      "sequence": 14,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -1131,29 +1826,75 @@
             "_inngest": {
               "status": "Completed"
             },
+            "correlation_id": "<correlation_id>",
             "event": {
               "data": {
-                "companyId": "company-047"
+                "_inngest": {
+                  "correlation_id": "<correlation_id>",
+                  "expire": "<expire>",
+                  "fn_id": "examples-011-step-invoke-child-square",
+                  "gid": "<gid>",
+                  "isr": {
+                    "dsid": "<dsid>",
+                    "dstp": "<dstp>",
+                    "tp": "<traceparent>",
+                    "ts": "<event-ts>"
+                  },
+                  "name": "call-child",
+                  "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                  "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "<sid>",
+                      "traceparent": "<traceparent>"
+                    },
+                    "ts": "<event-ts>"
+                  }
+                },
+                "value": 7
               },
-              "id": "fixture-native-047-rate-limit-key-0-0",
-              "name": "demo/rate-keyed",
+              "id": "01KV8ZEZFBNAG8SE7FXST201CN",
+              "name": "inngest/function.invoked",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "companyId": "company-047"
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  },
+                  "value": 7
                 },
-                "id": "fixture-native-047-rate-limit-key-0-0",
-                "name": "demo/rate-keyed",
+                "id": "01KV8ZEZFBNAG8SE7FXST201CN",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+            "function_id": "examples-011-step-invoke-child-square",
             "result": {
-              "companyId": "company-047",
-              "processedAt": "2026-06-16T19:40:11.523Z"
+              "squared": 49
             },
             "run_id": "<run_id>"
           },
@@ -1168,29 +1909,75 @@
               "_inngest": {
                 "status": "Completed"
               },
+              "correlation_id": "<correlation_id>",
               "event": {
                 "data": {
-                  "companyId": "company-047"
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-011-step-invoke-child-square",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "call-child",
+                    "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                    "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  },
+                  "value": 7
                 },
-                "id": "fixture-native-047-rate-limit-key-0-0",
-                "name": "demo/rate-keyed",
+                "id": "01KV8ZEZFBNAG8SE7FXST201CN",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "companyId": "company-047"
+                    "_inngest": {
+                      "correlation_id": "<correlation_id>",
+                      "expire": "<expire>",
+                      "fn_id": "examples-011-step-invoke-child-square",
+                      "gid": "<gid>",
+                      "isr": {
+                        "dsid": "<dsid>",
+                        "dstp": "<dstp>",
+                        "tp": "<traceparent>",
+                        "ts": "<event-ts>"
+                      },
+                      "name": "call-child",
+                      "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
+                      "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "<sid>",
+                          "traceparent": "<traceparent>"
+                        },
+                        "ts": "<event-ts>"
+                      }
+                    },
+                    "value": 7
                   },
-                  "id": "fixture-native-047-rate-limit-key-0-0",
-                  "name": "demo/rate-keyed",
+                  "id": "01KV8ZEZFBNAG8SE7FXST201CN",
+                  "name": "inngest/function.invoked",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
+              "function_id": "examples-011-step-invoke-child-square",
               "result": {
-                "companyId": "company-047",
-                "processedAt": "2026-06-16T19:40:11.523Z"
+                "squared": 49
               },
               "run_id": "<run_id>"
             },
@@ -1227,152 +2014,11 @@
     }
   },
   {
-    "sequence": 10,
+    "sequence": 15,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 10,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {
-                "teamId": "team-046"
-              },
-              "id": "fixture-native-046-throttle-key-0-0",
-              "name": "demo/throttle-keyed",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "teamId": "team-046"
-                },
-                "id": "fixture-native-046-throttle-key-0-0",
-                "name": "demo/throttle-keyed",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-046-throttle-key-throttle-keyed",
-            "result": {
-              "processedAt": "2026-06-16T19:40:11.530Z",
-              "teamId": "team-046"
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {
-                  "teamId": "team-046"
-                },
-                "id": "fixture-native-046-throttle-key-0-0",
-                "name": "demo/throttle-keyed",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "teamId": "team-046"
-                  },
-                  "id": "fixture-native-046-throttle-key-0-0",
-                  "name": "demo/throttle-keyed",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-046-throttle-key-throttle-keyed",
-              "result": {
-                "processedAt": "2026-06-16T19:40:11.530Z",
-                "teamId": "team-046"
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 11,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 11,
+      "sequence": 15,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -1509,652 +2155,6 @@
     }
   },
   {
-    "sequence": 12,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 12,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {},
-              "id": "fixture-native-042-sendEvent-batch-0-0",
-              "name": "demo/send-batch",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {},
-                "id": "fixture-native-042-sendEvent-batch-0-0",
-                "name": "demo/send-batch",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-042-sendEvent-batch-send-batch",
-            "result": {
-              "sentCount": 3
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {},
-                "id": "fixture-native-042-sendEvent-batch-0-0",
-                "name": "demo/send-batch",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {},
-                  "id": "fixture-native-042-sendEvent-batch-0-0",
-                  "name": "demo/send-batch",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-042-sendEvent-batch-send-batch",
-              "result": {
-                "sentCount": 3
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 13,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 13,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {},
-              "id": "fixture-native-036-step-run-with-options-0-0",
-              "name": "demo/step-options",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {},
-                "id": "fixture-native-036-step-run-with-options-0-0",
-                "name": "demo/step-options",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-036-step-run-with-options-step-options-demo",
-            "result": {
-              "results": ["basic", "with-name", "completed"]
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {},
-                "id": "fixture-native-036-step-run-with-options-0-0",
-                "name": "demo/step-options",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {},
-                  "id": "fixture-native-036-step-run-with-options-0-0",
-                  "name": "demo/step-options",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-036-step-run-with-options-step-options-demo",
-              "result": {
-                "results": ["basic", "with-name", "completed"]
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 14,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 14,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {},
-              "id": "fixture-native-037-nested-steps-0-0",
-              "name": "demo/nested",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {},
-                "id": "fixture-native-037-nested-steps-0-0",
-                "name": "demo/nested",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-037-nested-steps-nested-steps-demo",
-            "result": {
-              "final": 55,
-              "level1": 10,
-              "level2": 20,
-              "level3": 25
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {},
-                "id": "fixture-native-037-nested-steps-0-0",
-                "name": "demo/nested",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {},
-                  "id": "fixture-native-037-nested-steps-0-0",
-                  "name": "demo/nested",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-037-nested-steps-nested-steps-demo",
-              "result": {
-                "final": 55,
-                "level1": 10,
-                "level2": 20,
-                "level3": 25
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 15,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 15,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Failed"
-            },
-            "correlation_id": "<correlation_id>",
-            "error": {
-              "error": "NonRetriableError",
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
-            },
-            "event": {
-              "data": {
-                "_inngest": {
-                  "correlation_id": "<correlation_id>",
-                  "expire": "<expire>",
-                  "fn_id": "examples-028-invoke-failure-failing-child",
-                  "gid": "<gid>",
-                  "isr": {
-                    "dsid": "<dsid>",
-                    "dstp": "<dstp>",
-                    "tp": "<traceparent>",
-                    "ts": "<event-ts>"
-                  },
-                  "name": "call-child",
-                  "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                  "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "0bf76189d2e9fb26",
-                      "traceparent": "<traceparent>"
-                    },
-                    "ts": "<event-ts>"
-                  }
-                }
-              },
-              "id": "01KV8Z5KN3YVYET6G8JSJBK843",
-              "name": "inngest/function.invoked",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "0bf76189d2e9fb26",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  }
-                },
-                "id": "01KV8Z5KN3YVYET6G8JSJBK843",
-                "name": "inngest/function.invoked",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-028-invoke-failure-failing-child",
-            "result": {
-              "__serialized": true,
-              "message": "Child always fails",
-              "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Failed"
-              },
-              "correlation_id": "<correlation_id>",
-              "error": {
-                "error": "NonRetriableError",
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
-              },
-              "event": {
-                "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-028-invoke-failure-failing-child",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "call-child",
-                    "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                    "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "0bf76189d2e9fb26",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  }
-                },
-                "id": "01KV8Z5KN3YVYET6G8JSJBK843",
-                "name": "inngest/function.invoked",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "_inngest": {
-                      "correlation_id": "<correlation_id>",
-                      "expire": "<expire>",
-                      "fn_id": "examples-028-invoke-failure-failing-child",
-                      "gid": "<gid>",
-                      "isr": {
-                        "dsid": "<dsid>",
-                        "dstp": "<dstp>",
-                        "tp": "<traceparent>",
-                        "ts": "<event-ts>"
-                      },
-                      "name": "call-child",
-                      "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                      "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "0bf76189d2e9fb26",
-                          "traceparent": "<traceparent>"
-                        },
-                        "ts": "<event-ts>"
-                      }
-                    }
-                  },
-                  "id": "01KV8Z5KN3YVYET6G8JSJBK843",
-                  "name": "inngest/function.invoked",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-028-invoke-failure-failing-child",
-              "result": {
-                "__serialized": true,
-                "message": "Child always fails",
-                "name": "Error",
-                "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
     "sequence": 16,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
@@ -2202,27 +2202,27 @@
             },
             "event": {
               "data": {
-                "data": "payload-035"
+                "companyId": "company-047"
               },
-              "id": "fixture-native-035-event-with-id-0-0",
-              "name": "demo/idempotent-event",
+              "id": "fixture-native-047-rate-limit-key-0-0",
+              "name": "demo/rate-keyed",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "data": "payload-035"
+                  "companyId": "company-047"
                 },
-                "id": "fixture-native-035-event-with-id-0-0",
-                "name": "demo/idempotent-event",
+                "id": "fixture-native-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-035-event-with-id-idempotent-handler",
+            "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
             "result": {
-              "eventId": "01KV8Z5KVSAPPMD6VKZ4JGJWA0",
-              "processed": true
+              "companyId": "company-047",
+              "processedAt": "<timestamp>"
             },
             "run_id": "<run_id>"
           },
@@ -2239,27 +2239,27 @@
               },
               "event": {
                 "data": {
-                  "data": "payload-035"
+                  "companyId": "company-047"
                 },
-                "id": "fixture-native-035-event-with-id-0-0",
-                "name": "demo/idempotent-event",
+                "id": "fixture-native-047-rate-limit-key-0-0",
+                "name": "demo/rate-keyed",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "data": "payload-035"
+                    "companyId": "company-047"
                   },
-                  "id": "fixture-native-035-event-with-id-0-0",
-                  "name": "demo/idempotent-event",
+                  "id": "fixture-native-047-rate-limit-key-0-0",
+                  "name": "demo/rate-keyed",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-035-event-with-id-idempotent-handler",
+              "function_id": "examples-047-rate-limit-key-rate-limit-keyed",
               "result": {
-                "eventId": "01KV8Z5KVSAPPMD6VKZ4JGJWA0",
-                "processed": true
+                "companyId": "company-047",
+                "processedAt": "<timestamp>"
               },
               "run_id": "<run_id>"
             },
@@ -2485,27 +2485,23 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "number": 7
-              },
-              "id": "fixture-native-011-step-invoke-0-0",
-              "name": "demo/invoke-parent",
+              "data": {},
+              "id": "fixture-native-029-retry-error-0-0",
+              "name": "demo/retry-error",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "number": 7
-                },
-                "id": "fixture-native-011-step-invoke-0-0",
-                "name": "demo/invoke-parent",
+                "data": {},
+                "id": "fixture-native-029-retry-error-0-0",
+                "name": "demo/retry-error",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-011-step-invoke-parent-invoke",
+            "function_id": "examples-029-retry-error-retry-demo",
             "result": {
-              "result": 49
+              "attempts": 2
             },
             "run_id": "<run_id>"
           },
@@ -2521,27 +2517,23 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "number": 7
-                },
-                "id": "fixture-native-011-step-invoke-0-0",
-                "name": "demo/invoke-parent",
+                "data": {},
+                "id": "fixture-native-029-retry-error-0-0",
+                "name": "demo/retry-error",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "number": 7
-                  },
-                  "id": "fixture-native-011-step-invoke-0-0",
-                  "name": "demo/invoke-parent",
+                  "data": {},
+                  "id": "fixture-native-029-retry-error-0-0",
+                  "name": "demo/retry-error",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-011-step-invoke-parent-invoke",
+              "function_id": "examples-029-retry-error-retry-demo",
               "result": {
-                "result": 49
+                "attempts": 2
               },
               "run_id": "<run_id>"
             },
@@ -2625,27 +2617,25 @@
             },
             "event": {
               "data": {
-                "tag": "opt-out-065"
+                "shouldFail": false
               },
-              "id": "fixture-native-065-checkpointing-opt-out-0-0",
-              "name": "demo/checkpoint-opt-out",
+              "id": "fixture-native-055-system-events-0-0",
+              "name": "demo/trigger-failure",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "tag": "opt-out-065"
+                  "shouldFail": false
                 },
-                "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                "name": "demo/checkpoint-opt-out",
+                "id": "fixture-native-055-system-events-0-0",
+                "name": "demo/trigger-failure",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-            "result": {
-              "tag": "opt-out-065"
-            },
+            "function_id": "examples-055-system-events-trigger-failure",
+            "result": null,
             "run_id": "<run_id>"
           },
           "id": "<event-id>",
@@ -2661,27 +2651,25 @@
               },
               "event": {
                 "data": {
-                  "tag": "opt-out-065"
+                  "shouldFail": false
                 },
-                "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                "name": "demo/checkpoint-opt-out",
+                "id": "fixture-native-055-system-events-0-0",
+                "name": "demo/trigger-failure",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "tag": "opt-out-065"
+                    "shouldFail": false
                   },
-                  "id": "fixture-native-065-checkpointing-opt-out-0-0",
-                  "name": "demo/checkpoint-opt-out",
+                  "id": "fixture-native-055-system-events-0-0",
+                  "name": "demo/trigger-failure",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-              "result": {
-                "tag": "opt-out-065"
-              },
+              "function_id": "examples-055-system-events-trigger-failure",
+              "result": null,
               "run_id": "<run_id>"
             },
             "id": "<event-id>",
@@ -2722,284 +2710,6 @@
     "proxy": "inngest-to-sdk",
     "request": {
       "sequence": 20,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {
-                "key": "override-064"
-              },
-              "id": "fixture-native-064-checkpointing-fn-override-0-0",
-              "name": "demo/checkpoint-override",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "key": "override-064"
-                },
-                "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                "name": "demo/checkpoint-override",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
-            "result": {
-              "key": "override-064"
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {
-                  "key": "override-064"
-                },
-                "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                "name": "demo/checkpoint-override",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "key": "override-064"
-                  },
-                  "id": "fixture-native-064-checkpointing-fn-override-0-0",
-                  "name": "demo/checkpoint-override",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
-              "result": {
-                "key": "override-064"
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 21,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 21,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
-      "path": "/examples/055-system-events",
-      "query": {
-        "fnId": "examples-055-system-events-track-completion",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "status": "Completed"
-            },
-            "event": {
-              "data": {
-                "base": 10
-              },
-              "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-              "name": "demo/checkpoint-buffered",
-              "ts": "<event-ts>",
-              "user": {}
-            },
-            "events": [
-              {
-                "data": {
-                  "base": 10
-                },
-                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                "name": "demo/checkpoint-buffered",
-                "ts": "<event-ts>"
-              }
-            ],
-            "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
-            "result": {
-              "total": 50
-            },
-            "run_id": "<run_id>"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.finished",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "status": "Completed"
-              },
-              "event": {
-                "data": {
-                  "base": 10
-                },
-                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                "name": "demo/checkpoint-buffered",
-                "ts": "<event-ts>",
-                "user": {}
-              },
-              "events": [
-                {
-                  "data": {
-                    "base": 10
-                  },
-                  "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
-                  "name": "demo/checkpoint-buffered",
-                  "ts": "<event-ts>"
-                }
-              ],
-              "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
-              "result": {
-                "total": 50
-              },
-              "run_id": "<run_id>"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.finished",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "tracked": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 22,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 22,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -3144,11 +2854,11 @@
     }
   },
   {
-    "sequence": 23,
+    "sequence": 21,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 23,
+      "sequence": 21,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -3277,11 +2987,11 @@
     }
   },
   {
-    "sequence": 24,
+    "sequence": 22,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 24,
+      "sequence": 22,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -3424,11 +3134,11 @@
     }
   },
   {
-    "sequence": 25,
+    "sequence": 23,
     "direction": "inbound",
     "proxy": "inngest-to-sdk",
     "request": {
-      "sequence": 25,
+      "sequence": 23,
       "method": "POST",
       "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
       "path": "/examples/055-system-events",
@@ -3489,7 +3199,7 @@
                   "source_fn_v": 1,
                   "tc": {
                     "ctx": {
-                      "sid": "e0f2a3727e1f3cbf",
+                      "sid": "<sid>",
                       "traceparent": "<traceparent>"
                     },
                     "ts": "<event-ts>"
@@ -3497,7 +3207,7 @@
                 },
                 "input": 21
               },
-              "id": "01KV8Z5KWASWY5434K1K3B6BEZ",
+              "id": "01KV8ZEZQA9JS3DTZHCERG1HJT",
               "name": "inngest/function.invoked",
               "ts": "<event-ts>",
               "user": {}
@@ -3522,7 +3232,7 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "e0f2a3727e1f3cbf",
+                        "sid": "<sid>",
                         "traceparent": "<traceparent>"
                       },
                       "ts": "<event-ts>"
@@ -3530,7 +3240,7 @@
                   },
                   "input": 21
                 },
-                "id": "01KV8Z5KWASWY5434K1K3B6BEZ",
+                "id": "01KV8ZEZQA9JS3DTZHCERG1HJT",
                 "name": "inngest/function.invoked",
                 "ts": "<event-ts>"
               }
@@ -3572,7 +3282,7 @@
                     "source_fn_v": 1,
                     "tc": {
                       "ctx": {
-                        "sid": "e0f2a3727e1f3cbf",
+                        "sid": "<sid>",
                         "traceparent": "<traceparent>"
                       },
                       "ts": "<event-ts>"
@@ -3580,7 +3290,7 @@
                   },
                   "input": 21
                 },
-                "id": "01KV8Z5KWASWY5434K1K3B6BEZ",
+                "id": "01KV8ZEZQA9JS3DTZHCERG1HJT",
                 "name": "inngest/function.invoked",
                 "ts": "<event-ts>",
                 "user": {}
@@ -3605,7 +3315,7 @@
                       "source_fn_v": 1,
                       "tc": {
                         "ctx": {
-                          "sid": "e0f2a3727e1f3cbf",
+                          "sid": "<sid>",
                           "traceparent": "<traceparent>"
                         },
                         "ts": "<event-ts>"
@@ -3613,7 +3323,7 @@
                     },
                     "input": 21
                   },
-                  "id": "01KV8Z5KWASWY5434K1K3B6BEZ",
+                  "id": "01KV8ZEZQA9JS3DTZHCERG1HJT",
                   "name": "inngest/function.invoked",
                   "ts": "<event-ts>"
                 }
@@ -3621,6 +3331,284 @@
               "function_id": "examples-034-reference-function-helper-function",
               "result": {
                 "doubled": 42
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 24,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 24,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "number": 7
+              },
+              "id": "fixture-native-011-step-invoke-0-0",
+              "name": "demo/invoke-parent",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "number": 7
+                },
+                "id": "fixture-native-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-011-step-invoke-parent-invoke",
+            "result": {
+              "result": 49
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "number": 7
+                },
+                "id": "fixture-native-011-step-invoke-0-0",
+                "name": "demo/invoke-parent",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "number": 7
+                  },
+                  "id": "fixture-native-011-step-invoke-0-0",
+                  "name": "demo/invoke-parent",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-011-step-invoke-parent-invoke",
+              "result": {
+                "result": 49
+              },
+              "run_id": "<run_id>"
+            },
+            "id": "<event-id>",
+            "name": "inngest/function.finished",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "tracked": true
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 25,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 25,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/055-system-events?fnId=examples-055-system-events-track-completion&stepId=step",
+      "path": "/examples/055-system-events",
+      "query": {
+        "fnId": "examples-055-system-events-track-completion",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "402b07f2-c036-57d9-838a-fdd4a688b10c",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "_inngest": {
+              "status": "Completed"
+            },
+            "event": {
+              "data": {
+                "tag": "opt-out-065"
+              },
+              "id": "fixture-native-065-checkpointing-opt-out-0-0",
+              "name": "demo/checkpoint-opt-out",
+              "ts": "<event-ts>",
+              "user": {}
+            },
+            "events": [
+              {
+                "data": {
+                  "tag": "opt-out-065"
+                },
+                "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": "<event-ts>"
+              }
+            ],
+            "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+            "result": {
+              "tag": "opt-out-065"
+            },
+            "run_id": "<run_id>"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.finished",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "_inngest": {
+                "status": "Completed"
+              },
+              "event": {
+                "data": {
+                  "tag": "opt-out-065"
+                },
+                "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                "name": "demo/checkpoint-opt-out",
+                "ts": "<event-ts>",
+                "user": {}
+              },
+              "events": [
+                {
+                  "data": {
+                    "tag": "opt-out-065"
+                  },
+                  "id": "fixture-native-065-checkpointing-opt-out-0-0",
+                  "name": "demo/checkpoint-opt-out",
+                  "ts": "<event-ts>"
+                }
+              ],
+              "function_id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+              "result": {
+                "tag": "opt-out-065"
               },
               "run_id": "<run_id>"
             },
@@ -3704,25 +3692,27 @@
             },
             "event": {
               "data": {
-                "shouldFail": false
+                "base": 10
               },
-              "id": "fixture-native-055-system-events-0-0",
-              "name": "demo/trigger-failure",
+              "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+              "name": "demo/checkpoint-buffered",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "shouldFail": false
+                  "base": 10
                 },
-                "id": "fixture-native-055-system-events-0-0",
-                "name": "demo/trigger-failure",
+                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-055-system-events-trigger-failure",
-            "result": null,
+            "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+            "result": {
+              "total": 50
+            },
             "run_id": "<run_id>"
           },
           "id": "<event-id>",
@@ -3738,25 +3728,27 @@
               },
               "event": {
                 "data": {
-                  "shouldFail": false
+                  "base": 10
                 },
-                "id": "fixture-native-055-system-events-0-0",
-                "name": "demo/trigger-failure",
+                "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                "name": "demo/checkpoint-buffered",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "shouldFail": false
+                    "base": 10
                   },
-                  "id": "fixture-native-055-system-events-0-0",
-                  "name": "demo/trigger-failure",
+                  "id": "fixture-native-061-checkpointing-buffered-steps-0-0",
+                  "name": "demo/checkpoint-buffered",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-055-system-events-trigger-failure",
-              "result": null,
+              "function_id": "examples-061-checkpointing-buffered-steps-checkpoint-buffered",
+              "result": {
+                "total": 50
+              },
               "run_id": "<run_id>"
             },
             "id": "<event-id>",
@@ -3837,78 +3829,28 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "<correlation_id>",
             "event": {
               "data": {
-                "_inngest": {
-                  "correlation_id": "<correlation_id>",
-                  "expire": "<expire>",
-                  "fn_id": "examples-053-step-invoke-options-worker-task",
-                  "gid": "<gid>",
-                  "isr": {
-                    "dsid": "<dsid>",
-                    "dstp": "<dstp>",
-                    "tp": "<traceparent>",
-                    "ts": "<event-ts>"
-                  },
-                  "name": "invoke-worker",
-                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "f97e655b7252f24b",
-                      "traceparent": "<traceparent>"
-                    },
-                    "ts": "<event-ts>"
-                  }
-                },
-                "priority": "high",
-                "taskId": "task-053"
+                "key": "override-064"
               },
-              "id": "01KV8Z5M5K7DXQMBBPPJD3NAJ4",
-              "name": "inngest/function.invoked",
+              "id": "fixture-native-064-checkpointing-fn-override-0-0",
+              "name": "demo/checkpoint-override",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "invoke-worker",
-                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "f97e655b7252f24b",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  },
-                  "priority": "high",
-                  "taskId": "task-053"
+                  "key": "override-064"
                 },
-                "id": "01KV8Z5M5K7DXQMBBPPJD3NAJ4",
-                "name": "inngest/function.invoked",
+                "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-053-step-invoke-options-worker-task",
+            "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
             "result": {
-              "completed": true,
-              "taskId": "task-053"
+              "key": "override-064"
             },
             "run_id": "<run_id>"
           },
@@ -3923,78 +3865,28 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "<correlation_id>",
               "event": {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "invoke-worker",
-                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "f97e655b7252f24b",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
-                    }
-                  },
-                  "priority": "high",
-                  "taskId": "task-053"
+                  "key": "override-064"
                 },
-                "id": "01KV8Z5M5K7DXQMBBPPJD3NAJ4",
-                "name": "inngest/function.invoked",
+                "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                "name": "demo/checkpoint-override",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "_inngest": {
-                      "correlation_id": "<correlation_id>",
-                      "expire": "<expire>",
-                      "fn_id": "examples-053-step-invoke-options-worker-task",
-                      "gid": "<gid>",
-                      "isr": {
-                        "dsid": "<dsid>",
-                        "dstp": "<dstp>",
-                        "tp": "<traceparent>",
-                        "ts": "<event-ts>"
-                      },
-                      "name": "invoke-worker",
-                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "f97e655b7252f24b",
-                          "traceparent": "<traceparent>"
-                        },
-                        "ts": "<event-ts>"
-                      }
-                    },
-                    "priority": "high",
-                    "taskId": "task-053"
+                    "key": "override-064"
                   },
-                  "id": "01KV8Z5M5K7DXQMBBPPJD3NAJ4",
-                  "name": "inngest/function.invoked",
+                  "id": "fixture-native-064-checkpointing-fn-override-0-0",
+                  "name": "demo/checkpoint-override",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-053-step-invoke-options-worker-task",
+              "function_id": "examples-064-checkpointing-fn-override-checkpoint-override",
               "result": {
-                "completed": true,
-                "taskId": "task-053"
+                "key": "override-064"
               },
               "run_id": "<run_id>"
             },
@@ -4207,24 +4099,78 @@
             "_inngest": {
               "status": "Completed"
             },
+            "correlation_id": "<correlation_id>",
             "event": {
-              "data": {},
-              "id": "fixture-native-029-retry-error-0-0",
-              "name": "demo/retry-error",
+              "data": {
+                "_inngest": {
+                  "correlation_id": "<correlation_id>",
+                  "expire": "<expire>",
+                  "fn_id": "examples-053-step-invoke-options-worker-task",
+                  "gid": "<gid>",
+                  "isr": {
+                    "dsid": "<dsid>",
+                    "dstp": "<dstp>",
+                    "tp": "<traceparent>",
+                    "ts": "<event-ts>"
+                  },
+                  "name": "invoke-worker",
+                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "<sid>",
+                      "traceparent": "<traceparent>"
+                    },
+                    "ts": "<event-ts>"
+                  }
+                },
+                "priority": "high",
+                "taskId": "task-053"
+              },
+              "id": "01KV8ZEZYRWPDS4MHXE8BY8V87",
+              "name": "inngest/function.invoked",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-029-retry-error-0-0",
-                "name": "demo/retry-error",
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "invoke-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  },
+                  "priority": "high",
+                  "taskId": "task-053"
+                },
+                "id": "01KV8ZEZYRWPDS4MHXE8BY8V87",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-029-retry-error-retry-demo",
+            "function_id": "examples-053-step-invoke-options-worker-task",
             "result": {
-              "attempts": 2
+              "completed": true,
+              "taskId": "task-053"
             },
             "run_id": "<run_id>"
           },
@@ -4239,24 +4185,78 @@
               "_inngest": {
                 "status": "Completed"
               },
+              "correlation_id": "<correlation_id>",
               "event": {
-                "data": {},
-                "id": "fixture-native-029-retry-error-0-0",
-                "name": "demo/retry-error",
+                "data": {
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "invoke-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
+                    }
+                  },
+                  "priority": "high",
+                  "taskId": "task-053"
+                },
+                "id": "01KV8ZEZYRWPDS4MHXE8BY8V87",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-029-retry-error-0-0",
-                  "name": "demo/retry-error",
+                  "data": {
+                    "_inngest": {
+                      "correlation_id": "<correlation_id>",
+                      "expire": "<expire>",
+                      "fn_id": "examples-053-step-invoke-options-worker-task",
+                      "gid": "<gid>",
+                      "isr": {
+                        "dsid": "<dsid>",
+                        "dstp": "<dstp>",
+                        "tp": "<traceparent>",
+                        "ts": "<event-ts>"
+                      },
+                      "name": "invoke-worker",
+                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "<sid>",
+                          "traceparent": "<traceparent>"
+                        },
+                        "ts": "<event-ts>"
+                      }
+                    },
+                    "priority": "high",
+                    "taskId": "task-053"
+                  },
+                  "id": "01KV8ZEZYRWPDS4MHXE8BY8V87",
+                  "name": "inngest/function.invoked",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-029-retry-error-retry-demo",
+              "function_id": "examples-053-step-invoke-options-worker-task",
               "result": {
-                "attempts": 2
+                "completed": true,
+                "taskId": "task-053"
               },
               "run_id": "<run_id>"
             },
@@ -4339,28 +4339,23 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "id": "concurrent-014"
-              },
-              "id": "fixture-native-014-concurrency-limit-0-0",
-              "name": "demo/concurrent",
+              "data": {},
+              "id": "fixture-native-005-step-sleep-0-0",
+              "name": "demo/sleep",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "id": "concurrent-014"
-                },
-                "id": "fixture-native-014-concurrency-limit-0-0",
-                "name": "demo/concurrent",
+                "data": {},
+                "id": "fixture-native-005-step-sleep-0-0",
+                "name": "demo/sleep",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-014-concurrency-limit-concurrent-fn",
+            "function_id": "examples-005-step-sleep-sleep-test",
             "result": {
-              "completedAt": "2026-06-16T19:40:12.289Z",
-              "id": "concurrent-014"
+              "slept": true
             },
             "run_id": "<run_id>"
           },
@@ -4376,28 +4371,23 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "id": "concurrent-014"
-                },
-                "id": "fixture-native-014-concurrency-limit-0-0",
-                "name": "demo/concurrent",
+                "data": {},
+                "id": "fixture-native-005-step-sleep-0-0",
+                "name": "demo/sleep",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "id": "concurrent-014"
-                  },
-                  "id": "fixture-native-014-concurrency-limit-0-0",
-                  "name": "demo/concurrent",
+                  "data": {},
+                  "id": "fixture-native-005-step-sleep-0-0",
+                  "name": "demo/sleep",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-014-concurrency-limit-concurrent-fn",
+              "function_id": "examples-005-step-sleep-sleep-test",
               "result": {
-                "completedAt": "2026-06-16T19:40:12.289Z",
-                "id": "concurrent-014"
+                "slept": true
               },
               "run_id": "<run_id>"
             },
@@ -4483,7 +4473,7 @@
               "error": "NonRetriableError",
               "message": "Intentional failure",
               "name": "Error",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "event": {
               "data": {},
@@ -4505,7 +4495,7 @@
               "__serialized": true,
               "message": "Intentional failure",
               "name": "Error",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "run_id": "<run_id>"
           },
@@ -4524,7 +4514,7 @@
                 "error": "NonRetriableError",
                 "message": "Intentional failure",
                 "name": "Error",
-                "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "event": {
                 "data": {},
@@ -4546,7 +4536,7 @@
                 "__serialized": true,
                 "message": "Intentional failure",
                 "name": "Error",
-                "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "run_id": "<run_id>"
             },
@@ -4630,27 +4620,24 @@
               "status": "Completed"
             },
             "event": {
-              "data": {
-                "userId": "user-025"
-              },
-              "id": "fixture-native-025-concurrency-key-0-0",
-              "name": "demo/concurrent-keyed",
+              "data": {},
+              "id": "fixture-native-027-step-memoization-0-0",
+              "name": "demo/memoized",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {
-                  "userId": "user-025"
-                },
-                "id": "fixture-native-025-concurrency-key-0-0",
-                "name": "demo/concurrent-keyed",
+                "data": {},
+                "id": "fixture-native-027-step-memoization-0-0",
+                "name": "demo/memoized",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-025-concurrency-key-user-processor",
+            "function_id": "examples-027-step-memoization-memoization-demo",
             "result": {
-              "processed": "user-025"
+              "randomValue": 0.7077282531086655,
+              "timestamp": "<timestamp>"
             },
             "run_id": "<run_id>"
           },
@@ -4666,27 +4653,24 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {
-                  "userId": "user-025"
-                },
-                "id": "fixture-native-025-concurrency-key-0-0",
-                "name": "demo/concurrent-keyed",
+                "data": {},
+                "id": "fixture-native-027-step-memoization-0-0",
+                "name": "demo/memoized",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {
-                    "userId": "user-025"
-                  },
-                  "id": "fixture-native-025-concurrency-key-0-0",
-                  "name": "demo/concurrent-keyed",
+                  "data": {},
+                  "id": "fixture-native-027-step-memoization-0-0",
+                  "name": "demo/memoized",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-025-concurrency-key-user-processor",
+              "function_id": "examples-027-step-memoization-memoization-demo",
               "result": {
-                "processed": "user-025"
+                "randomValue": 0.7077282531086655,
+                "timestamp": "<timestamp>"
               },
               "run_id": "<run_id>"
             },
@@ -5056,7 +5040,7 @@
               "error": "NonRetriableError",
               "message": "Intentional failure",
               "name": "Error",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "event": {
               "data": {},
@@ -5078,7 +5062,7 @@
               "__serialized": true,
               "message": "Intentional failure",
               "name": "Error",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             },
             "run_id": "<run_id>"
           },
@@ -5097,7 +5081,7 @@
                 "error": "NonRetriableError",
                 "message": "Intentional failure",
                 "name": "Error",
-                "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "event": {
                 "data": {},
@@ -5119,7 +5103,7 @@
                 "__serialized": true,
                 "message": "Intentional failure",
                 "name": "Error",
-                "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+                "stack": "<stack>"
               },
               "run_id": "<run_id>"
             },
@@ -5202,23 +5186,28 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-005-step-sleep-0-0",
-              "name": "demo/sleep",
+              "data": {
+                "id": "concurrent-014"
+              },
+              "id": "fixture-native-014-concurrency-limit-0-0",
+              "name": "demo/concurrent",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-005-step-sleep-0-0",
-                "name": "demo/sleep",
+                "data": {
+                  "id": "concurrent-014"
+                },
+                "id": "fixture-native-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-005-step-sleep-sleep-test",
+            "function_id": "examples-014-concurrency-limit-concurrent-fn",
             "result": {
-              "slept": true
+              "completedAt": "<timestamp>",
+              "id": "concurrent-014"
             },
             "run_id": "<run_id>"
           },
@@ -5234,23 +5223,28 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-005-step-sleep-0-0",
-                "name": "demo/sleep",
+                "data": {
+                  "id": "concurrent-014"
+                },
+                "id": "fixture-native-014-concurrency-limit-0-0",
+                "name": "demo/concurrent",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-005-step-sleep-0-0",
-                  "name": "demo/sleep",
+                  "data": {
+                    "id": "concurrent-014"
+                  },
+                  "id": "fixture-native-014-concurrency-limit-0-0",
+                  "name": "demo/concurrent",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-005-step-sleep-sleep-test",
+              "function_id": "examples-014-concurrency-limit-concurrent-fn",
               "result": {
-                "slept": true
+                "completedAt": "<timestamp>",
+                "id": "concurrent-014"
               },
               "run_id": "<run_id>"
             },
@@ -5333,24 +5327,27 @@
               "status": "Completed"
             },
             "event": {
-              "data": {},
-              "id": "fixture-native-027-step-memoization-0-0",
-              "name": "demo/memoized",
+              "data": {
+                "userId": "user-025"
+              },
+              "id": "fixture-native-025-concurrency-key-0-0",
+              "name": "demo/concurrent-keyed",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
-                "data": {},
-                "id": "fixture-native-027-step-memoization-0-0",
-                "name": "demo/memoized",
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-native-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-027-step-memoization-memoization-demo",
+            "function_id": "examples-025-concurrency-key-user-processor",
             "result": {
-              "randomValue": 0.14880804301690975,
-              "timestamp": "<timestamp>"
+              "processed": "user-025"
             },
             "run_id": "<run_id>"
           },
@@ -5366,24 +5363,27 @@
                 "status": "Completed"
               },
               "event": {
-                "data": {},
-                "id": "fixture-native-027-step-memoization-0-0",
-                "name": "demo/memoized",
+                "data": {
+                  "userId": "user-025"
+                },
+                "id": "fixture-native-025-concurrency-key-0-0",
+                "name": "demo/concurrent-keyed",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
-                  "data": {},
-                  "id": "fixture-native-027-step-memoization-0-0",
-                  "name": "demo/memoized",
+                  "data": {
+                    "userId": "user-025"
+                  },
+                  "id": "fixture-native-025-concurrency-key-0-0",
+                  "name": "demo/concurrent-keyed",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-027-step-memoization-memoization-demo",
+              "function_id": "examples-025-concurrency-key-user-processor",
               "result": {
-                "randomValue": 0.14880804301690975,
-                "timestamp": "<timestamp>"
+                "processed": "user-025"
               },
               "run_id": "<run_id>"
             },
@@ -5465,49 +5465,78 @@
             "_inngest": {
               "status": "Completed"
             },
+            "correlation_id": "<correlation_id>",
             "event": {
               "data": {
-                "items": [
-                  {
-                    "price": 10,
-                    "qty": 2,
-                    "sku": "sku-1"
+                "_inngest": {
+                  "correlation_id": "<correlation_id>",
+                  "expire": "<expire>",
+                  "fn_id": "examples-053-step-invoke-options-worker-task",
+                  "gid": "<gid>",
+                  "isr": {
+                    "dsid": "<dsid>",
+                    "dstp": "<dstp>",
+                    "tp": "<traceparent>",
+                    "ts": "<event-ts>"
+                  },
+                  "name": "invoke-batch-worker",
+                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                  "source_fn_v": 1,
+                  "tc": {
+                    "ctx": {
+                      "sid": "<sid>",
+                      "traceparent": "<traceparent>"
+                    },
+                    "ts": "<event-ts>"
                   }
-                ],
-                "orderId": "order-050",
-                "total": 20,
-                "userId": "user-050"
+                },
+                "priority": "low",
+                "taskId": "task-053-batch"
               },
-              "id": "fixture-native-050-complex-workflow-0-0",
-              "name": "examples/050/order/placed",
+              "id": "01KV8ZF0E0R7XG3VQ4JVKN6K1Z",
+              "name": "inngest/function.invoked",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "items": [
-                    {
-                      "price": 10,
-                      "qty": 2,
-                      "sku": "sku-1"
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "invoke-batch-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
                     }
-                  ],
-                  "orderId": "order-050",
-                  "total": 20,
-                  "userId": "user-050"
+                  },
+                  "priority": "low",
+                  "taskId": "task-053-batch"
                 },
-                "id": "fixture-native-050-complex-workflow-0-0",
-                "name": "examples/050/order/placed",
+                "id": "01KV8ZF0E0R7XG3VQ4JVKN6K1Z",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-050-complex-workflow-process-order",
+            "function_id": "examples-053-step-invoke-options-worker-task",
             "result": {
-              "deliveryDate": "2026-06-20",
-              "orderId": "order-050",
-              "status": "completed",
-              "transactionId": "txn-050"
+              "completed": true,
+              "taskId": "task-053-batch"
             },
             "run_id": "<run_id>"
           },
@@ -5522,49 +5551,78 @@
               "_inngest": {
                 "status": "Completed"
               },
+              "correlation_id": "<correlation_id>",
               "event": {
                 "data": {
-                  "items": [
-                    {
-                      "price": 10,
-                      "qty": 2,
-                      "sku": "sku-1"
+                  "_inngest": {
+                    "correlation_id": "<correlation_id>",
+                    "expire": "<expire>",
+                    "fn_id": "examples-053-step-invoke-options-worker-task",
+                    "gid": "<gid>",
+                    "isr": {
+                      "dsid": "<dsid>",
+                      "dstp": "<dstp>",
+                      "tp": "<traceparent>",
+                      "ts": "<event-ts>"
+                    },
+                    "name": "invoke-batch-worker",
+                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                    "source_fn_v": 1,
+                    "tc": {
+                      "ctx": {
+                        "sid": "<sid>",
+                        "traceparent": "<traceparent>"
+                      },
+                      "ts": "<event-ts>"
                     }
-                  ],
-                  "orderId": "order-050",
-                  "total": 20,
-                  "userId": "user-050"
+                  },
+                  "priority": "low",
+                  "taskId": "task-053-batch"
                 },
-                "id": "fixture-native-050-complex-workflow-0-0",
-                "name": "examples/050/order/placed",
+                "id": "01KV8ZF0E0R7XG3VQ4JVKN6K1Z",
+                "name": "inngest/function.invoked",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "items": [
-                      {
-                        "price": 10,
-                        "qty": 2,
-                        "sku": "sku-1"
+                    "_inngest": {
+                      "correlation_id": "<correlation_id>",
+                      "expire": "<expire>",
+                      "fn_id": "examples-053-step-invoke-options-worker-task",
+                      "gid": "<gid>",
+                      "isr": {
+                        "dsid": "<dsid>",
+                        "dstp": "<dstp>",
+                        "tp": "<traceparent>",
+                        "ts": "<event-ts>"
+                      },
+                      "name": "invoke-batch-worker",
+                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+                      "source_fn_v": 1,
+                      "tc": {
+                        "ctx": {
+                          "sid": "<sid>",
+                          "traceparent": "<traceparent>"
+                        },
+                        "ts": "<event-ts>"
                       }
-                    ],
-                    "orderId": "order-050",
-                    "total": 20,
-                    "userId": "user-050"
+                    },
+                    "priority": "low",
+                    "taskId": "task-053-batch"
                   },
-                  "id": "fixture-native-050-complex-workflow-0-0",
-                  "name": "examples/050/order/placed",
+                  "id": "01KV8ZF0E0R7XG3VQ4JVKN6K1Z",
+                  "name": "inngest/function.invoked",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-050-complex-workflow-process-order",
+              "function_id": "examples-053-step-invoke-options-worker-task",
               "result": {
-                "deliveryDate": "2026-06-20",
-                "orderId": "order-050",
-                "status": "completed",
-                "transactionId": "txn-050"
+                "completed": true,
+                "taskId": "task-053-batch"
               },
               "run_id": "<run_id>"
             },
@@ -5787,78 +5845,49 @@
             "_inngest": {
               "status": "Completed"
             },
-            "correlation_id": "<correlation_id>",
             "event": {
               "data": {
-                "_inngest": {
-                  "correlation_id": "<correlation_id>",
-                  "expire": "<expire>",
-                  "fn_id": "examples-053-step-invoke-options-worker-task",
-                  "gid": "<gid>",
-                  "isr": {
-                    "dsid": "<dsid>",
-                    "dstp": "<dstp>",
-                    "tp": "<traceparent>",
-                    "ts": "<event-ts>"
-                  },
-                  "name": "invoke-batch-worker",
-                  "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                  "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                  "source_fn_v": 1,
-                  "tc": {
-                    "ctx": {
-                      "sid": "abac4d4829b6f050",
-                      "traceparent": "<traceparent>"
-                    },
-                    "ts": "<event-ts>"
+                "items": [
+                  {
+                    "price": 10,
+                    "qty": 2,
+                    "sku": "sku-1"
                   }
-                },
-                "priority": "low",
-                "taskId": "task-053-batch"
+                ],
+                "orderId": "order-050",
+                "total": 20,
+                "userId": "user-050"
               },
-              "id": "01KV8Z5MKCBP68PCQNH2HW67RK",
-              "name": "inngest/function.invoked",
+              "id": "fixture-native-050-complex-workflow-0-0",
+              "name": "examples/050/order/placed",
               "ts": "<event-ts>",
               "user": {}
             },
             "events": [
               {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "invoke-batch-worker",
-                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "abac4d4829b6f050",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
+                  "items": [
+                    {
+                      "price": 10,
+                      "qty": 2,
+                      "sku": "sku-1"
                     }
-                  },
-                  "priority": "low",
-                  "taskId": "task-053-batch"
+                  ],
+                  "orderId": "order-050",
+                  "total": 20,
+                  "userId": "user-050"
                 },
-                "id": "01KV8Z5MKCBP68PCQNH2HW67RK",
-                "name": "inngest/function.invoked",
+                "id": "fixture-native-050-complex-workflow-0-0",
+                "name": "examples/050/order/placed",
                 "ts": "<event-ts>"
               }
             ],
-            "function_id": "examples-053-step-invoke-options-worker-task",
+            "function_id": "examples-050-complex-workflow-process-order",
             "result": {
-              "completed": true,
-              "taskId": "task-053-batch"
+              "deliveryDate": "2026-06-20",
+              "orderId": "order-050",
+              "status": "completed",
+              "transactionId": "txn-050"
             },
             "run_id": "<run_id>"
           },
@@ -5873,78 +5902,49 @@
               "_inngest": {
                 "status": "Completed"
               },
-              "correlation_id": "<correlation_id>",
               "event": {
                 "data": {
-                  "_inngest": {
-                    "correlation_id": "<correlation_id>",
-                    "expire": "<expire>",
-                    "fn_id": "examples-053-step-invoke-options-worker-task",
-                    "gid": "<gid>",
-                    "isr": {
-                      "dsid": "<dsid>",
-                      "dstp": "<dstp>",
-                      "tp": "<traceparent>",
-                      "ts": "<event-ts>"
-                    },
-                    "name": "invoke-batch-worker",
-                    "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                    "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                    "source_fn_v": 1,
-                    "tc": {
-                      "ctx": {
-                        "sid": "abac4d4829b6f050",
-                        "traceparent": "<traceparent>"
-                      },
-                      "ts": "<event-ts>"
+                  "items": [
+                    {
+                      "price": 10,
+                      "qty": 2,
+                      "sku": "sku-1"
                     }
-                  },
-                  "priority": "low",
-                  "taskId": "task-053-batch"
+                  ],
+                  "orderId": "order-050",
+                  "total": 20,
+                  "userId": "user-050"
                 },
-                "id": "01KV8Z5MKCBP68PCQNH2HW67RK",
-                "name": "inngest/function.invoked",
+                "id": "fixture-native-050-complex-workflow-0-0",
+                "name": "examples/050/order/placed",
                 "ts": "<event-ts>",
                 "user": {}
               },
               "events": [
                 {
                   "data": {
-                    "_inngest": {
-                      "correlation_id": "<correlation_id>",
-                      "expire": "<expire>",
-                      "fn_id": "examples-053-step-invoke-options-worker-task",
-                      "gid": "<gid>",
-                      "isr": {
-                        "dsid": "<dsid>",
-                        "dstp": "<dstp>",
-                        "tp": "<traceparent>",
-                        "ts": "<event-ts>"
-                      },
-                      "name": "invoke-batch-worker",
-                      "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                      "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                      "source_fn_v": 1,
-                      "tc": {
-                        "ctx": {
-                          "sid": "abac4d4829b6f050",
-                          "traceparent": "<traceparent>"
-                        },
-                        "ts": "<event-ts>"
+                    "items": [
+                      {
+                        "price": 10,
+                        "qty": 2,
+                        "sku": "sku-1"
                       }
-                    },
-                    "priority": "low",
-                    "taskId": "task-053-batch"
+                    ],
+                    "orderId": "order-050",
+                    "total": 20,
+                    "userId": "user-050"
                   },
-                  "id": "01KV8Z5MKCBP68PCQNH2HW67RK",
-                  "name": "inngest/function.invoked",
+                  "id": "fixture-native-050-complex-workflow-0-0",
+                  "name": "examples/050/order/placed",
                   "ts": "<event-ts>"
                 }
               ],
-              "function_id": "examples-053-step-invoke-options-worker-task",
+              "function_id": "examples-050-complex-workflow-process-order",
               "result": {
-                "completed": true,
-                "taskId": "task-053-batch"
+                "deliveryDate": "2026-06-20",
+                "orderId": "order-050",
+                "status": "completed",
+                "transactionId": "txn-050"
               },
               "run_id": "<run_id>"
             },

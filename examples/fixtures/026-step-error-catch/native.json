@@ -217,7 +217,7 @@
           "error": {
             "name": "Error",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -227,7 +227,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -315,7 +315,7 @@
           "error": {
             "name": "Error",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -325,7 +325,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -413,7 +413,7 @@
           "error": {
             "name": "Error",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -423,7 +423,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -511,7 +511,7 @@
           "error": {
             "name": "Error",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -521,7 +521,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -609,14 +609,14 @@
           "error": {
             "name": "Error",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": {
             "__serialized": true,
             "name": "Error",
             "message": "Something went wrong",
-            "stack": ""
+            "stack": "<stack>"
           },
           "opts": {},
           "userland": {
@@ -624,7 +624,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -692,7 +692,7 @@
             "error": {
               "message": "Something went wrong",
               "name": "Error",
-              "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/026-step-error-catch.ts:12:21)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             }
           }
         },

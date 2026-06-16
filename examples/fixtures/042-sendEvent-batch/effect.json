@@ -300,11 +300,11 @@
             },
             "transformedResultPromise": {},
             "data": {
-              "ids": ["01KV8Z5TWJQAN2Z958QANCG5Q3", "01KV8Z5TWJP8XBE4VHNW21D4N7", "01KV8Z5TWJSRRK4BVVS2ASRNEX"]
+              "ids": ["<event-id>", "<event-id>", "<event-id>"]
             },
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

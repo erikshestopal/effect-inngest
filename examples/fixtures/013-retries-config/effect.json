@@ -220,7 +220,7 @@
           "error": {
             "name": "IntentionalFailure",
             "message": "Intentional failure",
-            "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/013-retries-config.ts:26:27)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           }
         }
       ]
@@ -308,13 +308,13 @@
           "error": {
             "name": "IntentionalFailure",
             "message": "Intentional failure",
-            "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/013-retries-config.ts:26:27)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           },
           "data": {
             "__serialized": true,
             "name": "IntentionalFailure",
             "message": "Intentional failure",
-            "stack": ""
+            "stack": "<stack>"
           },
           "opts": {},
           "userland": {
@@ -386,7 +386,7 @@
             "error": {
               "message": "Intentional failure",
               "name": "IntentionalFailure",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/013-retries-config.ts:26:27)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              "stack": "<stack>"
             }
           }
         },
@@ -408,7 +408,7 @@
       "body": {
         "name": "StepError",
         "message": "Intentional failure",
-        "stack": "Error: Intentional failure\n    at make (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Schema.js:7298:18)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/next/internal/runtime/steps/StepRun.ts:35:21)\n    at add (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/matcher.js:41:67)\n    at pipeArguments (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Pipeable.js:66:51)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/next/internal/runtime/steps/StepRun.ts:25:37)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+        "stack": "<stack>"
       }
     }
   }

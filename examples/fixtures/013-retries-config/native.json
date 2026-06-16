@@ -220,7 +220,7 @@
           "error": {
             "name": "Error",
             "message": "Intentional failure",
-            "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -230,7 +230,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -318,14 +318,14 @@
           "error": {
             "name": "Error",
             "message": "Intentional failure",
-            "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": {
             "__serialized": true,
             "name": "Error",
             "message": "Intentional failure",
-            "stack": ""
+            "stack": "<stack>"
           },
           "opts": {},
           "userland": {
@@ -333,7 +333,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -401,7 +401,7 @@
             "error": {
               "message": "Intentional failure",
               "name": "Error",
-              "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             }
           }
         },
@@ -423,7 +423,7 @@
       "body": {
         "name": "Error",
         "message": "Intentional failure",
-        "stack": "Error: Intentional failure\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/013-retries-config.ts:13:19)\n    at processTicksAndRejections (native:7:39)",
+        "stack": "<stack>",
         "__serialized": true
       }
     }

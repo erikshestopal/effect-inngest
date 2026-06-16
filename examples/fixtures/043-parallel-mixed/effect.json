@@ -331,7 +331,7 @@
           "data": 42,
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -422,7 +422,7 @@
             "id": "notify"
           },
           "data": {
-            "ids": ["01KV8Z5TX8570WVD5PQKDXR8JF"]
+            "ids": ["<event-id>"]
           }
         }
       ]
@@ -496,7 +496,7 @@
           "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
           "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
             "data": {
-              "ids": ["01KV8Z5TX8570WVD5PQKDXR8JF"]
+              "ids": ["<event-id>"]
             }
           }
         },

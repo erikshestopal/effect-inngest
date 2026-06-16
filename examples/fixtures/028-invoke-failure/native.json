@@ -305,7 +305,7 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "0bf76189d2e9fb26",
+                  "sid": "<sid>",
                   "traceparent": "<traceparent>"
                 },
                 "ts": "<event-ts>"
@@ -337,7 +337,7 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "0bf76189d2e9fb26",
+                    "sid": "<sid>",
                     "traceparent": "<traceparent>"
                   },
                   "ts": "<event-ts>"
@@ -369,7 +369,7 @@
       "body": {
         "name": "Error",
         "message": "Child always fails",
-        "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)",
+        "stack": "<stack>",
         "__serialized": true
       }
     }
@@ -437,7 +437,7 @@
               "error": "NonRetriableError",
               "message": "Child always fails",
               "name": "Error",
-              "stack": "NonRetriableError: Child always fails\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/028-invoke-failure.ts:11:17)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             }
           }
         },

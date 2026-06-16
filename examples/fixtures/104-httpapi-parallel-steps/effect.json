@@ -179,7 +179,7 @@
         "event": {
           "data": {
             "a": "<timing-a>",
-            "b": 7
+            "b": "<timing-b>"
           },
           "id": "<event-id>",
           "name": "examples/104/demo/parallel",
@@ -190,7 +190,7 @@
           {
             "data": {
               "a": "<timing-a>",
-              "b": 7
+              "b": "<timing-b>"
             },
             "id": "<event-id>",
             "name": "examples/104/demo/parallel",
@@ -283,7 +283,7 @@
         "event": {
           "data": {
             "a": "<timing-a>",
-            "b": 7
+            "b": "<timing-b>"
           },
           "id": "<event-id>",
           "name": "examples/104/demo/parallel",
@@ -294,7 +294,7 @@
           {
             "data": {
               "a": "<timing-a>",
-              "b": 7
+              "b": "<timing-b>"
             },
             "id": "<event-id>",
             "name": "examples/104/demo/parallel",
@@ -330,7 +330,7 @@
           "data": 42,
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -380,7 +380,7 @@
         "event": {
           "data": {
             "a": "<timing-a>",
-            "b": 7
+            "b": "<timing-b>"
           },
           "id": "<event-id>",
           "name": "examples/104/demo/parallel",
@@ -391,7 +391,7 @@
           {
             "data": {
               "a": "<timing-a>",
-              "b": 7
+              "b": "<timing-b>"
             },
             "id": "<event-id>",
             "name": "examples/104/demo/parallel",
@@ -427,7 +427,7 @@
           "data": 13,
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -477,7 +477,7 @@
         "event": {
           "data": {
             "a": "<timing-a>",
-            "b": 7
+            "b": "<timing-b>"
           },
           "id": "<event-id>",
           "name": "examples/104/demo/parallel",
@@ -488,7 +488,7 @@
           {
             "data": {
               "a": "<timing-a>",
-              "b": 7
+              "b": "<timing-b>"
             },
             "id": "<event-id>",
             "name": "examples/104/demo/parallel",

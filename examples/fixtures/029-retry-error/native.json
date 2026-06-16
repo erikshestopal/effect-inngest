@@ -221,7 +221,7 @@
           "error": {
             "name": "Error",
             "message": "Attempt 0 failed",
-            "stack": "RetryAfterError: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/029-retry-error.ts:16:21)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": null,
@@ -231,7 +231,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -322,7 +322,7 @@
           "data": 2,
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]

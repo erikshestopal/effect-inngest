@@ -211,7 +211,7 @@
         {
           "id": "277d17825bcc1c6b9bfcec798e3bc15dc427a873",
           "op": "Sleep",
-          "name": "2026-06-16T19:40:23.467Z",
+          "name": "<timestamp>",
           "displayName": "wait-until",
           "opts": {},
           "data": null,
@@ -301,7 +301,7 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "wokeAt": "2026-06-16T19:40:23.478Z"
+            "wokeAt": "<timestamp>"
           }
         }
       ]

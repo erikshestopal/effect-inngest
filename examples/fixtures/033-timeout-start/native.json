@@ -278,7 +278,7 @@
             "data": "Started successfully",
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

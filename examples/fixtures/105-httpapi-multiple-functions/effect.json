@@ -299,7 +299,7 @@
             "transformedResultPromise": {},
             "timing": {
               "a": "<timing-a>",
-              "b": 0
+              "b": "<timing-b>"
             }
           }
         ],

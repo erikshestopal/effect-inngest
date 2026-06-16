@@ -217,7 +217,7 @@
           "error": {
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           }
         }
       ]
@@ -305,7 +305,7 @@
           "error": {
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           }
         }
       ]
@@ -393,7 +393,7 @@
           "error": {
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           }
         }
       ]
@@ -481,7 +481,7 @@
           "error": {
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           }
         }
       ]
@@ -569,13 +569,13 @@
           "error": {
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+            "stack": "<stack>"
           },
           "data": {
             "__serialized": true,
             "name": "StepError",
             "message": "Something went wrong",
-            "stack": ""
+            "stack": "<stack>"
           },
           "opts": {},
           "userland": {
@@ -647,7 +647,7 @@
             "error": {
               "message": "Something went wrong",
               "name": "StepError",
-              "stack": "Error: Something went wrong\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/026-step-error-catch.ts:23:44)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              "stack": "<stack>"
             }
           }
         },

@@ -217,14 +217,14 @@
           "error": {
             "name": "Error",
             "message": "No retry",
-            "stack": "NonRetriableError: No retry\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/012-error-non-retriable.ts:12:19)\n    at processTicksAndRejections (native:7:39)",
+            "stack": "<stack>",
             "__serialized": true
           },
           "data": {
             "__serialized": true,
             "name": "Error",
             "message": "No retry",
-            "stack": ""
+            "stack": "<stack>"
           },
           "opts": {},
           "userland": {
@@ -232,7 +232,7 @@
           },
           "timing": {
             "a": "<timing-a>",
-            "b": 0
+            "b": "<timing-b>"
           }
         }
       ]
@@ -300,7 +300,7 @@
             "error": {
               "message": "No retry",
               "name": "Error",
-              "stack": "NonRetriableError: No retry\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/012-error-non-retriable.ts:12:19)\n    at processTicksAndRejections (native:7:39)"
+              "stack": "<stack>"
             }
           }
         },
@@ -322,7 +322,7 @@
       "body": {
         "name": "Error",
         "message": "No retry",
-        "stack": "NonRetriableError: No retry\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/native/012-error-non-retriable.ts:12:19)\n    at processTicksAndRejections (native:7:39)",
+        "stack": "<stack>",
         "__serialized": true
       }
     }
