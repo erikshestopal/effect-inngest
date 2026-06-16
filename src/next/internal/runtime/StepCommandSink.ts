@@ -14,14 +14,14 @@ export interface Service {
   readonly recordResult: (command: StepCommand.ResultCommand) => Effect.Effect<void>;
   readonly planCommand: (command: StepCommand.PlanCommand) => Effect.Effect<void>;
   readonly failCommand: (command: StepCommand.ErrorCommand) => Effect.Effect<void>;
-  readonly currentYields: Effect.Effect<ReadonlyArray<StepYield>>;
+  readonly takeYields: Effect.Effect<ReadonlyArray<StepYield>>;
 }
 
 export class StepCommandSink extends Context.Service<StepCommandSink, Service>()(
   "effect-inngest/internal/runtime/StepCommandSink",
 ) {
   static readonly make = Effect.gen(function* () {
-    const currentYields = yield* Ref.make<Array<StepYield>>([]);
+    const yields = yield* Ref.make<Array<StepYield>>([]);
 
     const suspend = (args: {
       readonly opcode: typeof Protocol.GeneratorOpcode.Type;
@@ -30,7 +30,7 @@ export class StepCommandSink extends Context.Service<StepCommandSink, Service>()
       Ref.update((current: Array<StepYield>) => [
         ...current,
         StepYield.make({ opcode: args.opcode, retryAfterMs: args.retryAfterMs ?? Option.none() }),
-      ])(currentYields).pipe(Effect.andThen(Effect.interrupt));
+      ])(yields).pipe(Effect.andThen(Effect.interrupt));
 
     return {
       yieldCommand: (command: StepCommand.YieldCommand) =>
@@ -62,7 +62,7 @@ export class StepCommandSink extends Context.Service<StepCommandSink, Service>()
         const failed = StepCommandOpcode.failure(command);
         return suspend({ opcode: failed.opcode, retryAfterMs: failed.retryAfterMs });
       },
-      currentYields: Ref.get(currentYields),
+      takeYields: Ref.modify(yields, (current) => [current, [] as Array<StepYield>]),
     };
   });
 

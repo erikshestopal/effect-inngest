@@ -128,8 +128,7 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
     };
   });
 
-  static readonly layer = Layer.effect(this, this.make).pipe(
-    Layer.provide(StepCommandSink.layer),
-    Layer.provide(EventApi.layer),
-  );
+  static readonly layer = Layer.effect(this, this.make);
+
+  static readonly live = this.layer.pipe(Layer.provide(StepCommandSink.layer), Layer.provide(EventApi.layer));
 }
