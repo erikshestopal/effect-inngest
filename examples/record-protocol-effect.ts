@@ -803,9 +803,19 @@ const waitForExpectedExecutionRecordings = (
   });
 
 const removeSyncedApp = (sdkUrl: string) =>
-  http(`${realDevOrigin}/fn/remove?url=${encodeURIComponent(sdkUrl)}`, { method: "DELETE", timeoutMs: 5_000 }).pipe(
-    Effect.ignore,
-  );
+  Effect.gen(function* () {
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const response = yield* http(`${realDevOrigin}/fn/remove?url=${encodeURIComponent(sdkUrl)}`, {
+        method: "DELETE",
+        timeoutMs: 5_000,
+      }).pipe(Effect.catch(() => Effect.succeed({ body: "", status: 404 } satisfies HttpResult)));
+      if (response.status === 404) return;
+      if (response.status < 200 || response.status >= 300) {
+        return yield* Effect.fail(new Error(`remove app ${sdkUrl} failed with ${response.status}: ${response.body}`));
+      }
+    }
+    return yield* Effect.fail(new Error(`remove app ${sdkUrl} did not drain duplicate registrations`));
+  });
 
 const fixtureFile = (exampleId: string, runtimeName: RuntimeName) =>
   join(fixturesRoot, exampleId, `${runtimeName}.json`);
@@ -946,7 +956,7 @@ const recordExample = (
       console.log(
         `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,
       );
-    }).pipe(Effect.ensuring(removeSyncedApp(sdkUrlFor(example.id)))),
+    }).pipe(Effect.ensuring(removeSyncedApp(sdkUrlFor(example.id)).pipe(Effect.ignore))),
   );
 
 const selectedRuntimes = (runtime: RuntimeArg): ReadonlyArray<RuntimeName> =>

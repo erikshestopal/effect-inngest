@@ -163,97 +163,6 @@
     "request": {
       "sequence": 4,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/052-trigger-if-filter?fnId=examples-052-trigger-if-filter-process-vip-order&stepId=step",
-      "path": "/examples/052-trigger-if-filter",
-      "query": {
-        "fnId": "examples-052-trigger-if-filter-process-vip-order",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "994acea2-9cf8-5055-a0b8-55d0e9f33097",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "amount": 600,
-            "customerId": "customer-052",
-            "orderId": "order-052"
-          },
-          "id": "<event-id>",
-          "name": "order/placed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "amount": 600,
-              "customerId": "customer-052",
-              "orderId": "order-052"
-            },
-            "id": "<event-id>",
-            "name": "order/placed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "vip": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/052-trigger-if-filter?fnId=examples-052-trigger-if-filter-process-high-value-order&stepId=step",
       "path": "/examples/052-trigger-if-filter",
       "query": {
@@ -334,6 +243,97 @@
           "data": {
             "processed": true,
             "priority": "high"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 5,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 5,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/052-trigger-if-filter?fnId=examples-052-trigger-if-filter-process-vip-order&stepId=step",
+      "path": "/examples/052-trigger-if-filter",
+      "query": {
+        "fnId": "examples-052-trigger-if-filter-process-vip-order",
+        "stepId": "step"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "-1",
+        "x-inngest-step-id": "step"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": false,
+          "env": "",
+          "fn_id": "994acea2-9cf8-5055-a0b8-55d0e9f33097",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {
+            "amount": 600,
+            "customerId": "customer-052",
+            "orderId": "order-052"
+          },
+          "id": "<event-id>",
+          "name": "order/placed",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {
+              "amount": 600,
+              "customerId": "customer-052",
+              "orderId": "order-052"
+            },
+            "id": "<event-id>",
+            "name": "order/placed",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": -1
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "op": "RunComplete",
+          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+          "data": {
+            "vip": true
           }
         }
       ]
