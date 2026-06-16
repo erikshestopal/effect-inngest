@@ -22,6 +22,7 @@ rule:
           - pattern: Effect.forEach($$$ARGS)
           - pattern: Effect.andThen($$$ARGS)
           - pattern: Effect.provideService($$$ARGS)
+          - pattern: Function.dual($$$ARGS)
           - pattern: Layer.effect($$$ARGS)
           - pattern: Match.tag($$$ARGS)
           - pattern: MutableHashMap.set($$$ARGS)

@@ -443,12 +443,9 @@ export declare namespace InngestFunction {
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =
     F extends InngestFunction<any, infer T, any, any> ? (T extends EventTrigger<infer E> ? E : never) : never;
+  export type EventPayload<F> = InngestEvent.EventType<Events<F>>;
   export type EventType<F> =
-    F extends InngestFunction<any, infer T, any, any>
-      ? T extends EventTrigger<infer E>
-        ? InngestEvent.EventType<E>
-        : never
-      : never;
+    Options<F> extends { readonly batchEvents: BatchEventsOption } ? ReadonlyArray<EventPayload<F>> : EventPayload<F>;
 
   export type Success<F> = F extends InngestFunction<any, any, infer S, any> ? Schema.Schema.Type<S> : never;
   export type Options<F> = F extends InngestFunction<any, any, any, infer O> ? O : never;

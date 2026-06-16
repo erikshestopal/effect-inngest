@@ -176,7 +176,7 @@ describe("TB-004: Wait For Event", () => {
         const response = yield* Effect.tryPromise(() =>
           handler(
             request({
-              [stepHash]: { data: null },
+              [stepHash]: null,
             }),
           ),
         );

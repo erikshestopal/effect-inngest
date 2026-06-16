@@ -2,7 +2,7 @@
  * Internal step tools implementation.
  * @internal
  */
-import { Array as Arr, Duration, Effect, Option, Predicate, Schema } from "effect";
+import { Duration, Effect, Layer, Option, Schema } from "effect";
 import type { InngestFunction } from "../Function.js";
 import type { CheckpointState } from "./checkpoint.js";
 import * as Protocol from "./protocol.js";
@@ -20,7 +20,6 @@ import * as SleepUntilStep from "../next/internal/runtime/steps/SleepUntilStep.j
 import * as StepRun from "../next/internal/runtime/steps/StepRun.js";
 import * as WaitForEventStep from "../next/internal/runtime/steps/WaitForEventStep.js";
 import * as EventPayload from "../next/internal/codec/EventPayload.js";
-import { eventSchemaFor, eventSchemas } from "../next/internal/domain/FunctionDefinition.js";
 import type * as InngestEvent from "../Event.js";
 
 import { StepInterrupt, type StepInfo } from "./interrupts.js";
@@ -71,55 +70,12 @@ interface InvokeOptionsBase<F extends InngestFunction.Any> {
   readonly timeout?: Duration.Input;
 }
 
-type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F>] extends [never]
+type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventPayload<F>] extends [never]
   ? InvokeOptionsBase<F>
-  : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventType<F> };
+  : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventPayload<F> };
 
 type EventSchema = InngestEvent.EventDefinition;
 type InngestEventPayload = InngestEvent.EventType<InngestEvent.EventDefinition>;
-
-const decodeEventData = <F extends InngestFunction.Any>(args: {
-  readonly fn: F;
-  readonly eventName: string;
-  readonly eventData: unknown;
-}): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> =>
-  Option.match(eventSchemaFor({ fn: args.fn, eventName: args.eventName }), {
-    onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
-    onSome: (event) =>
-      EventPayload.decodeSchema({
-        event,
-        eventName: args.eventName,
-        eventData: args.eventData,
-      }).pipe(Effect.map((decoded) => decoded as InngestFunction.EventType<F>)),
-  });
-
-const decodeInvocation = <F extends InngestFunction.Any>(args: {
-  readonly fn: F;
-  readonly request: Protocol.SDKRequestBody;
-}): Effect.Effect<InngestFunction.EventType<F>, EventPayload.EventDecodeError> => {
-  if (Predicate.isNotNullish(args.fn.options?.batchEvents)) {
-    return Effect.forEach(args.request.events, (event) =>
-      decodeEventData({ fn: args.fn, eventName: event.name, eventData: event.data }),
-    ).pipe(Effect.map((events) => events as unknown as InngestFunction.EventType<F>));
-  }
-
-  if (EventPayload.isFunctionInvoked(args.request.event)) {
-    const { _inngest, ...payload } = args.request.event.data;
-    return Option.match(Arr.head(eventSchemas(args.fn)), {
-      onNone: () => Effect.succeed(payload as unknown as InngestFunction.EventType<F>),
-      onSome: (event) =>
-        EventPayload.decodeSchema({ event, eventName: event.identifier, eventData: payload }).pipe(
-          Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
-        ),
-    });
-  }
-
-  return decodeEventData({
-    fn: args.fn,
-    eventName: args.request.event.name,
-    eventData: args.request.event.data,
-  });
-};
 
 interface StepTools {
   readonly run: StepRun;
@@ -152,11 +108,6 @@ export interface HandlerContext<F extends InngestFunction.Any> {
   readonly run: RunContext;
 }
 
-const handlerFiberScope = Effect.map(
-  Effect.serviceOption(HandlerFiberScope),
-  Option.getOrElse(() => ({ isForkedFromHandlerRoot: Effect.succeed(false) })),
-);
-
 export const createStepTools = (
   request: Protocol.SDKRequestBody,
   appName: string,
@@ -164,59 +115,40 @@ export const createStepTools = (
   checkpoint: Option.Option<CheckpointState> = Option.none(),
 ): StepTools => {
   const input = fromSdkRequestBody(request);
+  const runtime = Layer.mergeAll(
+    Layer.succeed(StepIdentity, identity),
+    Layer.succeed(CurrentCheckpoint, checkpoint),
+    Layer.effect(
+      HandlerFiberScope,
+      Effect.map(
+        Effect.serviceOption(HandlerFiberScope),
+        Option.getOrElse(() => ({ isForkedFromHandlerRoot: Effect.succeed(false) })),
+      ),
+    ),
+    StepCommandSink.layer,
+    EventApi.layer,
+  );
 
   const sleep = (opts: StepOptionsOrId, duration: Duration.Input) =>
-    SleepStep.sleep({ input, id: opts, duration }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-    );
+    SleepStep.sleep({ input, id: opts, duration }).pipe(Effect.provide(runtime));
 
   const sleepUntil = (opts: StepOptionsOrId, timestamp: Date | number | string) =>
-    SleepUntilStep.sleepUntil({ input, id: opts, timestamp }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-    );
+    SleepUntilStep.sleepUntil({ input, id: opts, timestamp }).pipe(Effect.provide(runtime));
 
   const waitForEvent = <E extends EventSchema>(opts: StepOptionsOrId, event: E, options: WaitForEventOptions) =>
-    WaitForEventStep.waitForEvent({ input, id: opts, event, options }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-    );
+    WaitForEventStep.waitForEvent({ input, id: opts, event, options }).pipe(Effect.provide(runtime));
 
   const invoke = <F extends InngestFunction.Any>(opts: StepOptionsOrId, options: InvokeOptions<F>) =>
-    InvokeStep.invoke({ input, appName, id: opts, options }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-    );
+    InvokeStep.invoke({ input, appName, id: opts, options }).pipe(Effect.provide(runtime));
 
   const run = <A, Err, R>(
     opts: StepOptionsOrId,
     effect: Effect.Effect<A, Err, R>,
     options?: StepRunOptions<JsonSchema<A>>,
-  ) =>
-    StepRun.run({ input, id: opts, effect, options }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-    );
+  ) => StepRun.run({ input, id: opts, effect, options }).pipe(Effect.provide(runtime));
 
   const sendEvent = (opts: StepOptionsOrId, payload: InngestEventPayload | ReadonlyArray<InngestEventPayload>) =>
-    SendEventStep.sendEvent({ input, id: opts, payload }).pipe(
-      Effect.provideService(StepIdentity, identity),
-      Effect.provideService(CurrentCheckpoint, checkpoint),
-      Effect.provideServiceEffect(HandlerFiberScope, handlerFiberScope),
-      Effect.provide(StepCommandSink.layer),
-      Effect.provide(EventApi.layer),
-    );
+    SendEventStep.sendEvent({ input, id: opts, payload }).pipe(Effect.provide(runtime));
 
   return {
     run: run as StepTools["run"],
@@ -234,7 +166,7 @@ export const buildHandlerContext = <F extends InngestFunction.Any>(
   request: Protocol.SDKRequestBody,
 ): Effect.Effect<HandlerContext<F>> =>
   Effect.gen(function* () {
-    const event = yield* decodeInvocation({ fn, request }).pipe(Effect.orDie);
+    const event = yield* EventPayload.decodeInvocation({ fn, input: fromSdkRequestBody(request) }).pipe(Effect.orDie);
 
     return {
       event,

@@ -44,9 +44,9 @@ export interface InvokeOptionsBase<F extends InngestFunction.Any> {
   readonly timeout?: Duration.Input;
 }
 
-export type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventType<F>] extends [never]
+export type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.EventPayload<F>] extends [never]
   ? InvokeOptionsBase<F>
-  : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventType<F> };
+  : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventPayload<F> };
 
 export interface Run {
   <A, Err, R>(id: StepInput, effect: Effect.Effect<A, Err, R>): Effect.Effect<RunOutput<A>, StepError | Err, R>;

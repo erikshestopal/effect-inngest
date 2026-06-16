@@ -1,8 +1,8 @@
-import { Array as Arr, Effect, Option, Predicate, Schema } from "effect";
+import { Array as Arr, Effect, Function, Option, Predicate, Schema } from "effect";
 import type { InngestFunction } from "../../../Function.js";
 import type * as InngestEvent from "../../../Event.js";
 import * as InngestEvents from "../../../Events.js";
-import type { ExecutionInput } from "../domain/ExecutionInput.js";
+import type { ExecutionEvent, ExecutionInput } from "../domain/ExecutionInput.js";
 import { eventSchemaFor, eventSchemas } from "../domain/FunctionDefinition.js";
 
 export type EventSchema = InngestEvent.EventDefinition;
@@ -14,53 +14,74 @@ export class EventDecodeError extends Schema.TaggedErrorClass<EventDecodeError>(
 
 export const isFunctionInvoked = Schema.is(InngestEvents.FunctionInvoked);
 
-export const decodeSchema = <E extends EventSchema>(args: {
-  readonly event: E;
-  readonly eventName: string;
-  readonly eventData: unknown;
-}): Effect.Effect<InngestEvent.EventType<E>, EventDecodeError, never> =>
-  Schema.decodeUnknownEffect(Schema.toCodecJson(args.event as Schema.Top))({
-    name: args.eventName,
-    data: args.eventData,
-  }).pipe(
-    Effect.map((event) => event as InngestEvent.EventType<E>),
-    Effect.mapError((cause) => EventDecodeError.make({ eventName: args.eventName, cause })),
-  ) as Effect.Effect<InngestEvent.EventType<E>, EventDecodeError, never>;
-
-export const decode = <F extends InngestFunction.Any>(args: {
-  readonly fn: F;
-  readonly eventName: string;
-  readonly eventData: unknown;
-}): Effect.Effect<InngestFunction.EventType<F>, EventDecodeError> =>
-  Option.match(eventSchemaFor(args), {
-    onNone: () => Effect.succeed(args.eventData as InngestFunction.EventType<F>),
-    onSome: (event) =>
-      decodeSchema({ event, eventName: args.eventName, eventData: args.eventData }).pipe(
-        Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
-      ),
+export const envelope = <const Name extends string, const DataSchema extends Schema.Top>(
+  event: InngestEvent.EventDefinition<Name, DataSchema>,
+) =>
+  Schema.Struct({
+    name: Schema.tag(event.identifier),
+    data: event.schema,
+    id: Schema.optional(Schema.String),
+    ts: Schema.optional(Schema.Number),
+    v: Schema.optional(Schema.String),
   });
 
-export const decodeInvocation = <F extends InngestFunction.Any>(args: {
+export const decodeEnvelope: {
+  <E extends EventSchema>(event: E): (value: unknown) => Effect.Effect<InngestEvent.EventType<E>, EventDecodeError>;
+  <E extends EventSchema>(value: unknown, event: E): Effect.Effect<InngestEvent.EventType<E>, EventDecodeError>;
+} = Function.dual(
+  2,
+  <Name extends string, DataSchema extends Schema.Top>(
+    value: unknown,
+    event: InngestEvent.EventDefinition<Name, DataSchema>,
+  ) => {
+    const eventEnvelope = envelope(event);
+    const decode = Schema.decodeUnknownEffect(Schema.toCodecJson(eventEnvelope));
+
+    return decode(value).pipe(
+      Effect.mapError((cause) => EventDecodeError.make({ eventName: event.identifier, cause })),
+    );
+  },
+);
+
+export const decodeTriggerEvent: {
+  <F extends InngestFunction.Any>(
+    fn: F,
+  ): (event: ExecutionEvent) => Effect.Effect<InngestFunction.EventPayload<F>, EventDecodeError>;
+  <F extends InngestFunction.Any>(
+    event: ExecutionEvent,
+    fn: F,
+  ): Effect.Effect<InngestFunction.EventPayload<F>, EventDecodeError>;
+} = Function.dual(2, <F extends InngestFunction.Any>(event: ExecutionEvent, fn: F) =>
+  Option.match(eventSchemaFor({ fn, eventName: event.name }), {
+    onNone: () =>
+      Effect.fail(EventDecodeError.make({ eventName: event.name, cause: "No matching event trigger schema" })),
+    onSome: (eventSchema) => decodeEnvelope(eventSchema)(event),
+  }),
+);
+
+export function decodeInvocation<F extends InngestFunction.Any>(args: {
   readonly fn: F;
   readonly input: ExecutionInput;
-}): Effect.Effect<InngestFunction.EventType<F>, EventDecodeError> => {
+}): Effect.Effect<InngestFunction.EventType<F>, EventDecodeError>;
+export function decodeInvocation<F extends InngestFunction.Any>(args: {
+  readonly fn: F;
+  readonly input: ExecutionInput;
+}): Effect.Effect<InngestFunction.EventPayload<F> | ReadonlyArray<InngestFunction.EventPayload<F>>, EventDecodeError> {
   const { fn, input } = args;
   if (Predicate.isNotNullish(fn.options?.batchEvents)) {
-    return Effect.forEach(input.events, (event) => decode({ fn, eventName: event.name, eventData: event.data })).pipe(
-      Effect.map((events) => events as unknown as InngestFunction.EventType<F>),
-    );
+    return Effect.forEach(input.events, decodeTriggerEvent(fn));
   }
 
   if (isFunctionInvoked(input.event)) {
     const { _inngest, ...payload } = input.event.data;
     return Option.match(Arr.head(eventSchemas(fn)), {
-      onNone: () => Effect.succeed(payload as unknown as InngestFunction.EventType<F>),
-      onSome: (event) =>
-        decodeSchema({ event, eventName: event.identifier, eventData: payload }).pipe(
-          Effect.map((decoded) => decoded as InngestFunction.EventType<F>),
+      onNone: () =>
+        Effect.fail(
+          EventDecodeError.make({ eventName: input.event.name, cause: "No event trigger schema for invocation" }),
         ),
+      onSome: (event) => decodeEnvelope(event)({ name: event.identifier, data: payload }),
     });
   }
 
-  return decode({ fn, eventName: input.event.name, eventData: input.event.data });
-};
+  return decodeTriggerEvent(fn)(input.event);
+}

@@ -750,7 +750,7 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
         }>;
         const waitOp = opcodes.find((o) => o.op === "WaitForEvent");
 
-        // null data = timeout
+        // raw null memo = timeout
         const secondResponse = yield* Effect.tryPromise(() =>
           handler(
             makeTestRequest({
@@ -758,7 +758,7 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
               eventName: "test/wait-trigger",
               eventData: { orderId: "order-123" },
               steps: {
-                [waitOp!.id]: { data: null },
+                [waitOp!.id]: null,
               },
             }),
           ),

@@ -1,6 +1,8 @@
 import { Option, Predicate, Schema } from "effect";
+import type * as InngestEvent from "../../../Event.js";
 import type { EventTrigger, InngestFunction } from "../../../Function.js";
-import type { EventSchema } from "../codec/EventPayload.js";
+
+type EventSchema = InngestEvent.EventDefinition;
 
 const EventSchemaShape = Schema.declare<EventSchema>(
   (value): value is EventSchema =>
@@ -16,13 +18,13 @@ const isEventTriggerShape = Schema.is(EventTriggerShape);
 const isEventTrigger = (trigger: InngestFunction.Any["triggers"][number]): trigger is EventTrigger<EventSchema> =>
   isEventTriggerShape(trigger);
 
-export const eventSchemas = (fn: InngestFunction.Any): ReadonlyArray<EventSchema> =>
-  fn.triggers.filter(isEventTrigger).map((trigger) => trigger.event);
+export const eventSchemas = <F extends InngestFunction.Any>(fn: F): ReadonlyArray<InngestFunction.Events<F>> =>
+  fn.triggers.filter(isEventTrigger).map((trigger) => trigger.event as InngestFunction.Events<F>);
 
-export const eventSchemaFor = (args: {
-  readonly fn: InngestFunction.Any;
+export const eventSchemaFor = <F extends InngestFunction.Any>(args: {
+  readonly fn: F;
   readonly eventName: string;
-}): Option.Option<EventSchema> => {
+}): Option.Option<InngestFunction.Events<F>> => {
   const events = eventSchemas(args.fn);
   return Option.fromNullishOr(events.find((event) => event.identifier === args.eventName));
 };

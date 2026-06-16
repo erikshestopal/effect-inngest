@@ -1,4 +1,4 @@
-import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
+import { Duration, Effect, Match, Option, Schema } from "effect";
 import type * as InngestEvent from "../../../../Event.js";
 import * as EventPayload from "../../codec/EventPayload.js";
 import * as StepResult from "../../codec/StepResult.js";
@@ -26,19 +26,14 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
-        Option.match(Option.filter(Option.some(data), Predicate.isNotNullish), {
-          onNone: () => Effect.succeed(Option.none()),
-          onSome: (eventPayload) =>
-            (
-              Schema.decodeUnknownEffect(Schema.toCodecJson(args.event as Schema.Top))(eventPayload) as Effect.Effect<
-                InngestEvent.EventType<E>
-              >
-            ).pipe(
-              Effect.map((event) => Option.some(event as InngestEvent.EventType<E>)),
-              Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
-            ),
-        }),
+        EventPayload.decodeEnvelope(args.event)(data).pipe(
+          Effect.map(Option.some),
+          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
+        ),
       ),
+      Match.tag("MemoTimeout", () => Effect.succeed(Option.none())),
+      Match.tag("MemoError", ({ error }) => Effect.fail(StepResult.stepDecodeError({ stepId: info.id, cause: error }))),
+      Match.tag("MemoInput", ({ input }) => Effect.fail(StepResult.stepDecodeError({ stepId: info.id, cause: input }))),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           yield* sink.yieldCommand(
@@ -52,6 +47,6 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
           return Option.none();
         }),
       ),
-      Match.orElse(() => Effect.succeed(Option.none())),
+      Match.exhaustive,
     );
   });
