@@ -111,19 +111,18 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
   };
 
   it.effect(
-    "maxRuntime exceeded → 206 ends in DiscoveryRequest",
+    "maxRuntime does not force DiscoveryRequest for stepless functions that can still complete",
     () =>
       Effect.gen(function* () {
-        // Handler buffers one step then blocks forever. The driver's race
-        // between the handler and `Effect.sleep(maxRuntime)` should pick the
-        // deadline branch and terminate with DiscoveryRequest.
-        const { captures, layer } = setup(
-          ({ step }) =>
+        let enterCount = 0;
+        const { layer } = setup(
+          () =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
-              return yield* Effect.never;
+              enterCount++;
+              yield* Effect.sleep("75 millis");
+              return "done";
             }),
-          { bufferedSteps: 10, maxRuntime: "50 millis" },
+          { bufferedSteps: 10, maxRuntime: "25 millis" },
         );
         const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer });
         try {
@@ -131,15 +130,49 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
             handler(makeRequest({ fnId: "ckpt-deadline-fn", eventName: "ckpt/maxruntime" })),
           );
           expect(response.status).toBe(206);
-          const body = (yield* Effect.tryPromise(() => response.json())) as Array<{ op: string; id?: string }>;
-          const last = body[body.length - 1]!;
-          expect(last.op).toBe("DiscoveryRequest");
-          // Step "a" was buffered — either flushed mid-run or drained into the
-          // 206 body. Either way it must not be lost.
-          const flushedStepIds = captures.flatMap((c) => c.body.steps.map((s) => s.id));
-          const bodyStepRuns = body.filter((o) => o.op === "StepRun");
-          const allStepIds = [...flushedStepIds, ...bodyStepRuns.map((o) => o.id!)];
-          expect(allStepIds.length).toBeGreaterThanOrEqual(1);
+          const body = (yield* Effect.tryPromise(() => response.json())) as Array<{ op: string; data?: unknown }>;
+
+          expect(body).toHaveLength(1);
+          expect(body[0]).toMatchObject({ op: "RunComplete", data: "done" });
+          expect(enterCount).toBe(1);
+        } finally {
+          yield* Effect.tryPromise(() => dispose());
+        }
+      }),
+    { timeout: 5_000 },
+  );
+
+  it.effect(
+    "maxRuntime exceeded plans the next step boundary instead of executing it in-process",
+    () =>
+      Effect.gen(function* () {
+        const { captures, layer } = setup(
+          ({ step }) =>
+            Effect.gen(function* () {
+              yield* step.run("a", Effect.succeed("A"));
+              yield* Effect.sleep("75 millis");
+              yield* step.run("b", Effect.succeed("B"));
+              return "done";
+            }),
+          { bufferedSteps: 10, maxRuntime: "25 millis" },
+        );
+        const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer });
+        try {
+          const response = yield* Effect.tryPromise(() =>
+            handler(makeRequest({ fnId: "ckpt-deadline-fn", eventName: "ckpt/maxruntime" })),
+          );
+          expect(response.status).toBe(206);
+          const body = (yield* Effect.tryPromise(() => response.json())) as Array<{
+            op: string;
+            id?: string;
+            name?: string;
+          }>;
+
+          expect(captures).toHaveLength(1);
+          expect(captures[0]!.body.steps).toHaveLength(1);
+          expect(captures[0]!.body.steps[0]!.op).toBe("StepRun");
+          expect(body).toHaveLength(1);
+          expect(body[0]).toMatchObject({ op: "StepPlanned", name: "b" });
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }

@@ -15,8 +15,7 @@ import { SignatureError } from "./signature.js";
 import * as SdkRequest from "./serve/request.js";
 import * as Protocol from "./protocol.js";
 export { SignatureError } from "./signature.js";
-import { execute, type TraceHeaders } from "./driver.js";
-export type { TraceHeaders } from "./driver.js";
+import { execute } from "./driver.js";
 
 export class InvalidRequestError extends Schema.TaggedErrorClass<InvalidRequestError>()("InvalidRequestError", {
   message: Schema.String,
@@ -197,7 +196,6 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
   fnId: string,
   urlStepId: string | undefined,
   body: typeof Protocol.SDKRequestBody.Type,
-  traceHeaders: TraceHeaders = {},
 ) {
   const client = yield* InngestClient;
   const context = yield* Effect.context<never>();
@@ -263,9 +261,6 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
     ? Option.fromNullishOr(Checkpoint.resolveConfig(fn.options.checkpointing, client.config.checkpointing))
     : Option.none<Checkpoint.CheckpointConfig>();
 
-  const result = yield* Effect.provide(
-    execute(fn, entry.handler, effectiveBody, appId, traceHeaders, checkpointConfig),
-    entry.context,
-  );
+  const result = yield* Effect.provide(execute(fn, entry.handler, effectiveBody, checkpointConfig), entry.context);
   return { status: result.status, headers: result.headers, body: result.body } as HandlerResponse<unknown>;
 });

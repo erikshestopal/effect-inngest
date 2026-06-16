@@ -32,22 +32,10 @@ export const withCheckpointDeadline = <E, R>(effect: Effect.Effect<HandlerComple
     return yield* Option.match(checkpoint, {
       onNone: () => effect,
       onSome: (state) =>
-        Effect.raceFirst(
-          effect,
-          Effect.sleep(state.config.maxRuntime).pipe(
-            Effect.andThen(state.markRuntimeExceeded),
-            Effect.andThen(Effect.sleep(state.config.maxRuntime)),
-            Effect.as(CheckpointDeadlineElapsed.make()),
-          ),
-        ).pipe(
-          Effect.flatMap((completion) =>
-            state.isRuntimeExceeded.pipe(
-              Effect.map(
-                (runtimeExceeded): HandlerCompletion =>
-                  runtimeExceeded ? CheckpointDeadlineElapsed.make() : completion,
-              ),
-            ),
-          ),
+        Effect.sleep(state.config.maxRuntime).pipe(
+          Effect.andThen(state.markRuntimeExceeded),
+          Effect.forkScoped,
+          Effect.andThen(effect),
         ),
     });
   });

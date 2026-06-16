@@ -38,7 +38,7 @@ describe("Driver.layer coverage", () => {
       const driver = yield* Driver.Driver;
       expect(driver.execute).toBeDefined();
       expect(typeof driver.execute).toBe("function");
-    }).pipe(Effect.provide(Driver.layer({ appName: "test-app" }))),
+    }).pipe(Effect.provide(Driver.layer)),
   );
 });
 

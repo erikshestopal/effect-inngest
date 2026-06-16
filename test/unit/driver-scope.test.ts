@@ -79,7 +79,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)),
           ),
         makeRequest(),
-        "test-app",
       ).pipe(Effect.provide(clientLayer));
 
       // The step.run always interrupts with a 206 on first execution
@@ -104,7 +103,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
             ),
           ),
         makeRequest(),
-        "test-app",
       ).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(206);
@@ -128,7 +126,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
             ),
           ),
         makeRequest(),
-        "test-app",
       ).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(206);
@@ -155,7 +152,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
             return "done";
           }),
         makeRequest(),
-        "test-app",
       ).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(200);
@@ -184,7 +180,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
             return "done";
           }),
         makeRequest(),
-        "test-app",
       ).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(200);
