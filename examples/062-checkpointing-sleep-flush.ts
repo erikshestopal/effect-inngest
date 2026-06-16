@@ -10,7 +10,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const SleepEvent = InngestEvent.make(
-  "demo/checkpoint-sleep",
+  "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
   Schema.Struct({
     tag: Schema.String,
   }),
@@ -45,7 +45,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-sleep",
+          name: "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
           data: {
             tag: "sleep-062",
           },

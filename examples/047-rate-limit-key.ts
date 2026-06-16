@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoRateKeyed = InngestEvent.make(
-  "demo/rate-keyed",
+  "examples/047-rate-limit-key/demo/rate-keyed",
   Schema.Struct({
     companyId: Schema.String,
   }),
@@ -41,7 +41,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/rate-keyed",
+          name: "examples/047-rate-limit-key/demo/rate-keyed",
           data: {
             companyId: "company-047",
           },

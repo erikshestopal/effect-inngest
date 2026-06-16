@@ -7,7 +7,7 @@ class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
   message: Schema.String,
 }) {}
 
-const DemoStepCatch = InngestEvent.make("demo/step-catch", Schema.Struct({}));
+const DemoStepCatch = InngestEvent.make("examples/026-step-error-catch/demo/step-catch", Schema.Struct({}));
 
 const StepCatchFn = InngestFunction.make("step-catch-handler", {
   trigger: { event: DemoStepCatch },
@@ -38,7 +38,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/step-catch",
+          name: "examples/026-step-error-catch/demo/step-catch",
           data: {},
         },
       ],

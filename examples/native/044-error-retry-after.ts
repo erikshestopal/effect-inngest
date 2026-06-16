@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
   const RetryAfterFn = inngest.createFunction(
     {
       id: "retry-after-demo",
-      triggers: [{ event: "demo/retry-after" }],
+      triggers: [{ event: "examples/044-error-retry-after/demo/retry-after" }],
     },
     async ({ attempt, logger }) => {
       logger.info(`Attempt ${attempt + 1}...`);
@@ -25,7 +25,7 @@ export default defineNativeExample((inngest) => {
     functions: [RetryAfterFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/retry-after", data: {} }],
+        events: [{ name: "examples/044-error-retry-after/demo/retry-after", data: {} }],
         expect: [{ functionId: "examples-044-error-retry-after-retry-after-demo" }],
       }),
     ],

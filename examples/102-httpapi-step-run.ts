@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoStepSingle = InngestEvent.make(
-  "demo/step-single",
+  "examples/102-httpapi-step-run/demo/step-single",
   Schema.Struct({
     value: Schema.Number,
   }),
@@ -33,7 +33,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/step-single",
+          name: "examples/102-httpapi-step-run/demo/step-single",
           data: {
             value: 21,
           },

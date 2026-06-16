@@ -5,9 +5,9 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { NonRetriableError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoInvokeFailing = InngestEvent.make("demo/invoke-failing", Schema.Struct({}));
+const DemoInvokeFailing = InngestEvent.make("examples/028-invoke-failure/demo/invoke-failing", Schema.Struct({}));
 
-const DemoFailingChild = InngestEvent.make("demo/failing-child", Schema.Struct({}));
+const DemoFailingChild = InngestEvent.make("examples/028-invoke-failure/demo/failing-child", Schema.Struct({}));
 
 const FailingChildFn = InngestFunction.make("failing-child", {
   trigger: { event: DemoFailingChild },
@@ -50,7 +50,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/invoke-failing",
+          name: "examples/028-invoke-failure/demo/invoke-failing",
           data: {},
         },
       ],

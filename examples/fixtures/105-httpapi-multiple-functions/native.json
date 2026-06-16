@@ -98,7 +98,7 @@
             "name": "on-user-created",
             "triggers": [
               {
-                "event": "user/created"
+                "event": "examples/105-httpapi-multiple-functions/user/created"
               }
             ],
             "steps": {
@@ -117,7 +117,7 @@
             "name": "on-user-deleted",
             "triggers": [
               {
-                "event": "user/deleted"
+                "event": "examples/105-httpapi-multiple-functions/user/deleted"
               }
             ],
             "steps": {
@@ -201,7 +201,7 @@
             "userId": "user-105"
           },
           "id": "<event-id>",
-          "name": "user/created",
+          "name": "examples/105-httpapi-multiple-functions/user/created",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -212,7 +212,7 @@
               "userId": "user-105"
             },
             "id": "<event-id>",
-            "name": "user/created",
+            "name": "examples/105-httpapi-multiple-functions/user/created",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -249,326 +249,6 @@
     "proxy": "sdk-to-inngest",
     "request": {
       "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "send-welcome",
-            "displayName": "send-welcome",
-            "userland": {
-              "id": "send-welcome"
-            },
-            "opts": {},
-            "rawArgs": ["send-welcome", null],
-            "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-                "memoized": false,
-                "options": {
-                  "id": "send-welcome",
-                  "name": "send-welcome"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/105-httpapi-multiple-functions?fnId=examples-105-httpapi-multiple-functions-on-user-created&stepId=step",
-      "path": "/examples/105-httpapi-multiple-functions",
-      "query": {
-        "fnId": "examples-105-httpapi-multiple-functions-on-user-created",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "userId": "user-020"
-          },
-          "id": "<event-id>",
-          "name": "user/created",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "userId": "user-020"
-            },
-            "id": "<event-id>",
-            "name": "user/created",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "welcomed": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/105-httpapi-multiple-functions?fnId=examples-105-httpapi-multiple-functions-on-user-created&stepId=step",
-      "path": "/examples/105-httpapi-multiple-functions",
-      "query": {
-        "fnId": "examples-105-httpapi-multiple-functions-on-user-created",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "email": "alice@example.com",
-            "userId": "123"
-          },
-          "id": "<event-id>",
-          "name": "user/created",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "email": "alice@example.com",
-              "userId": "123"
-            },
-            "id": "<event-id>",
-            "name": "user/created",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "welcomed": true
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "send-welcome",
-            "displayName": "send-welcome",
-            "userland": {
-              "id": "send-welcome"
-            },
-            "opts": {},
-            "rawArgs": ["send-welcome", null],
-            "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
-                "memoized": false,
-                "options": {
-                  "id": "send-welcome",
-                  "name": "send-welcome"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 9,
       "method": "POST",
       "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
       "path": "/v1/checkpoint/<run_id>/async",

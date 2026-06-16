@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const LongRunningFn = inngest.createFunction(
     {
       id: "long-running-task",
-      triggers: [{ event: "demo/long-running" }],
+      triggers: [{ event: "examples/024-timeout-finish/demo/long-running" }],
       timeouts: { finish: "2s" },
     },
     async ({ step }) => {
@@ -20,7 +20,7 @@ export default defineNativeExample((inngest) => {
     functions: [LongRunningFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/long-running", data: {} }],
+        events: [{ name: "examples/024-timeout-finish/demo/long-running", data: {} }],
         expect: [
           {
             functionId: "examples-024-timeout-finish-long-running-task",

@@ -98,7 +98,7 @@
             "name": "service-handler",
             "triggers": [
               {
-                "event": "demo/with-services"
+                "event": "examples/030-context-services/demo/with-services"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "name": "Ada"
           },
           "id": "<event-id>",
-          "name": "demo/with-services",
+          "name": "examples/030-context-services/demo/with-services",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "name": "Ada"
             },
             "id": "<event-id>",
-            "name": "demo/with-services",
+            "name": "examples/030-context-services/demo/with-services",
             "ts": "<event-ts>",
             "user": {}
           }

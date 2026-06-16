@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoDebounced = InngestEvent.make(
-  "demo/debounced",
+  "examples/015-debounce/demo/debounced",
   Schema.Struct({
     seq: Schema.Number,
   }),
@@ -34,7 +34,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/debounced",
+          name: "examples/015-debounce/demo/debounced",
           data: {
             seq: 1,
           },

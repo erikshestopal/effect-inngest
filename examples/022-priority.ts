@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoPriority = InngestEvent.make(
-  "demo/priority",
+  "examples/022-priority/demo/priority",
   Schema.Struct({
     plan: Schema.String,
   }),
@@ -30,7 +30,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/priority",
+          name: "examples/022-priority/demo/priority",
           data: {
             plan: "enterprise",
           },

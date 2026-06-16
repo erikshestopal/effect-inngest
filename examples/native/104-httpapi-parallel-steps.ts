@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ParallelTest = inngest.createFunction(
     {
       id: "parallel-test",
-      triggers: [{ event: "examples/104/demo/parallel" }],
+      triggers: [{ event: "examples/104-httpapi-parallel-steps/examples/104/demo/parallel" }],
     },
     async ({ event, step }) => {
       const a = typeof event.data.a === "number" ? event.data.a : 0;
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [ParallelTest],
     cases: [
       eventCase({
-        events: [{ name: "examples/104/demo/parallel", data: { a: 6, b: 7 } }],
+        events: [{ name: "examples/104-httpapi-parallel-steps/examples/104/demo/parallel", data: { a: 6, b: 7 } }],
         expect: [{ functionId: "examples-104-httpapi-parallel-steps-parallel-test" }],
       }),
     ],

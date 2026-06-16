@@ -4,8 +4,8 @@ export default defineNativeExample((inngest) => {
   const LongTaskFn = inngest.createFunction(
     {
       id: "long-task",
-      triggers: [{ event: "task/started" }],
-      cancelOn: [{ event: "task/cancelled", if: "async.data.taskId == event.data.taskId" }],
+      triggers: [{ event: "examples/021-cancelOn-event/task/started" }],
+      cancelOn: [{ event: "examples/021-cancelOn-event/task/cancelled", if: "async.data.taskId == event.data.taskId" }],
     },
     async ({ event, step }) => {
       const taskId = typeof event.data.taskId === "string" ? event.data.taskId : "";
@@ -23,7 +23,7 @@ export default defineNativeExample((inngest) => {
     functions: [LongTaskFn],
     cases: [
       eventCase({
-        events: [{ name: "task/started", data: { taskId: "task-021" } }],
+        events: [{ name: "examples/021-cancelOn-event/task/started", data: { taskId: "task-021" } }],
         expect: [{ functionId: "examples-021-cancelOn-event-long-task" }],
       }),
     ],

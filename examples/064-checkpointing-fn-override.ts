@@ -12,7 +12,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const OverrideEvent = InngestEvent.make(
-  "demo/checkpoint-override",
+  "examples/064-checkpointing-fn-override/demo/checkpoint-override",
   Schema.Struct({
     key: Schema.String,
   }),
@@ -46,7 +46,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-override",
+          name: "examples/064-checkpointing-fn-override/demo/checkpoint-override",
           data: {
             key: "override-064",
           },

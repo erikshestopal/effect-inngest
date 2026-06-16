@@ -4,14 +4,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSendSingle = InngestEvent.make(
-  "demo/send-single",
+  "examples/007-step-sendEvent/demo/send-single",
   Schema.Struct({
     userId: Schema.String,
   }),
 );
 
 const DemoNotification = InngestEvent.make(
-  "demo/notification",
+  "examples/007-step-sendEvent/demo/notification",
   Schema.Struct({
     userId: Schema.String,
     message: Schema.String,
@@ -45,7 +45,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/send-single",
+          name: "examples/007-step-sendEvent/demo/send-single",
           data: {
             userId: "u_001",
           },

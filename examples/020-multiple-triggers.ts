@@ -4,14 +4,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const UserCreated = InngestEvent.make(
-  "user/created",
+  "examples/020-multiple-triggers/user/created",
   Schema.Struct({
     userId: Schema.String,
   }),
 );
 
 const UserUpdated = InngestEvent.make(
-  "user/updated",
+  "examples/020-multiple-triggers/user/updated",
   Schema.Struct({
     userId: Schema.String,
   }),
@@ -27,7 +27,7 @@ const Group = InngestGroup.make(UserHandlerFn);
 const HandlersLive = Group.toLayer({
   "user-handler": ({ event }) =>
     Effect.gen(function* () {
-      const action = event.name === "user/created" ? "Created" : "Updated";
+      const action = event.name === "examples/020-multiple-triggers/user/created" ? "Created" : "Updated";
       yield* Effect.log(`User ${action}: ${event.data.userId}`);
       return { eventName: event.name, userId: event.data.userId, action };
     }),
@@ -41,7 +41,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "user/created",
+          name: "examples/020-multiple-triggers/user/created",
           data: {
             userId: "user-020",
           },

@@ -12,7 +12,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const OptOutEvent = InngestEvent.make(
-  "demo/checkpoint-opt-out",
+  "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
   Schema.Struct({
     tag: Schema.String,
   }),
@@ -44,7 +44,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-opt-out",
+          name: "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
           data: {
             tag: "opt-out-065",
           },

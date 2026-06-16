@@ -6,14 +6,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoWaitMatch = InngestEvent.make(
-  "demo/wait-match",
+  "examples/041-waitForEvent-match/demo/wait-match",
   Schema.Struct({
     invoiceId: Schema.String,
   }),
 );
 
 const DemoInvoicePaid = InngestEvent.make(
-  "demo/invoice-paid",
+  "examples/041-waitForEvent-match/demo/invoice-paid",
   Schema.Struct({
     invoiceId: Schema.String,
     amount: Schema.Number,
@@ -55,7 +55,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/wait-match",
+          name: "examples/041-waitForEvent-match/demo/wait-match",
           data: {
             invoiceId: "invoice-041",
           },
@@ -66,7 +66,7 @@ export default defineExample({
           delayMs: 1000,
           events: [
             {
-              name: "demo/invoice-paid",
+              name: "examples/041-waitForEvent-match/demo/invoice-paid",
               data: {
                 invoiceId: "invoice-041",
                 amount: 123.45,

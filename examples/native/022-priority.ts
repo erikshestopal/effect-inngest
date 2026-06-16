@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const PriorityFn = inngest.createFunction(
     {
       id: "priority-handler",
-      triggers: [{ event: "demo/priority" }],
+      triggers: [{ event: "examples/022-priority/demo/priority" }],
       priority: { run: "event.data.plan == 'enterprise' ? 100 : 0" },
     },
     async ({ event }) => {
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [PriorityFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/priority", data: { plan: "enterprise" } }],
+        events: [{ name: "examples/022-priority/demo/priority", data: { plan: "enterprise" } }],
         expect: [{ functionId: "examples-022-priority-priority-handler" }],
       }),
     ],

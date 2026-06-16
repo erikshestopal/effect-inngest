@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoConditional = InngestEvent.make(
-  "demo/conditional",
+  "examples/038-conditional-steps/demo/conditional",
   Schema.Struct({
     shouldSkip: Schema.Boolean,
   }),
@@ -45,7 +45,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/conditional",
+          name: "examples/038-conditional-steps/demo/conditional",
           data: {
             shouldSkip: false,
           },

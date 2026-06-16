@@ -98,7 +98,7 @@
             "name": "concurrent-fn",
             "triggers": [
               {
-                "event": "demo/concurrent"
+                "event": "examples/014-concurrency-limit/demo/concurrent"
               }
             ],
             "steps": {
@@ -184,7 +184,7 @@
             "id": "concurrent-014"
           },
           "id": "<event-id>",
-          "name": "demo/concurrent",
+          "name": "examples/014-concurrency-limit/demo/concurrent",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -194,7 +194,7 @@
               "id": "concurrent-014"
             },
             "id": "<event-id>",
-            "name": "demo/concurrent",
+            "name": "examples/014-concurrency-limit/demo/concurrent",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -275,7 +275,7 @@
             "id": "concurrent-014"
           },
           "id": "<event-id>",
-          "name": "demo/concurrent",
+          "name": "examples/014-concurrency-limit/demo/concurrent",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +285,7 @@
               "id": "concurrent-014"
             },
             "id": "<event-id>",
-            "name": "demo/concurrent",
+            "name": "examples/014-concurrency-limit/demo/concurrent",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Fn = inngest.createFunction(
     {
       id: "checkpoint-basic",
-      triggers: [{ event: "demo/checkpoint-basic" }],
+      triggers: [{ event: "examples/060-checkpointing-basic/demo/checkpoint-basic" }],
     },
     async ({ event, step }) => {
       const value = event.data.value as number;
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/checkpoint-basic", data: { value: 4 } }],
+        events: [{ name: "examples/060-checkpointing-basic/demo/checkpoint-basic", data: { value: 4 } }],
         expect: [{ functionId: "examples-060-checkpointing-basic-checkpoint-basic" }],
       }),
     ],

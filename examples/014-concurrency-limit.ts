@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoConcurrent = InngestEvent.make(
-  "demo/concurrent",
+  "examples/014-concurrency-limit/demo/concurrent",
   Schema.Struct({
     id: Schema.String,
   }),
@@ -36,7 +36,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/concurrent",
+          name: "examples/014-concurrency-limit/demo/concurrent",
           data: {
             id: "concurrent-014",
           },

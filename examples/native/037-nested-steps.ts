@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const NestedSteps = inngest.createFunction(
     {
       id: "nested-steps-demo",
-      triggers: [{ event: "demo/nested" }],
+      triggers: [{ event: "examples/037-nested-steps/demo/nested" }],
     },
     async ({ step }) => {
       const level1 = await step.run("level-1", () => 10);
@@ -20,7 +20,7 @@ export default defineNativeExample((inngest) => {
     functions: [NestedSteps],
     cases: [
       eventCase({
-        events: [{ name: "demo/nested", data: {} }],
+        events: [{ name: "examples/037-nested-steps/demo/nested", data: {} }],
         expect: [{ functionId: "examples-037-nested-steps-nested-steps-demo" }],
       }),
     ],

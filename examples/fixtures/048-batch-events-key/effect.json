@@ -98,7 +98,7 @@
             "name": "batch-keyed",
             "triggers": [
               {
-                "event": "demo/batch-keyed"
+                "event": "examples/048-batch-events-key/demo/batch-keyed"
               }
             ],
             "steps": {
@@ -187,7 +187,7 @@
             "userId": "user-048"
           },
           "id": "<event-id>",
-          "name": "demo/batch-keyed",
+          "name": "examples/048-batch-events-key/demo/batch-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -198,7 +198,7 @@
               "userId": "user-048"
             },
             "id": "<event-id>",
-            "name": "demo/batch-keyed",
+            "name": "examples/048-batch-events-key/demo/batch-keyed",
             "ts": "<event-ts>",
             "user": {}
           },
@@ -208,7 +208,7 @@
               "userId": "user-048"
             },
             "id": "<event-id>",
-            "name": "demo/batch-keyed",
+            "name": "examples/048-batch-events-key/demo/batch-keyed",
             "ts": "<event-ts>",
             "user": {}
           }

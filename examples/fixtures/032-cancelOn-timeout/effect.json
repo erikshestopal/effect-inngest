@@ -98,7 +98,7 @@
             "name": "cancellable-job",
             "triggers": [
               {
-                "event": "job/started"
+                "event": "examples/032-cancelOn-timeout/job/started"
               }
             ],
             "steps": {
@@ -113,7 +113,7 @@
             },
             "cancel": [
               {
-                "event": "job/cancelled",
+                "event": "examples/032-cancelOn-timeout/job/cancelled",
                 "if": "async.data.jobId == event.data.jobId",
                 "timeout": "1m"
               }
@@ -188,7 +188,7 @@
             "jobId": "job-032"
           },
           "id": "<event-id>",
-          "name": "job/started",
+          "name": "examples/032-cancelOn-timeout/job/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -198,7 +198,7 @@
               "jobId": "job-032"
             },
             "id": "<event-id>",
-            "name": "job/started",
+            "name": "examples/032-cancelOn-timeout/job/started",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -352,7 +352,7 @@
             "jobId": "job-032"
           },
           "id": "<event-id>",
-          "name": "job/started",
+          "name": "examples/032-cancelOn-timeout/job/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -362,7 +362,7 @@
               "jobId": "job-032"
             },
             "id": "<event-id>",
-            "name": "job/started",
+            "name": "examples/032-cancelOn-timeout/job/started",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -526,7 +526,7 @@
             "jobId": "job-032"
           },
           "id": "<event-id>",
-          "name": "job/started",
+          "name": "examples/032-cancelOn-timeout/job/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -536,7 +536,7 @@
               "jobId": "job-032"
             },
             "id": "<event-id>",
-            "name": "job/started",
+            "name": "examples/032-cancelOn-timeout/job/started",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -706,7 +706,7 @@
             "jobId": "job-032"
           },
           "id": "<event-id>",
-          "name": "job/started",
+          "name": "examples/032-cancelOn-timeout/job/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -716,7 +716,7 @@
               "jobId": "job-032"
             },
             "id": "<event-id>",
-            "name": "job/started",
+            "name": "examples/032-cancelOn-timeout/job/started",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoStepChain = InngestEvent.make(
-  "demo/step-chain",
+  "examples/004-step-run-multiple/demo/step-chain",
   Schema.Struct({
     value: Schema.Number,
   }),
@@ -48,7 +48,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/step-chain",
+          name: "examples/004-step-run-multiple/demo/step-chain",
           data: {
             value: 16,
           },

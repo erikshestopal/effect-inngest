@@ -98,7 +98,7 @@
             "name": "checkout-handler",
             "triggers": [
               {
-                "event": "demo/idempotent"
+                "event": "examples/023-idempotency/demo/idempotent"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
             "cartId": "cart-023"
           },
           "id": "<event-id>",
-          "name": "demo/idempotent",
+          "name": "examples/023-idempotency/demo/idempotent",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -192,7 +192,7 @@
               "cartId": "cart-023"
             },
             "id": "<event-id>",
-            "name": "demo/idempotent",
+            "name": "examples/023-idempotency/demo/idempotent",
             "ts": "<event-ts>",
             "user": {}
           }

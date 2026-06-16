@@ -98,7 +98,7 @@
             "name": "process-order",
             "triggers": [
               {
-                "event": "examples/050/order/placed"
+                "event": "examples/050-complex-workflow/examples/050/order/placed"
               }
             ],
             "steps": {
@@ -190,7 +190,7 @@
             "userId": "user-050"
           },
           "id": "<event-id>",
-          "name": "examples/050/order/placed",
+          "name": "examples/050-complex-workflow/examples/050/order/placed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -209,7 +209,7 @@
               "userId": "user-050"
             },
             "id": "<event-id>",
-            "name": "examples/050/order/placed",
+            "name": "examples/050-complex-workflow/examples/050/order/placed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -233,7 +233,7 @@
         {
           "id": "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8",
           "op": "WaitForEvent",
-          "name": "examples/050/order/payment-received",
+          "name": "examples/050-complex-workflow/examples/050/order/payment-received",
           "displayName": "wait-for-payment",
           "opts": {
             "timeout": "30s",
@@ -452,7 +452,7 @@
             "userId": "user-050"
           },
           "id": "<event-id>",
-          "name": "examples/050/order/placed",
+          "name": "examples/050-complex-workflow/examples/050/order/placed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -471,7 +471,7 @@
               "userId": "user-050"
             },
             "id": "<event-id>",
-            "name": "examples/050/order/placed",
+            "name": "examples/050-complex-workflow/examples/050/order/placed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -486,7 +486,7 @@
               "transactionId": "txn-050"
             },
             "id": "fixture-effect-050-complex-workflow-0-after-0-0",
-            "name": "examples/050/order/payment-received",
+            "name": "examples/050-complex-workflow/examples/050/order/payment-received",
             "ts": "<event-ts>",
             "user": {}
           },
@@ -560,7 +560,7 @@
             "rawArgs": [
               "send-confirmation",
               {
-                "name": "order/confirmed",
+                "name": "examples/050-complex-workflow/order/confirmed",
                 "data": {
                   "orderId": "order-050",
                   "userId": "user-050",
@@ -720,7 +720,7 @@
             "rawArgs": [
               "notify-delivery",
               {
-                "name": "delivery/scheduled",
+                "name": "examples/050-complex-workflow/delivery/scheduled",
                 "data": {
                   "orderId": "order-050",
                   "estimatedDelivery": "2026-06-20"

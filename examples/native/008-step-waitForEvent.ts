@@ -4,12 +4,12 @@ export default defineNativeExample((inngest) => {
   const WaitForEventFn = inngest.createFunction(
     {
       id: "wait-for-event",
-      triggers: [{ event: "demo/wait-start" }],
+      triggers: [{ event: "examples/008-step-waitForEvent/demo/wait-start" }],
     },
     async ({ event, step }) => {
       const orderId = typeof event.data.orderId === "string" ? event.data.orderId : "";
       const matched = await step.waitForEvent("wait-for-complete", {
-        event: "demo/wait-complete",
+        event: "examples/008-step-waitForEvent/demo/wait-complete",
         timeout: "5m",
         if: `async.data.orderId == "${orderId}"`,
       });
@@ -23,11 +23,16 @@ export default defineNativeExample((inngest) => {
     functions: [WaitForEventFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/wait-start", data: { orderId: "order-008" } }],
+        events: [{ name: "examples/008-step-waitForEvent/demo/wait-start", data: { orderId: "order-008" } }],
         afterEvents: [
           {
             delayMs: 1000,
-            events: [{ name: "demo/wait-complete", data: { orderId: "order-008", status: "approved" } }],
+            events: [
+              {
+                name: "examples/008-step-waitForEvent/demo/wait-complete",
+                data: { orderId: "order-008", status: "approved" },
+              },
+            ],
           },
         ],
         expect: [{ functionId: "examples-008-step-waitForEvent-wait-for-event" }],

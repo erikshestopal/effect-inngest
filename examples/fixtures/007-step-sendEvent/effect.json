@@ -98,7 +98,7 @@
             "name": "send-single",
             "triggers": [
               {
-                "event": "demo/send-single"
+                "event": "examples/007-step-sendEvent/demo/send-single"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "userId": "u_001"
           },
           "id": "<event-id>",
-          "name": "demo/send-single",
+          "name": "examples/007-step-sendEvent/demo/send-single",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "userId": "u_001"
             },
             "id": "<event-id>",
-            "name": "demo/send-single",
+            "name": "examples/007-step-sendEvent/demo/send-single",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -260,7 +260,7 @@
             "rawArgs": [
               "send-notification",
               {
-                "name": "demo/notification",
+                "name": "examples/007-step-sendEvent/demo/notification",
                 "data": {
                   "userId": "u_001",
                   "message": "Hello from step.sendEvent!"

@@ -98,7 +98,7 @@
             "name": "failing-child",
             "triggers": [
               {
-                "event": "demo/failing-child"
+                "event": "examples/028-invoke-failure/demo/failing-child"
               }
             ],
             "steps": {
@@ -117,7 +117,7 @@
             "name": "parent-invoker",
             "triggers": [
               {
-                "event": "demo/invoke-failing"
+                "event": "examples/028-invoke-failure/demo/invoke-failing"
               }
             ],
             "steps": {
@@ -198,7 +198,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/invoke-failing",
+          "name": "examples/028-invoke-failure/demo/invoke-failing",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -206,7 +206,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/invoke-failing",
+            "name": "examples/028-invoke-failure/demo/invoke-failing",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -417,7 +417,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/invoke-failing",
+          "name": "examples/028-invoke-failure/demo/invoke-failing",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -425,7 +425,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/invoke-failing",
+            "name": "examples/028-invoke-failure/demo/invoke-failing",
             "ts": "<event-ts>",
             "user": {}
           }

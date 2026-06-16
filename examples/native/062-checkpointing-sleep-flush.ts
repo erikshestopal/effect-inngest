@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Fn = inngest.createFunction(
     {
       id: "checkpoint-sleep",
-      triggers: [{ event: "demo/checkpoint-sleep" }],
+      triggers: [{ event: "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep" }],
       checkpointing: { bufferedSteps: 10 },
     },
     async ({ event, step }) => {
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/checkpoint-sleep", data: { tag: "sleep-062" } }],
+        events: [{ name: "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep", data: { tag: "sleep-062" } }],
         expect: [{ functionId: "examples-062-checkpointing-sleep-flush-checkpoint-sleep" }],
       }),
     ],

@@ -98,7 +98,7 @@
             "name": "retries-limited",
             "triggers": [
               {
-                "event": "demo/retries-limited"
+                "event": "examples/013-retries-config/demo/retries-limited"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retries-limited",
+          "name": "examples/013-retries-config/demo/retries-limited",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -190,7 +190,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retries-limited",
+            "name": "examples/013-retries-config/demo/retries-limited",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -280,7 +280,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retries-limited",
+          "name": "examples/013-retries-config/demo/retries-limited",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -288,7 +288,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retries-limited",
+            "name": "examples/013-retries-config/demo/retries-limited",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -383,7 +383,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retries-limited",
+          "name": "examples/013-retries-config/demo/retries-limited",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -391,7 +391,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retries-limited",
+            "name": "examples/013-retries-config/demo/retries-limited",
             "ts": "<event-ts>",
             "user": {}
           }

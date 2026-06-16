@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoReturnTypes = InngestEvent.make("demo/return-types", Schema.Struct({}));
+const DemoReturnTypes = InngestEvent.make("examples/040-step-return-types/demo/return-types", Schema.Struct({}));
 
 const ReturnTypesFn = InngestFunction.make("return-types-demo", {
   trigger: { event: DemoReturnTypes },
@@ -59,7 +59,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/return-types",
+          name: "examples/040-step-return-types/demo/return-types",
           data: {},
         },
       ],

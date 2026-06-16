@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoBatchKeyed = InngestEvent.make(
-  "demo/batch-keyed",
+  "examples/048-batch-events-key/demo/batch-keyed",
   Schema.Struct({
     userId: Schema.String,
     item: Schema.String,
@@ -47,14 +47,14 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/batch-keyed",
+          name: "examples/048-batch-events-key/demo/batch-keyed",
           data: {
             userId: "user-048",
             item: "a",
           },
         },
         {
-          name: "demo/batch-keyed",
+          name: "examples/048-batch-events-key/demo/batch-keyed",
           data: {
             userId: "user-048",
             item: "b",

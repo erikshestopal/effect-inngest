@@ -6,7 +6,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const OrderPlaced = InngestEvent.make(
-  "examples/050/order/placed",
+  "examples/050-complex-workflow/examples/050/order/placed",
   Schema.Struct({
     orderId: Schema.String,
     userId: Schema.String,
@@ -22,7 +22,7 @@ const OrderPlaced = InngestEvent.make(
 );
 
 const OrderPaymentReceived = InngestEvent.make(
-  "examples/050/order/payment-received",
+  "examples/050-complex-workflow/examples/050/order/payment-received",
   Schema.Struct({
     orderId: Schema.String,
     transactionId: Schema.String,
@@ -30,7 +30,7 @@ const OrderPaymentReceived = InngestEvent.make(
 );
 
 const OrderConfirmed = InngestEvent.make(
-  "order/confirmed",
+  "examples/050-complex-workflow/order/confirmed",
   Schema.Struct({
     orderId: Schema.String,
     userId: Schema.String,
@@ -39,7 +39,7 @@ const OrderConfirmed = InngestEvent.make(
 );
 
 const DeliveryScheduled = InngestEvent.make(
-  "delivery/scheduled",
+  "examples/050-complex-workflow/delivery/scheduled",
   Schema.Struct({
     orderId: Schema.String,
     estimatedDelivery: Schema.String,
@@ -166,7 +166,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "examples/050/order/placed",
+          name: "examples/050-complex-workflow/examples/050/order/placed",
           data: {
             orderId: "order-050",
             userId: "user-050",
@@ -187,7 +187,7 @@ export default defineExample({
           eventKey: "test",
           events: [
             {
-              name: "examples/050/order/payment-received",
+              name: "examples/050-complex-workflow/examples/050/order/payment-received",
               data: {
                 orderId: "order-050",
                 transactionId: "txn-050",

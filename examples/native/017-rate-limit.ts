@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const RateLimitedFn = inngest.createFunction(
     {
       id: "rate-limited-fn",
-      triggers: [{ event: "demo/rate-limited" }],
+      triggers: [{ event: "examples/017-rate-limit/demo/rate-limited" }],
       rateLimit: { limit: 1, period: "1s" },
     },
     async ({ event, logger }) => {
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [RateLimitedFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/rate-limited", data: { id: "rate-017" } }],
+        events: [{ name: "examples/017-rate-limit/demo/rate-limited", data: { id: "rate-017" } }],
         expect: [{ functionId: "examples-017-rate-limit-rate-limited-fn" }],
       }),
     ],

@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const BatchedFn = inngest.createFunction(
     {
       id: "batched-fn",
-      triggers: [{ event: "demo/batched" }],
+      triggers: [{ event: "examples/018-batch-events/demo/batched" }],
       batchEvents: { maxSize: 5, timeout: "1s" },
     },
     async ({ events, logger }) => {
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [BatchedFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/batched", data: { n: 2 } }],
+        events: [{ name: "examples/018-batch-events/demo/batched", data: { n: 2 } }],
         expect: [{ functionId: "examples-018-batch-events-batched-fn" }],
       }),
     ],

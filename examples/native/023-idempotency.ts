@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const IdempotentFn = inngest.createFunction(
     {
       id: "checkout-handler",
-      triggers: [{ event: "demo/idempotent" }],
+      triggers: [{ event: "examples/023-idempotency/demo/idempotent" }],
       idempotency: "event.data.cartId",
     },
     async ({ event }) => {
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [IdempotentFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/idempotent", data: { cartId: "cart-023" } }],
+        events: [{ name: "examples/023-idempotency/demo/idempotent", data: { cartId: "cart-023" } }],
         expect: [{ functionId: "examples-023-idempotency-checkout-handler" }],
       }),
     ],

@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoParallel = InngestEvent.make("demo/parallel", Schema.Struct({}));
+const DemoParallel = InngestEvent.make("examples/010-parallel-steps/demo/parallel", Schema.Struct({}));
 
 const ParallelFn = InngestFunction.make("parallel-steps", {
   trigger: { event: DemoParallel },
@@ -35,7 +35,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/parallel",
+          name: "examples/010-parallel-steps/demo/parallel",
           data: {},
         },
       ],

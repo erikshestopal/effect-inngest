@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoBatched = InngestEvent.make(
-  "demo/batched",
+  "examples/018-batch-events/demo/batched",
   Schema.Struct({
     n: Schema.Number,
   }),
@@ -36,7 +36,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/batched",
+          name: "examples/018-batch-events/demo/batched",
           data: {
             n: 2,
           },

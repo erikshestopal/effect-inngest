@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const BatchKeyedFn = inngest.createFunction(
     {
       id: "batch-keyed",
-      triggers: [{ event: "demo/batch-keyed" }],
+      triggers: [{ event: "examples/048-batch-events-key/demo/batch-keyed" }],
       batchEvents: { maxSize: 10, timeout: "1s", key: "event.data.userId" },
     },
     async ({ events, logger }) => {
@@ -22,8 +22,8 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         events: [
-          { name: "demo/batch-keyed", data: { userId: "user-048", item: "a" } },
-          { name: "demo/batch-keyed", data: { userId: "user-048", item: "b" } },
+          { name: "examples/048-batch-events-key/demo/batch-keyed", data: { userId: "user-048", item: "a" } },
+          { name: "examples/048-batch-events-key/demo/batch-keyed", data: { userId: "user-048", item: "b" } },
         ],
         expect: [{ functionId: "examples-048-batch-events-key-batch-keyed" }],
       }),

@@ -4,7 +4,7 @@ import { InngestEvent, InngestEvents, InngestFunction, InngestGroup } from "effe
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoTriggerFailure = InngestEvent.make(
-  "demo/trigger-failure",
+  "examples/055-system-events/demo/trigger-failure",
   Schema.Struct({
     shouldFail: Schema.Boolean,
   }),
@@ -74,7 +74,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/trigger-failure",
+          name: "examples/055-system-events/demo/trigger-failure",
           data: {
             shouldFail: false,
           },

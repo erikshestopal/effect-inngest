@@ -6,7 +6,7 @@ export default defineNativeExample((inngest) => {
     {
       id: "retry-demo",
       retries: 5,
-      triggers: [{ event: "demo/retry-error" }],
+      triggers: [{ event: "examples/029-retry-error/demo/retry-error" }],
     },
     async ({ step, attempt, logger }) => {
       const result = await step.run("flaky-step", () => {
@@ -27,7 +27,7 @@ export default defineNativeExample((inngest) => {
     functions: [RetryDemo],
     cases: [
       eventCase({
-        events: [{ name: "demo/retry-error", data: {} }],
+        events: [{ name: "examples/029-retry-error/demo/retry-error", data: {} }],
         expect: [{ functionId: "examples-029-retry-error-retry-demo" }],
       }),
     ],

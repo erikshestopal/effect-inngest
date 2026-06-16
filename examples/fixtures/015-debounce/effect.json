@@ -98,7 +98,7 @@
             "name": "debounced-fn",
             "triggers": [
               {
-                "event": "demo/debounced"
+                "event": "examples/015-debounce/demo/debounced"
               }
             ],
             "steps": {
@@ -184,7 +184,7 @@
             "seq": 1
           },
           "id": "<event-id>",
-          "name": "demo/debounced",
+          "name": "examples/015-debounce/demo/debounced",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -194,7 +194,7 @@
               "seq": 1
             },
             "id": "<event-id>",
-            "name": "demo/debounced",
+            "name": "examples/015-debounce/demo/debounced",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -10,7 +10,7 @@ export default defineNativeExample((inngest) => {
   const OrderWorkflowFn = inngest.createFunction(
     {
       id: "process-order",
-      triggers: [{ event: "examples/050/order/placed" }],
+      triggers: [{ event: "examples/050-complex-workflow/examples/050/order/placed" }],
     },
     async ({ event, step, logger }) => {
       const orderId = typeof event.data.orderId === "string" ? event.data.orderId : "";
@@ -41,7 +41,7 @@ export default defineNativeExample((inngest) => {
 
       logger.info(`Waiting for payment on order ${orderId}...`);
       const paymentEvent = await step.waitForEvent("wait-for-payment", {
-        event: "examples/050/order/payment-received",
+        event: "examples/050-complex-workflow/examples/050/order/payment-received",
         timeout: "30s",
         if: `async.data.orderId == "${orderId}"`,
       });
@@ -59,7 +59,7 @@ export default defineNativeExample((inngest) => {
       logger.info(`Payment received: ${transactionId}`);
 
       await step.sendEvent("send-confirmation", {
-        name: "order/confirmed",
+        name: "examples/050-complex-workflow/order/confirmed",
         data: { orderId, userId, total },
       });
 
@@ -72,7 +72,7 @@ export default defineNativeExample((inngest) => {
       });
 
       await step.sendEvent("notify-delivery", {
-        name: "delivery/scheduled",
+        name: "examples/050-complex-workflow/delivery/scheduled",
         data: { orderId, estimatedDelivery: deliveryDate },
       });
 
@@ -89,7 +89,7 @@ export default defineNativeExample((inngest) => {
         eventKey: "test",
         events: [
           {
-            name: "examples/050/order/placed",
+            name: "examples/050-complex-workflow/examples/050/order/placed",
             data: {
               orderId: "order-050",
               userId: "user-050",
@@ -104,7 +104,7 @@ export default defineNativeExample((inngest) => {
             eventKey: "test",
             events: [
               {
-                name: "examples/050/order/payment-received",
+                name: "examples/050-complex-workflow/examples/050/order/payment-received",
                 data: { orderId: "order-050", transactionId: "txn-050" },
               },
             ],

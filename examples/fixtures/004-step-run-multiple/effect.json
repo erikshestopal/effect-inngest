@@ -98,7 +98,7 @@
             "name": "step-chain",
             "triggers": [
               {
-                "event": "demo/step-chain"
+                "event": "examples/004-step-run-multiple/demo/step-chain"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "value": 16
           },
           "id": "<event-id>",
-          "name": "demo/step-chain",
+          "name": "examples/004-step-run-multiple/demo/step-chain",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "value": 16
             },
             "id": "<event-id>",
-            "name": "demo/step-chain",
+            "name": "examples/004-step-run-multiple/demo/step-chain",
             "ts": "<event-ts>",
             "user": {}
           }

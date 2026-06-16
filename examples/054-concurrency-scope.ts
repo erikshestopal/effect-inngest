@@ -5,7 +5,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoProcessItem = InngestEvent.make(
-  "demo/process-item",
+  "examples/054-concurrency-scope/demo/process-item",
   Schema.Struct({
     itemId: Schema.String,
     userId: Schema.String,
@@ -13,7 +13,7 @@ const DemoProcessItem = InngestEvent.make(
 );
 
 const DemoSendNotification = InngestEvent.make(
-  "demo/send-notification",
+  "examples/054-concurrency-scope/demo/send-notification",
   Schema.Struct({
     userId: Schema.String,
     channel: Schema.Literals(["email", "sms", "push"]),
@@ -84,7 +84,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/process-item",
+          name: "examples/054-concurrency-scope/demo/process-item",
           data: {
             itemId: "item-054",
             userId: "user-054",

@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const UserCreated = InngestEvent.make(
-  "user/created",
+  "examples/105-httpapi-multiple-functions/user/created",
   Schema.Struct({
     userId: Schema.String,
     email: Schema.String,
@@ -12,7 +12,7 @@ const UserCreated = InngestEvent.make(
 );
 
 const UserDeleted = InngestEvent.make(
-  "user/deleted",
+  "examples/105-httpapi-multiple-functions/user/deleted",
   Schema.Struct({
     userId: Schema.String,
   }),
@@ -51,7 +51,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "user/created",
+          name: "examples/105-httpapi-multiple-functions/user/created",
           data: {
             userId: "user-105",
             email: "user@example.com",

@@ -98,7 +98,7 @@
             "name": "sleep-until",
             "triggers": [
               {
-                "event": "demo/sleep-until"
+                "event": "examples/006-step-sleepUntil/demo/sleep-until"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/sleep-until",
+          "name": "examples/006-step-sleepUntil/demo/sleep-until",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/sleep-until",
+            "name": "examples/006-step-sleepUntil/demo/sleep-until",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -266,7 +266,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/sleep-until",
+          "name": "examples/006-step-sleepUntil/demo/sleep-until",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -274,7 +274,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/sleep-until",
+            "name": "examples/006-step-sleepUntil/demo/sleep-until",
             "ts": "<event-ts>",
             "user": {}
           }

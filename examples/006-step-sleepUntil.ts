@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoSleepUntil = InngestEvent.make("demo/sleep-until", Schema.Struct({}));
+const DemoSleepUntil = InngestEvent.make("examples/006-step-sleepUntil/demo/sleep-until", Schema.Struct({}));
 
 const SleepUntilFn = InngestFunction.make("sleep-until", {
   trigger: { event: DemoSleepUntil },
@@ -29,7 +29,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/sleep-until",
+          name: "examples/006-step-sleepUntil/demo/sleep-until",
           data: {},
         },
       ],

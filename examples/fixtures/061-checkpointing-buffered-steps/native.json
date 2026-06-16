@@ -98,7 +98,7 @@
             "name": "checkpoint-buffered",
             "triggers": [
               {
-                "event": "demo/checkpoint-buffered"
+                "event": "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "base": 10
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-buffered",
+          "name": "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "base": 10
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-buffered",
+            "name": "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered",
             "ts": "<event-ts>",
             "user": {}
           }

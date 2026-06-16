@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
     {
       id: "trigger-failure",
       retries: 0,
-      triggers: [{ event: "demo/trigger-failure" }],
+      triggers: [{ event: "examples/055-system-events/demo/trigger-failure" }],
     },
     async ({ event }) => {
       if (event.data.shouldFail === true) {
@@ -63,7 +63,7 @@ export default defineNativeExample((inngest) => {
     functions: [TriggerFailure, HandleFailure, TrackCompletion, HandleCancellation],
     cases: [
       eventCase({
-        events: [{ name: "demo/trigger-failure", data: { shouldFail: false } }],
+        events: [{ name: "examples/055-system-events/demo/trigger-failure", data: { shouldFail: false } }],
         expect: [{ functionId: "examples-055-system-events-trigger-failure" }],
       }),
     ],

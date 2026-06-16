@@ -98,10 +98,10 @@
             "name": "user-handler",
             "triggers": [
               {
-                "event": "user/created"
+                "event": "examples/020-multiple-triggers/user/created"
               },
               {
-                "event": "user/updated"
+                "event": "examples/020-multiple-triggers/user/updated"
               }
             ],
             "steps": {
@@ -181,101 +181,10 @@
         "defers": {},
         "event": {
           "data": {
-            "email": "user@example.com",
-            "userId": "user-105"
-          },
-          "id": "<event-id>",
-          "name": "user/created",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "email": "user@example.com",
-              "userId": "user-105"
-            },
-            "id": "<event-id>",
-            "name": "user/created",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "eventName": "user/created",
-            "userId": "user-105",
-            "action": "Created"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/020-multiple-triggers?fnId=examples-020-multiple-triggers-user-handler&stepId=step",
-      "path": "/examples/020-multiple-triggers",
-      "query": {
-        "fnId": "examples-020-multiple-triggers-user-handler",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "b7310b90-6a8d-5f71-9fb1-b41e0cef9245",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
             "userId": "user-020"
           },
           "id": "<event-id>",
-          "name": "user/created",
+          "name": "examples/020-multiple-triggers/user/created",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +194,7 @@
               "userId": "user-020"
             },
             "id": "<event-id>",
-            "name": "user/created",
+            "name": "examples/020-multiple-triggers/user/created",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -310,7 +219,7 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "eventName": "user/created",
+            "eventName": "examples/020-multiple-triggers/user/created",
             "userId": "user-020",
             "action": "Created"
           }

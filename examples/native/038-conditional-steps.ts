@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Conditional = inngest.createFunction(
     {
       id: "conditional-steps",
-      triggers: [{ event: "demo/conditional" }],
+      triggers: [{ event: "examples/038-conditional-steps/demo/conditional" }],
     },
     async ({ event, step }) => {
       await step.run("setup", () => "initialized");
@@ -26,7 +26,7 @@ export default defineNativeExample((inngest) => {
     functions: [Conditional],
     cases: [
       eventCase({
-        events: [{ name: "demo/conditional", data: { shouldSkip: false } }],
+        events: [{ name: "examples/038-conditional-steps/demo/conditional", data: { shouldSkip: false } }],
         expect: [{ functionId: "examples-038-conditional-steps-conditional-steps" }],
       }),
     ],

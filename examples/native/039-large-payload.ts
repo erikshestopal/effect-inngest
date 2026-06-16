@@ -9,7 +9,7 @@ export default defineNativeExample((inngest) => {
   const ProcessLargePayload = inngest.createFunction(
     {
       id: "process-large-payload",
-      triggers: [{ event: "demo/large-payload" }],
+      triggers: [{ event: "examples/039-large-payload/demo/large-payload" }],
     },
     async ({ event, step }) => {
       const items: ReadonlyArray<PayloadItem> = Array.isArray(event.data.items) ? event.data.items : [];
@@ -35,7 +35,7 @@ export default defineNativeExample((inngest) => {
       eventCase({
         events: [
           {
-            name: "demo/large-payload",
+            name: "examples/039-large-payload/demo/large-payload",
             data: {
               items: [
                 { id: "a", value: 1 },

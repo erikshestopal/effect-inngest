@@ -98,7 +98,7 @@
             "name": "checkpoint-opt-out",
             "triggers": [
               {
-                "event": "demo/checkpoint-opt-out"
+                "event": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "tag": "opt-out-065"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-opt-out",
+          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "tag": "opt-out-065"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-opt-out",
+            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -276,7 +276,7 @@
             "tag": "opt-out-065"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-opt-out",
+          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -286,7 +286,7 @@
               "tag": "opt-out-065"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-opt-out",
+            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -375,7 +375,7 @@
             "tag": "opt-out-065"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-opt-out",
+          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -385,7 +385,7 @@
               "tag": "opt-out-065"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-opt-out",
+            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
             "ts": "<event-ts>",
             "user": {}
           }

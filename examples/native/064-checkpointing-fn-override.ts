@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Fn = inngest.createFunction(
     {
       id: "checkpoint-override",
-      triggers: [{ event: "demo/checkpoint-override" }],
+      triggers: [{ event: "examples/064-checkpointing-fn-override/demo/checkpoint-override" }],
       checkpointing: { bufferedSteps: 1 },
     },
     async ({ event, step }) => {
@@ -21,7 +21,9 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/checkpoint-override", data: { key: "override-064" } }],
+        events: [
+          { name: "examples/064-checkpointing-fn-override/demo/checkpoint-override", data: { key: "override-064" } },
+        ],
         expect: [{ functionId: "examples-064-checkpointing-fn-override-checkpoint-override" }],
       }),
     ],

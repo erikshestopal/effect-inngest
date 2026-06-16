@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
     {
       id: "retries-limited",
       retries: 1,
-      triggers: [{ event: "demo/retries-limited" }],
+      triggers: [{ event: "examples/013-retries-config/demo/retries-limited" }],
     },
     async ({ step, logger }) => {
       await step.run("always-fail", () => {
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     functions: [RetriesLimitedFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/retries-limited", data: {} }],
+        events: [{ name: "examples/013-retries-config/demo/retries-limited", data: {} }],
         expect: [{ functionId: "examples-013-retries-config-retries-limited" }],
       }),
     ],

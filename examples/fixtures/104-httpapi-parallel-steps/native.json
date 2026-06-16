@@ -98,7 +98,7 @@
             "name": "parallel-test",
             "triggers": [
               {
-                "event": "examples/104/demo/parallel"
+                "event": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
             "b": "<timing-b>"
           },
           "id": "<event-id>",
-          "name": "examples/104/demo/parallel",
+          "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -193,7 +193,7 @@
               "b": "<timing-b>"
             },
             "id": "<event-id>",
-            "name": "examples/104/demo/parallel",
+            "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -286,7 +286,7 @@
             "b": "<timing-b>"
           },
           "id": "<event-id>",
-          "name": "examples/104/demo/parallel",
+          "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -297,7 +297,7 @@
               "b": "<timing-b>"
             },
             "id": "<event-id>",
-            "name": "examples/104/demo/parallel",
+            "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -383,7 +383,7 @@
             "b": "<timing-b>"
           },
           "id": "<event-id>",
-          "name": "examples/104/demo/parallel",
+          "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -394,7 +394,7 @@
               "b": "<timing-b>"
             },
             "id": "<event-id>",
-            "name": "examples/104/demo/parallel",
+            "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -480,7 +480,7 @@
             "b": "<timing-b>"
           },
           "id": "<event-id>",
-          "name": "examples/104/demo/parallel",
+          "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -491,7 +491,7 @@
               "b": "<timing-b>"
             },
             "id": "<event-id>",
-            "name": "examples/104/demo/parallel",
+            "name": "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ThrottledFn = inngest.createFunction(
     {
       id: "throttled-fn",
-      triggers: [{ event: "demo/throttled" }],
+      triggers: [{ event: "examples/016-throttle/demo/throttled" }],
       throttle: { limit: 1, period: "1s" },
     },
     async ({ event, logger }) => {
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [ThrottledFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/throttled", data: { id: "throttle-016" } }],
+        events: [{ name: "examples/016-throttle/demo/throttled", data: { id: "throttle-016" } }],
         expect: [{ functionId: "examples-016-throttle-throttled-fn" }],
       }),
     ],

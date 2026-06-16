@@ -98,7 +98,7 @@
             "name": "checkpoint-sleep",
             "triggers": [
               {
-                "event": "demo/checkpoint-sleep"
+                "event": "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "tag": "sleep-062"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-sleep",
+          "name": "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "tag": "sleep-062"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-sleep",
+            "name": "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -386,7 +386,7 @@
             "tag": "sleep-062"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-sleep",
+          "name": "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -396,7 +396,7 @@
               "tag": "sleep-062"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-sleep",
+            "name": "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
             "ts": "<event-ts>",
             "user": {}
           }

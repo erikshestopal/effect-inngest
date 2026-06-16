@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const SleepUntilFn = inngest.createFunction(
     {
       id: "sleep-until",
-      triggers: [{ event: "demo/sleep-until" }],
+      triggers: [{ event: "examples/006-step-sleepUntil/demo/sleep-until" }],
     },
     async ({ step }) => {
       const target = new Date(Date.now() + 5000);
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [SleepUntilFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/sleep-until", data: {} }],
+        events: [{ name: "examples/006-step-sleepUntil/demo/sleep-until", data: {} }],
         expect: [{ functionId: "examples-006-step-sleepUntil-sleep-until" }],
       }),
     ],

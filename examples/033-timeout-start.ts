@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoSlowStart = InngestEvent.make("demo/slow-start", Schema.Struct({}));
+const DemoSlowStart = InngestEvent.make("examples/033-timeout-start/demo/slow-start", Schema.Struct({}));
 
 const SlowStartFn = InngestFunction.make("slow-start-task", {
   trigger: { event: DemoSlowStart },
@@ -29,7 +29,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/slow-start",
+          name: "examples/033-timeout-start/demo/slow-start",
           data: {},
         },
       ],

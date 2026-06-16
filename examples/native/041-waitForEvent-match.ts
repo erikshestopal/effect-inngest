@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const WaitMatchFn = inngest.createFunction(
     {
       id: "wait-for-invoice-payment",
-      triggers: [{ event: "demo/wait-match" }],
+      triggers: [{ event: "examples/041-waitForEvent-match/demo/wait-match" }],
     },
     async ({ event, step, logger }) => {
       const invoiceId = typeof event.data.invoiceId === "string" ? event.data.invoiceId : "";
@@ -12,7 +12,7 @@ export default defineNativeExample((inngest) => {
       logger.info(`Waiting for payment on invoice: ${invoiceId}`);
 
       const paidEvent = await step.waitForEvent("wait-for-payment", {
-        event: "demo/invoice-paid",
+        event: "examples/041-waitForEvent-match/demo/invoice-paid",
         timeout: "30s",
         if: `async.data.invoiceId == "${invoiceId}"`,
       });
@@ -33,11 +33,16 @@ export default defineNativeExample((inngest) => {
     functions: [WaitMatchFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/wait-match", data: { invoiceId: "invoice-041" } }],
+        events: [{ name: "examples/041-waitForEvent-match/demo/wait-match", data: { invoiceId: "invoice-041" } }],
         afterEvents: [
           {
             delayMs: 1000,
-            events: [{ name: "demo/invoice-paid", data: { invoiceId: "invoice-041", amount: 123.45 } }],
+            events: [
+              {
+                name: "examples/041-waitForEvent-match/demo/invoice-paid",
+                data: { invoiceId: "invoice-041", amount: 123.45 },
+              },
+            ],
           },
         ],
         expect: [{ functionId: "examples-041-waitForEvent-match-wait-for-invoice-payment" }],

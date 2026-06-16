@@ -98,7 +98,7 @@
             "name": "process-high-value-order",
             "triggers": [
               {
-                "event": "order/placed",
+                "event": "examples/052-trigger-if-filter/order/placed",
                 "expression": "event.data.amount > 100"
               }
             ],
@@ -118,7 +118,7 @@
             "name": "process-vip-order",
             "triggers": [
               {
-                "event": "order/placed",
+                "event": "examples/052-trigger-if-filter/order/placed",
                 "expression": "event.data.amount > 500 && has(event.data.customerId)"
               }
             ],
@@ -204,7 +204,7 @@
             "orderId": "order-052"
           },
           "id": "<event-id>",
-          "name": "order/placed",
+          "name": "examples/052-trigger-if-filter/order/placed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -216,7 +216,7 @@
               "orderId": "order-052"
             },
             "id": "<event-id>",
-            "name": "order/placed",
+            "name": "examples/052-trigger-if-filter/order/placed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -296,7 +296,7 @@
             "orderId": "order-052"
           },
           "id": "<event-id>",
-          "name": "order/placed",
+          "name": "examples/052-trigger-if-filter/order/placed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -308,7 +308,7 @@
               "orderId": "order-052"
             },
             "id": "<event-id>",
-            "name": "order/placed",
+            "name": "examples/052-trigger-if-filter/order/placed",
             "ts": "<event-ts>",
             "user": {}
           }

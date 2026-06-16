@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const StepCatch = inngest.createFunction(
     {
       id: "step-catch-handler",
-      triggers: [{ event: "demo/step-catch" }],
+      triggers: [{ event: "examples/026-step-error-catch/demo/step-catch" }],
     },
     async ({ step }) => {
       const result = await step
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     functions: [StepCatch],
     cases: [
       eventCase({
-        events: [{ name: "demo/step-catch", data: {} }],
+        events: [{ name: "examples/026-step-error-catch/demo/step-catch", data: {} }],
         expect: [{ functionId: "examples-026-step-error-catch-step-catch-handler" }],
       }),
     ],

@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoThrottleKeyed = InngestEvent.make(
-  "demo/throttle-keyed",
+  "examples/046-throttle-key/demo/throttle-keyed",
   Schema.Struct({
     teamId: Schema.String,
   }),
@@ -41,7 +41,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/throttle-keyed",
+          name: "examples/046-throttle-key/demo/throttle-keyed",
           data: {
             teamId: "team-046",
           },

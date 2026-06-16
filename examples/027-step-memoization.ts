@@ -4,7 +4,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoMemoized = InngestEvent.make("demo/memoized", Schema.Struct({}));
+const DemoMemoized = InngestEvent.make("examples/027-step-memoization/demo/memoized", Schema.Struct({}));
 
 const MemoizedFn = InngestFunction.make("memoization-demo", {
   trigger: { event: DemoMemoized },
@@ -41,7 +41,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/memoized",
+          name: "examples/027-step-memoization/demo/memoized",
           data: {},
         },
       ],

@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
     {
       id: "worker-task",
       retries: 3,
-      triggers: [{ event: "demo/worker-task" }],
+      triggers: [{ event: "examples/053-step-invoke-options/demo/worker-task" }],
     },
     async ({ event, logger }) => {
       const taskId = typeof event.data.taskId === "string" ? event.data.taskId : "";
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
   const OrchestratorFn = inngest.createFunction(
     {
       id: "orchestrator",
-      triggers: [{ event: "demo/orchestrate" }],
+      triggers: [{ event: "examples/053-step-invoke-options/demo/orchestrate" }],
     },
     async ({ event, step, logger }) => {
       const taskId = typeof event.data.taskId === "string" ? event.data.taskId : "";
@@ -49,7 +49,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/orchestrate", data: { taskId: "task-053" } }],
+        events: [{ name: "examples/053-step-invoke-options/demo/orchestrate", data: { taskId: "task-053" } }],
         expect: [{ functionId: "examples-053-step-invoke-options-orchestrator" }],
       }),
     ],

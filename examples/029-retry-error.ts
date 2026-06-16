@@ -5,7 +5,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { RetryAfterError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoRetryError = InngestEvent.make("demo/retry-error", Schema.Struct({}));
+const DemoRetryError = InngestEvent.make("examples/029-retry-error/demo/retry-error", Schema.Struct({}));
 
 const RetryFn = InngestFunction.make("retry-demo", {
   trigger: { event: DemoRetryError },
@@ -48,7 +48,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/retry-error",
+          name: "examples/029-retry-error/demo/retry-error",
           data: {},
         },
       ],

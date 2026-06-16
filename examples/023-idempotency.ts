@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoIdempotent = InngestEvent.make(
-  "demo/idempotent",
+  "examples/023-idempotency/demo/idempotent",
   Schema.Struct({
     cartId: Schema.String,
   }),
@@ -30,7 +30,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/idempotent",
+          name: "examples/023-idempotency/demo/idempotent",
           data: {
             cartId: "cart-023",
           },

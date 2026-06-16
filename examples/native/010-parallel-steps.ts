@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ParallelFn = inngest.createFunction(
     {
       id: "parallel-steps",
-      triggers: [{ event: "demo/parallel" }],
+      triggers: [{ event: "examples/010-parallel-steps/demo/parallel" }],
     },
     async ({ step }) => {
       const results = await Promise.all([
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     functions: [ParallelFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/parallel", data: {} }],
+        events: [{ name: "examples/010-parallel-steps/demo/parallel", data: {} }],
         expect: [{ functionId: "examples-010-parallel-steps-parallel-steps" }],
       }),
     ],

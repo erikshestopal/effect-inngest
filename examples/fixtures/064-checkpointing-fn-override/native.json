@@ -98,7 +98,7 @@
             "name": "checkpoint-override",
             "triggers": [
               {
-                "event": "demo/checkpoint-override"
+                "event": "examples/064-checkpointing-fn-override/demo/checkpoint-override"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "key": "override-064"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-override",
+          "name": "examples/064-checkpointing-fn-override/demo/checkpoint-override",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "key": "override-064"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-override",
+            "name": "examples/064-checkpointing-fn-override/demo/checkpoint-override",
             "ts": "<event-ts>",
             "user": {}
           }

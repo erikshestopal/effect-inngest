@@ -20,7 +20,7 @@ const EmailServiceLive = Layer.succeed(EmailService, {
 });
 
 const DemoWithServices = InngestEvent.make(
-  "demo/with-services",
+  "examples/030-context-services/demo/with-services",
   Schema.Struct({
     name: Schema.String,
   }),
@@ -50,7 +50,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/with-services",
+          name: "examples/030-context-services/demo/with-services",
           data: {
             name: "Ada",
           },

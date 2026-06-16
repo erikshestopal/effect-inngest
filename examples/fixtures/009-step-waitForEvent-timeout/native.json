@@ -98,7 +98,7 @@
             "name": "wait-timeout",
             "triggers": [
               {
-                "event": "demo/wait-timeout"
+                "event": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "orderId": "timeout-009"
           },
           "id": "<event-id>",
-          "name": "demo/wait-timeout",
+          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "orderId": "timeout-009"
             },
             "id": "<event-id>",
-            "name": "demo/wait-timeout",
+            "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -215,7 +215,7 @@
         {
           "id": "dd4654a352d46a6f4b313e0b0dd326be36e5004c",
           "op": "WaitForEvent",
-          "name": "demo/timeout-signal",
+          "name": "examples/009-step-waitForEvent-timeout/demo/timeout-signal",
           "displayName": "wait-for-signal",
           "opts": {
             "timeout": "5s",
@@ -275,7 +275,7 @@
             "orderId": "timeout-009"
           },
           "id": "<event-id>",
-          "name": "demo/wait-timeout",
+          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +285,7 @@
               "orderId": "timeout-009"
             },
             "id": "<event-id>",
-            "name": "demo/wait-timeout",
+            "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
             "ts": "<event-ts>",
             "user": {}
           }

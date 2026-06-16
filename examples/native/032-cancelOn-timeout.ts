@@ -4,10 +4,10 @@ export default defineNativeExample((inngest) => {
   const CancellableJob = inngest.createFunction(
     {
       id: "cancellable-job",
-      triggers: [{ event: "job/started" }],
+      triggers: [{ event: "examples/032-cancelOn-timeout/job/started" }],
       cancelOn: [
         {
-          event: "job/cancelled",
+          event: "examples/032-cancelOn-timeout/job/cancelled",
           if: "async.data.jobId == event.data.jobId",
           timeout: "60s",
         },
@@ -30,7 +30,7 @@ export default defineNativeExample((inngest) => {
     functions: [CancellableJob],
     cases: [
       eventCase({
-        events: [{ name: "job/started", data: { jobId: "job-032" } }],
+        events: [{ name: "examples/032-cancelOn-timeout/job/started", data: { jobId: "job-032" } }],
         expect: [{ functionId: "examples-032-cancelOn-timeout-cancellable-job" }],
       }),
     ],

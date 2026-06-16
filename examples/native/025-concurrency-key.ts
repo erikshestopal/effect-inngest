@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const KeyedConcurrentFn = inngest.createFunction(
     {
       id: "user-processor",
-      triggers: [{ event: "demo/concurrent-keyed" }],
+      triggers: [{ event: "examples/025-concurrency-key/demo/concurrent-keyed" }],
       concurrency: { limit: 1, key: "event.data.userId" },
     },
     async ({ event, step }) => {
@@ -20,7 +20,7 @@ export default defineNativeExample((inngest) => {
     functions: [KeyedConcurrentFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/concurrent-keyed", data: { userId: "user-025" } }],
+        events: [{ name: "examples/025-concurrency-key/demo/concurrent-keyed", data: { userId: "user-025" } }],
         expect: [{ functionId: "examples-025-concurrency-key-user-processor" }],
       }),
     ],

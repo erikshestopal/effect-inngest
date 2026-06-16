@@ -5,21 +5,21 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoInvokeParent = InngestEvent.make(
-  "demo/invoke-parent",
+  "examples/011-step-invoke/demo/invoke-parent",
   Schema.Struct({
     number: Schema.Number,
   }),
 );
 
 const DemoInvokeChild = InngestEvent.make(
-  "demo/invoke-child",
+  "examples/011-step-invoke/demo/invoke-child",
   Schema.Struct({
     value: Schema.Number,
   }),
 );
 
 const DemoInvokeChild2 = InngestEvent.make(
-  "demo/invoke-child-2",
+  "examples/011-step-invoke/demo/invoke-child-2",
   Schema.Struct({
     test: Schema.String,
   }),
@@ -40,7 +40,10 @@ const Group = InngestGroup.make(ChildFn, ParentFn);
 const HandlersLive = Group.toLayer({
   "child-square": ({ event }) =>
     Effect.succeed({
-      squared: event.name === "demo/invoke-child" ? event.data.value * event.data.value : event.data.test.length,
+      squared:
+        event.name === "examples/011-step-invoke/demo/invoke-child"
+          ? event.data.value * event.data.value
+          : event.data.test.length,
     }),
   "parent-invoke": ({ event, step }) =>
     Effect.gen(function* () {
@@ -60,7 +63,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/invoke-parent",
+          name: "examples/011-step-invoke/demo/invoke-parent",
           data: {
             number: 7,
           },

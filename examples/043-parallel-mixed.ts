@@ -4,10 +4,10 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoParallelMixed = InngestEvent.make("demo/parallel-mixed", Schema.Struct({}));
+const DemoParallelMixed = InngestEvent.make("examples/043-parallel-mixed/demo/parallel-mixed", Schema.Struct({}));
 
 const DemoSideEffect = InngestEvent.make(
-  "demo/side-effect",
+  "examples/043-parallel-mixed/demo/side-effect",
   Schema.Struct({
     source: Schema.String,
   }),
@@ -48,7 +48,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/parallel-mixed",
+          name: "examples/043-parallel-mixed/demo/parallel-mixed",
           data: {},
         },
       ],

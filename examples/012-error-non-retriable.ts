@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { NonRetriableError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoNonRetriable = InngestEvent.make("demo/non-retriable", Schema.Struct({}));
+const DemoNonRetriable = InngestEvent.make("examples/012-error-non-retriable/demo/non-retriable", Schema.Struct({}));
 
 const NonRetriableFn = InngestFunction.make("non-retriable", {
   trigger: { event: DemoNonRetriable },
@@ -25,7 +25,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/non-retriable",
+          name: "examples/012-error-non-retriable/demo/non-retriable",
           data: {},
         },
       ],

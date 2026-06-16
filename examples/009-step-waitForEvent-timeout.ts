@@ -6,14 +6,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoWaitTimeout = InngestEvent.make(
-  "demo/wait-timeout",
+  "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
   Schema.Struct({
     orderId: Schema.String,
   }),
 );
 
 const DemoTimeoutSignal = InngestEvent.make(
-  "demo/timeout-signal",
+  "examples/009-step-waitForEvent-timeout/demo/timeout-signal",
   Schema.Struct({
     orderId: Schema.String,
   }),
@@ -45,7 +45,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/wait-timeout",
+          name: "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
           data: {
             orderId: "timeout-009",
           },

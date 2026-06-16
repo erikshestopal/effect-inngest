@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const DebounceKeyedFn = inngest.createFunction(
     {
       id: "debounce-keyed",
-      triggers: [{ event: "demo/debounce-keyed" }],
+      triggers: [{ event: "examples/045-debounce-key/demo/debounce-keyed" }],
       debounce: { period: "1s", key: "event.data.userId" },
     },
     async ({ event, logger }) => {
@@ -20,7 +20,9 @@ export default defineNativeExample((inngest) => {
     functions: [DebounceKeyedFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/debounce-keyed", data: { userId: "user-045", action: "update" } }],
+        events: [
+          { name: "examples/045-debounce-key/demo/debounce-keyed", data: { userId: "user-045", action: "update" } },
+        ],
         expect: [{ functionId: "examples-045-debounce-key-debounce-keyed" }],
       }),
     ],

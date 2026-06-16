@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoThrottled = InngestEvent.make(
-  "demo/throttled",
+  "examples/016-throttle/demo/throttled",
   Schema.Struct({
     id: Schema.String,
   }),
@@ -34,7 +34,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/throttled",
+          name: "examples/016-throttle/demo/throttled",
           data: {
             id: "throttle-016",
           },

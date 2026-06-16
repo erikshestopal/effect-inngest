@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoDebounceKeyed = InngestEvent.make(
-  "demo/debounce-keyed",
+  "examples/045-debounce-key/demo/debounce-keyed",
   Schema.Struct({
     userId: Schema.String,
     action: Schema.String,
@@ -42,7 +42,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/debounce-keyed",
+          name: "examples/045-debounce-key/demo/debounce-keyed",
           data: {
             userId: "user-045",
             action: "update",

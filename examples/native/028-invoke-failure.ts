@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
   const FailingChild = inngest.createFunction(
     {
       id: "failing-child",
-      triggers: [{ event: "demo/failing-child" }],
+      triggers: [{ event: "examples/028-invoke-failure/demo/failing-child" }],
     },
     async () => {
       throw new NonRetriableError("Child always fails");
@@ -15,7 +15,7 @@ export default defineNativeExample((inngest) => {
   const ParentInvoker = inngest.createFunction(
     {
       id: "parent-invoker",
-      triggers: [{ event: "demo/invoke-failing" }],
+      triggers: [{ event: "examples/028-invoke-failure/demo/invoke-failing" }],
     },
     async ({ step }) => {
       try {
@@ -35,7 +35,7 @@ export default defineNativeExample((inngest) => {
     functions: [FailingChild, ParentInvoker],
     cases: [
       eventCase({
-        events: [{ name: "demo/invoke-failing", data: {} }],
+        events: [{ name: "examples/028-invoke-failure/demo/invoke-failing", data: {} }],
         expect: [{ functionId: "examples-028-invoke-failure-parent-invoker" }],
       }),
     ],

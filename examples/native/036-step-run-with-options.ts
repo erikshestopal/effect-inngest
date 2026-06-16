@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const StepOptions = inngest.createFunction(
     {
       id: "step-options-demo",
-      triggers: [{ event: "demo/step-options" }],
+      triggers: [{ event: "examples/036-step-run-with-options/demo/step-options" }],
     },
     async ({ step }) => {
       const result1 = await step.run("basic-step", () => "basic");
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [StepOptions],
     cases: [
       eventCase({
-        events: [{ name: "demo/step-options", data: {} }],
+        events: [{ name: "examples/036-step-run-with-options/demo/step-options", data: {} }],
         expect: [{ functionId: "examples-036-step-run-with-options-step-options-demo" }],
       }),
     ],

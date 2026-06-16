@@ -98,7 +98,7 @@
             "name": "parallel-mixed",
             "triggers": [
               {
-                "event": "demo/parallel-mixed"
+                "event": "examples/043-parallel-mixed/demo/parallel-mixed"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -290,7 +290,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -298,7 +298,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -385,7 +385,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -393,7 +393,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -468,9 +468,9 @@
           "stack": {
             "current": 3,
             "stack": [
-              "24989d8ee41c1575924630844ad094b55e6b1445",
               "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9"
+              "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
+              "24989d8ee41c1575924630844ad094b55e6b1445"
             ]
           },
           "step_id": "step",
@@ -480,7 +480,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -488,7 +488,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }

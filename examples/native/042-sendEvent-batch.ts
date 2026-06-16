@@ -4,15 +4,24 @@ export default defineNativeExample((inngest) => {
   const SendBatchFn = inngest.createFunction(
     {
       id: "send-batch",
-      triggers: [{ event: "demo/send-batch" }],
+      triggers: [{ event: "examples/042-sendEvent-batch/demo/send-batch" }],
     },
     async ({ step, logger }) => {
       logger.info("Sending batch of notifications...");
 
       await step.sendEvent("send-notifications", [
-        { name: "demo/notification", data: { userId: "u1", message: "First notification" } },
-        { name: "demo/notification", data: { userId: "u2", message: "Second notification" } },
-        { name: "demo/notification", data: { userId: "u3", message: "Third notification" } },
+        {
+          name: "examples/042-sendEvent-batch/demo/notification",
+          data: { userId: "u1", message: "First notification" },
+        },
+        {
+          name: "examples/042-sendEvent-batch/demo/notification",
+          data: { userId: "u2", message: "Second notification" },
+        },
+        {
+          name: "examples/042-sendEvent-batch/demo/notification",
+          data: { userId: "u3", message: "Third notification" },
+        },
       ]);
 
       logger.info("Batch sent successfully!");
@@ -26,7 +35,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/send-batch", data: {} }],
+        events: [{ name: "examples/042-sendEvent-batch/demo/send-batch", data: {} }],
         expect: [{ functionId: "examples-042-sendEvent-batch-send-batch" }],
       }),
     ],

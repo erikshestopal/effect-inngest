@@ -98,7 +98,7 @@
             "name": "memoization-demo",
             "triggers": [
               {
-                "event": "demo/memoized"
+                "event": "examples/027-step-memoization/demo/memoized"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/memoized",
+          "name": "examples/027-step-memoization/demo/memoized",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/memoized",
+            "name": "examples/027-step-memoization/demo/memoized",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -276,7 +276,7 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781639618960,
+            "data": 1781640048244,
             "timing": {
               "a": "<timing-a>",
               "b": "<timing-b>"
@@ -349,7 +349,7 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.12396215049595283,
+            "data": 0.6882349991777953,
             "timing": {
               "a": "<timing-a>",
               "b": "<timing-b>"
@@ -416,7 +416,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/memoized",
+          "name": "examples/027-step-memoization/demo/memoized",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -424,7 +424,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/memoized",
+            "name": "examples/027-step-memoization/demo/memoized",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -432,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.12396215049595283
+            "data": 0.6882349991777953
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781639618960
+            "data": 1781640048244
           }
         },
         "use_api": false,
@@ -458,7 +458,7 @@
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
             "timestamp": "<timestamp>",
-            "randomValue": 0.12396215049595283
+            "randomValue": 0.6882349991777953
           }
         }
       ]

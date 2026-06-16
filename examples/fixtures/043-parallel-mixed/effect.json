@@ -98,7 +98,7 @@
             "name": "parallel-mixed",
             "triggers": [
               {
-                "event": "demo/parallel-mixed"
+                "event": "examples/043-parallel-mixed/demo/parallel-mixed"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -253,97 +253,6 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=24989d8ee41c1575924630844ad094b55e6b1445",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "24989d8ee41c1575924630844ad094b55e6b1445"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "24989d8ee41c1575924630844ad094b55e6b1445"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": true,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "24989d8ee41c1575924630844ad094b55e6b1445",
-          "op": "StepRun",
-          "name": "compute",
-          "opts": {},
-          "displayName": "compute",
-          "userland": {
-            "id": "compute"
-          },
-          "data": 42,
-          "timing": {
-            "a": "<timing-a>",
-            "b": "<timing-b>"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
       "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
       "path": "/examples/043-parallel-mixed",
       "query": {
@@ -381,7 +290,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -389,7 +298,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -423,6 +332,97 @@
           },
           "data": {
             "ids": ["<event-id>"]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "sequence": 6,
+    "direction": "inbound",
+    "proxy": "inngest-to-sdk",
+    "request": {
+      "sequence": 6,
+      "method": "POST",
+      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=24989d8ee41c1575924630844ad094b55e6b1445",
+      "path": "/examples/043-parallel-mixed",
+      "query": {
+        "fnId": "examples-043-parallel-mixed-parallel-mixed",
+        "stepId": "24989d8ee41c1575924630844ad094b55e6b1445"
+      },
+      "headers": {
+        "account-id": "00000000-0000-4000-a000-000000000000",
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-generation-id": "1",
+        "x-inngest-req-version": "2",
+        "x-inngest-step-id": "24989d8ee41c1575924630844ad094b55e6b1445"
+      },
+      "body": {
+        "ctx": {
+          "attempt": 0,
+          "disable_immediate_execution": true,
+          "env": "",
+          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
+          "generation_id": 1,
+          "job_id": "<job_id>",
+          "max_attempts": 5,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "run_id": "<run_id>",
+          "stack": {
+            "current": 0,
+            "stack": []
+          },
+          "step_id": "step",
+          "use_api": false
+        },
+        "defers": {},
+        "event": {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
+          "ts": "<event-ts>",
+          "user": {}
+        },
+        "events": [
+          {
+            "data": {},
+            "id": "<event-id>",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
+            "ts": "<event-ts>",
+            "user": {}
+          }
+        ],
+        "steps": {},
+        "use_api": false,
+        "version": 2
+      }
+    },
+    "response": {
+      "status": 206,
+      "headers": {
+        "content-type": "application/json",
+        "user-agent": "<sdk>",
+        "x-inngest-framework": "bun",
+        "x-inngest-req-version": "2",
+        "x-inngest-sdk": "<sdk>",
+        "x-inngest-sdk-handled": "true"
+      },
+      "body": [
+        {
+          "id": "24989d8ee41c1575924630844ad094b55e6b1445",
+          "op": "StepRun",
+          "name": "compute",
+          "opts": {},
+          "displayName": "compute",
+          "userland": {
+            "id": "compute"
+          },
+          "data": 42,
+          "timing": {
+            "a": "<timing-a>",
+            "b": "<timing-b>"
           }
         }
       ]
@@ -464,9 +464,9 @@
           "stack": {
             "current": 3,
             "stack": [
-              "24989d8ee41c1575924630844ad094b55e6b1445",
               "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9"
+              "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
+              "24989d8ee41c1575924630844ad094b55e6b1445"
             ]
           },
           "step_id": "step",
@@ -476,7 +476,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/parallel-mixed",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -484,7 +484,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/parallel-mixed",
+            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
             "ts": "<event-ts>",
             "user": {}
           }

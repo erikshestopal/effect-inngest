@@ -7,7 +7,7 @@ class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("
   message: Schema.String,
 }) {}
 
-const DemoRetriesLimited = InngestEvent.make("demo/retries-limited", Schema.Struct({}));
+const DemoRetriesLimited = InngestEvent.make("examples/013-retries-config/demo/retries-limited", Schema.Struct({}));
 
 const RetriesLimitedFn = InngestFunction.make("retries-limited", {
   trigger: { event: DemoRetriesLimited },
@@ -36,7 +36,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/retries-limited",
+          name: "examples/013-retries-config/demo/retries-limited",
           data: {},
         },
       ],

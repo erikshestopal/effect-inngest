@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Idempotent = inngest.createFunction(
     {
       id: "idempotent-handler",
-      triggers: [{ event: "demo/idempotent-event" }],
+      triggers: [{ event: "examples/035-event-with-id/demo/idempotent-event" }],
     },
     async ({ event, runId, logger }) => {
       const data = typeof event.data.data === "string" ? event.data.data : "";
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [Idempotent],
     cases: [
       eventCase({
-        events: [{ name: "demo/idempotent-event", data: { data: "payload-035" } }],
+        events: [{ name: "examples/035-event-with-id/demo/idempotent-event", data: { data: "payload-035" } }],
         expect: [{ functionId: "examples-035-event-with-id-idempotent-handler" }],
       }),
     ],

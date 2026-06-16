@@ -98,7 +98,7 @@
             "name": "process-large-payload",
             "triggers": [
               {
-                "event": "demo/large-payload"
+                "event": "examples/039-large-payload/demo/large-payload"
               }
             ],
             "steps": {
@@ -190,7 +190,7 @@
             ]
           },
           "id": "<event-id>",
-          "name": "demo/large-payload",
+          "name": "examples/039-large-payload/demo/large-payload",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -209,7 +209,7 @@
               ]
             },
             "id": "<event-id>",
-            "name": "demo/large-payload",
+            "name": "examples/039-large-payload/demo/large-payload",
             "ts": "<event-ts>",
             "user": {}
           }

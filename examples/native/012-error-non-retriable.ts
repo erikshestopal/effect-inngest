@@ -5,7 +5,7 @@ export default defineNativeExample((inngest) => {
   const NonRetriableFn = inngest.createFunction(
     {
       id: "non-retriable",
-      triggers: [{ event: "demo/non-retriable" }],
+      triggers: [{ event: "examples/012-error-non-retriable/demo/non-retriable" }],
     },
     async ({ step }) => {
       await step.run("fail", () => {
@@ -20,7 +20,7 @@ export default defineNativeExample((inngest) => {
     functions: [NonRetriableFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/non-retriable", data: {} }],
+        events: [{ name: "examples/012-error-non-retriable/demo/non-retriable", data: {} }],
         expect: [{ functionId: "examples-012-error-non-retriable-non-retriable" }],
       }),
     ],

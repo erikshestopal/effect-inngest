@@ -98,7 +98,7 @@
             "name": "worker-task",
             "triggers": [
               {
-                "event": "demo/worker-task"
+                "event": "examples/053-step-invoke-options/demo/worker-task"
               }
             ],
             "steps": {
@@ -120,7 +120,7 @@
             "name": "orchestrator",
             "triggers": [
               {
-                "event": "demo/orchestrate"
+                "event": "examples/053-step-invoke-options/demo/orchestrate"
               }
             ],
             "steps": {
@@ -203,7 +203,7 @@
             "taskId": "task-053"
           },
           "id": "<event-id>",
-          "name": "demo/orchestrate",
+          "name": "examples/053-step-invoke-options/demo/orchestrate",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -213,7 +213,7 @@
               "taskId": "task-053"
             },
             "id": "<event-id>",
-            "name": "demo/orchestrate",
+            "name": "examples/053-step-invoke-options/demo/orchestrate",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -438,7 +438,7 @@
             "taskId": "task-053"
           },
           "id": "<event-id>",
-          "name": "demo/orchestrate",
+          "name": "examples/053-step-invoke-options/demo/orchestrate",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -448,7 +448,7 @@
               "taskId": "task-053"
             },
             "id": "<event-id>",
-            "name": "demo/orchestrate",
+            "name": "examples/053-step-invoke-options/demo/orchestrate",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -680,7 +680,7 @@
             "taskId": "task-053"
           },
           "id": "<event-id>",
-          "name": "demo/orchestrate",
+          "name": "examples/053-step-invoke-options/demo/orchestrate",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -690,7 +690,7 @@
               "taskId": "task-053"
             },
             "id": "<event-id>",
-            "name": "demo/orchestrate",
+            "name": "examples/053-step-invoke-options/demo/orchestrate",
             "ts": "<event-ts>",
             "user": {}
           }

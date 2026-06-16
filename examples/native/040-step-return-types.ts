@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ReturnTypesFn = inngest.createFunction(
     {
       id: "return-types-demo",
-      triggers: [{ event: "demo/return-types" }],
+      triggers: [{ event: "examples/040-step-return-types/demo/return-types" }],
     },
     async ({ step, logger }) => {
       const stringResult = await step.run("return-string", () => "hello");
@@ -39,7 +39,7 @@ export default defineNativeExample((inngest) => {
     functions: [ReturnTypesFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/return-types", data: {} }],
+        events: [{ name: "examples/040-step-return-types/demo/return-types", data: {} }],
         expect: [{ functionId: "examples-040-step-return-types-return-types-demo" }],
       }),
     ],

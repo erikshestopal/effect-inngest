@@ -4,11 +4,14 @@ export default defineNativeExample((inngest) => {
   const UserHandlerFn = inngest.createFunction(
     {
       id: "user-handler",
-      triggers: [{ event: "user/created" }, { event: "user/updated" }],
+      triggers: [
+        { event: "examples/020-multiple-triggers/user/created" },
+        { event: "examples/020-multiple-triggers/user/updated" },
+      ],
     },
     async ({ event, logger }) => {
       const userId = typeof event.data.userId === "string" ? event.data.userId : "";
-      const action = event.name === "user/created" ? "Created" : "Updated";
+      const action = event.name === "examples/020-multiple-triggers/user/created" ? "Created" : "Updated";
       logger.info(`User ${action}: ${userId}`);
       return { eventName: event.name, userId, action };
     },
@@ -19,7 +22,7 @@ export default defineNativeExample((inngest) => {
     functions: [UserHandlerFn],
     cases: [
       eventCase({
-        events: [{ name: "user/created", data: { userId: "user-020" } }],
+        events: [{ name: "examples/020-multiple-triggers/user/created", data: { userId: "user-020" } }],
         expect: [{ functionId: "examples-020-multiple-triggers-user-handler" }],
       }),
     ],

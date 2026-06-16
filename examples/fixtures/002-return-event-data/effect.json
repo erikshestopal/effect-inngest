@@ -98,7 +98,7 @@
             "name": "echo-data",
             "triggers": [
               {
-                "event": "demo/echo"
+                "event": "examples/002-return-event-data/demo/echo"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "message": "hello from examples harness"
           },
           "id": "<event-id>",
-          "name": "demo/echo",
+          "name": "examples/002-return-event-data/demo/echo",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "message": "hello from examples harness"
             },
             "id": "<event-id>",
-            "name": "demo/echo",
+            "name": "examples/002-return-event-data/demo/echo",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -5,14 +5,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoOrchestrate = InngestEvent.make(
-  "demo/orchestrate",
+  "examples/053-step-invoke-options/demo/orchestrate",
   Schema.Struct({
     taskId: Schema.String,
   }),
 );
 
 const DemoWorkerTask = InngestEvent.make(
-  "demo/worker-task",
+  "examples/053-step-invoke-options/demo/worker-task",
   Schema.Struct({
     taskId: Schema.String,
     priority: Schema.optional(Schema.Literals(["low", "normal", "high"])),
@@ -79,7 +79,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/orchestrate",
+          name: "examples/053-step-invoke-options/demo/orchestrate",
           data: {
             taskId: "task-053",
           },

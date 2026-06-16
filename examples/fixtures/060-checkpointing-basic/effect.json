@@ -98,7 +98,7 @@
             "name": "checkpoint-basic",
             "triggers": [
               {
-                "event": "demo/checkpoint-basic"
+                "event": "examples/060-checkpointing-basic/demo/checkpoint-basic"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "value": 4
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-basic",
+          "name": "examples/060-checkpointing-basic/demo/checkpoint-basic",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "value": 4
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-basic",
+            "name": "examples/060-checkpointing-basic/demo/checkpoint-basic",
             "ts": "<event-ts>",
             "user": {}
           }

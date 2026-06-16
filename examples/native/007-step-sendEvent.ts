@@ -4,12 +4,12 @@ export default defineNativeExample((inngest) => {
   const SendSingleFn = inngest.createFunction(
     {
       id: "send-single",
-      triggers: [{ event: "demo/send-single" }],
+      triggers: [{ event: "examples/007-step-sendEvent/demo/send-single" }],
     },
     async ({ event, step }) => {
       const userId = typeof event.data.userId === "string" ? event.data.userId : "";
       await step.sendEvent("send-notification", {
-        name: "demo/notification",
+        name: "examples/007-step-sendEvent/demo/notification",
         data: { userId, message: "Hello from step.sendEvent!" },
       });
       return { sent: true };
@@ -22,7 +22,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/send-single", data: { userId: "u_001" } }],
+        events: [{ name: "examples/007-step-sendEvent/demo/send-single", data: { userId: "u_001" } }],
         expect: [{ functionId: "examples-007-step-sendEvent-send-single" }],
       }),
     ],

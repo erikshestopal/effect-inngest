@@ -4,8 +4,8 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoHello = InngestEvent.make("demo/hello", Schema.Struct({ name: Schema.String }));
-const DemoBye = InngestEvent.make("demo/bye", Schema.Struct({ lastName: Schema.Number }));
+const DemoHello = InngestEvent.make("examples/001-hello-world/demo/hello", Schema.Struct({ name: Schema.String }));
+const DemoBye = InngestEvent.make("examples/001-hello-world/demo/bye", Schema.Struct({ lastName: Schema.Number }));
 
 const HelloFn = InngestFunction.make("hello-world", {
   trigger: [{ event: DemoHello }, { event: DemoBye }],
@@ -16,7 +16,7 @@ const Group = InngestGroup.make(HelloFn);
 
 const HelloFnHandler = Group.toLayerHandler("hello-world", ({ event }) =>
   Effect.gen(function* () {
-    const greetingName = event.name === "demo/hello" ? event.data.name : "Guest";
+    const greetingName = event.name === "examples/001-hello-world/demo/hello" ? event.data.name : "Guest";
     yield* Effect.log(`hello-world greeting ${greetingName}`);
     return { greeting: `Hello, ${greetingName}!` };
   }).pipe(Effect.withSpan("example/hello-world"), Effect.withLogSpan("example/hello-world")),
@@ -30,7 +30,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/hello",
+          name: "examples/001-hello-world/demo/hello",
           data: {
             name: "Amp",
           },

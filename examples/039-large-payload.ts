@@ -9,7 +9,7 @@ const ItemSchema = Schema.Struct({
 });
 
 const DemoLargePayload = InngestEvent.make(
-  "demo/large-payload",
+  "examples/039-large-payload/demo/large-payload",
   Schema.Struct({
     items: Schema.Array(ItemSchema),
   }),
@@ -60,7 +60,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/large-payload",
+          name: "examples/039-large-payload/demo/large-payload",
           data: {
             items: [
               {

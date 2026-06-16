@@ -98,7 +98,7 @@
             "name": "throttle-keyed",
             "triggers": [
               {
-                "event": "demo/throttle-keyed"
+                "event": "examples/046-throttle-key/demo/throttle-keyed"
               }
             ],
             "steps": {
@@ -186,7 +186,7 @@
             "teamId": "team-046"
           },
           "id": "<event-id>",
-          "name": "demo/throttle-keyed",
+          "name": "examples/046-throttle-key/demo/throttle-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -196,7 +196,7 @@
               "teamId": "team-046"
             },
             "id": "<event-id>",
-            "name": "demo/throttle-keyed",
+            "name": "examples/046-throttle-key/demo/throttle-keyed",
             "ts": "<event-ts>",
             "user": {}
           }

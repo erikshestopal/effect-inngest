@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const Memoization = inngest.createFunction(
     {
       id: "memoization-demo",
-      triggers: [{ event: "demo/memoized" }],
+      triggers: [{ event: "examples/027-step-memoization/demo/memoized" }],
     },
     async ({ step }) => {
       const timestamp = await step.run("capture-time", () => Date.now());
@@ -25,7 +25,7 @@ export default defineNativeExample((inngest) => {
     functions: [Memoization],
     cases: [
       eventCase({
-        events: [{ name: "demo/memoized", data: {} }],
+        events: [{ name: "examples/027-step-memoization/demo/memoized", data: {} }],
         expect: [{ functionId: "examples-027-step-memoization-memoization-demo" }],
       }),
     ],

@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const RateLimitKeyedFn = inngest.createFunction(
     {
       id: "rate-limit-keyed",
-      triggers: [{ event: "demo/rate-keyed" }],
+      triggers: [{ event: "examples/047-rate-limit-key/demo/rate-keyed" }],
       rateLimit: { limit: 2, period: "1m", key: "event.data.companyId" },
     },
     async ({ event, logger }) => {
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
     functions: [RateLimitKeyedFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/rate-keyed", data: { companyId: "company-047" } }],
+        events: [{ name: "examples/047-rate-limit-key/demo/rate-keyed", data: { companyId: "company-047" } }],
         expect: [{ functionId: "examples-047-rate-limit-key-rate-limit-keyed" }],
       }),
     ],

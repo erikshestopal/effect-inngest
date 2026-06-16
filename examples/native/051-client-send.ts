@@ -10,11 +10,18 @@ export default defineNativeExample(() => {
     cases: [
       eventCase({
         events: [
-          { name: "user/created", data: { userId: "123", email: "alice@example.com" } },
-          { name: "order/placed", data: { orderId: "o1", userId: "123", total: 99.99 } },
-          { name: "order/placed", data: { orderId: "o2", userId: "456", total: 149.99 } },
-          { name: "notification/send", data: { channel: "email", userId: "123", template: "order-confirmation" } },
-          { name: "payment/received", data: { orderId: "o1", amount: 99.99 }, id: "payment-o1-20240115" },
+          { name: "examples/051-client-send/user/created", data: { userId: "123", email: "alice@example.com" } },
+          { name: "examples/051-client-send/order/placed", data: { orderId: "o1", userId: "123", total: 99.99 } },
+          { name: "examples/051-client-send/order/placed", data: { orderId: "o2", userId: "456", total: 149.99 } },
+          {
+            name: "examples/051-client-send/notification/send",
+            data: { channel: "email", userId: "123", template: "order-confirmation" },
+          },
+          {
+            name: "examples/051-client-send/payment/received",
+            data: { orderId: "o1", amount: 99.99 },
+            id: "payment-o1-20240115",
+          },
         ],
         expect: [],
       }),

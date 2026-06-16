@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoNested = InngestEvent.make("demo/nested", Schema.Struct({}));
+const DemoNested = InngestEvent.make("examples/037-nested-steps/demo/nested", Schema.Struct({}));
 
 const NestedStepsFn = InngestFunction.make("nested-steps-demo", {
   trigger: { event: DemoNested },
@@ -40,7 +40,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/nested",
+          name: "examples/037-nested-steps/demo/nested",
           data: {},
         },
       ],

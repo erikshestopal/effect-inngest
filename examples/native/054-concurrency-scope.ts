@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ProcessItemFn = inngest.createFunction(
     {
       id: "process-item",
-      triggers: [{ event: "demo/process-item" }],
+      triggers: [{ event: "examples/054-concurrency-scope/demo/process-item" }],
       concurrency: { limit: 5, scope: "fn", key: "event.data.userId" },
     },
     async ({ event, logger }) => {
@@ -19,7 +19,7 @@ export default defineNativeExample((inngest) => {
   const SendNotificationFn = inngest.createFunction(
     {
       id: "send-notification",
-      triggers: [{ event: "demo/send-notification" }],
+      triggers: [{ event: "examples/054-concurrency-scope/demo/send-notification" }],
       concurrency: { limit: 10, scope: "env", key: "event.data.userId" },
     },
     async ({ event, logger }) => {
@@ -34,7 +34,7 @@ export default defineNativeExample((inngest) => {
   const ExternalApiCallFn = inngest.createFunction(
     {
       id: "external-api-call",
-      triggers: [{ event: "demo/process-item" }],
+      triggers: [{ event: "examples/054-concurrency-scope/demo/process-item" }],
       concurrency: { limit: 2, scope: "account", key: "event.data.userId" },
     },
     async ({ event, logger }) => {
@@ -51,7 +51,12 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/process-item", data: { itemId: "item-054", userId: "user-054" } }],
+        events: [
+          {
+            name: "examples/054-concurrency-scope/demo/process-item",
+            data: { itemId: "item-054", userId: "user-054" },
+          },
+        ],
         expect: [
           { functionId: "examples-054-concurrency-scope-process-item" },
           { functionId: "examples-054-concurrency-scope-external-api-call" },

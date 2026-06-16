@@ -826,7 +826,7 @@ const isRootParallelPlan = (exchange: Exchange) =>
   (exchange.request.query as any)?.stepId === "step" &&
   Array.isArray(exchange.response.body) &&
   exchange.response.body.length > 1 &&
-  exchange.response.body.every((op: any) => op?.op === "StepPlanned" && typeof op.id === "string");
+  exchange.response.body.every((op: any) => typeof op?.op === "string" && typeof op.id === "string");
 const isParallelChildRequest = (exchange: Exchange, orderByPath: Map<string, Map<string, number>>) =>
   exchange.direction === "inbound" &&
   exchange.request.method === "POST" &&
@@ -900,13 +900,31 @@ const canonicalizeParallelChildOrder = (ordered: ReadonlyArray<Exchange>) => {
   }));
 };
 
-const writeFixture = (state: RecordingState, exampleId: string, runtimeName: RuntimeName) =>
+const keepExpectedTerminalExecutions = (ordered: ReadonlyArray<Exchange>, example: ExampleManifestEntry) => {
+  const expectedFunctionIds = expectedRootFunctionIds(example);
+  const expectedTerminalCount = expectedTerminalExecutionCount(example);
+  let terminalCount = 0;
+  return ordered.filter((exchange) => {
+    if (!isTerminalExecutionResponse(exchange)) return true;
+    if (exchange.direction !== "inbound" || exchange.request.method !== "POST") return true;
+    if ((exchange.request.query as any)?.stepId !== "step") return true;
+    if (expectedFunctionIds.size > 0 && !expectedFunctionIds.has(String((exchange.request.query as any)?.fnId)))
+      return true;
+    terminalCount++;
+    return terminalCount <= expectedTerminalCount;
+  });
+};
+
+const writeFixture = (state: RecordingState, example: ExampleManifestEntry, runtimeName: RuntimeName) =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
     const path = yield* Path.Path;
-    const exchanges = (yield* Ref.get(state.exchanges)).get(exampleId) ?? [];
-    const ordered = canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence));
-    const outputFile = fixtureFile(exampleId, runtimeName);
+    const exchanges = (yield* Ref.get(state.exchanges)).get(example.id) ?? [];
+    const ordered = keepExpectedTerminalExecutions(
+      canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence)),
+      example,
+    );
+    const outputFile = fixtureFile(example.id, runtimeName);
     yield* fs.makeDirectory(path.dirname(outputFile), { recursive: true });
     yield* fs.writeFileString(outputFile, `${JSON.stringify(ordered, null, 2)}\n`);
   });
@@ -951,7 +969,7 @@ const recordExample = (
       yield* waitForNetworkIdle(state);
       yield* removeSyncedApp(sdkUrl);
       yield* waitForNetworkIdle(state);
-      yield* writeFixture(state, example.id, runtimeName);
+      yield* writeFixture(state, example, runtimeName);
       const exchanges = (yield* Ref.get(state.exchanges)).get(example.id) ?? [];
       console.log(
         `recorded ${exchanges.length} ${runtimeName} HTTP exchanges to ${fixtureFile(example.id, runtimeName)}`,

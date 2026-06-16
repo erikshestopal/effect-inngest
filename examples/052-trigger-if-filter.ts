@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const OrderPlaced = InngestEvent.make(
-  "order/placed",
+  "examples/052-trigger-if-filter/order/placed",
   Schema.Struct({
     orderId: Schema.String,
     amount: Schema.Number,
@@ -54,7 +54,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "order/placed",
+          name: "examples/052-trigger-if-filter/order/placed",
           data: {
             orderId: "order-052",
             amount: 600,

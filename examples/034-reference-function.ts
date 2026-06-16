@@ -3,10 +3,13 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoReferenceInvoke = InngestEvent.make("demo/reference-invoke", Schema.Struct({}));
+const DemoReferenceInvoke = InngestEvent.make(
+  "examples/034-reference-function/demo/reference-invoke",
+  Schema.Struct({}),
+);
 
 const DemoHelperEvent = InngestEvent.make(
-  "demo/helper-event",
+  "examples/034-reference-function/demo/helper-event",
   Schema.Struct({
     input: Schema.Number,
   }),
@@ -44,7 +47,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/reference-invoke",
+          name: "examples/034-reference-function/demo/reference-invoke",
           data: {},
         },
       ],

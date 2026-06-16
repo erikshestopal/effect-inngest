@@ -5,14 +5,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const JobStarted = InngestEvent.make(
-  "job/started",
+  "examples/032-cancelOn-timeout/job/started",
   Schema.Struct({
     jobId: Schema.String,
   }),
 );
 
 export const JobCancelled = InngestEvent.make(
-  "job/cancelled",
+  "examples/032-cancelOn-timeout/job/cancelled",
   Schema.Struct({
     jobId: Schema.String,
   }),
@@ -22,7 +22,7 @@ const CancellableJobFn = InngestFunction.make("cancellable-job", {
   trigger: { event: JobStarted },
   cancelOn: [
     {
-      event: "job/cancelled",
+      event: "examples/032-cancelOn-timeout/job/cancelled",
       if: "async.data.jobId == event.data.jobId",
       timeout: "60 seconds",
     },
@@ -53,7 +53,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "job/started",
+          name: "examples/032-cancelOn-timeout/job/started",
           data: {
             jobId: "job-032",
           },

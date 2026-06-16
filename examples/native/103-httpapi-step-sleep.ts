@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const SleepTest = inngest.createFunction(
     {
       id: "sleep-test",
-      triggers: [{ event: "demo/sleep" }],
+      triggers: [{ event: "examples/103-httpapi-step-sleep/demo/sleep" }],
     },
     async ({ step }) => {
       await step.sleep("wait", "1s");
@@ -17,7 +17,7 @@ export default defineNativeExample((inngest) => {
     functions: [SleepTest],
     cases: [
       eventCase({
-        events: [{ name: "demo/sleep", data: {} }],
+        events: [{ name: "examples/103-httpapi-step-sleep/demo/sleep", data: {} }],
         expect: [{ functionId: "examples-103-httpapi-step-sleep-sleep-test" }],
       }),
     ],

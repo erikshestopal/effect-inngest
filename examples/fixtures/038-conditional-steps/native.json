@@ -98,7 +98,7 @@
             "name": "conditional-steps",
             "triggers": [
               {
-                "event": "demo/conditional"
+                "event": "examples/038-conditional-steps/demo/conditional"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "shouldSkip": false
           },
           "id": "<event-id>",
-          "name": "demo/conditional",
+          "name": "examples/038-conditional-steps/demo/conditional",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "shouldSkip": false
             },
             "id": "<event-id>",
-            "name": "demo/conditional",
+            "name": "examples/038-conditional-steps/demo/conditional",
             "ts": "<event-ts>",
             "user": {}
           }

@@ -98,7 +98,7 @@
             "name": "send-batch",
             "triggers": [
               {
-                "event": "demo/send-batch"
+                "event": "examples/042-sendEvent-batch/demo/send-batch"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/send-batch",
+          "name": "examples/042-sendEvent-batch/demo/send-batch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/send-batch",
+            "name": "examples/042-sendEvent-batch/demo/send-batch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -257,21 +257,21 @@
               "send-notifications",
               [
                 {
-                  "name": "demo/notification",
+                  "name": "examples/042-sendEvent-batch/demo/notification",
                   "data": {
                     "userId": "u1",
                     "message": "First notification"
                   }
                 },
                 {
-                  "name": "demo/notification",
+                  "name": "examples/042-sendEvent-batch/demo/notification",
                   "data": {
                     "userId": "u2",
                     "message": "Second notification"
                   }
                 },
                 {
-                  "name": "demo/notification",
+                  "name": "examples/042-sendEvent-batch/demo/notification",
                   "data": {
                     "userId": "u3",
                     "message": "Third notification"

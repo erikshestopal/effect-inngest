@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const StepSingle = inngest.createFunction(
     {
       id: "step-single",
-      triggers: [{ event: "demo/step-single" }],
+      triggers: [{ event: "examples/102-httpapi-step-run/demo/step-single" }],
     },
     async ({ event, step }) => {
       const value = typeof event.data.value === "number" ? event.data.value : 0;
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [StepSingle],
     cases: [
       eventCase({
-        events: [{ name: "demo/step-single", data: { value: 21 } }],
+        events: [{ name: "examples/102-httpapi-step-run/demo/step-single", data: { value: 21 } }],
         expect: [{ functionId: "examples-102-httpapi-step-run-step-single" }],
       }),
     ],

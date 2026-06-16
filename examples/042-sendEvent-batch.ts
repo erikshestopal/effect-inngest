@@ -3,10 +3,10 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoSendBatch = InngestEvent.make("demo/send-batch", Schema.Struct({}));
+const DemoSendBatch = InngestEvent.make("examples/042-sendEvent-batch/demo/send-batch", Schema.Struct({}));
 
 const DemoNotification = InngestEvent.make(
-  "demo/notification",
+  "examples/042-sendEvent-batch/demo/notification",
   Schema.Struct({
     userId: Schema.String,
     message: Schema.String,
@@ -45,7 +45,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/send-batch",
+          name: "examples/042-sendEvent-batch/demo/send-batch",
           data: {},
         },
       ],

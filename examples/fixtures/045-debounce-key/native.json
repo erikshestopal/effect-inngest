@@ -98,7 +98,7 @@
             "name": "debounce-keyed",
             "triggers": [
               {
-                "event": "demo/debounce-keyed"
+                "event": "examples/045-debounce-key/demo/debounce-keyed"
               }
             ],
             "steps": {
@@ -186,7 +186,7 @@
             "userId": "user-045"
           },
           "id": "<event-id>",
-          "name": "demo/debounce-keyed",
+          "name": "examples/045-debounce-key/demo/debounce-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -197,7 +197,7 @@
               "userId": "user-045"
             },
             "id": "<event-id>",
-            "name": "demo/debounce-keyed",
+            "name": "examples/045-debounce-key/demo/debounce-keyed",
             "ts": "<event-ts>",
             "user": {}
           }

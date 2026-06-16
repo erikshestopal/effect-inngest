@@ -98,7 +98,7 @@
             "name": "step-catch-handler",
             "triggers": [
               {
-                "event": "demo/step-catch"
+                "event": "examples/026-step-error-catch/demo/step-catch"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -277,7 +277,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +285,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -375,7 +375,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -383,7 +383,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -473,7 +473,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -481,7 +481,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -571,7 +571,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -579,7 +579,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -674,7 +674,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/step-catch",
+          "name": "examples/026-step-error-catch/demo/step-catch",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -682,7 +682,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/step-catch",
+            "name": "examples/026-step-error-catch/demo/step-catch",
             "ts": "<event-ts>",
             "user": {}
           }

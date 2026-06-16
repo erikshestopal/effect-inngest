@@ -98,7 +98,7 @@
             "name": "long-task",
             "triggers": [
               {
-                "event": "task/started"
+                "event": "examples/021-cancelOn-event/task/started"
               }
             ],
             "steps": {
@@ -113,7 +113,7 @@
             },
             "cancel": [
               {
-                "event": "task/cancelled",
+                "event": "examples/021-cancelOn-event/task/cancelled",
                 "if": "async.data.taskId == event.data.taskId"
               }
             ]
@@ -187,7 +187,7 @@
             "taskId": "task-021"
           },
           "id": "<event-id>",
-          "name": "task/started",
+          "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -197,7 +197,7 @@
               "taskId": "task-021"
             },
             "id": "<event-id>",
-            "name": "task/started",
+            "name": "examples/021-cancelOn-event/task/started",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -351,7 +351,7 @@
             "taskId": "task-021"
           },
           "id": "<event-id>",
-          "name": "task/started",
+          "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -361,7 +361,7 @@
               "taskId": "task-021"
             },
             "id": "<event-id>",
-            "name": "task/started",
+            "name": "examples/021-cancelOn-event/task/started",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -525,7 +525,7 @@
             "taskId": "task-021"
           },
           "id": "<event-id>",
-          "name": "task/started",
+          "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -535,7 +535,7 @@
               "taskId": "task-021"
             },
             "id": "<event-id>",
-            "name": "task/started",
+            "name": "examples/021-cancelOn-event/task/started",
             "ts": "<event-ts>",
             "user": {}
           }

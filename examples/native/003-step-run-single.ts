@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const StepSingleFn = inngest.createFunction(
     {
       id: "step-single",
-      triggers: [{ event: "demo/step-single" }],
+      triggers: [{ event: "examples/003-step-run-single/demo/step-single" }],
     },
     async ({ event, step, logger }) => {
       const value = typeof event.data.value === "number" ? event.data.value : 0;
@@ -23,7 +23,7 @@ export default defineNativeExample((inngest) => {
     functions: [StepSingleFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/step-single", data: { value: 21 } }],
+        events: [{ name: "examples/003-step-run-single/demo/step-single", data: { value: 21 } }],
         expect: [{ functionId: "examples-003-step-run-single-step-single" }],
       }),
     ],

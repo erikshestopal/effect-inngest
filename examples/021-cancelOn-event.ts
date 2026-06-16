@@ -5,14 +5,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const TaskStarted = InngestEvent.make(
-  "task/started",
+  "examples/021-cancelOn-event/task/started",
   Schema.Struct({
     taskId: Schema.String,
   }),
 );
 
 export const TaskCancelled = InngestEvent.make(
-  "task/cancelled",
+  "examples/021-cancelOn-event/task/cancelled",
   Schema.Struct({
     taskId: Schema.String,
   }),
@@ -20,7 +20,7 @@ export const TaskCancelled = InngestEvent.make(
 
 const LongTaskFn = InngestFunction.make("long-task", {
   trigger: { event: TaskStarted },
-  cancelOn: [{ event: "task/cancelled", if: "async.data.taskId == event.data.taskId" }],
+  cancelOn: [{ event: "examples/021-cancelOn-event/task/cancelled", if: "async.data.taskId == event.data.taskId" }],
   success: Schema.Struct({ status: Schema.String }),
 });
 
@@ -46,7 +46,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "task/started",
+          name: "examples/021-cancelOn-event/task/started",
           data: {
             taskId: "task-021",
           },

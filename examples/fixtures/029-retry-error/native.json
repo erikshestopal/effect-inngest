@@ -98,7 +98,7 @@
             "name": "retry-demo",
             "triggers": [
               {
-                "event": "demo/retry-error"
+                "event": "examples/029-retry-error/demo/retry-error"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retry-error",
+          "name": "examples/029-retry-error/demo/retry-error",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -190,7 +190,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retry-error",
+            "name": "examples/029-retry-error/demo/retry-error",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -281,7 +281,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retry-error",
+          "name": "examples/029-retry-error/demo/retry-error",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -289,7 +289,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retry-error",
+            "name": "examples/029-retry-error/demo/retry-error",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -372,7 +372,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retry-error",
+          "name": "examples/029-retry-error/demo/retry-error",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -380,7 +380,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retry-error",
+            "name": "examples/029-retry-error/demo/retry-error",
             "ts": "<event-ts>",
             "user": {}
           }

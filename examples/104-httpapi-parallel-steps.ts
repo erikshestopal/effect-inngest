@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoParallel = InngestEvent.make(
-  "examples/104/demo/parallel",
+  "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
   Schema.Struct({
     a: Schema.Number,
     b: Schema.Number,
@@ -40,7 +40,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "examples/104/demo/parallel",
+          name: "examples/104-httpapi-parallel-steps/examples/104/demo/parallel",
           data: {
             a: 6,
             b: 7,

@@ -98,7 +98,7 @@
             "name": "long-running-task",
             "triggers": [
               {
-                "event": "demo/long-running"
+                "event": "examples/024-timeout-finish/demo/long-running"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/long-running",
+          "name": "examples/024-timeout-finish/demo/long-running",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -190,7 +190,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/long-running",
+            "name": "examples/024-timeout-finish/demo/long-running",
             "ts": "<event-ts>",
             "user": {}
           }

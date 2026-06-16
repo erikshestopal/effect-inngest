@@ -98,7 +98,7 @@
             "name": "user-processor",
             "triggers": [
               {
-                "event": "demo/concurrent-keyed"
+                "event": "examples/025-concurrency-key/demo/concurrent-keyed"
               }
             ],
             "steps": {
@@ -185,7 +185,7 @@
             "userId": "user-025"
           },
           "id": "<event-id>",
-          "name": "demo/concurrent-keyed",
+          "name": "examples/025-concurrency-key/demo/concurrent-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -195,7 +195,7 @@
               "userId": "user-025"
             },
             "id": "<event-id>",
-            "name": "demo/concurrent-keyed",
+            "name": "examples/025-concurrency-key/demo/concurrent-keyed",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -349,7 +349,7 @@
             "userId": "user-025"
           },
           "id": "<event-id>",
-          "name": "demo/concurrent-keyed",
+          "name": "examples/025-concurrency-key/demo/concurrent-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -359,7 +359,7 @@
               "userId": "user-025"
             },
             "id": "<event-id>",
-            "name": "demo/concurrent-keyed",
+            "name": "examples/025-concurrency-key/demo/concurrent-keyed",
             "ts": "<event-ts>",
             "user": {}
           }

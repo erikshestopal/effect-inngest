@@ -12,7 +12,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const BasicEvent = InngestEvent.make(
-  "demo/checkpoint-basic",
+  "examples/060-checkpointing-basic/demo/checkpoint-basic",
   Schema.Struct({
     value: Schema.Number,
   }),
@@ -44,7 +44,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-basic",
+          name: "examples/060-checkpointing-basic/demo/checkpoint-basic",
           data: {
             value: 4,
           },

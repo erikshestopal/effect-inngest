@@ -10,7 +10,7 @@ export default defineNativeExample((inngest) => {
   const ServiceHandler = inngest.createFunction(
     {
       id: "service-handler",
-      triggers: [{ event: "demo/with-services" }],
+      triggers: [{ event: "examples/030-context-services/demo/with-services" }],
     },
     async ({ event }) => {
       const name = typeof event.name === "string" ? event.data.name : "Guest";
@@ -24,7 +24,7 @@ export default defineNativeExample((inngest) => {
     functions: [ServiceHandler],
     cases: [
       eventCase({
-        events: [{ name: "demo/with-services", data: { name: "Ada" } }],
+        events: [{ name: "examples/030-context-services/demo/with-services", data: { name: "Ada" } }],
         expect: [{ functionId: "examples-030-context-services-service-handler" }],
       }),
     ],

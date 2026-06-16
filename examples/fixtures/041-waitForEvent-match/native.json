@@ -98,7 +98,7 @@
             "name": "wait-for-invoice-payment",
             "triggers": [
               {
-                "event": "demo/wait-match"
+                "event": "examples/041-waitForEvent-match/demo/wait-match"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "invoiceId": "invoice-041"
           },
           "id": "<event-id>",
-          "name": "demo/wait-match",
+          "name": "examples/041-waitForEvent-match/demo/wait-match",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "invoiceId": "invoice-041"
             },
             "id": "<event-id>",
-            "name": "demo/wait-match",
+            "name": "examples/041-waitForEvent-match/demo/wait-match",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -215,7 +215,7 @@
         {
           "id": "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8",
           "op": "WaitForEvent",
-          "name": "demo/invoice-paid",
+          "name": "examples/041-waitForEvent-match/demo/invoice-paid",
           "displayName": "wait-for-payment",
           "opts": {
             "timeout": "30s",
@@ -275,7 +275,7 @@
             "invoiceId": "invoice-041"
           },
           "id": "<event-id>",
-          "name": "demo/wait-match",
+          "name": "examples/041-waitForEvent-match/demo/wait-match",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +285,7 @@
               "invoiceId": "invoice-041"
             },
             "id": "<event-id>",
-            "name": "demo/wait-match",
+            "name": "examples/041-waitForEvent-match/demo/wait-match",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -297,7 +297,7 @@
               "invoiceId": "invoice-041"
             },
             "id": "fixture-native-041-waitForEvent-match-0-after-0-0",
-            "name": "demo/invoice-paid",
+            "name": "examples/041-waitForEvent-match/demo/invoice-paid",
             "ts": "<event-ts>",
             "user": {}
           }

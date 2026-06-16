@@ -98,7 +98,7 @@
             "name": "priority-handler",
             "triggers": [
               {
-                "event": "demo/priority"
+                "event": "examples/022-priority/demo/priority"
               }
             ],
             "steps": {
@@ -184,7 +184,7 @@
             "plan": "enterprise"
           },
           "id": "<event-id>",
-          "name": "demo/priority",
+          "name": "examples/022-priority/demo/priority",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -194,7 +194,7 @@
               "plan": "enterprise"
             },
             "id": "<event-id>",
-            "name": "demo/priority",
+            "name": "examples/022-priority/demo/priority",
             "ts": "<event-ts>",
             "user": {}
           }

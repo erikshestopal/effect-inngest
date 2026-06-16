@@ -98,7 +98,7 @@
             "name": "slow-start-task",
             "triggers": [
               {
-                "event": "demo/slow-start"
+                "event": "examples/033-timeout-start/demo/slow-start"
               }
             ],
             "steps": {
@@ -182,7 +182,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/slow-start",
+          "name": "examples/033-timeout-start/demo/slow-start",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -190,7 +190,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/slow-start",
+            "name": "examples/033-timeout-start/demo/slow-start",
             "ts": "<event-ts>",
             "user": {}
           }

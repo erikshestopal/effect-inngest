@@ -4,7 +4,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoEcho = InngestEvent.make(
-  "demo/echo",
+  "examples/002-return-event-data/demo/echo",
   Schema.Struct({
     message: Schema.String,
   }),
@@ -33,7 +33,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/echo",
+          name: "examples/002-return-event-data/demo/echo",
           data: {
             message: "hello from examples harness",
           },

@@ -4,7 +4,10 @@ export default defineNativeExample((inngest) => {
   const ChildFn = inngest.createFunction(
     {
       id: "child-square",
-      triggers: [{ event: "demo/invoke-child" }, { event: "demo/invoke-child-2" }],
+      triggers: [
+        { event: "examples/011-step-invoke/demo/invoke-child" },
+        { event: "examples/011-step-invoke/demo/invoke-child-2" },
+      ],
     },
     async ({ event }) => {
       const squared =
@@ -20,7 +23,7 @@ export default defineNativeExample((inngest) => {
   const ParentFn = inngest.createFunction(
     {
       id: "parent-invoke",
-      triggers: [{ event: "demo/invoke-parent" }],
+      triggers: [{ event: "examples/011-step-invoke/demo/invoke-parent" }],
     },
     async ({ event, step }) => {
       const number = typeof event.data.number === "number" ? event.data.number : 0;
@@ -37,7 +40,7 @@ export default defineNativeExample((inngest) => {
     functions: [ChildFn, ParentFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/invoke-parent", data: { number: 7 } }],
+        events: [{ name: "examples/011-step-invoke/demo/invoke-parent", data: { number: 7 } }],
         expect: [{ functionId: "examples-011-step-invoke-parent-invoke" }],
       }),
     ],

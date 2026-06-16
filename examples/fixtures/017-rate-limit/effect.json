@@ -98,7 +98,7 @@
             "name": "rate-limited-fn",
             "triggers": [
               {
-                "event": "demo/rate-limited"
+                "event": "examples/017-rate-limit/demo/rate-limited"
               }
             ],
             "steps": {
@@ -185,7 +185,7 @@
             "id": "rate-017"
           },
           "id": "<event-id>",
-          "name": "demo/rate-limited",
+          "name": "examples/017-rate-limit/demo/rate-limited",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -195,7 +195,7 @@
               "id": "rate-017"
             },
             "id": "<event-id>",
-            "name": "demo/rate-limited",
+            "name": "examples/017-rate-limit/demo/rate-limited",
             "ts": "<event-ts>",
             "user": {}
           }

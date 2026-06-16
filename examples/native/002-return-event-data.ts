@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const EchoFn = inngest.createFunction(
     {
       id: "echo-data",
-      triggers: [{ event: "demo/echo" }],
+      triggers: [{ event: "examples/002-return-event-data/demo/echo" }],
     },
     async ({ event, logger }) => {
       const message = typeof event.data.message === "string" ? event.data.message : "";
@@ -18,7 +18,9 @@ export default defineNativeExample((inngest) => {
     functions: [EchoFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/echo", data: { message: "hello from examples harness" } }],
+        events: [
+          { name: "examples/002-return-event-data/demo/echo", data: { message: "hello from examples harness" } },
+        ],
         expect: [{ functionId: "examples-002-return-event-data-echo-data" }],
       }),
     ],

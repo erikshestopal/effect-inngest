@@ -98,7 +98,7 @@
             "name": "wait-for-event",
             "triggers": [
               {
-                "event": "demo/wait-start"
+                "event": "examples/008-step-waitForEvent/demo/wait-start"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "orderId": "order-008"
           },
           "id": "<event-id>",
-          "name": "demo/wait-start",
+          "name": "examples/008-step-waitForEvent/demo/wait-start",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "orderId": "order-008"
             },
             "id": "<event-id>",
-            "name": "demo/wait-start",
+            "name": "examples/008-step-waitForEvent/demo/wait-start",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -215,7 +215,7 @@
         {
           "id": "530a9d53676b712ef28992a4ad38a5b729ae2491",
           "op": "WaitForEvent",
-          "name": "demo/wait-complete",
+          "name": "examples/008-step-waitForEvent/demo/wait-complete",
           "displayName": "wait-for-complete",
           "opts": {
             "timeout": "5m",
@@ -275,7 +275,7 @@
             "orderId": "order-008"
           },
           "id": "<event-id>",
-          "name": "demo/wait-start",
+          "name": "examples/008-step-waitForEvent/demo/wait-start",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -285,7 +285,7 @@
               "orderId": "order-008"
             },
             "id": "<event-id>",
-            "name": "demo/wait-start",
+            "name": "examples/008-step-waitForEvent/demo/wait-start",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -297,7 +297,7 @@
               "status": "approved"
             },
             "id": "fixture-native-008-step-waitForEvent-0-after-0-0",
-            "name": "demo/wait-complete",
+            "name": "examples/008-step-waitForEvent/demo/wait-complete",
             "ts": "<event-ts>",
             "user": {}
           }

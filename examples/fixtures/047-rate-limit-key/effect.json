@@ -98,7 +98,7 @@
             "name": "rate-limit-keyed",
             "triggers": [
               {
-                "event": "demo/rate-keyed"
+                "event": "examples/047-rate-limit-key/demo/rate-keyed"
               }
             ],
             "steps": {
@@ -186,7 +186,7 @@
             "companyId": "company-047"
           },
           "id": "<event-id>",
-          "name": "demo/rate-keyed",
+          "name": "examples/047-rate-limit-key/demo/rate-keyed",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -196,7 +196,7 @@
               "companyId": "company-047"
             },
             "id": "<event-id>",
-            "name": "demo/rate-keyed",
+            "name": "examples/047-rate-limit-key/demo/rate-keyed",
             "ts": "<event-ts>",
             "user": {}
           }

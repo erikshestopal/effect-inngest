@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ConcurrentFn = inngest.createFunction(
     {
       id: "concurrent-fn",
-      triggers: [{ event: "demo/concurrent" }],
+      triggers: [{ event: "examples/014-concurrency-limit/demo/concurrent" }],
       concurrency: { limit: 1 },
     },
     async ({ event, step, logger }) => {
@@ -21,7 +21,7 @@ export default defineNativeExample((inngest) => {
     functions: [ConcurrentFn],
     cases: [
       eventCase({
-        events: [{ name: "demo/concurrent", data: { id: "concurrent-014" } }],
+        events: [{ name: "examples/014-concurrency-limit/demo/concurrent", data: { id: "concurrent-014" } }],
         expect: [{ functionId: "examples-014-concurrency-limit-concurrent-fn" }],
       }),
     ],

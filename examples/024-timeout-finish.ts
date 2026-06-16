@@ -4,7 +4,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoLongRunning = InngestEvent.make("demo/long-running", Schema.Struct({}));
+const DemoLongRunning = InngestEvent.make("examples/024-timeout-finish/demo/long-running", Schema.Struct({}));
 
 const LongRunningFn = InngestFunction.make("long-running-task", {
   trigger: { event: DemoLongRunning },
@@ -32,7 +32,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/long-running",
+          name: "examples/024-timeout-finish/demo/long-running",
           data: {},
         },
       ],

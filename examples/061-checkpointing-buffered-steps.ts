@@ -11,7 +11,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const BufferedEvent = InngestEvent.make(
-  "demo/checkpoint-buffered",
+  "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered",
   Schema.Struct({
     base: Schema.Number,
   }),
@@ -45,7 +45,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-buffered",
+          name: "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered",
           data: {
             base: 10,
           },

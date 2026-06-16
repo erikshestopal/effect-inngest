@@ -6,14 +6,14 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoWaitStart = InngestEvent.make(
-  "demo/wait-start",
+  "examples/008-step-waitForEvent/demo/wait-start",
   Schema.Struct({
     orderId: Schema.String,
   }),
 );
 
 const DemoWaitComplete = InngestEvent.make(
-  "demo/wait-complete",
+  "examples/008-step-waitForEvent/demo/wait-complete",
   Schema.Struct({
     orderId: Schema.String,
     status: Schema.String,
@@ -46,7 +46,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/wait-start",
+          name: "examples/008-step-waitForEvent/demo/wait-start",
           data: {
             orderId: "order-008",
           },
@@ -57,7 +57,7 @@ export default defineExample({
           delayMs: 1000,
           events: [
             {
-              name: "demo/wait-complete",
+              name: "examples/008-step-waitForEvent/demo/wait-complete",
               data: {
                 orderId: "order-008",
                 status: "approved",

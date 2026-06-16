@@ -5,7 +5,7 @@ import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoConcurrentKeyed = InngestEvent.make(
-  "demo/concurrent-keyed",
+  "examples/025-concurrency-key/demo/concurrent-keyed",
   Schema.Struct({
     userId: Schema.String,
   }),
@@ -36,7 +36,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/concurrent-keyed",
+          name: "examples/025-concurrency-key/demo/concurrent-keyed",
           data: {
             userId: "user-025",
           },

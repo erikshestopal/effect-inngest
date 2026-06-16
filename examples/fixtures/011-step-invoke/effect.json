@@ -98,10 +98,10 @@
             "name": "child-square",
             "triggers": [
               {
-                "event": "demo/invoke-child"
+                "event": "examples/011-step-invoke/demo/invoke-child"
               },
               {
-                "event": "demo/invoke-child-2"
+                "event": "examples/011-step-invoke/demo/invoke-child-2"
               }
             ],
             "steps": {
@@ -120,7 +120,7 @@
             "name": "parent-invoke",
             "triggers": [
               {
-                "event": "demo/invoke-parent"
+                "event": "examples/011-step-invoke/demo/invoke-parent"
               }
             ],
             "steps": {
@@ -203,7 +203,7 @@
             "number": 7
           },
           "id": "<event-id>",
-          "name": "demo/invoke-parent",
+          "name": "examples/011-step-invoke/demo/invoke-parent",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -213,7 +213,7 @@
               "number": 7
             },
             "id": "<event-id>",
-            "name": "demo/invoke-parent",
+            "name": "examples/011-step-invoke/demo/invoke-parent",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -433,7 +433,7 @@
             "number": 7
           },
           "id": "<event-id>",
-          "name": "demo/invoke-parent",
+          "name": "examples/011-step-invoke/demo/invoke-parent",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -443,7 +443,7 @@
               "number": 7
             },
             "id": "<event-id>",
-            "name": "demo/invoke-parent",
+            "name": "examples/011-step-invoke/demo/invoke-parent",
             "ts": "<event-ts>",
             "user": {}
           }

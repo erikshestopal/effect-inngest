@@ -98,7 +98,7 @@
             "name": "helper-function",
             "triggers": [
               {
-                "event": "demo/helper-event"
+                "event": "examples/034-reference-function/demo/helper-event"
               }
             ],
             "steps": {
@@ -117,7 +117,7 @@
             "name": "invoke-by-reference",
             "triggers": [
               {
-                "event": "demo/reference-invoke"
+                "event": "examples/034-reference-function/demo/reference-invoke"
               }
             ],
             "steps": {
@@ -198,7 +198,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/reference-invoke",
+          "name": "examples/034-reference-function/demo/reference-invoke",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -206,7 +206,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/reference-invoke",
+            "name": "examples/034-reference-function/demo/reference-invoke",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -424,7 +424,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/reference-invoke",
+          "name": "examples/034-reference-function/demo/reference-invoke",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -432,7 +432,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/reference-invoke",
+            "name": "examples/034-reference-function/demo/reference-invoke",
             "ts": "<event-ts>",
             "user": {}
           }

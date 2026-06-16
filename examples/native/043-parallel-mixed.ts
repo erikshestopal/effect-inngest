@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const ParallelMixedFn = inngest.createFunction(
     {
       id: "parallel-mixed",
-      triggers: [{ event: "demo/parallel-mixed" }],
+      triggers: [{ event: "examples/043-parallel-mixed/demo/parallel-mixed" }],
     },
     async ({ step, logger }) => {
       logger.info("Starting parallel mixed steps...");
@@ -12,7 +12,10 @@ export default defineNativeExample((inngest) => {
       const [computed] = await Promise.all([
         step.run("compute", () => 42),
         step.sleep("short-wait", "2s"),
-        step.sendEvent("notify", { name: "demo/side-effect", data: { source: "parallel-mixed-function" } }),
+        step.sendEvent("notify", {
+          name: "examples/043-parallel-mixed/demo/side-effect",
+          data: { source: "parallel-mixed-function" },
+        }),
       ]);
 
       logger.info(`Parallel steps complete! Computed: ${computed}`);
@@ -26,7 +29,7 @@ export default defineNativeExample((inngest) => {
     cases: [
       eventCase({
         eventKey: "test",
-        events: [{ name: "demo/parallel-mixed", data: {} }],
+        events: [{ name: "examples/043-parallel-mixed/demo/parallel-mixed", data: {} }],
         expect: [{ functionId: "examples-043-parallel-mixed-parallel-mixed" }],
       }),
     ],

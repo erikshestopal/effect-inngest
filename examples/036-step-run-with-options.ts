@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoStepOptions = InngestEvent.make("demo/step-options", Schema.Struct({}));
+const DemoStepOptions = InngestEvent.make("examples/036-step-run-with-options/demo/step-options", Schema.Struct({}));
 
 const StepOptionsFn = InngestFunction.make("step-options-demo", {
   trigger: { event: DemoStepOptions },
@@ -33,7 +33,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/step-options",
+          name: "examples/036-step-run-with-options/demo/step-options",
           data: {},
         },
       ],

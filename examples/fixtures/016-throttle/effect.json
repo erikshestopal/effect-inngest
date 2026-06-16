@@ -98,7 +98,7 @@
             "name": "throttled-fn",
             "triggers": [
               {
-                "event": "demo/throttled"
+                "event": "examples/016-throttle/demo/throttled"
               }
             ],
             "steps": {
@@ -185,7 +185,7 @@
             "id": "throttle-016"
           },
           "id": "<event-id>",
-          "name": "demo/throttled",
+          "name": "examples/016-throttle/demo/throttled",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -195,7 +195,7 @@
               "id": "throttle-016"
             },
             "id": "<event-id>",
-            "name": "demo/throttled",
+            "name": "examples/016-throttle/demo/throttled",
             "ts": "<event-ts>",
             "user": {}
           }

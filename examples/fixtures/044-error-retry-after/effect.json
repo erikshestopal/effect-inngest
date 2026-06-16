@@ -98,7 +98,7 @@
             "name": "retry-after-demo",
             "triggers": [
               {
-                "event": "demo/retry-after"
+                "event": "examples/044-error-retry-after/demo/retry-after"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/retry-after",
+          "name": "examples/044-error-retry-after/demo/retry-after",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,88 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/retry-after",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 500,
-      "headers": {
-        "content-type": "application/json",
-        "retry-after": "1",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "false",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "name": "RetryAfterError",
-        "message": "Rate limited by external API",
-        "stack": "<stack>"
-      }
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/044-error-retry-after?fnId=examples-044-error-retry-after-retry-after-demo&stepId=step",
-      "path": "/examples/044-error-retry-after",
-      "query": {
-        "fnId": "examples-044-error-retry-after-retry-after-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c13fc519-4016-5e3d-800f-204cdef7b959",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "demo/retry-after",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "demo/retry-after",
+            "name": "examples/044-error-retry-after/demo/retry-after",
             "ts": "<event-ts>",
             "user": {}
           }

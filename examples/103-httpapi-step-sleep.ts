@@ -4,7 +4,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-const DemoSleep = InngestEvent.make("demo/sleep", Schema.Struct({}));
+const DemoSleep = InngestEvent.make("examples/103-httpapi-step-sleep/demo/sleep", Schema.Struct({}));
 
 const SleepFn = InngestFunction.make("sleep-test", {
   trigger: { event: DemoSleep },
@@ -29,7 +29,7 @@ export default defineExample({
     eventCase({
       events: [
         {
-          name: "demo/sleep",
+          name: "examples/103-httpapi-step-sleep/demo/sleep",
           data: {},
         },
       ],

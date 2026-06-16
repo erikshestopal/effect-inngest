@@ -98,7 +98,7 @@
             "name": "checkpoint-deadline",
             "triggers": [
               {
-                "event": "demo/checkpoint-deadline"
+                "event": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
               }
             ],
             "steps": {
@@ -181,7 +181,7 @@
             "runId": "deadline-063"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-deadline",
+          "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -191,7 +191,7 @@
               "runId": "deadline-063"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-deadline",
+            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -495,7 +495,7 @@
             "runId": "deadline-063"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-deadline",
+          "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -505,7 +505,7 @@
               "runId": "deadline-063"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-deadline",
+            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -605,7 +605,7 @@
             "runId": "deadline-063"
           },
           "id": "<event-id>",
-          "name": "demo/checkpoint-deadline",
+          "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -615,7 +615,7 @@
               "runId": "deadline-063"
             },
             "id": "<event-id>",
-            "name": "demo/checkpoint-deadline",
+            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
             "ts": "<event-ts>",
             "user": {}
           }

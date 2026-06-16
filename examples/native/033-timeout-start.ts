@@ -4,7 +4,7 @@ export default defineNativeExample((inngest) => {
   const SlowStart = inngest.createFunction(
     {
       id: "slow-start-task",
-      triggers: [{ event: "demo/slow-start" }],
+      triggers: [{ event: "examples/033-timeout-start/demo/slow-start" }],
       timeouts: { start: "10s" },
     },
     async ({ step }) => {
@@ -18,7 +18,7 @@ export default defineNativeExample((inngest) => {
     functions: [SlowStart],
     cases: [
       eventCase({
-        events: [{ name: "demo/slow-start", data: {} }],
+        events: [{ name: "examples/033-timeout-start/demo/slow-start", data: {} }],
         expect: [{ functionId: "examples-033-timeout-start-slow-start-task" }],
       }),
     ],

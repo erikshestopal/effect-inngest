@@ -13,7 +13,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 
 const DeadlineEvent = InngestEvent.make(
-  "demo/checkpoint-deadline",
+  "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
   Schema.Struct({
     runId: Schema.String,
   }),
@@ -49,7 +49,7 @@ export default defineExample({
       eventKey: "test",
       events: [
         {
-          name: "demo/checkpoint-deadline",
+          name: "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           data: {
             runId: "deadline-063",
           },

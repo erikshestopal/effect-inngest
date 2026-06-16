@@ -98,7 +98,7 @@
             "name": "non-retriable",
             "triggers": [
               {
-                "event": "demo/non-retriable"
+                "event": "examples/012-error-non-retriable/demo/non-retriable"
               }
             ],
             "steps": {
@@ -179,7 +179,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/non-retriable",
+          "name": "examples/012-error-non-retriable/demo/non-retriable",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -187,7 +187,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/non-retriable",
+            "name": "examples/012-error-non-retriable/demo/non-retriable",
             "ts": "<event-ts>",
             "user": {}
           }
@@ -282,7 +282,7 @@
         "event": {
           "data": {},
           "id": "<event-id>",
-          "name": "demo/non-retriable",
+          "name": "examples/012-error-non-retriable/demo/non-retriable",
           "ts": "<event-ts>",
           "user": {}
         },
@@ -290,7 +290,7 @@
           {
             "data": {},
             "id": "<event-id>",
-            "name": "demo/non-retriable",
+            "name": "examples/012-error-non-retriable/demo/non-retriable",
             "ts": "<event-ts>",
             "user": {}
           }
