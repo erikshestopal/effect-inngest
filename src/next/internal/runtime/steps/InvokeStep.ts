@@ -1,4 +1,5 @@
 import { Duration, Effect, Match, Predicate, Schema } from "effect";
+import { InngestConfig } from "../../../../Client.js";
 import type { InngestFunction } from "../../../../Function.js";
 import { StepError } from "../../../../internal/errors.js";
 import * as StepResult from "../../codec/StepResult.js";
@@ -13,11 +14,11 @@ import * as StepOperation from "./StepOperation.js";
 
 export const invoke = <F extends InngestFunction.Any>(args: {
   readonly input: ExecutionInput;
-  readonly appName: string;
   readonly id: StepInput;
   readonly options: InvokeOptions<F>;
 }) =>
   Effect.gen(function* () {
+    const config = yield* InngestConfig;
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
     const info = yield* identity.resolve(args.id);
@@ -49,7 +50,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
           yield* sink.yieldCommand(
             StepCommand.InvokeFunction.make({
               info,
-              functionId: `${args.appName}-${args.options.function._tag}`,
+              functionId: `${config.id}-${args.options.function._tag}`,
               payload: {
                 data: event?.data,
                 ...(Predicate.isNotUndefined(args.options.user) ? { user: args.options.user } : {}),

@@ -5,10 +5,10 @@ import { Context, Effect, Layer } from "effect";
 import type { InngestFunction } from "./Function.js";
 import * as ServeHttp from "./internal/serve/http.js";
 
-import { type HandlerContext } from "./internal/step.js";
+import { type HandlerContext } from "./next/internal/runtime/HandlerContext.js";
 
 /**
- * Re-export HandlerContext from internal step module.
+ * Re-export HandlerContext.
  * @since 0.1.0
  * @category models
  */

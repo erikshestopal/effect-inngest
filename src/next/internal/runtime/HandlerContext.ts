@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import type { InngestFunction } from "../../../Function.js";
 import * as EventPayload from "../codec/EventPayload.js";
-import type { ExecutionInput } from "../domain/ExecutionInput.js";
+import { CurrentExecutionInput, type ExecutionInput } from "../domain/ExecutionInput.js";
 import { StepTools } from "./StepTools.js";
 
 export interface HandlerContext<F extends InngestFunction.Any = InngestFunction.Any> {
@@ -12,10 +12,10 @@ export interface HandlerContext<F extends InngestFunction.Any = InngestFunction.
 
 export const make = <F extends InngestFunction.Any>(args: {
   readonly fn: F;
-  readonly input: ExecutionInput;
-}): Effect.Effect<HandlerContext<F>, EventPayload.EventDecodeError, StepTools> =>
+}): Effect.Effect<HandlerContext<F>, EventPayload.EventDecodeError, StepTools | CurrentExecutionInput> =>
   Effect.gen(function* () {
+    const input = yield* CurrentExecutionInput;
     const step = yield* StepTools;
-    const event = yield* EventPayload.decodeInvocation(args);
-    return { event, step, run: args.input.run };
+    const event = yield* EventPayload.decodeInvocation({ fn: args.fn, input });
+    return { event, step, run: input.run };
   });

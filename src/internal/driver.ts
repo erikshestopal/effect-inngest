@@ -6,17 +6,18 @@ import * as Headers from "effect/unstable/http/Headers";
 import * as HttpTraceContext from "effect/unstable/http/HttpTraceContext";
 import { Cause, Chunk, Clock, Context, Duration, Effect, Layer, Option, pipe, Predicate, Schema } from "effect";
 import type { InngestFunction } from "../Function.js";
-import { InngestClient } from "../Client.js";
+import { InngestClient, InngestConfig } from "../Client.js";
 import * as Checkpoint from "./checkpoint.js";
 import type { CheckpointConfig, CheckpointState } from "./checkpoint.js";
 import { isRetryAfterError, isNonRetriableError, isStepError, type RetryAfterError, type StepError } from "./errors.js";
 import * as Protocol from "./protocol.js";
 import { StepInterrupt } from "./interrupts.js";
-import { createStepTools, buildHandlerContext, type HandlerContext } from "./step.js";
+import type { HandlerContext } from "../next/internal/runtime/HandlerContext.js";
 import { OtelAttributes } from "./constants.js";
 import { CurrentCheckpoint } from "../next/internal/runtime/CheckpointContext.js";
 import { HandlerFiberScope } from "../next/internal/runtime/HandlerFiberScope.js";
-import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
+import { CurrentExecutionInput, ExecutionInput } from "../next/internal/domain/ExecutionInput.js";
+import { ExecutionRuntime } from "../next/internal/runtime/ExecutionRuntime.js";
 
 /** Trace context headers extracted from incoming request */
 export interface TraceHeaders {
@@ -77,6 +78,7 @@ export const execute = <F extends InngestFunction.Any, R>(
     const client = yield* InngestClient;
     const headers = baseHeaders(client.config.framework);
     const requestStartedAt = yield* Clock.currentTimeMillis;
+    const input = ExecutionInput.fromSdkRequestBody(request);
 
     // Build the optional CheckpointState. In checkpoint mode the step tools
     // buffer StepRun results into this state and yield (drain + DiscoveryRequest /
@@ -105,13 +107,19 @@ export const execute = <F extends InngestFunction.Any, R>(
         }),
     });
 
+    const executionContextLayer = Layer.mergeAll(
+      Layer.succeed(CurrentExecutionInput, input),
+      Layer.succeed(CurrentCheckpoint, checkpointState),
+      Layer.succeed(InngestConfig, client.config),
+    );
+    const runtimeLayer = ExecutionRuntime.layer.pipe(Layer.provide(executionContextLayer));
+
     const runHandler = HandlerFiberScope.withRoot(
       Effect.gen(function* () {
-        const identity = yield* StepIdentity;
-        const step = createStepTools(request, appName, identity, checkpointState);
-        const context = yield* buildHandlerContext<F>(fn, step, request);
+        const runtime = yield* ExecutionRuntime;
+        const context = yield* runtime.handlerContext({ fn });
         return yield* handler(context);
-      }),
+      }).pipe(Effect.provide(runtimeLayer)),
     );
 
     /**
@@ -142,8 +150,6 @@ export const execute = <F extends InngestFunction.Any, R>(
     });
 
     const result = yield* Effect.scoped(handlerWithDeadline).pipe(
-      Effect.provideService(CurrentCheckpoint, checkpointState),
-      Effect.provide(StepIdentity.layer),
       Effect.flatMap((maybeValue) =>
         Effect.gen(function* () {
           const planned = yield* drainPlanned;
