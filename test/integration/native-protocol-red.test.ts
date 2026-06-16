@@ -216,25 +216,60 @@ describe("native v4 protocol RED regressions", () => {
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
-      const targetId = sha1("step-2");
 
       try {
-        const response = yield* Effect.tryPromise(() =>
+        const rootResponse = yield* Effect.tryPromise(() =>
           handler(
             makeRequest({
               fnId: "parallel-target",
               eventName: "demo/event",
               eventData: { value: 1 },
-              stepId: targetId,
-              disableImmediateExecution: true,
             }),
           ),
         );
-        const body = yield* responseOpcodes(response);
+        const planned = yield* responseOpcodes(rootResponse);
+        const expectedData = new Map([
+          [sha1("step-1"), 1],
+          [sha1("step-2"), 2],
+          [sha1("step-3"), 3],
+        ]);
 
-        expect(response.status).toBe(206);
-        expect(body).toHaveLength(1);
-        expect(body[0]).toMatchObject({ op: "StepRun", id: targetId, name: "step-2", data: 2 });
+        expect(rootResponse.status).toBe(206);
+        expect(planned).toHaveLength(3);
+
+        const executionOrder = [planned[2]!, planned[0]!, planned[1]!];
+
+        const responses = yield* Effect.all(
+          executionOrder.map((target) =>
+            Effect.gen(function* () {
+              const response = yield* Effect.tryPromise(() =>
+                handler(
+                  makeRequest({
+                    fnId: "parallel-target",
+                    eventName: "demo/event",
+                    eventData: { value: 1 },
+                    stepId: target.id,
+                    disableImmediateExecution: true,
+                  }),
+                ),
+              );
+              const body = yield* responseOpcodes(response);
+              return { target, response, body };
+            }),
+          ),
+          { concurrency: "unbounded" },
+        );
+
+        for (const { target, response, body } of responses) {
+          expect(response.status).toBe(206);
+          expect(body).toHaveLength(1);
+          expect(body[0]).toMatchObject({
+            op: "StepRun",
+            id: target.id,
+            name: target.name,
+            data: expectedData.get(target.id),
+          });
+        }
         expect(checkpointRequests(captures)).toHaveLength(0);
       } finally {
         yield* Effect.tryPromise(() => dispose());

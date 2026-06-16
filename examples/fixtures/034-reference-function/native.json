@@ -291,15 +291,15 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-              "expire": 1813024678052,
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
               "fn_id": "examples-034-reference-function-helper-function",
-              "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+              "gid": "<gid>",
               "isr": {
-                "dsid": "c2c7cfd6f77b07dc",
-                "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
-                "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
-                "ts": ""
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
               },
               "name": "call-helper",
               "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
@@ -307,10 +307,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "66f13693e68b367e",
-                  "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                  "sid": "23a618530e3929ba",
+                  "traceparent": "<traceparent>"
                 },
-                "ts": "2026-06-15T01:57:58.052345Z"
+                "ts": "<event-ts>"
               }
             },
             "input": 21
@@ -324,15 +324,15 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4FZX4JXXHSH4ZH43E51VS8.0468d60916f8c6bb90279b321e3dd5afde1e9e55",
-                "expire": 1813024678052,
+                "correlation_id": "<correlation_id>",
+                "expire": "<expire>",
                 "fn_id": "examples-034-reference-function-helper-function",
-                "gid": "0bee19d5-df40-4090-8a17-0fef4d2e4ea6",
+                "gid": "<gid>",
                 "isr": {
-                  "dsid": "c2c7cfd6f77b07dc",
-                  "dstp": "00-2f7519b7131d84cbceda0a23ee271cad-dc887fe1e37a3f01-00",
-                  "tp": "00-2f7519b7131d84cbceda0a23ee271cad-c2c7cfd6f77b07dc-01",
-                  "ts": ""
+                  "dsid": "<dsid>",
+                  "dstp": "<dstp>",
+                  "tp": "<traceparent>",
+                  "ts": "<event-ts>"
                 },
                 "name": "call-helper",
                 "source_app_id": "7307dede-c62a-5953-882f-677d5f929b90",
@@ -340,10 +340,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "66f13693e68b367e",
-                    "traceparent": "00-642eca2ad09bddc7ef8f264788fcfc40-bde8477c5cdab862-01"
+                    "sid": "23a618530e3929ba",
+                    "traceparent": "<traceparent>"
                   },
-                  "ts": "2026-06-15T01:57:58.052345Z"
+                  "ts": "<event-ts>"
                 }
               },
               "input": 21

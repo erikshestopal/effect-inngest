@@ -100,35 +100,36 @@ export declare namespace StepTools {
 export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
   "effect-inngest/internal/runtime/StepTools",
 ) {
-  static readonly layer = Layer.effect(
-    this,
-    Effect.gen(function* () {
-      const input = yield* CurrentExecutionInput;
-      const checkpoint = yield* CurrentCheckpoint;
-      const config = yield* InngestConfig;
-      const identity = yield* StepIdentity;
-      const sink = yield* StepCommandSink;
-      const eventApi = yield* EventApi;
-      const runtime = pipe(
-        Context.make(StepIdentity, identity),
-        Context.add(StepCommandSink, sink),
-        Context.add(EventApi, eventApi),
-        Context.add(CurrentCheckpoint, checkpoint),
-        Context.add(InngestConfig, config),
-      );
+  static readonly make = Effect.gen(function* () {
+    const input = yield* CurrentExecutionInput;
+    const checkpoint = yield* CurrentCheckpoint;
+    const config = yield* InngestConfig;
+    const identity = yield* StepIdentity;
+    const sink = yield* StepCommandSink;
+    const eventApi = yield* EventApi;
+    const runtime = pipe(
+      Context.make(StepIdentity, identity),
+      Context.add(StepCommandSink, sink),
+      Context.add(EventApi, eventApi),
+      Context.add(CurrentCheckpoint, checkpoint),
+      Context.add(InngestConfig, config),
+    );
 
-      return {
-        run: ((id, effect, options) =>
-          StepRun.run({ input, id, effect, options }).pipe(Effect.provide(runtime))) as Run,
-        sleep: ((id, duration) => SleepStep.sleep({ input, id, duration }).pipe(Effect.provide(runtime))) as Sleep,
-        sleepUntil: ((id, timestamp) =>
-          SleepUntilStep.sleepUntil({ input, id, timestamp }).pipe(Effect.provide(runtime))) as SleepUntil,
-        waitForEvent: ((id, event, options) =>
-          WaitForEventStep.waitForEvent({ input, id, event, options }).pipe(Effect.provide(runtime))) as WaitForEvent,
-        invoke: ((id, options) => InvokeStep.invoke({ input, id, options }).pipe(Effect.provide(runtime))) as Invoke,
-        sendEvent: ((id, payload) =>
-          SendEventStep.sendEvent({ input, id, payload }).pipe(Effect.provide(runtime))) as SendEvent,
-      };
-    }),
-  ).pipe(Layer.provide(StepIdentity.layer), Layer.provide(StepCommandSink.layer), Layer.provide(EventApi.layer));
+    return {
+      run: ((id, effect, options) => StepRun.run({ input, id, effect, options }).pipe(Effect.provide(runtime))) as Run,
+      sleep: ((id, duration) => SleepStep.sleep({ input, id, duration }).pipe(Effect.provide(runtime))) as Sleep,
+      sleepUntil: ((id, timestamp) =>
+        SleepUntilStep.sleepUntil({ input, id, timestamp }).pipe(Effect.provide(runtime))) as SleepUntil,
+      waitForEvent: ((id, event, options) =>
+        WaitForEventStep.waitForEvent({ input, id, event, options }).pipe(Effect.provide(runtime))) as WaitForEvent,
+      invoke: ((id, options) => InvokeStep.invoke({ input, id, options }).pipe(Effect.provide(runtime))) as Invoke,
+      sendEvent: ((id, payload) =>
+        SendEventStep.sendEvent({ input, id, payload }).pipe(Effect.provide(runtime))) as SendEvent,
+    };
+  });
+
+  static readonly layer = Layer.effect(this, this.make).pipe(
+    Layer.provide(StepCommandSink.layer),
+    Layer.provide(EventApi.layer),
+  );
 }

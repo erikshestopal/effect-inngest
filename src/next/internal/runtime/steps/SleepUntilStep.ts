@@ -7,7 +7,6 @@ import { CurrentCheckpoint } from "../CheckpointContext.js";
 import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
-import * as StepOperation from "./StepOperation.js";
 
 export const sleepUntil = (args: {
   readonly input: ExecutionInput;
@@ -18,9 +17,13 @@ export const sleepUntil = (args: {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
     const info = yield* identity.resolve(args.id);
-    const memo = StepOperation.memoFor({ input: args.input, info });
+    const memo = args.input.memoForStep(info);
 
     if (!Predicate.isTagged(memo, "MemoNone")) {
+      return;
+    }
+
+    if (!args.input.shouldExecuteStep(info)) {
       return;
     }
 
@@ -33,7 +36,7 @@ export const sleepUntil = (args: {
     const scope = yield* HandlerFiberScope;
     const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
 
-    if (args.input.stepId === "step" && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
+    if (args.input.isFunctionRun() && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
       return yield* sink.planCommand(command);
     }
 

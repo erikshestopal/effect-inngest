@@ -250,8 +250,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G05GGECHCS7XKB6JRDM0G/async",
-      "path": "/v1/checkpoint/01KV4G05GGECHCS7XKB6JRDM0G/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -259,12 +259,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G05GGECHCS7XKB6JRDM0G",
+        "run_id": "<run_id>",
         "fn_id": "78a7d1c2-f546-516d-a5ca-779b2adbcaff",
-        "qi_id": "bDJkMGl4aDd0ZXI2OjpkZWZhdWx0",
-        "request_id": "01KV4G05GR5AXX5F72RQC91V63",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488686620,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "35b38d6e7e06b2259cf170fbc128c883b2327cab",
@@ -298,12 +298,12 @@
             },
             "transformedResultPromise": {},
             "timing": {
-              "a": 1781488686620000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488686620
+        "ts": "<event-ts>"
       }
     },
     "response": {

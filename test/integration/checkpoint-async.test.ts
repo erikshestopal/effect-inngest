@@ -410,7 +410,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
               fnId: "ckpt-fn",
               eventName: "ckpt/test",
               eventData: { value: "v" },
-              stepIdQuery: "not-root-step",
+              stepIdQuery: "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
               disableImmediateExecution: false,
             }),
           ),

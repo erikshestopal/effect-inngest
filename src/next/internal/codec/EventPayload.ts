@@ -43,6 +43,13 @@ export const decodeEnvelope: {
   },
 );
 
+export const decodeMemoData: {
+  <E extends EventSchema>(event: E): (value: unknown) => Effect.Effect<InngestEvent.EventType<E>, EventDecodeError>;
+  <E extends EventSchema>(value: unknown, event: E): Effect.Effect<InngestEvent.EventType<E>, EventDecodeError>;
+} = Function.dual(2, <E extends EventSchema>(value: unknown, event: E) =>
+  decodeEnvelope(event)(value).pipe(Effect.catch(() => decodeEnvelope(event)({ name: event.identifier, data: value }))),
+);
+
 export const decodeTriggerEvent: {
   <F extends InngestFunction.Any>(
     fn: F,

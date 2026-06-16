@@ -230,6 +230,12 @@ const parseBody = (text: string): unknown => {
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+const sanitizePath = (path: string): string =>
+  path.replace(/\/v1\/checkpoint\/[^/]+\/async/u, "/v1/checkpoint/<run_id>/async");
+
+const sanitizeUrl = (url: string): string =>
+  url.replace(/\/v1\/checkpoint\/[^/]+\/async/u, "/v1/checkpoint/<run_id>/async");
+
 const orderObject = (value: Record<string, unknown>, keys: ReadonlyArray<string>): Record<string, unknown> => {
   const ordered: Record<string, unknown> = {};
   for (const key of keys) {
@@ -279,6 +285,10 @@ const canonicalizeProtocolValue = (value: unknown): unknown => {
   if (Array.isArray(value)) return value.map(canonicalizeProtocolValue);
   if (!isObject(value)) return value;
 
+  if (Object.hasOwn(value, "a") && Object.hasOwn(value, "b") && Object.keys(value).length === 2) {
+    return orderObject({ ...value, a: "<timing-a>" }, ["a", "b"]);
+  }
+
   if (typeof value.op === "string") return orderObject(value, opcodeKeyOrder(value));
   if (Array.isArray(value.steps) && Object.hasOwn(value, "run_id")) {
     return orderObject(value, [
@@ -296,11 +306,36 @@ const canonicalizeProtocolValue = (value: unknown): unknown => {
   if (Object.hasOwn(value, "hashedId") && Object.hasOwn(value, "stepType")) {
     return orderObject(value, ["hashedId", "memoized", "options", "stepType"]);
   }
-  if (Object.hasOwn(value, "a") && Object.hasOwn(value, "b")) return orderObject(value, ["a", "b"]);
   if (Object.hasOwn(value, "id") && Object.hasOwn(value, "name") && Object.keys(value).length === 2) {
     return orderObject(value, ["id", "name"]);
   }
   return orderObject(value, []);
+};
+
+const sanitizeVolatileProtocolFields = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(sanitizeVolatileProtocolFields);
+  if (!isObject(value)) return value;
+
+  const sanitized: Record<string, unknown> = {};
+  for (const [key, child] of Object.entries(value)) {
+    sanitized[key] = sanitizeVolatileProtocolFields(child);
+  }
+
+  for (const key of ["job_id", "qi_id", "request_id", "run_id"]) {
+    if (sanitized[key] !== undefined) sanitized[key] = `<${key}>`;
+  }
+  if (sanitized.request_started_at !== undefined) sanitized.request_started_at = "<request_started_at>";
+  if (sanitized.ts !== undefined) sanitized.ts = "<event-ts>";
+  if (sanitized.timestamp !== undefined) sanitized.timestamp = "<timestamp>";
+  if (sanitized.correlation_id !== undefined) sanitized.correlation_id = "<correlation_id>";
+  if (sanitized.expire !== undefined) sanitized.expire = "<expire>";
+  if (sanitized.gid !== undefined) sanitized.gid = "<gid>";
+  if (sanitized.dsid !== undefined) sanitized.dsid = "<dsid>";
+  if (sanitized.dstp !== undefined) sanitized.dstp = "<dstp>";
+  if (sanitized.tp !== undefined) sanitized.tp = "<traceparent>";
+  if (sanitized.traceparent !== undefined) sanitized.traceparent = "<traceparent>";
+
+  return sanitized;
 };
 
 const sanitizeEventBody = (event: unknown): unknown => {
@@ -313,20 +348,12 @@ const sanitizeEventBody = (event: unknown): unknown => {
 };
 
 const sanitizeProtocolBody = (body: unknown): unknown => {
-  if (Array.isArray(body)) return canonicalizeProtocolValue(body);
+  if (Array.isArray(body)) return canonicalizeProtocolValue(sanitizeVolatileProtocolFields(body));
   if (!isObject(body)) return body;
 
-  const sanitized: Record<string, unknown> = { ...body };
+  const sanitized = sanitizeVolatileProtocolFields(body) as Record<string, unknown>;
   if (sanitized.sync_id !== undefined) sanitized.sync_id = "<sync-id>";
   if (sanitized.sdk !== undefined) sanitized.sdk = "<sdk>";
-  if (isObject(sanitized.ctx)) {
-    sanitized.ctx = { ...sanitized.ctx };
-    for (const key of ["job_id", "qi_id", "request_id", "run_id"]) {
-      if ((sanitized.ctx as Record<string, unknown>)[key] !== undefined) {
-        (sanitized.ctx as Record<string, unknown>)[key] = `<${key}>`;
-      }
-    }
-  }
   if (sanitized.event) sanitized.event = sanitizeEventBody(sanitized.event);
   if (Array.isArray(sanitized.events)) sanitized.events = sanitized.events.map(sanitizeEventBody);
   return canonicalizeProtocolValue(sanitized);
@@ -455,8 +482,8 @@ const recordProxy = (
                 const requestRecord = {
                   ...(localSequence ? { sequence: localSequence } : {}),
                   method: request.method,
-                  url: `${opts.proxyOrigin}${url.pathname}${url.search}`,
-                  path: url.pathname,
+                  url: sanitizeUrl(`${opts.proxyOrigin}${url.pathname}${url.search}`),
+                  path: sanitizePath(url.pathname),
                   query: Object.fromEntries(url.searchParams.entries()),
                   headers: sanitizeHeaders(Object.fromEntries(request.headers.entries())),
                   body: sanitizeProtocolBody(rawBody),
@@ -749,6 +776,7 @@ const waitForExpectedExecutionRecordings = (
               path: exchange.request.path,
               method: exchange.request.method,
               query: exchange.request.query,
+              requestBody: exchange.request.body,
               status: exchange.response.status,
               body: exchange.response.body,
             }));

@@ -10,7 +10,6 @@ import * as StepCommand from "../../domain/StepCommand.js";
 import type { InvokeOptions, JsonSchema } from "../StepTools.js";
 import { StepIdentity } from "../StepIdentity.js";
 import { StepCommandSink } from "../StepCommandSink.js";
-import * as StepOperation from "./StepOperation.js";
 
 export const invoke = <F extends InngestFunction.Any>(args: {
   readonly input: ExecutionInput;
@@ -22,7 +21,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
     const identity = yield* StepIdentity;
     const sink = yield* StepCommandSink;
     const info = yield* identity.resolve(args.id);
-    const memo = StepOperation.memoFor({ input: args.input, info });
+    const memo = args.input.memoForStep(info);
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
@@ -45,14 +44,19 @@ export const invoke = <F extends InngestFunction.Any>(args: {
       Match.tag("MemoInput", () => Effect.succeed(undefined)),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
+          if (!args.input.shouldExecuteStep(info)) {
+            return yield* Effect.void;
+          }
+
           const event = Predicate.hasProperty(args.options, "data") ? args.options.data : undefined;
+          const data = Predicate.isObject(event) && Predicate.hasProperty(event, "data") ? event.data : event;
 
           yield* sink.yieldCommand(
             StepCommand.InvokeFunction.make({
               info,
               functionId: `${config.id}-${args.options.function._tag}`,
               payload: {
-                data: event?.data,
+                data,
                 ...(Predicate.isNotUndefined(args.options.user) ? { user: args.options.user } : {}),
                 ...(Predicate.isNotUndefined(args.options.v) ? { v: args.options.v } : {}),
               },

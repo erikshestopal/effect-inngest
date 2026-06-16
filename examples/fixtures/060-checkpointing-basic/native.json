@@ -231,8 +231,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
-      "path": "/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -240,12 +240,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4FZXC7GT4XV29A1N4DXDN2",
+        "run_id": "<run_id>",
         "fn_id": "76cbd0ca-c3be-51e3-8e9e-20eb9963fd1b",
-        "qi_id": "Mjd3Z2JmZng4NmZxNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4FZXCRMJCWM17DFHYPTH8D",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488678303,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "bdb36bb22deb169275b3094ba9005a29eeddd195",
@@ -280,12 +280,12 @@
             "transformedResultPromise": {},
             "data": 8,
             "timing": {
-              "a": 1781488678304000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488678304
+        "ts": "<event-ts>"
       }
     },
     "response": {
@@ -304,8 +304,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
-      "path": "/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -313,12 +313,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4FZXC7GT4XV29A1N4DXDN2",
+        "run_id": "<run_id>",
         "fn_id": "76cbd0ca-c3be-51e3-8e9e-20eb9963fd1b",
-        "qi_id": "Mjd3Z2JmZng4NmZxNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4FZXCRMJCWM17DFHYPTH8D",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488678303,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "5a99906eeaa831eb73f129f25a3adbb46490f870",
@@ -353,12 +353,12 @@
             "transformedResultPromise": {},
             "data": 12,
             "timing": {
-              "a": 1781488678309000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488678309
+        "ts": "<event-ts>"
       }
     },
     "response": {
@@ -377,8 +377,8 @@
     "request": {
       "sequence": 7,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
-      "path": "/v1/checkpoint/01KV4FZXC7GT4XV29A1N4DXDN2/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -386,12 +386,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4FZXC7GT4XV29A1N4DXDN2",
+        "run_id": "<run_id>",
         "fn_id": "76cbd0ca-c3be-51e3-8e9e-20eb9963fd1b",
-        "qi_id": "Mjd3Z2JmZng4NmZxNDo6ZGVmYXVsdA==",
-        "request_id": "01KV4FZXCRMJCWM17DFHYPTH8D",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488678303,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "e9dff3557ded7414ae530834de7011f1388d202a",
@@ -426,12 +426,12 @@
             "transformedResultPromise": {},
             "data": 20,
             "timing": {
-              "a": 1781488678315000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488678315
+        "ts": "<event-ts>"
       }
     },
     "response": {

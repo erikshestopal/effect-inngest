@@ -221,7 +221,7 @@
           "error": {
             "name": "RetryAfterError",
             "message": "Attempt 0 failed",
-            "stack": "Error: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/029-retry-error.ts:29:19)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:656:13)\n    at runTasks (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Scheduler.js:150:15)\n    at afterScheduled (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/Scheduler.js:140:10)"
+            "stack": "Error: Attempt 0 failed\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/examples/029-retry-error.ts:29:19)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
           }
         }
       ]
@@ -311,7 +311,7 @@
           },
           "data": 2,
           "timing": {
-            "a": 1781488685002000000,
+            "a": "<timing-a>",
             "b": 0
           }
         }

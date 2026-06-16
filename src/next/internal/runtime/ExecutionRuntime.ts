@@ -16,21 +16,20 @@ export interface Service {
 export class ExecutionRuntime extends Context.Service<ExecutionRuntime, Service>()(
   "effect-inngest/internal/runtime/ExecutionRuntime",
 ) {
-  static readonly layer = Layer.effect(
-    this,
-    Effect.gen(function* () {
-      const input = yield* CurrentExecutionInput;
-      const tools = yield* StepTools;
+  static readonly make = Effect.gen(function* () {
+    const input = yield* CurrentExecutionInput;
+    const tools = yield* StepTools;
 
-      return {
-        input,
-        step: tools,
-        handlerContext: ({ fn }) =>
-          HandlerContext.make({ fn }).pipe(
-            Effect.provideService(CurrentExecutionInput, input),
-            Effect.provideService(StepTools, tools),
-          ),
-      };
-    }),
-  ).pipe(Layer.provide(StepTools.layer));
+    return {
+      input,
+      step: tools,
+      handlerContext: <F extends InngestFunction.Any>(args: { readonly fn: F }) =>
+        HandlerContext.make({ fn: args.fn }).pipe(
+          Effect.provideService(CurrentExecutionInput, input),
+          Effect.provideService(StepTools, tools),
+        ),
+    };
+  });
+
+  static readonly layer = Layer.effect(this, this.make);
 }

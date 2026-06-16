@@ -1,5 +1,7 @@
-import { Context, Schema } from "effect";
+import { Context, Equal, Option, Schema } from "effect";
 import type * as Protocol from "../../../internal/protocol.js";
+import * as Memo from "./Memo.js";
+import type { StepInfo } from "./StepInfo.js";
 
 export class ExecutionEvent extends Schema.Class<ExecutionEvent>("effect-inngest/internal/domain/ExecutionEvent")({
   id: Schema.optional(Schema.String),
@@ -21,7 +23,7 @@ export class ExecutionInput extends Schema.Class<ExecutionInput>("effect-inngest
   events: Schema.Array(ExecutionEvent),
   steps: Schema.Record(Schema.String, Schema.Unknown),
   run: RunContext,
-  stepId: Schema.String,
+  requestedStepHash: Schema.Option(Schema.String),
   disableImmediateExecution: Schema.Boolean,
 }) {
   static fromSdkRequestBody(request: Protocol.SDKRequestBody) {
@@ -34,9 +36,28 @@ export class ExecutionInput extends Schema.Class<ExecutionInput>("effect-inngest
         attempt: request.ctx.attempt,
         maxAttempts: request.ctx.max_attempts,
       }),
-      stepId: request.ctx.step_id,
+      requestedStepHash: request.ctx.step_id === "step" ? Option.none() : Option.some(request.ctx.step_id),
       disableImmediateExecution: request.ctx.disable_immediate_execution,
     });
+  }
+
+  memoForStep(info: StepInfo): Memo.Memo {
+    return Memo.decode(this.steps[info.hash]);
+  }
+
+  shouldExecuteStep(info: StepInfo): boolean {
+    return Option.match(this.requestedStepHash, {
+      onNone: () => true,
+      onSome: Equal.equals(info.hash),
+    });
+  }
+
+  shouldPlanStep(info: StepInfo): boolean {
+    return this.shouldExecuteStep(info) && this.isFunctionRun() && this.disableImmediateExecution;
+  }
+
+  isFunctionRun(): boolean {
+    return Option.isNone(this.requestedStepHash);
   }
 }
 

@@ -18,6 +18,10 @@ import { CurrentCheckpoint } from "../next/internal/runtime/CheckpointContext.js
 import { HandlerFiberScope } from "../next/internal/runtime/HandlerFiberScope.js";
 import { CurrentExecutionInput, ExecutionInput } from "../next/internal/domain/ExecutionInput.js";
 import { ExecutionRuntime } from "../next/internal/runtime/ExecutionRuntime.js";
+import { StepIdentity } from "../next/internal/runtime/StepIdentity.js";
+import { StepTools } from "../next/internal/runtime/StepTools.js";
+import { StepCommandSink } from "../next/internal/runtime/StepCommandSink.js";
+import { EventApi } from "../next/internal/runtime/EventApi.js";
 
 /** Trace context headers extracted from incoming request */
 export interface TraceHeaders {
@@ -111,8 +115,17 @@ export const execute = <F extends InngestFunction.Any, R>(
       Layer.succeed(CurrentExecutionInput, input),
       Layer.succeed(CurrentCheckpoint, checkpointState),
       Layer.succeed(InngestConfig, client.config),
+      Layer.effect(StepIdentity, StepIdentity.make),
     );
-    const runtimeLayer = ExecutionRuntime.layer.pipe(Layer.provide(executionContextLayer));
+    const stepToolsLayer = Layer.effect(StepTools, StepTools.make).pipe(
+      Layer.provide(StepCommandSink.layer),
+      Layer.provide(EventApi.layer),
+      Layer.provide(executionContextLayer),
+    );
+    const runtimeLayer = Layer.effect(ExecutionRuntime, ExecutionRuntime.make).pipe(
+      Layer.provide(stepToolsLayer),
+      Layer.provide(executionContextLayer),
+    );
 
     const runHandler = HandlerFiberScope.withRoot(
       Effect.gen(function* () {

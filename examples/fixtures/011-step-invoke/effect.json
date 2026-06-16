@@ -298,15 +298,15 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4G03T6VQ05WKF2NQNBNCHG.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "expire": 1813024684913,
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
               "fn_id": "examples-011-step-invoke-child-square",
-              "gid": "09ab0399-9511-4d3e-83f0-fa4cf8704223",
+              "gid": "<gid>",
               "isr": {
-                "dsid": "0f50163eba32619e",
-                "dstp": "00-29e2dab9d5a679bd5c535ede605c26c8-ac99e6b0d532569d-00",
-                "tp": "00-29e2dab9d5a679bd5c535ede605c26c8-0f50163eba32619e-01",
-                "ts": ""
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
               },
               "name": "call-child",
               "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
@@ -314,10 +314,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "4a690650834d0a34",
-                  "traceparent": "00-640c9cb290219b042659ac3324d95e22-a7e398733328ebf2-01"
+                  "sid": "fa2a2570c95548d1",
+                  "traceparent": "<traceparent>"
                 },
-                "ts": "2026-06-15T01:58:04.913757Z"
+                "ts": "<event-ts>"
               }
             },
             "value": 7
@@ -331,15 +331,15 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4G03T6VQ05WKF2NQNBNCHG.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                "expire": 1813024684913,
+                "correlation_id": "<correlation_id>",
+                "expire": "<expire>",
                 "fn_id": "examples-011-step-invoke-child-square",
-                "gid": "09ab0399-9511-4d3e-83f0-fa4cf8704223",
+                "gid": "<gid>",
                 "isr": {
-                  "dsid": "0f50163eba32619e",
-                  "dstp": "00-29e2dab9d5a679bd5c535ede605c26c8-ac99e6b0d532569d-00",
-                  "tp": "00-29e2dab9d5a679bd5c535ede605c26c8-0f50163eba32619e-01",
-                  "ts": ""
+                  "dsid": "<dsid>",
+                  "dstp": "<dstp>",
+                  "tp": "<traceparent>",
+                  "ts": "<event-ts>"
                 },
                 "name": "call-child",
                 "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
@@ -347,10 +347,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "4a690650834d0a34",
-                    "traceparent": "00-640c9cb290219b042659ac3324d95e22-a7e398733328ebf2-01"
+                    "sid": "fa2a2570c95548d1",
+                    "traceparent": "<traceparent>"
                   },
-                  "ts": "2026-06-15T01:58:04.913757Z"
+                  "ts": "<event-ts>"
                 }
               },
               "value": 7

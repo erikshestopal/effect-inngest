@@ -289,15 +289,15 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4G03ST6D3WEMXYBGDFC8DR.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-              "expire": 1813024684902,
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
               "fn_id": "examples-028-invoke-failure-failing-child",
-              "gid": "36b466de-b2d2-4aef-8bf2-a2b62afca89c",
+              "gid": "<gid>",
               "isr": {
-                "dsid": "7568f512df7c41de",
-                "dstp": "00-520067978d730899b665ca08e40b801b-1b00ab5dfac7b38a-00",
-                "tp": "00-520067978d730899b665ca08e40b801b-7568f512df7c41de-01",
-                "ts": ""
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
               },
               "name": "call-child",
               "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
@@ -305,10 +305,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "b555ff52320b62bd",
-                  "traceparent": "00-c2db91dcaa5b371c762e5fcde233cc20-ff888b233b5d01eb-01"
+                  "sid": "733c1ce8389b8865",
+                  "traceparent": "<traceparent>"
                 },
-                "ts": "2026-06-15T01:58:04.902457Z"
+                "ts": "<event-ts>"
               }
             }
           },
@@ -321,15 +321,15 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4G03ST6D3WEMXYBGDFC8DR.93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-                "expire": 1813024684902,
+                "correlation_id": "<correlation_id>",
+                "expire": "<expire>",
                 "fn_id": "examples-028-invoke-failure-failing-child",
-                "gid": "36b466de-b2d2-4aef-8bf2-a2b62afca89c",
+                "gid": "<gid>",
                 "isr": {
-                  "dsid": "7568f512df7c41de",
-                  "dstp": "00-520067978d730899b665ca08e40b801b-1b00ab5dfac7b38a-00",
-                  "tp": "00-520067978d730899b665ca08e40b801b-7568f512df7c41de-01",
-                  "ts": ""
+                  "dsid": "<dsid>",
+                  "dstp": "<dstp>",
+                  "tp": "<traceparent>",
+                  "ts": "<event-ts>"
                 },
                 "name": "call-child",
                 "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
@@ -337,10 +337,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "b555ff52320b62bd",
-                    "traceparent": "00-c2db91dcaa5b371c762e5fcde233cc20-ff888b233b5d01eb-01"
+                    "sid": "733c1ce8389b8865",
+                    "traceparent": "<traceparent>"
                   },
-                  "ts": "2026-06-15T01:58:04.902457Z"
+                  "ts": "<event-ts>"
                 }
               }
             },
@@ -369,7 +369,7 @@
       "body": {
         "name": "NonRetriableError",
         "message": "Child always fails",
-        "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+        "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:134:23)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at forkUnsafe (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:2079:11)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:959:19)\n    at ~effect/Effect/evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:719:22)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
       }
     }
   },
@@ -436,7 +436,7 @@
               "error": "NonRetriableError",
               "message": "Child always fails",
               "name": "NonRetriableError",
-              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at onSome (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:146:22)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:142:83)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
+              "stack": "Error: Child always fails\n    at failing-child (/Users/erikshestopal/erik/effect-inngest/examples/028-invoke-failure.ts:25:42)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/src/internal/driver.ts:134:23)\n    at ~effect/Effect/successCont (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:870:26)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at forkUnsafe (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:2079:11)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:959:19)\n    at ~effect/Effect/evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:719:22)\n    at runLoop (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:444:98)\n    at evaluate (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:412:23)\n    at <anonymous> (/Users/erikshestopal/erik/effect-inngest/node_modules/effect/dist/internal/effect.js:723:15)"
             }
           }
         },

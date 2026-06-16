@@ -300,15 +300,15 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
-              "expire": 1781488708328,
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
               "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
+              "gid": "<gid>",
               "isr": {
-                "dsid": "8e67345a955241e5",
-                "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
-                "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
-                "ts": ""
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
               },
               "name": "invoke-worker",
               "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
@@ -316,10 +316,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "2b74a1ebf61ad937",
-                  "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
+                  "sid": "e13dd56963b7b73b",
+                  "traceparent": "<traceparent>"
                 },
-                "ts": "2026-06-15T01:57:58.328708Z"
+                "ts": "<event-ts>"
               }
             },
             "priority": "high",
@@ -334,15 +334,15 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.98f60eef27694e38e56d53701e64d91e7b4b9166",
-                "expire": 1781488708328,
+                "correlation_id": "<correlation_id>",
+                "expire": "<expire>",
                 "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "3417fb95-69c7-47b4-b060-04293fcf80da",
+                "gid": "<gid>",
                 "isr": {
-                  "dsid": "8e67345a955241e5",
-                  "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
-                  "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-8e67345a955241e5-01",
-                  "ts": ""
+                  "dsid": "<dsid>",
+                  "dstp": "<dstp>",
+                  "tp": "<traceparent>",
+                  "ts": "<event-ts>"
                 },
                 "name": "invoke-worker",
                 "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
@@ -350,10 +350,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "2b74a1ebf61ad937",
-                    "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
+                    "sid": "e13dd56963b7b73b",
+                    "traceparent": "<traceparent>"
                   },
-                  "ts": "2026-06-15T01:57:58.328708Z"
+                  "ts": "<event-ts>"
                 }
               },
               "priority": "high",
@@ -542,15 +542,15 @@
         "event": {
           "data": {
             "_inngest": {
-              "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
-              "expire": 1781488978791,
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
               "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
+              "gid": "<gid>",
               "isr": {
-                "dsid": "cf9df7d797c8ed93",
-                "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
-                "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
-                "ts": ""
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
               },
               "name": "invoke-batch-worker",
               "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
@@ -558,10 +558,10 @@
               "source_fn_v": 1,
               "tc": {
                 "ctx": {
-                  "sid": "bbad5bdb11c1803c",
-                  "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
+                  "sid": "ccfea61f976928ae",
+                  "traceparent": "<traceparent>"
                 },
-                "ts": "2026-06-15T01:57:58.791612Z"
+                "ts": "<event-ts>"
               }
             },
             "priority": "low",
@@ -576,15 +576,15 @@
           {
             "data": {
               "_inngest": {
-                "correlation_id": "01KV4FZXCHW5PRAK3GZC5J3GBQ.f7931d4debe848361c612c75928abab74294ff1b",
-                "expire": 1781488978791,
+                "correlation_id": "<correlation_id>",
+                "expire": "<expire>",
                 "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "8a281843-6419-4131-ac9e-79b2ef3b1f21",
+                "gid": "<gid>",
                 "isr": {
-                  "dsid": "cf9df7d797c8ed93",
-                  "dstp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-598047d884d0236c-00",
-                  "tp": "00-73c2ec1ce9ab906c2f3a8d82545dd544-cf9df7d797c8ed93-01",
-                  "ts": ""
+                  "dsid": "<dsid>",
+                  "dstp": "<dstp>",
+                  "tp": "<traceparent>",
+                  "ts": "<event-ts>"
                 },
                 "name": "invoke-batch-worker",
                 "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
@@ -592,10 +592,10 @@
                 "source_fn_v": 1,
                 "tc": {
                   "ctx": {
-                    "sid": "bbad5bdb11c1803c",
-                    "traceparent": "00-d2bfa5b1eeca6047e4c6b5176866e50f-ed0a596a264905fb-01"
+                    "sid": "ccfea61f976928ae",
+                    "traceparent": "<traceparent>"
                   },
-                  "ts": "2026-06-15T01:57:58.791612Z"
+                  "ts": "<event-ts>"
                 }
               },
               "priority": "low",

@@ -2,8 +2,8 @@ import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.4.1 #7 — `maxRuntime` deadline.
  *
- * Five `step.run` calls each taking ~200ms. With `maxRuntime: 500ms`, the
- * driver interrupts the handler after ~2-3 steps and emits `DiscoveryRequest`
+ * Five `step.run` calls each taking ~200ms. With `maxRuntime: 150ms`, the
+ * driver interrupts the handler after the first step and emits `DiscoveryRequest`
  * so the executor re-invokes the function with the buffered results committed.
  * Verify in dev-server timeline that 5 step runs eventually complete across
  * multiple function call attempts.
@@ -22,7 +22,7 @@ const DeadlineEvent = InngestEvent.make(
 const Fn = InngestFunction.make("checkpoint-deadline", {
   trigger: { event: DeadlineEvent },
   success: Schema.Struct({ count: Schema.Number }),
-  checkpointing: { bufferedSteps: 1, maxRuntime: "500 millis" },
+  checkpointing: { bufferedSteps: 1, maxRuntime: "150 millis" },
 });
 
 const Group = InngestGroup.make(Fn);

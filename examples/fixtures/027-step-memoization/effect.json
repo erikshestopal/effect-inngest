@@ -229,8 +229,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
-      "path": "/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -238,12 +238,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G03T7H98KNHHYNMRMVSBE",
+        "run_id": "<run_id>",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
-        "request_id": "01KV4G03TRQJPVAFAPBSEF9HZA",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488684907,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
@@ -276,14 +276,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 1781488684907,
+            "data": 1781631804889,
             "timing": {
-              "a": 1781488684915000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488684916
+        "ts": "<event-ts>"
       }
     },
     "response": {
@@ -302,8 +302,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
-      "path": "/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -311,12 +311,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G03T7H98KNHHYNMRMVSBE",
+        "run_id": "<run_id>",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "ejdycWI5Nm1zZmNoOjpkZWZhdWx0",
-        "request_id": "01KV4G03TRQJPVAFAPBSEF9HZA",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488684907,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
@@ -349,14 +349,14 @@
               "promise": {}
             },
             "transformedResultPromise": {},
-            "data": 0.5613625245099271,
+            "data": 0.8394501111141841,
             "timing": {
-              "a": 1781488684922000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488684922
+        "ts": "<event-ts>"
       }
     },
     "response": {
@@ -432,10 +432,10 @@
         "steps": {
           "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
           "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.5613625245099271
+            "data": 0.8394501111141841
           },
           "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781488684907
+            "data": 1781631804889
           }
         },
         "use_api": false,
@@ -457,8 +457,8 @@
           "op": "RunComplete",
           "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "timestamp": 1781488684907,
-            "randomValue": 0.5613625245099271
+            "timestamp": "<timestamp>",
+            "randomValue": 0.8394501111141841
           }
         }
       ]
@@ -471,8 +471,8 @@
     "request": {
       "sequence": 8,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
-      "path": "/v1/checkpoint/01KV4G03T7H98KNHHYNMRMVSBE/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -480,12 +480,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G03T7H98KNHHYNMRMVSBE",
+        "run_id": "<run_id>",
         "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "M21pbXp3MG5hZjR5cTo6ZGVmYXVsdA==",
-        "request_id": "01KV4G04V8TJ7YT5KE3BQVGDND",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488685930,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
@@ -519,12 +519,12 @@
             },
             "transformedResultPromise": {},
             "timing": {
-              "a": 1781488685930000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488685930
+        "ts": "<event-ts>"
       }
     },
     "response": {

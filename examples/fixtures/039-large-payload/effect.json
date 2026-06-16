@@ -249,8 +249,8 @@
     "request": {
       "sequence": 5,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041VHSR9TMQCXPWCR8NR/async",
-      "path": "/v1/checkpoint/01KV4G041VHSR9TMQCXPWCR8NR/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -258,12 +258,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G041VHSR9TMQCXPWCR8NR",
+        "run_id": "<run_id>",
         "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
-        "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
-        "request_id": "01KV4G042BJQKYF1EEAN664A72",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488685136,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "75ee1e663f94cc968ac5165f86d7e2720739e2ee",
@@ -307,12 +307,12 @@
               }
             ],
             "timing": {
-              "a": 1781488685137000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488685137
+        "ts": "<event-ts>"
       }
     },
     "response": {
@@ -331,8 +331,8 @@
     "request": {
       "sequence": 6,
       "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/01KV4G041VHSR9TMQCXPWCR8NR/async",
-      "path": "/v1/checkpoint/01KV4G041VHSR9TMQCXPWCR8NR/async",
+      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
+      "path": "/v1/checkpoint/<run_id>/async",
       "query": {},
       "headers": {
         "authorization": "<redacted>",
@@ -340,12 +340,12 @@
         "user-agent": "<sdk>"
       },
       "body": {
-        "run_id": "01KV4G041VHSR9TMQCXPWCR8NR",
+        "run_id": "<run_id>",
         "fn_id": "3ad73f50-286b-525b-bf5b-ca0b45a790b0",
-        "qi_id": "M2NpcmlzM3pzOWJsdzo6ZGVmYXVsdA==",
-        "request_id": "01KV4G042BJQKYF1EEAN664A72",
+        "qi_id": "<qi_id>",
+        "request_id": "<request_id>",
         "generation_id": 1,
-        "request_started_at": 1781488685136,
+        "request_started_at": "<request_started_at>",
         "steps": [
           {
             "id": "3801d4a5540e7450fe1648b2a868defa6bb8001e",
@@ -380,12 +380,12 @@
             "transformedResultPromise": {},
             "data": 3,
             "timing": {
-              "a": 1781488685139000000,
+              "a": "<timing-a>",
               "b": 0
             }
           }
         ],
-        "ts": 1781488685140
+        "ts": "<event-ts>"
       }
     },
     "response": {

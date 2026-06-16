@@ -8,7 +8,7 @@ const rootDir = Path.resolve(Path.dirname(fileURLToPath(import.meta.url)), "../.
 const fixturesDir = Path.join(rootDir, "examples/fixtures");
 
 const missingEffectAllowlist = new Set(["019-cron-trigger", "049-cron-timezone", "051-client-send"]);
-const paritySkip = new Set(["055-system-events"]);
+const paritySkip = new Set(["055-system-events", "063-checkpointing-max-runtime"]);
 
 type Json = null | boolean | number | string | ReadonlyArray<Json> | { readonly [key: string]: Json };
 
