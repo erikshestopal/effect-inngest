@@ -1,7 +1,7 @@
 import { Cause, Duration, Effect, Exit, Match, Option, Predicate } from "effect";
 import { InngestConfig } from "../../Client.js";
-import { CurrentCheckpoint } from "../../next/internal/runtime/CheckpointContext.js";
-import { StepCommandSink, type StepYield } from "../../next/internal/runtime/StepCommandSink.js";
+import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
+import { StepCommandSink, type StepYield } from "../runtime/StepCommandSink.js";
 import { isNonRetriableError, isRetryAfterError, isStepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
@@ -102,10 +102,10 @@ const fromSuccess = (args: {
             name: "Error",
             message: "Checkpoint deadline elapsed outside checkpoint mode",
           }),
-          headers: ExecutionHeaders.withRetryDisposition(
-            args.headers,
-            ExecutionHeaders.RetryDisposition.failure({ noRetry: false }),
-          ),
+          headers: ExecutionHeaders.withRetryDisposition({
+            headers: args.headers,
+            disposition: ExecutionHeaders.RetryDisposition.failure({ noRetry: false }),
+          }),
         }),
       ),
       Match.exhaustive,
@@ -123,7 +123,10 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
       return ExecutionResult.make({
         status: 206,
         body: encodeOpcodes(opcodes),
-        headers: ExecutionHeaders.withRetryDisposition(args.headers, opcodeDisposition({ yielded, opcodes })),
+        headers: ExecutionHeaders.withRetryDisposition({
+          headers: args.headers,
+          disposition: opcodeDisposition({ yielded, opcodes }),
+        }),
       });
     }
 
@@ -138,14 +141,14 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
       return ExecutionResult.make({
         status: 206,
         body: encodeOpcodes(completed),
-        headers: ExecutionHeaders.withRetryDisposition(args.headers, disposition),
+        headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
       });
     }
 
     return ExecutionResult.make({
       status: disposition.noRetry ? 400 : 500,
       body: Protocol.UserError.fromUnknown(error),
-      headers: ExecutionHeaders.withRetryDisposition(args.headers, disposition),
+      headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
     });
   });
 

@@ -43,10 +43,11 @@ export const base = (config: ClientConfig): Record<string, string> => ({
   ...(config.framework ? { [Protocol.Headers.Framework]: config.framework } : {}),
 });
 
-export const withRetryDisposition = (
-  headers: Record<string, string>,
-  disposition: RetryDisposition,
-): Record<string, string> => {
+export const withRetryDisposition = (args: {
+  readonly headers: Record<string, string>;
+  readonly disposition: RetryDisposition;
+}): Record<string, string> => {
+  const { headers, disposition } = args;
   if (Option.isSome(disposition.retryAfterMs)) {
     return {
       ...headers,

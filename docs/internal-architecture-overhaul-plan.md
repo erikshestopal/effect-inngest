@@ -341,9 +341,9 @@ These are architectural targets, not instructions to remove everything in one pa
 
 Use a strangler pattern. Each step should reduce one mixed concern while keeping public behavior unchanged.
 
-Do not migrate one horizontal module at a time. Prefer vertical slices: a behavior crosses public facade, runtime/domain decision, wire encoding, adapter boundary, and validation. A slice can start in `src/next`, but it is not complete until it has a named seam back into current production code or an explicit reason to remain a spike.
+Do not migrate one horizontal module at a time. Prefer vertical slices: a behavior crosses public facade, runtime/domain decision, wire encoding, adapter boundary, and validation. A slice can start in `src/internal`, but it is not complete until it has a named seam back into current production code or an explicit reason to remain a spike.
 
-Before implementing any new `src/next` module, write down this seam map:
+Before implementing any new `src/internal` module, write down this seam map:
 
 ```txt
 Behavior:

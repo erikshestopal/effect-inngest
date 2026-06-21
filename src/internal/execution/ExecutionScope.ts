@@ -3,12 +3,12 @@ import { InngestClient, InngestConfig } from "../../Client.js";
 import * as CheckpointRun from "./CheckpointRun.js";
 import type { CheckpointConfig } from "../checkpoint.js";
 import * as Protocol from "../protocol.js";
-import { CurrentExecutionInput, ExecutionInput } from "../../next/internal/domain/ExecutionInput.js";
-import { CurrentCheckpoint } from "../../next/internal/runtime/CheckpointContext.js";
-import { EventApi } from "../../next/internal/runtime/EventApi.js";
-import { StepCommandSink } from "../../next/internal/runtime/StepCommandSink.js";
-import { StepIdentity } from "../../next/internal/runtime/StepIdentity.js";
-import { StepTools } from "../../next/internal/runtime/StepTools.js";
+import { CurrentExecutionInput, ExecutionInput } from "../domain/ExecutionInput.js";
+import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
+import { EventApi } from "../runtime/EventApi.js";
+import { StepCommandSink } from "../runtime/StepCommandSink.js";
+import { StepIdentity } from "../runtime/StepIdentity.js";
+import { StepTools } from "../runtime/StepTools.js";
 
 export const provide =
   (args: { readonly request: Protocol.SDKRequestBody; readonly checkpointConfig: Option.Option<CheckpointConfig> }) =>

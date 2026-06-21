@@ -1,7 +1,7 @@
 import { describe, expect, it } from "@effect/vitest";
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
-import * as WireDuration from "../../../src/next/internal/wire/Duration.js";
+import * as WireDuration from "../../../src/internal/wire/Duration.js";
 
 const encodeDuration = Schema.encodeSync(WireDuration.InngestDuration);
 

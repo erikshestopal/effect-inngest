@@ -3,7 +3,7 @@
  * @internal
  */
 import { Effect, Predicate, SchemaTransformation, Struct, Schema } from "effect";
-import type { StepInfo } from "../next/internal/domain/StepInfo.js";
+import type { StepInfo } from "./domain/StepInfo.js";
 
 const stripTopLevelTag = (value: unknown): unknown => {
   if (Predicate.isObject(value)) {

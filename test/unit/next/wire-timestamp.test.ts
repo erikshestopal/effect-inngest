@@ -1,7 +1,7 @@
 import { describe, expect, it } from "@effect/vitest";
 import * as DateTime from "effect/DateTime";
 import * as Schema from "effect/Schema";
-import * as WireTimestamp from "../../../src/next/internal/wire/Timestamp.js";
+import * as WireTimestamp from "../../../src/internal/wire/Timestamp.js";
 
 const decodeTimestamp = Schema.decodeUnknownSync(WireTimestamp.InngestTimestamp);
 

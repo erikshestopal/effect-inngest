@@ -11,10 +11,10 @@ import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
 import type { InngestGroup } from "../Group.js";
 import * as Checkpoint from "./checkpoint.js";
-import { SignatureError } from "./signature.js";
-import * as SdkRequest from "./serve/request.js";
+import { SignatureError } from "./serve/Signature.js";
+import * as SdkRequest from "./serve/Request.js";
 import * as Protocol from "./protocol.js";
-export { SignatureError } from "./signature.js";
+export { SignatureError } from "./serve/Signature.js";
 import { execute } from "./driver.js";
 
 export class InvalidRequestError extends Schema.TaggedErrorClass<InvalidRequestError>()("InvalidRequestError", {
@@ -32,13 +32,17 @@ const baseHeaders = (framework?: string): Record<string, string> => ({
   ...(framework ? { [Protocol.Headers.Framework]: framework } : {}),
 });
 
-const buildServeUrl = (requestUrl: string, serveHost?: string, servePath?: string): URL => {
-  const url = new URL(requestUrl);
-  if (servePath) {
-    url.pathname = servePath;
+const buildServeUrl = (args: {
+  readonly requestUrl: string;
+  readonly serveHost?: string;
+  readonly servePath?: string;
+}): URL => {
+  const url = new URL(args.requestUrl);
+  if (args.servePath) {
+    url.pathname = args.servePath;
   }
-  if (serveHost) {
-    return new URL(url.pathname + url.search, serveHost);
+  if (args.serveHost) {
+    return new URL(url.pathname + url.search, args.serveHost);
   }
   return url;
 };
@@ -97,7 +101,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
   const client = yield* InngestClient;
   const httpClient = yield* HttpClient.HttpClient;
   const config = client.config;
-  const url = buildServeUrl(requestUrl, config.serveHost, config.servePath);
+  const url = buildServeUrl({ requestUrl, serveHost: config.serveHost, servePath: config.servePath });
 
   const functions = Array.from(group.functions.values()).map((fn) =>
     fn.toRegistration({ appId: config.id, url: url.href }),
@@ -191,20 +195,20 @@ export interface Handler<Tag extends string> {
   readonly context: Context.Context<any>;
 }
 
-export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution")(function* (
-  group: InngestGroup.Any,
-  fnId: string,
-  urlStepId: string | undefined,
-  body: typeof Protocol.SDKRequestBody.Type,
-) {
+export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution")(function* (args: {
+  readonly group: InngestGroup.Any;
+  readonly fnId: string;
+  readonly urlStepId: string | undefined;
+  readonly body: typeof Protocol.SDKRequestBody.Type;
+}) {
   const client = yield* InngestClient;
   const context = yield* Effect.context<never>();
 
   const appId = client.config.id;
   const prefix = `${appId}-`;
-  const fnTag = fnId.startsWith(prefix) ? fnId.slice(prefix.length) : fnId;
+  const fnTag = args.fnId.startsWith(prefix) ? args.fnId.slice(prefix.length) : args.fnId;
 
-  const fn = group.functions.get(fnTag) as InngestFunction.Any | undefined;
+  const fn = args.group.functions.get(fnTag) as InngestFunction.Any | undefined;
   const entry = fn ? (context.mapUnsafe.get(fn.key) as Handler<string> | undefined) : undefined;
 
   if (!fn || !entry) {
@@ -214,38 +218,40 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
     return {
       status: 500 as const,
       headers: { ...baseHeaders(client.config.framework), [Protocol.Headers.NoRetry]: "false" },
-      body: Protocol.UserError.make({ name: "FunctionNotFoundError", message: `Unknown function: ${fnId}` }),
+      body: Protocol.UserError.make({ name: "FunctionNotFoundError", message: `Unknown function: ${args.fnId}` }),
     };
   }
 
-  const requestedStepId = urlStepId === "step" ? undefined : urlStepId;
+  const requestedStepId = args.urlStepId === "step" ? undefined : args.urlStepId;
 
   // Non-root URL stepId takes precedence over body.ctx.step_id. The root
   // `stepId=step` identifies the function run step, not a targeted child step.
   const effectiveBody =
-    requestedStepId && requestedStepId !== body.ctx.step_id
+    requestedStepId && requestedStepId !== args.body.ctx.step_id
       ? Protocol.SDKRequestBody.make({
-          event: body.event,
-          events: body.events,
-          steps: body.steps,
+          event: args.body.event,
+          events: args.body.events,
+          steps: args.body.steps,
           ctx: Protocol.SDKRequestContext.make({
-            fn_id: body.ctx.fn_id,
-            run_id: body.ctx.run_id,
-            env: body.ctx.env,
+            fn_id: args.body.ctx.fn_id,
+            run_id: args.body.ctx.run_id,
+            env: args.body.ctx.env,
             step_id: requestedStepId,
-            attempt: body.ctx.attempt,
-            max_attempts: body.ctx.max_attempts,
-            qi_id: body.ctx.qi_id,
-            ...(Predicate.isNotUndefined(body.ctx.request_id) ? { request_id: body.ctx.request_id } : {}),
-            ...(Predicate.isNotUndefined(body.ctx.generation_id) ? { generation_id: body.ctx.generation_id } : {}),
-            disable_immediate_execution: body.ctx.disable_immediate_execution,
-            use_api: body.ctx.use_api,
-            stack: body.ctx.stack,
+            attempt: args.body.ctx.attempt,
+            max_attempts: args.body.ctx.max_attempts,
+            qi_id: args.body.ctx.qi_id,
+            ...(Predicate.isNotUndefined(args.body.ctx.request_id) ? { request_id: args.body.ctx.request_id } : {}),
+            ...(Predicate.isNotUndefined(args.body.ctx.generation_id)
+              ? { generation_id: args.body.ctx.generation_id }
+              : {}),
+            disable_immediate_execution: args.body.ctx.disable_immediate_execution,
+            use_api: args.body.ctx.use_api,
+            stack: args.body.ctx.stack,
           }),
-          version: body.version,
-          use_api: body.use_api,
+          version: args.body.version,
+          use_api: args.body.use_api,
         })
-      : body;
+      : args.body;
 
   // Checkpoint mode entry decision (spec §10):
   //   - non-root URL stepId NOT set (we are not running a targeted child step)
@@ -261,6 +267,9 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
     ? Option.fromNullishOr(Checkpoint.resolveConfig(fn.options.checkpointing, client.config.checkpointing))
     : Option.none<Checkpoint.CheckpointConfig>();
 
-  const result = yield* Effect.provide(execute(fn, entry.handler, effectiveBody, checkpointConfig), entry.context);
+  const result = yield* Effect.provide(
+    execute({ fn, handler: entry.handler, request: effectiveBody, checkpointConfig }),
+    entry.context,
+  );
   return { status: result.status, headers: result.headers, body: result.body } as HandlerResponse<unknown>;
 });

@@ -8,7 +8,7 @@ import { describe, expect, it } from "@effect/vitest";
 import { InngestClient } from "../../src/index.js";
 import { CheckpointApiError } from "../../src/internal/checkpoint.js";
 import * as Protocol from "../../src/internal/protocol.js";
-import { StepInfo } from "../../src/next/internal/domain/StepInfo.js";
+import { StepInfo } from "../../src/internal/domain/StepInfo.js";
 
 // Zero-delay retry schedule for tests; production uses exponential backoff.
 const instantRetry: Schedule.Schedule<unknown, CheckpointApiError> = Schedule.recurs(5).pipe(

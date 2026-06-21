@@ -1,8 +1,8 @@
 import { Effect, Option, Schema } from "effect";
 import type { InngestFunction } from "../../Function.js";
-import * as HandlerContext from "../../next/internal/runtime/HandlerContext.js";
-import { CurrentCheckpoint } from "../../next/internal/runtime/CheckpointContext.js";
-import { HandlerFiberScope } from "../../next/internal/runtime/HandlerFiberScope.js";
+import * as HandlerContext from "../runtime/HandlerContext.js";
+import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
+import { HandlerFiberScope } from "../runtime/HandlerFiberScope.js";
 
 export class HandlerSucceeded extends Schema.TaggedClass<HandlerSucceeded>()("HandlerSucceeded", {
   value: Schema.Unknown,

@@ -14,7 +14,7 @@ import {
   SignatureError,
   SignatureHeader,
   SignedPayload,
-} from "../../src/internal/signature.js";
+} from "../../src/internal/serve/Signature.js";
 
 const TEST_SIGNING_KEY = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
 const TEST_SIGNING_KEY_FALLBACK = "signkey-test-" + Crypto.randomBytes(32).toString("hex");

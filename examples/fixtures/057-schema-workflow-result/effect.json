@@ -1,0 +1,183 @@
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "057-schema-workflow-result",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/057-schema-workflow-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/057-schema-workflow-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-057-schema-workflow-result",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-057-schema-workflow-result-schema-workflow-result-demo",
+              "name": "schema-workflow-result-demo",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/057-schema-workflow-result?fnId=examples-057-schema-workflow-result-schema-workflow-result-demo&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/057-schema-workflow-result/demo/schema-workflow-result"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/057-schema-workflow-result",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {},
+      "name": "examples/057-schema-workflow-result/demo/schema-workflow-result"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/057-schema-workflow-result/demo/schema-workflow-result",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/057-schema-workflow-result/demo/schema-workflow-result"
+      },
+      "functionId": "examples-057-schema-workflow-result-schema-workflow-result-demo",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "4323cf077fe0d264d9d554e7287b310d8c2077e1": null
+      },
+      "response": {
+        "data": {
+          "url": "https://example.com/workflow"
+        },
+        "status": "complete"
+      },
+      "stack": ["4323cf077fe0d264d9d554e7287b310d8c2077e1"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/057-schema-workflow-result/demo/schema-workflow-result",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/057-schema-workflow-result/demo/schema-workflow-result"
+      },
+      "functionId": "examples-057-schema-workflow-result-schema-workflow-result-demo",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "force-replay",
+            "id": "4323cf077fe0d264d9d554e7287b310d8c2077e1",
+            "name": "1s",
+            "op": "Sleep",
+            "opts": {},
+            "userland": {
+              "id": "force-replay"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": []
+}

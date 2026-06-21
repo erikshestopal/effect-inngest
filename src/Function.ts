@@ -5,7 +5,7 @@ import { Array as Arr, Duration, Predicate, Schema } from "effect";
 import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Checkpoint from "./internal/checkpoint.js";
 import type { CheckpointingOption } from "./internal/checkpoint.js";
-import { InngestDuration } from "./next/internal/wire/Duration.js";
+import { InngestDuration } from "./internal/wire/Duration.js";
 import type * as InngestEvent from "./Event.js";
 
 export type { CheckpointingOption } from "./internal/checkpoint.js";

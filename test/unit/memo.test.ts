@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
-import { decode } from "../../src/next/internal/domain/Memo.js";
+import { decode } from "../../src/internal/domain/Memo.js";
 
 describe("Memo.decode", () => {
   it("decodes { data: x } as MemoData", () => {

@@ -71,15 +71,15 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
-      const result = yield* execute(
-        testFn,
-        ({ step }) =>
+      const result = yield* execute({
+        fn: testFn,
+        handler: ({ step }) =>
           step.run(
             "work",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)),
           ),
-        makeRequest(),
-      ).pipe(Effect.provide(clientLayer));
+        request: makeRequest(),
+      }).pipe(Effect.provide(clientLayer));
 
       // The step.run always interrupts with a 206 on first execution
       expect(result.status).toBe(206);
@@ -93,17 +93,17 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
-      const result = yield* execute(
-        testFn,
-        ({ step }) =>
+      const result = yield* execute({
+        fn: testFn,
+        handler: ({ step }) =>
           step.run(
             "failing-step",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)).pipe(
               Effect.andThen(Effect.fail("boom")),
             ),
           ),
-        makeRequest(),
-      ).pipe(Effect.provide(clientLayer));
+        request: makeRequest(),
+      }).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(206);
 
@@ -116,17 +116,17 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
-      const result = yield* execute(
-        testFn,
-        ({ step }) =>
+      const result = yield* execute({
+        fn: testFn,
+        handler: ({ step }) =>
           step.run(
             "defect-step",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)).pipe(
               Effect.andThen(Effect.die("unexpected defect")),
             ),
           ),
-        makeRequest(),
-      ).pipe(Effect.provide(clientLayer));
+        request: makeRequest(),
+      }).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(206);
 
@@ -144,15 +144,15 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
         success: Schema.String,
       });
 
-      const result = yield* execute(
-        handlerFn,
-        () =>
+      const result = yield* execute({
+        fn: handlerFn,
+        handler: () =>
           Effect.gen(function* () {
             yield* Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true));
             return "done";
           }),
-        makeRequest(),
-      ).pipe(Effect.provide(clientLayer));
+        request: makeRequest(),
+      }).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(200);
 
@@ -171,16 +171,16 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
         success: Schema.String,
       });
 
-      const result = yield* execute(
-        handlerFn,
-        () =>
+      const result = yield* execute({
+        fn: handlerFn,
+        handler: () =>
           Effect.gen(function* () {
             yield* Effect.acquireRelease(Effect.succeed("r1"), () => Ref.set(finalizer1Ran, true));
             yield* Effect.acquireRelease(Effect.succeed("r2"), () => Ref.set(finalizer2Ran, true));
             return "done";
           }),
-        makeRequest(),
-      ).pipe(Effect.provide(clientLayer));
+        request: makeRequest(),
+      }).pipe(Effect.provide(clientLayer));
 
       expect(result.status).toBe(200);
 

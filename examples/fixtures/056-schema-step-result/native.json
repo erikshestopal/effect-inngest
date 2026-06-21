@@ -1,0 +1,233 @@
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "056-schema-step-result",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/056-schema-step-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/056-schema-step-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-056-schema-step-result",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-056-schema-step-result-schema-step-result-demo",
+              "name": "schema-step-result-demo",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/056-schema-step-result?fnId=examples-056-schema-step-result-schema-step-result-demo&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/056-schema-step-result/demo/schema-step-result"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/056-schema-step-result",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {},
+      "name": "examples/056-schema-step-result/demo/schema-step-result"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/056-schema-step-result/demo/schema-step-result",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/056-schema-step-result/demo/schema-step-result"
+      },
+      "functionId": "examples-056-schema-step-result-schema-step-result-demo",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "4323cf077fe0d264d9d554e7287b310d8c2077e1": null,
+        "d09281729930178693c59b08bbfdd794cd6c8970": {
+          "data": {
+            "url": "https://example.com/docs"
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "pathname": "/docs"
+        },
+        "status": "complete"
+      },
+      "stack": ["d09281729930178693c59b08bbfdd794cd6c8970", "4323cf077fe0d264d9d554e7287b310d8c2077e1"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/056-schema-step-result/demo/schema-step-result",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/056-schema-step-result/demo/schema-step-result"
+      },
+      "functionId": "examples-056-schema-step-result-schema-step-result-demo",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "force-replay",
+            "id": "4323cf077fe0d264d9d554e7287b310d8c2077e1",
+            "name": "1s",
+            "op": "Sleep",
+            "opts": {},
+            "userland": {
+              "id": "force-replay"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": {
+                "url": "https://example.com/docs"
+              },
+              "displayName": "load-page",
+              "id": "d09281729930178693c59b08bbfdd794cd6c8970",
+              "mode": "sync",
+              "name": "load-page",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "load-page"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  ]
+}

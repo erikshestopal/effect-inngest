@@ -1,11 +1,13 @@
 /**
  * @since 0.1.0
  */
+import * as HttpClient from "effect/unstable/http/HttpClient";
 import { Context, Effect, Layer } from "effect";
+import { InngestClient } from "./Client.js";
 import type { InngestFunction } from "./Function.js";
-import * as ServeHttp from "./internal/serve/http.js";
+import * as ServeHttp from "./internal/serve/HttpApp.js";
 
-import { type HandlerContext } from "./next/internal/runtime/HandlerContext.js";
+import { type HandlerContext } from "./internal/runtime/HandlerContext.js";
 
 /**
  * Re-export HandlerContext.
@@ -245,4 +247,12 @@ export const toHttpApp = Effect.fn("InngestGroup.toHttpApp")(function* (group: I
  * process.on("SIGTERM", dispose)
  * ```
  */
-export const toWebHandler = ServeHttp.toWebHandler;
+export const toWebHandler = <R, E>(
+  group: InngestGroup.Any,
+  options: {
+    readonly layer: Layer.Layer<InngestClient | HttpClient.HttpClient | R, E, never>;
+  },
+): {
+  readonly handler: (request: Request, context?: Context.Context<never>) => Promise<Response>;
+  readonly dispose: () => Promise<void>;
+} => ServeHttp.toWebHandler({ group, options });

@@ -1,0 +1,199 @@
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "058-schema-waitForEvent",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/058-schema-waitForEvent",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/058-schema-waitForEvent",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-058-schema-waitForEvent",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-058-schema-waitForEvent-schema-waitForEvent-demo",
+              "name": "schema-waitForEvent-demo",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/058-schema-waitForEvent?fnId=examples-058-schema-waitForEvent-schema-waitForEvent-demo&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/058-schema-waitForEvent/demo/wait-start"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/058-schema-waitForEvent",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {
+        "url": "https://example.com/wait"
+      },
+      "name": "examples/058-schema-waitForEvent/demo/page-ready"
+    },
+    {
+      "data": {},
+      "name": "examples/058-schema-waitForEvent/demo/wait-start"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/058-schema-waitForEvent/demo/wait-start",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/058-schema-waitForEvent/demo/wait-start"
+      },
+      "functionId": "examples-058-schema-waitForEvent-schema-waitForEvent-demo",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "05706fcc2fc227871fe5268a81b27670363daf06": {
+          "data": {
+            "url": "https://example.com/wait"
+          },
+          "id": "fixture-058-schema-waitForEvent-0-after-0-0",
+          "name": "examples/058-schema-waitForEvent/demo/page-ready",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      },
+      "response": {
+        "data": {
+          "pathname": "/wait"
+        },
+        "status": "complete"
+      },
+      "stack": ["05706fcc2fc227871fe5268a81b27670363daf06"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/058-schema-waitForEvent/demo/wait-start",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/058-schema-waitForEvent/demo/wait-start"
+      },
+      "functionId": "examples-058-schema-waitForEvent-schema-waitForEvent-demo",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "wait-for-page",
+            "id": "05706fcc2fc227871fe5268a81b27670363daf06",
+            "name": "examples/058-schema-waitForEvent/demo/page-ready",
+            "op": "WaitForEvent",
+            "opts": {
+              "timeout": "5m"
+            },
+            "userland": {
+              "id": "wait-for-page"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": []
+}

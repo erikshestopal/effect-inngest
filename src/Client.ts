@@ -7,7 +7,7 @@ import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
 import { Clock, Config, Context, Effect, Layer, Option, Predicate, Ref, Schedule, Schema } from "effect";
 import { CheckpointApiError, type CheckpointingOption } from "./internal/checkpoint.js";
 import * as Protocol from "./internal/protocol.js";
-import { hashSigningKey } from "./internal/signature.js";
+import { hashSigningKey } from "./internal/serve/Signature.js";
 
 export type { CheckpointingOption } from "./internal/checkpoint.js";
 export { CheckpointApiError } from "./internal/checkpoint.js";

@@ -1,0 +1,261 @@
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "059-schema-invoke-result",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/059-schema-invoke-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 2,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/059-schema-invoke-result",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-059-schema-invoke-result",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-059-schema-invoke-result-schema-invoke-child",
+              "name": "schema-invoke-child",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/059-schema-invoke-result?fnId=examples-059-schema-invoke-result-schema-invoke-child&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/059-schema-invoke-result/demo/child"
+                }
+              ]
+            },
+            {
+              "id": "examples-059-schema-invoke-result-schema-invoke-parent",
+              "name": "schema-invoke-parent",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/059-schema-invoke-result?fnId=examples-059-schema-invoke-result-schema-invoke-parent&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/059-schema-invoke-result/demo/parent"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/059-schema-invoke-result",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {},
+      "name": "examples/059-schema-invoke-result/demo/parent"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "_inngest": {
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
+              "fn_id": "<fn_id>",
+              "gid": "<gid>",
+              "isr": {
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
+              },
+              "name": "call-schema-child",
+              "source_app_id": "1ddbe1b9-ecc7-55e6-a255-cfe92e7885e3",
+              "source_fn_id": "6b1613ae-628f-5957-9f12-6afedf85e5b9",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "<sid>",
+                  "traceparent": "<traceparent>"
+                },
+                "ts": "<event-ts>"
+              }
+            }
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "inngest/function.invoked"
+      },
+      "functionId": "examples-059-schema-invoke-result-schema-invoke-child",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "url": "https://example.com/invoke"
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/059-schema-invoke-result/demo/parent",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/059-schema-invoke-result/demo/parent"
+      },
+      "functionId": "examples-059-schema-invoke-result-schema-invoke-parent",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "a729ff4025f523a75589651f2a88caf0dffc92b6": {
+          "data": {
+            "url": "https://example.com/invoke"
+          }
+        }
+      },
+      "response": {
+        "data": {
+          "pathname": "/invoke"
+        },
+        "status": "complete"
+      },
+      "stack": ["a729ff4025f523a75589651f2a88caf0dffc92b6"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/059-schema-invoke-result/demo/parent",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/059-schema-invoke-result/demo/parent"
+      },
+      "functionId": "examples-059-schema-invoke-result-schema-invoke-parent",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "call-schema-child",
+            "id": "a729ff4025f523a75589651f2a88caf0dffc92b6",
+            "op": "InvokeFunction",
+            "opts": {
+              "function_id": "examples-059-schema-invoke-result-schema-invoke-child",
+              "payload": {
+                "data": {}
+              }
+            },
+            "userland": {
+              "id": "call-schema-child"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": []
+}

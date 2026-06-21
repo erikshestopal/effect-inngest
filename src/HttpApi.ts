@@ -12,7 +12,7 @@ import { InngestClient } from "./Client.js";
 import type { InngestGroup } from "./Group.js";
 import * as InternalHandler from "./internal/handler.js";
 import * as Protocol from "./internal/protocol.js";
-import { SignatureLive } from "./internal/signature.js";
+import { SignatureLive } from "./internal/serve/Signature.js";
 
 const ExecuteParams = Schema.Struct({
   fnId: Schema.String,
@@ -77,7 +77,9 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
         )
         .handleRaw("execute", ({ query, request }) =>
           InternalHandler.verifyAndParseRequestBody(request).pipe(
-            Effect.flatMap((payload) => InternalHandler.handleExecution(group, query.fnId, query.stepId, payload)),
+            Effect.flatMap((payload) =>
+              InternalHandler.handleExecution({ group, fnId: query.fnId, urlStepId: query.stepId, body: payload }),
+            ),
             Effect.map((r) => r.body),
           ),
         );
