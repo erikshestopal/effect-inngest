@@ -2,23 +2,22 @@ import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
 import { isNonRetriableError, isRetryAfterError, StepError } from "../../errors.js";
 import * as StepResult from "../../codec/StepResult.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
-import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import { CurrentCheckpoint } from "../CheckpointContext.js";
 import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import type { JsonSchema, RunOptions, RunOutput } from "../StepTools.js";
-import { StepIdentity } from "../StepIdentity.js";
-import { StepCommandSink } from "../StepCommandSink.js";
+import { StepIdentity, type StepReservation } from "../StepIdentity.js";
+import { StepCommandBus } from "../StepCommandBus.js";
 
 export const run = <A, Err, R>(args: {
   readonly input: ExecutionInput;
-  readonly id: StepInput;
+  readonly id: StepReservation;
   readonly effect: Effect.Effect<A, Err, R>;
   readonly options?: RunOptions<JsonSchema<A>>;
 }) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
-    const sink = yield* StepCommandSink;
+    const bus = yield* StepCommandBus;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
@@ -53,20 +52,20 @@ export const run = <A, Err, R>(args: {
           }
 
           if (args.input.shouldPlanStep(info)) {
-            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
             return yield* Effect.void;
           }
 
           const checkpoint = yield* CurrentCheckpoint;
           if (Option.isSome(checkpoint) && args.input.isFunctionRun() && (yield* checkpoint.value.isRuntimeExceeded)) {
             yield* checkpoint.value.flush;
-            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
             return yield* Effect.interrupt;
           }
 
           const scope = yield* HandlerFiberScope;
           if (args.input.isFunctionRun() && Option.isSome(checkpoint) && (yield* scope.isForkedFromHandlerRoot)) {
-            yield* sink.planCommand(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
             return yield* Effect.void;
           }
 
@@ -76,8 +75,8 @@ export const run = <A, Err, R>(args: {
                 const noRetry = isNonRetriableError(err) ? true : undefined;
                 const retryAfterMs = isRetryAfterError(err) ? Duration.toMillis(err.retryAfter) : undefined;
                 return noRetry === true || args.input.run.attempt >= args.input.run.maxAttempts - 1
-                  ? sink.failCommand(StepCommand.StepRunFailed.make({ info, error: err }))
-                  : sink.failCommand(StepCommand.StepRunError.make({ info, error: err, noRetry, retryAfterMs }));
+                  ? bus.fail(StepCommand.StepRunFailed.make({ info, error: err }))
+                  : bus.fail(StepCommand.StepRunError.make({ info, error: err, noRetry, retryAfterMs }));
               },
               onSuccess: (value) =>
                 Effect.gen(function* () {
@@ -89,11 +88,11 @@ export const run = <A, Err, R>(args: {
                         )
                       : yield* StepResult.encodeUnknownJson({ value, stepId: info.id });
 
-                  yield* sink.recordResult(StepCommand.StepRunResult.make({ info, data }));
+                  yield* bus.complete(StepCommand.StepRunResult.make({ info, data }));
                   return args.options?.schema ? value : (data as RunOutput<A>);
                 }),
             }),
-            Effect.catchDefect((defect) => sink.failCommand(StepCommand.StepRunError.make({ info, error: defect }))),
+            Effect.catchDefect((defect) => bus.fail(StepCommand.StepRunError.make({ info, error: defect }))),
           );
         }),
       ),

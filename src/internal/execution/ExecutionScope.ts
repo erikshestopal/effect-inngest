@@ -6,7 +6,7 @@ import * as Protocol from "../protocol.js";
 import { CurrentExecutionInput, ExecutionInput } from "../domain/ExecutionInput.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
 import { EventApi } from "../runtime/EventApi.js";
-import { StepCommandSink } from "../runtime/StepCommandSink.js";
+import { StepCommandBus } from "../runtime/StepCommandBus.js";
 import { StepIdentity } from "../runtime/StepIdentity.js";
 import { StepTools } from "../runtime/StepTools.js";
 
@@ -22,13 +22,13 @@ export const provide =
         config: args.checkpointConfig,
         requestStartedAt,
       });
-      const sink = yield* StepCommandSink.make;
+      const bus = yield* StepCommandBus.make;
       const identity = yield* StepIdentity.make;
       const eventApi = yield* EventApi.make;
       const baseContext = Context.make(CurrentExecutionInput, input).pipe(
         Context.add(CurrentCheckpoint, checkpoint),
         Context.add(InngestConfig, client.config),
-        Context.add(StepCommandSink, sink),
+        Context.add(StepCommandBus, bus),
         Context.add(StepIdentity, identity),
         Context.add(EventApi, eventApi),
       );

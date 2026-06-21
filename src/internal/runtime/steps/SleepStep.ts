@@ -1,21 +1,20 @@
 import { Duration, Effect, Option, Predicate, Schema } from "effect";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
-import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import { CurrentCheckpoint } from "../CheckpointContext.js";
 import { HandlerFiberScope } from "../HandlerFiberScope.js";
-import { StepIdentity } from "../StepIdentity.js";
-import { StepCommandSink } from "../StepCommandSink.js";
+import { StepIdentity, type StepReservation } from "../StepIdentity.js";
+import { StepCommandBus } from "../StepCommandBus.js";
 
 export const sleep = (args: {
   readonly input: ExecutionInput;
-  readonly id: StepInput;
+  readonly id: StepReservation;
   readonly duration: Duration.Input;
 }) =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
-    const sink = yield* StepCommandSink;
+    const bus = yield* StepCommandBus;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
@@ -37,8 +36,8 @@ export const sleep = (args: {
     const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
 
     if (args.input.isFunctionRun() && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
-      return yield* sink.planCommand(command);
+      return yield* bus.plan(command);
     }
 
-    return yield* sink.yieldCommand(command);
+    return yield* bus.suspend(command);
   });

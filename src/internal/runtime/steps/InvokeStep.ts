@@ -5,21 +5,20 @@ import { StepError } from "../../errors.js";
 import * as StepResult from "../../codec/StepResult.js";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
-import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import type { InvokeOptions, JsonSchema } from "../StepTools.js";
-import { StepIdentity } from "../StepIdentity.js";
-import { StepCommandSink } from "../StepCommandSink.js";
+import { StepIdentity, type StepReservation } from "../StepIdentity.js";
+import { StepCommandBus } from "../StepCommandBus.js";
 
 export const invoke = <F extends InngestFunction.Any>(args: {
   readonly input: ExecutionInput;
-  readonly id: StepInput;
+  readonly id: StepReservation;
   readonly options: InvokeOptions<F>;
 }) =>
   Effect.gen(function* () {
     const config = yield* InngestConfig;
     const identity = yield* StepIdentity;
-    const sink = yield* StepCommandSink;
+    const bus = yield* StepCommandBus;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
@@ -51,7 +50,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
           const event = Predicate.hasProperty(args.options, "data") ? args.options.data : undefined;
           const data = Predicate.isObject(event) && Predicate.hasProperty(event, "data") ? event.data : event;
 
-          yield* sink.yieldCommand(
+          yield* bus.suspend(
             StepCommand.InvokeFunction.make({
               info,
               functionId: `${config.id}-${args.options.function._tag}`,

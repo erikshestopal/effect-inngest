@@ -5,21 +5,20 @@ import * as StepResult from "../../codec/StepResult.js";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { StepError } from "../../errors.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
-import type { StepInput } from "../../domain/StepInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import type { WaitForEventOptions } from "../StepTools.js";
-import { StepIdentity } from "../StepIdentity.js";
-import { StepCommandSink } from "../StepCommandSink.js";
+import { StepIdentity, type StepReservation } from "../StepIdentity.js";
+import { StepCommandBus } from "../StepCommandBus.js";
 
 export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
   readonly input: ExecutionInput;
-  readonly id: StepInput;
+  readonly id: StepReservation;
   readonly event: E;
   readonly options: WaitForEventOptions;
-}): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError, StepIdentity | StepCommandSink> =>
+}): Effect.Effect<Option.Option<InngestEvent.EventType<E>>, StepError, StepIdentity | StepCommandBus> =>
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
-    const sink = yield* StepCommandSink;
+    const bus = yield* StepCommandBus;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
@@ -39,7 +38,7 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
             return Option.none();
           }
 
-          yield* sink.yieldCommand(
+          yield* bus.suspend(
             StepCommand.WaitForEvent.make({
               info,
               event: args.event.identifier,

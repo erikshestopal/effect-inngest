@@ -1,53 +1,21 @@
-import { Cause, Duration, Effect, Exit, Match, Option, Predicate } from "effect";
+import { Cause, Duration, Effect, Exit, Match, Option } from "effect";
 import { InngestConfig } from "../../Client.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
-import { StepCommandSink, type StepYield } from "../runtime/StepCommandSink.js";
+import { StepCommandBus } from "../runtime/StepCommandBus.js";
 import { isNonRetriableError, isRetryAfterError, isStepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
 import { ExecutionResult, encodeOpcodes } from "./ExecutionResult.js";
 import * as HandlerRun from "./HandlerRun.js";
 
-const takePlannedSteps = CurrentCheckpoint.pipe(
-  Effect.flatMap(
-    Option.match({
-      onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
-      onSome: (state) => state.drainPlanned,
-    }),
-  ),
-);
-
-const takeCompletedSteps = CurrentCheckpoint.pipe(
-  Effect.flatMap(
-    Option.match({
-      onNone: () => Effect.succeed([] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>),
-      onSome: (state) => state.drain,
-    }),
-  ),
-);
-
-const opcodeDisposition = (args: {
-  readonly yielded: ReadonlyArray<StepYield>;
-  readonly opcodes: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>;
-}) => {
-  const hasNonRetriableError = args.opcodes.some(
-    (op) =>
-      op.op === Protocol.Opcode.StepFailed ||
-      (op.op === Protocol.Opcode.StepError &&
-        Predicate.isObject(op.error) &&
-        Predicate.hasProperty(op.error, "noRetry") &&
-        op.error.noRetry === true),
-  );
-  const hasRetriableStepError = args.opcodes.some((op) => op.op === Protocol.Opcode.StepError);
-  const retryAfterMs = args.yielded.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs;
-
-  if (!hasRetriableStepError && !hasNonRetriableError && Option.isNone(retryAfterMs ?? Option.none())) {
+const commandDisposition = (commands: StepCommandBus.InterruptedCommands) => {
+  if (!commands.hasRetriableStepError && !commands.hasNonRetriableError && Option.isNone(commands.retryAfterMs)) {
     return ExecutionHeaders.RetryDisposition.none;
   }
 
   return ExecutionHeaders.RetryDisposition.failure({
-    noRetry: hasNonRetriableError,
-    retryAfterMs: retryAfterMs ?? Option.none(),
+    noRetry: commands.hasNonRetriableError,
+    retryAfterMs: commands.retryAfterMs,
   });
 };
 
@@ -74,8 +42,9 @@ const fromSuccess = (args: {
   readonly headers: Record<string, string>;
 }) =>
   Effect.gen(function* () {
+    const bus = yield* StepCommandBus;
     const checkpoint = yield* CurrentCheckpoint;
-    const completed = yield* takeCompletedSteps;
+    const completed = yield* bus.completed;
 
     if (Option.isSome(checkpoint)) {
       const terminal = Match.value(args.completion).pipe(
@@ -114,18 +83,16 @@ const fromSuccess = (args: {
 
 const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly headers: Record<string, string> }) =>
   Effect.gen(function* () {
-    const completed = yield* takeCompletedSteps;
-    const sink = yield* StepCommandSink;
-    const yielded = yield* sink.takeYields;
+    const bus = yield* StepCommandBus;
+    const commands = yield* bus.interrupted;
 
-    if (yielded.length > 0 && Cause.hasInterruptsOnly(args.cause)) {
-      const opcodes = [...completed, ...yielded.map((entry) => entry.opcode)];
+    if (commands.suspendedCount > 0 && Cause.hasInterruptsOnly(args.cause)) {
       return ExecutionResult.make({
         status: 206,
-        body: encodeOpcodes(opcodes),
+        body: encodeOpcodes(commands.opcodes),
         headers: ExecutionHeaders.withRetryDisposition({
           headers: args.headers,
-          disposition: opcodeDisposition({ yielded, opcodes }),
+          disposition: commandDisposition(commands),
         }),
       });
     }
@@ -137,10 +104,10 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
     const error = firstErrorOrDefect(args.cause);
     const disposition = errorDisposition(error);
 
-    if (completed.length > 0) {
+    if (commands.completed.length > 0) {
       return ExecutionResult.make({
         status: 206,
-        body: encodeOpcodes(completed),
+        body: encodeOpcodes(commands.completed),
         headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
       });
     }
@@ -155,8 +122,9 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
 export const fromExit = (exit: Exit.Exit<HandlerRun.HandlerCompletion, unknown>) =>
   Effect.gen(function* () {
     const config = yield* InngestConfig;
+    const bus = yield* StepCommandBus;
     const headers = ExecutionHeaders.base(config);
-    const planned = yield* takePlannedSteps;
+    const planned = yield* bus.planned;
 
     if (planned.length > 0) {
       return ExecutionResult.make({ status: 206, body: encodeOpcodes(planned), headers });
