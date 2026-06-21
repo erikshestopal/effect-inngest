@@ -1,6 +1,8 @@
-import { Option } from "effect";
+import { Duration, Option } from "effect";
 import type { ClientConfig } from "../../Client.js";
+import { isNonRetriableError, isRetryAfterError, isStepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
+import type { ExecutionSuspension } from "../runtime/StepCommandBus.js";
 
 const SDK_VERSION = "2.0.0";
 
@@ -30,6 +32,30 @@ export class RetryDisposition {
       noRetry: args.noRetry,
       isFailure: true,
       retryAfterMs: args.retryAfterMs ?? Option.none(),
+    });
+  }
+
+  static fromSuspension(commands: ExecutionSuspension) {
+    if (!commands.hasRetriableStepError && !commands.hasNonRetriableError && Option.isNone(commands.retryAfterMs)) {
+      return RetryDisposition.none;
+    }
+
+    return RetryDisposition.failure({
+      noRetry: commands.hasNonRetriableError,
+      retryAfterMs: commands.retryAfterMs,
+    });
+  }
+
+  static fromError(error: unknown) {
+    if (isRetryAfterError(error)) {
+      return RetryDisposition.failure({
+        noRetry: false,
+        retryAfterMs: Option.some(Duration.toMillis(error.retryAfter)),
+      });
+    }
+
+    return RetryDisposition.failure({
+      noRetry: isNonRetriableError(error) || (isStepError(error) && error.noRetry === true),
     });
   }
 }

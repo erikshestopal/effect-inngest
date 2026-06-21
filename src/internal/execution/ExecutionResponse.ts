@@ -1,41 +1,12 @@
-import { Cause, Duration, Effect, Exit, Match, Option } from "effect";
+import { Cause, Effect, Exit, Match, Option } from "effect";
 import { InngestConfig } from "../../Client.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
 import { StepCommandBus } from "../runtime/StepCommandBus.js";
-import { isNonRetriableError, isRetryAfterError, isStepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
+import { ExecutionFailure } from "./ExecutionFailure.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
 import { ExecutionResult, encodeOpcodes } from "./ExecutionResult.js";
 import * as HandlerRun from "./HandlerRun.js";
-
-const commandDisposition = (commands: StepCommandBus.InterruptedCommands) => {
-  if (!commands.hasRetriableStepError && !commands.hasNonRetriableError && Option.isNone(commands.retryAfterMs)) {
-    return ExecutionHeaders.RetryDisposition.none;
-  }
-
-  return ExecutionHeaders.RetryDisposition.failure({
-    noRetry: commands.hasNonRetriableError,
-    retryAfterMs: commands.retryAfterMs,
-  });
-};
-
-const firstErrorOrDefect = (cause: Cause.Cause<unknown>) =>
-  Option.orElse(Cause.findErrorOption(cause), () => {
-    const dieReason = cause.reasons.find(Cause.isDieReason);
-    return dieReason ? Option.some(dieReason.defect) : Option.none();
-  }).pipe(Option.getOrElse(() => Protocol.UserError.make({ name: "Error", message: "Unknown error" })));
-
-const errorDisposition = (error: unknown) => {
-  if (isRetryAfterError(error)) {
-    return ExecutionHeaders.RetryDisposition.failure({
-      noRetry: false,
-      retryAfterMs: Option.some(Duration.toMillis(error.retryAfter)),
-    });
-  }
-  return ExecutionHeaders.RetryDisposition.failure({
-    noRetry: isNonRetriableError(error) || (isStepError(error) && error.noRetry === true),
-  });
-};
 
 const fromSuccess = (args: {
   readonly completion: HandlerRun.HandlerCompletion;
@@ -92,7 +63,7 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
         body: encodeOpcodes(commands.opcodes),
         headers: ExecutionHeaders.withRetryDisposition({
           headers: args.headers,
-          disposition: commandDisposition(commands),
+          disposition: ExecutionHeaders.RetryDisposition.fromSuspension(commands),
         }),
       });
     }
@@ -101,8 +72,8 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
       return yield* Effect.interrupt;
     }
 
-    const error = firstErrorOrDefect(args.cause);
-    const disposition = errorDisposition(error);
+    const failure = ExecutionFailure.fromCause(args.cause);
+    const disposition = ExecutionHeaders.RetryDisposition.fromError(failure.error);
 
     if (commands.completed.length > 0) {
       return ExecutionResult.make({
@@ -114,7 +85,7 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
 
     return ExecutionResult.make({
       status: disposition.noRetry ? 400 : 500,
-      body: Protocol.UserError.fromUnknown(error),
+      body: Protocol.UserError.fromUnknown(failure.error),
       headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
     });
   });

@@ -26,16 +26,54 @@ export class SuspendedCommand extends Schema.Class<SuspendedCommand>(
   }
 }
 
-export declare namespace StepCommandBus {
-  export interface InterruptedCommands {
+export class ExecutionSuspension extends Schema.Class<ExecutionSuspension>(
+  "effect-inngest/internal/runtime/ExecutionSuspension",
+)({
+  completed: Schema.Array(Protocol.GeneratorOpcode),
+  opcodes: Schema.Array(Protocol.GeneratorOpcode),
+  suspendedCount: Schema.Number,
+  retryAfterMs: Schema.Option(Schema.Number),
+  hasRetriableStepError: Schema.Boolean,
+  hasNonRetriableError: Schema.Boolean,
+}) {
+  static from(args: {
     readonly completed: ReadonlyArray<GeneratorOpcode>;
-    readonly opcodes: ReadonlyArray<GeneratorOpcode>;
-    readonly suspendedCount: number;
-    readonly retryAfterMs: Option.Option<number>;
-    readonly hasRetriableStepError: boolean;
-    readonly hasNonRetriableError: boolean;
+    readonly suspended: ReadonlyArray<SuspendedCommand>;
+  }): ExecutionSuspension {
+    const suspended = args.suspended.toSorted((a, b) => {
+      if (Option.isNone(a.sequence) || Option.isNone(b.sequence)) {
+        return 0;
+      }
+      return a.sequence.value - b.sequence.value;
+    });
+    const opcodes = [...args.completed, ...suspended.map((entry) => entry.opcode)];
+    return ExecutionSuspension.make({
+      completed: [...args.completed],
+      opcodes,
+      suspendedCount: args.suspended.length,
+      retryAfterMs: suspended.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs ?? Option.none(),
+      hasRetriableStepError: ExecutionSuspension.hasRetriableStepError(opcodes),
+      hasNonRetriableError: ExecutionSuspension.hasNonRetriableError(opcodes),
+    });
   }
 
+  private static hasRetriableStepError(opcodes: ReadonlyArray<GeneratorOpcode>): boolean {
+    return opcodes.some((op) => op.op === Protocol.Opcode.StepError);
+  }
+
+  private static hasNonRetriableError(opcodes: ReadonlyArray<GeneratorOpcode>): boolean {
+    return opcodes.some(
+      (op) =>
+        op.op === Protocol.Opcode.StepFailed ||
+        (op.op === Protocol.Opcode.StepError &&
+          Predicate.isObject(op.error) &&
+          Predicate.hasProperty(op.error, "noRetry") &&
+          op.error.noRetry === true),
+    );
+  }
+}
+
+export declare namespace StepCommandBus {
   export interface Service {
     readonly suspend: (command: StepCommand.YieldCommand) => Effect.Effect<void>;
     readonly complete: (command: StepCommand.ResultCommand) => Effect.Effect<void>;
@@ -43,43 +81,9 @@ export declare namespace StepCommandBus {
     readonly fail: (command: StepCommand.ErrorCommand) => Effect.Effect<void>;
     readonly planned: Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
     readonly completed: Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
-    readonly interrupted: Effect.Effect<InterruptedCommands>;
+    readonly interrupted: Effect.Effect<ExecutionSuspension>;
   }
 }
-
-const hasNonRetriableError = (opcodes: ReadonlyArray<GeneratorOpcode>): boolean =>
-  opcodes.some(
-    (op) =>
-      op.op === Protocol.Opcode.StepFailed ||
-      (op.op === Protocol.Opcode.StepError &&
-        Predicate.isObject(op.error) &&
-        Predicate.hasProperty(op.error, "noRetry") &&
-        op.error.noRetry === true),
-  );
-
-const hasRetriableStepError = (opcodes: ReadonlyArray<GeneratorOpcode>): boolean =>
-  opcodes.some((op) => op.op === Protocol.Opcode.StepError);
-
-const summarizeInterrupted = (
-  completed: ReadonlyArray<GeneratorOpcode>,
-  suspended: ReadonlyArray<SuspendedCommand>,
-): StepCommandBus.InterruptedCommands => {
-  const orderedSuspended = [...suspended].sort((a, b) => {
-    if (Option.isNone(a.sequence) || Option.isNone(b.sequence)) {
-      return 0;
-    }
-    return a.sequence.value - b.sequence.value;
-  });
-  const opcodes = [...completed, ...orderedSuspended.map((entry) => entry.opcode)];
-  return {
-    completed,
-    opcodes,
-    suspendedCount: suspended.length,
-    retryAfterMs: suspended.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs ?? Option.none(),
-    hasRetriableStepError: hasRetriableStepError(opcodes),
-    hasNonRetriableError: hasNonRetriableError(opcodes),
-  };
-};
 
 const plannedFromCheckpoint = CurrentCheckpoint.pipe(
   Effect.flatMap(
@@ -115,7 +119,7 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
     const interrupted = Effect.gen(function* () {
       const completed = yield* completedFromCheckpoint;
       const commands = yield* takeSuspended;
-      return summarizeInterrupted(completed, commands);
+      return ExecutionSuspension.from({ completed, suspended: commands });
     });
 
     return {
