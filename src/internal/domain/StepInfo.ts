@@ -4,6 +4,5 @@ export class StepInfo extends Schema.Class<StepInfo>("effect-inngest/internal/do
   id: Schema.String,
   name: Schema.String,
   hash: Schema.String,
-  order: Schema.Number,
   rawStepArg: Schema.Unknown,
 }) {}

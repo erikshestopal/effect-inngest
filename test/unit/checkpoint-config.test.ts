@@ -138,7 +138,7 @@ describe("Checkpoint config (spec §10.1)", () => {
     });
   });
 
-  describe("CheckpointState.bufferStep + flush + drain", () => {
+  describe("CheckpointState.record + flush + completed", () => {
     it.effect("flushes when buffer reaches bufferedSteps", () =>
       Effect.gen(function* () {
         const flushed: Array<ReadonlyArray<unknown>> = [];
@@ -155,14 +155,14 @@ describe("Checkpoint config (spec §10.1)", () => {
 
         const op = (id: string) => ({ op: "StepRun" as const, id, name: id });
 
-        yield* state.bufferStep(op("a") as never);
+        yield* state.record(op("a") as never);
         expect(flushed.length).toBe(0);
-        yield* state.bufferStep(op("b") as never);
+        yield* state.record(op("b") as never);
         // bufferedSteps reached → flush
         expect(flushed.length).toBe(1);
         expect(flushed[0]).toHaveLength(2);
 
-        const remaining = yield* state.drain;
+        const remaining = yield* state.completed;
         expect(remaining).toHaveLength(0);
       }),
     );
@@ -179,9 +179,9 @@ describe("Checkpoint config (spec §10.1)", () => {
 
         const op = (id: string) => ({ op: "StepRun" as const, id, name: id });
 
-        yield* state.bufferStep(op("a") as never);
+        yield* state.record(op("a") as never);
         // Flush failed → buffer restored
-        const drained = yield* state.drain;
+        const drained = yield* state.completed;
         expect(drained).toHaveLength(1);
       }),
     );

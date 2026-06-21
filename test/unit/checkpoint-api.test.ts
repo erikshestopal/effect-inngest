@@ -72,7 +72,7 @@ const okResponse = () => new Response("{}", { status: 200, headers: { "Content-T
 
 const sampleSteps: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type> = [
   Protocol.GeneratorOpcode.stepRun({
-    info: StepInfo.make({ id: "a", name: "a", hash: "0".repeat(40), order: 0, rawStepArg: "a" }),
+    info: StepInfo.make({ id: "a", name: "a", hash: "0".repeat(40), rawStepArg: "a" }),
     data: { value: 1 },
   }),
 ];

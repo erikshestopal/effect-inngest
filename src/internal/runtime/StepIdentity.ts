@@ -17,7 +17,7 @@ export class StepReservation extends Schema.Class<StepReservation>("effect-innge
   id: Schema.String,
   name: Schema.String,
   effectiveId: Schema.String,
-  order: Schema.Number,
+  sequence: Schema.Number,
   rawStepArg: Schema.Unknown,
 }) {}
 
@@ -30,20 +30,20 @@ export class StepIdentity extends Context.Service<
 >()("effect-inngest/internal/runtime/StepIdentity", {
   make: Effect.gen(function* () {
     const counts = MutableHashMap.empty<string, number>();
-    const order = MutableRef.make(0);
+    const sequence = MutableRef.make(0);
     const textEncoder = new TextEncoder();
 
     return {
       reserve: (input) => {
         const id = Predicate.isString(input) ? input : input.id;
         const name = Predicate.isString(input) ? input : (input.name ?? input.id);
-        const currentOrder = MutableRef.getAndUpdate(order, Number.increment);
+        const currentSequence = MutableRef.getAndUpdate(sequence, Number.increment);
         const repeatIndex = Option.getOrElse(MutableHashMap.get(counts, id), () => 0);
 
         MutableHashMap.set(counts, id, Number.increment(repeatIndex));
 
         const effectiveId = repeatIndex > 0 ? `${id}:${repeatIndex}` : id;
-        return StepReservation.make({ id, name, effectiveId, order: currentOrder, rawStepArg: input });
+        return StepReservation.make({ id, name, effectiveId, sequence: currentSequence, rawStepArg: input });
       },
       resolve: Effect.fnUntraced(function* (reservation) {
         const buffer = yield* Effect.promise(() =>
@@ -55,7 +55,6 @@ export class StepIdentity extends Context.Service<
           id: reservation.id,
           name: reservation.name,
           hash,
-          order: reservation.order,
           rawStepArg: reservation.rawStepArg,
         });
       }),

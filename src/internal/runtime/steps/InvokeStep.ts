@@ -53,6 +53,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
           yield* bus.suspend(
             StepCommand.InvokeFunction.make({
               info,
+              sequence: args.id.sequence,
               functionId: `${config.id}-${args.options.function._tag}`,
               payload: {
                 data,

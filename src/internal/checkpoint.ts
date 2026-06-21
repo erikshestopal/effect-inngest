@@ -9,7 +9,12 @@
  */
 import { Clock, Duration, Effect, Option, Predicate, Ref, Result, Schema } from "effect";
 import { InngestDuration } from "./wire/Duration.js";
-import type * as Protocol from "./protocol.js";
+import * as Protocol from "./protocol.js";
+
+export class PlannedOpcode extends Schema.Class<PlannedOpcode>("effect-inngest/internal/checkpoint/PlannedOpcode")({
+  opcode: Protocol.GeneratorOpcode,
+  sequence: Schema.Number,
+}) {}
 
 /**
  * Tagged error returned by `InngestClient.checkpointAsync` when the API call
@@ -132,18 +137,18 @@ export interface CheckpointState {
   readonly fnId: string;
   readonly qiId: string;
   /** Append a planned/async opcode discovered during a root parallel pass. */
-  readonly planOpcode: (op: typeof Protocol.GeneratorOpcode.Type, order?: number) => Effect.Effect<void>;
+  readonly plan: (planned: PlannedOpcode) => Effect.Effect<void>;
   /** Atomic snapshot + clear for planned opcodes; never sent via async checkpoint. */
-  readonly drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
+  readonly planned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   /** Append a sync opcode; flush if `bufferedSteps` or `maxInterval` reached. */
-  readonly bufferStep: (op: typeof Protocol.GeneratorOpcode.Type) => Effect.Effect<void>;
+  readonly record: (op: typeof Protocol.GeneratorOpcode.Type) => Effect.Effect<void>;
   /**
    * Best-effort flush. On API error the buffered steps are re-prepended so
-   * `drain` can include them in the terminal 206 (no step loss per §10.4.3).
+   * `completed` can include them in the terminal 206 (no step loss per §10.4.3).
    */
   readonly flush: Effect.Effect<void>;
   /** Atomic snapshot + clear, for terminal response assembly. */
-  readonly drain: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
+  readonly completed: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   /** Signal that the handler's `maxRuntime` deadline fired (spec §10.4.1 #7). */
   readonly markRuntimeExceeded: Effect.Effect<void>;
   /** Query whether the `maxRuntime` deadline fired. */
@@ -166,16 +171,14 @@ export const make = (args: {
 }): Effect.Effect<CheckpointState> =>
   Effect.sync(() => {
     const buffer = Ref.makeUnsafe<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>([]);
-    const planned = Ref.makeUnsafe<
-      ReadonlyArray<{ readonly op: typeof Protocol.GeneratorOpcode.Type; readonly order: number }>
-    >([]);
+    const plannedBuffer = Ref.makeUnsafe<ReadonlyArray<PlannedOpcode>>([]);
     const intervalStartedAt = Ref.makeUnsafe<Option.Option<number>>(Option.none());
     const runtimeExceeded = Ref.makeUnsafe(false);
 
     const maxIntervalMs = Duration.toMillis(args.config.maxInterval);
 
     // Extract-then-restore is NOT atomic across multiple fibers; a concurrent
-    // `bufferStep` between the `Ref.modify` snapshot and the error-path
+    // `record` between the `Ref.modify` snapshot and the error-path
     // `Ref.update` restore would reorder opcodes. Request-scoped execution
     // today only runs a single fiber, so this is safe. If parallel fibers
     // are ever added here, guard `flushInner` with a `Semaphore(1)`.
@@ -189,14 +192,14 @@ export const make = (args: {
       }
       const result = yield* Effect.result(args.checkpointAsync(steps));
       if (Result.isFailure(result)) {
-        // Restore at the head so subsequent `drain` includes them in the 206.
+        // Restore at the head so subsequent `completed` includes them in the 206.
         yield* Ref.update(buffer, (current) => [...steps, ...current]);
         return;
       }
       yield* Ref.set(intervalStartedAt, Option.none());
     });
 
-    const bufferStep = (op: typeof Protocol.GeneratorOpcode.Type): Effect.Effect<void> =>
+    const record = (op: typeof Protocol.GeneratorOpcode.Type): Effect.Effect<void> =>
       Effect.gen(function* () {
         const len = yield* Ref.modify(buffer, (current) => {
           const next = [...current, op];
@@ -218,21 +221,19 @@ export const make = (args: {
         }
       });
 
-    const drain: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(buffer, (current) => [
-      current,
-      [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>,
-    ]);
+    const completed: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
+      buffer,
+      (current) => [current, [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>],
+    );
 
-    const planOpcode = (
-      op: typeof Protocol.GeneratorOpcode.Type,
-      order: number = Number.MAX_SAFE_INTEGER,
-    ): Effect.Effect<void> => Ref.update(planned, (current) => [...current, { op, order }]);
+    const plan = (planned: PlannedOpcode): Effect.Effect<void> =>
+      Ref.update(plannedBuffer, (current) => [...current, planned]);
 
-    const drainPlanned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
-      planned,
+    const planned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
+      plannedBuffer,
       (current) => [
-        [...current].sort((a, b) => a.order - b.order).map((entry) => entry.op),
-        [] as ReadonlyArray<{ readonly op: typeof Protocol.GeneratorOpcode.Type; readonly order: number }>,
+        [...current].sort((a, b) => a.sequence - b.sequence).map((entry) => entry.opcode),
+        [] as ReadonlyArray<PlannedOpcode>,
       ],
     );
 
@@ -241,11 +242,11 @@ export const make = (args: {
       runId: args.runId,
       fnId: args.fnId,
       qiId: args.qiId,
-      planOpcode,
-      drainPlanned,
-      bufferStep,
+      plan,
+      planned,
+      record,
       flush: flushInner,
-      drain,
+      completed,
       markRuntimeExceeded: Ref.set(runtimeExceeded, true),
       isRuntimeExceeded: Ref.get(runtimeExceeded),
     };

@@ -32,7 +32,7 @@ export const sendEvent = (args: {
           }
 
           if (args.input.shouldPlanStep(info)) {
-            yield* bus.plan(StepCommand.SendEventPlanned.make({ info }));
+            yield* bus.plan(StepCommand.SendEventPlanned.make({ info, sequence: args.id.sequence }));
             return { ids: [] };
           }
 
@@ -41,7 +41,7 @@ export const sendEvent = (args: {
           const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
 
           if (args.input.isFunctionRun() && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
-            yield* bus.plan(StepCommand.SendEventPlanned.make({ info }));
+            yield* bus.plan(StepCommand.SendEventPlanned.make({ info, sequence: args.id.sequence }));
             return { ids: [] };
           }
 

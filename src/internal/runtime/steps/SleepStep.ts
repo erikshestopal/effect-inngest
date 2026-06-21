@@ -28,6 +28,7 @@ export const sleep = (args: {
 
     const command = StepCommand.Sleep.make({
       info,
+      sequence: args.id.sequence,
       duration: Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(args.duration)),
     });
 

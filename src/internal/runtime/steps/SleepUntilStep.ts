@@ -28,6 +28,7 @@ export const sleepUntil = (args: {
 
     const command = StepCommand.Sleep.make({
       info,
+      sequence: args.id.sequence,
       duration: Schema.decodeUnknownSync(InngestTimestamp)(args.timestamp),
     });
 

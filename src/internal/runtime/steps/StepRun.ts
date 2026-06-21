@@ -52,20 +52,20 @@ export const run = <A, Err, R>(args: {
           }
 
           if (args.input.shouldPlanStep(info)) {
-            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info, sequence: args.id.sequence }));
             return yield* Effect.void;
           }
 
           const checkpoint = yield* CurrentCheckpoint;
           if (Option.isSome(checkpoint) && args.input.isFunctionRun() && (yield* checkpoint.value.isRuntimeExceeded)) {
             yield* checkpoint.value.flush;
-            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info, sequence: args.id.sequence }));
             return yield* Effect.interrupt;
           }
 
           const scope = yield* HandlerFiberScope;
           if (args.input.isFunctionRun() && Option.isSome(checkpoint) && (yield* scope.isForkedFromHandlerRoot)) {
-            yield* bus.plan(StepCommand.StepRunPlanned.make({ info }));
+            yield* bus.plan(StepCommand.StepRunPlanned.make({ info, sequence: args.id.sequence }));
             return yield* Effect.void;
           }
 

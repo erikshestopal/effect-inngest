@@ -41,6 +41,7 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
           yield* bus.suspend(
             StepCommand.WaitForEvent.make({
               info,
+              sequence: args.id.sequence,
               event: args.event.identifier,
               timeout: Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(args.options.timeout)),
               if: args.options.if,
