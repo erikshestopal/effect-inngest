@@ -5,7 +5,7 @@ import { StepCommandBus } from "../runtime/StepCommandBus.js";
 import * as Protocol from "../protocol.js";
 import { ExecutionFailure } from "./ExecutionFailure.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
-import { ExecutionResult, encodeOpcodes } from "./ExecutionResult.js";
+import { ExecutionResult } from "./ExecutionResult.js";
 import * as HandlerRun from "./HandlerRun.js";
 
 const fromSuccess = (args: {
@@ -24,30 +24,14 @@ const fromSuccess = (args: {
         Match.exhaustive,
       );
 
-      return ExecutionResult.make({
-        status: 206,
-        body: encodeOpcodes([...completed, terminal]),
-        headers: args.headers,
-      });
+      return ExecutionResult.opcodes({ opcodes: [...completed, terminal], headers: args.headers });
     }
 
     return Match.value(args.completion).pipe(
       Match.tag("HandlerSucceeded", (completion) =>
-        ExecutionResult.make({ status: 200, body: completion.value, headers: args.headers }),
+        ExecutionResult.success({ body: completion.value, headers: args.headers }),
       ),
-      Match.tag("CheckpointDeadlineElapsed", () =>
-        ExecutionResult.make({
-          status: 500,
-          body: Protocol.UserError.make({
-            name: "Error",
-            message: "Checkpoint deadline elapsed outside checkpoint mode",
-          }),
-          headers: ExecutionHeaders.withRetryDisposition({
-            headers: args.headers,
-            disposition: ExecutionHeaders.RetryDisposition.failure({ noRetry: false }),
-          }),
-        }),
-      ),
+      Match.tag("CheckpointDeadlineElapsed", () => ExecutionResult.checkpointDeadlineOutsideCheckpoint(args)),
       Match.exhaustive,
     );
   });
@@ -58,13 +42,10 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
     const commands = yield* bus.interrupted;
 
     if (commands.suspendedCount > 0 && Cause.hasInterruptsOnly(args.cause)) {
-      return ExecutionResult.make({
-        status: 206,
-        body: encodeOpcodes(commands.opcodes),
-        headers: ExecutionHeaders.withRetryDisposition({
-          headers: args.headers,
-          disposition: ExecutionHeaders.RetryDisposition.fromSuspension(commands),
-        }),
+      return ExecutionResult.opcodesWithRetry({
+        opcodes: commands.opcodes,
+        headers: args.headers,
+        disposition: ExecutionHeaders.RetryDisposition.fromSuspension(commands),
       });
     }
 
@@ -76,18 +57,10 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
     const disposition = ExecutionHeaders.RetryDisposition.fromError(failure.error);
 
     if (commands.completed.length > 0) {
-      return ExecutionResult.make({
-        status: 206,
-        body: encodeOpcodes(commands.completed),
-        headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
-      });
+      return ExecutionResult.opcodesWithRetry({ opcodes: commands.completed, headers: args.headers, disposition });
     }
 
-    return ExecutionResult.make({
-      status: disposition.noRetry ? 400 : 500,
-      body: Protocol.UserError.fromUnknown(failure.error),
-      headers: ExecutionHeaders.withRetryDisposition({ headers: args.headers, disposition }),
-    });
+    return ExecutionResult.userError({ error: failure.error, headers: args.headers, disposition });
   });
 
 export const fromExit = (exit: Exit.Exit<HandlerRun.HandlerCompletion, unknown>) =>
@@ -98,7 +71,7 @@ export const fromExit = (exit: Exit.Exit<HandlerRun.HandlerCompletion, unknown>)
     const planned = yield* bus.planned;
 
     if (planned.length > 0) {
-      return ExecutionResult.make({ status: 206, body: encodeOpcodes(planned), headers });
+      return ExecutionResult.opcodes({ opcodes: planned, headers });
     }
 
     return yield* Exit.match(exit, {

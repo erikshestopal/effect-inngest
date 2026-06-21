@@ -1,8 +1,8 @@
-import { Duration, Option } from "effect";
+import { Duration, Option, Predicate } from "effect";
 import type { ClientConfig } from "../../Client.js";
+import type { ExecutionSuspension } from "../domain/ExecutionSuspension.js";
 import { isNonRetriableError, isRetryAfterError, isStepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
-import type { ExecutionSuspension } from "../runtime/StepCommandBus.js";
 
 const SDK_VERSION = "2.0.0";
 
@@ -36,12 +36,15 @@ export class RetryDisposition {
   }
 
   static fromSuspension(commands: ExecutionSuspension) {
-    if (!commands.hasRetriableStepError && !commands.hasNonRetriableError && Option.isNone(commands.retryAfterMs)) {
+    const hasRetriableStepError = RetryDisposition.hasRetriableStepError(commands);
+    const hasNonRetriableError = RetryDisposition.hasNonRetriableError(commands);
+
+    if (!hasRetriableStepError && !hasNonRetriableError && Option.isNone(commands.retryAfterMs)) {
       return RetryDisposition.none;
     }
 
     return RetryDisposition.failure({
-      noRetry: commands.hasNonRetriableError,
+      noRetry: hasNonRetriableError,
       retryAfterMs: commands.retryAfterMs,
     });
   }
@@ -57,6 +60,21 @@ export class RetryDisposition {
     return RetryDisposition.failure({
       noRetry: isNonRetriableError(error) || (isStepError(error) && error.noRetry === true),
     });
+  }
+
+  private static hasRetriableStepError(commands: ExecutionSuspension): boolean {
+    return commands.opcodes.some((op) => op.op === Protocol.Opcode.StepError);
+  }
+
+  private static hasNonRetriableError(commands: ExecutionSuspension): boolean {
+    return commands.opcodes.some(
+      (op) =>
+        op.op === Protocol.Opcode.StepFailed ||
+        (op.op === Protocol.Opcode.StepError &&
+          Predicate.isObject(op.error) &&
+          Predicate.hasProperty(op.error, "noRetry") &&
+          op.error.noRetry === true),
+    );
   }
 }
 

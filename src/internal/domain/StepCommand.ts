@@ -58,6 +58,11 @@ export class StepRunFailed extends Schema.TaggedClass<StepRunFailed>()("StepRunF
   error: Schema.Unknown,
 }) {}
 
+export class Failure extends Schema.Class<Failure>("effect-inngest/internal/domain/StepCommand/Failure")({
+  opcode: Protocol.GeneratorOpcode,
+  retryAfterMs: Schema.Option(Schema.Number),
+}) {}
+
 export type YieldCommand = Sleep | WaitForEvent | InvokeFunction;
 export type ResultCommand = StepRunResult | SendEventResult;
 export type PlanCommand = YieldCommand | StepRunPlanned | SendEventPlanned;
@@ -99,24 +104,12 @@ export const checkpoint = (command: ResultCommand) =>
     Match.exhaustive,
   );
 
-export const plannedSuspension = (command: YieldCommand) =>
-  Checkpoint.PlannedOpcode.make({ opcode: suspension(command), sequence: command.sequence });
-
 export const plan = (command: PlanCommand) =>
   Checkpoint.PlannedOpcode.make({
     opcode: Match.value(command).pipe(
-      Match.tag("Sleep", (cmd) => Protocol.GeneratorOpcode.sleep({ info: cmd.info, duration: cmd.duration })),
-      Match.tag("WaitForEvent", (cmd) =>
-        Protocol.GeneratorOpcode.waitForEvent({ info: cmd.info, event: cmd.event, timeout: cmd.timeout, if: cmd.if }),
-      ),
-      Match.tag("InvokeFunction", (cmd) =>
-        Protocol.GeneratorOpcode.invokeFunction({
-          info: cmd.info,
-          functionId: cmd.functionId,
-          payload: cmd.payload,
-          timeout: cmd.timeout,
-        }),
-      ),
+      Match.tag("Sleep", (cmd) => suspension(cmd)),
+      Match.tag("WaitForEvent", (cmd) => suspension(cmd)),
+      Match.tag("InvokeFunction", (cmd) => suspension(cmd)),
       Match.tag("StepRunPlanned", (cmd) => Protocol.GeneratorOpcode.stepPlanned(cmd.info)),
       Match.tag("SendEventPlanned", (cmd) => Protocol.GeneratorOpcode.sendEventStepPlanned(cmd.info)),
       Match.exhaustive,
@@ -126,17 +119,24 @@ export const plan = (command: PlanCommand) =>
 
 export const failure = (command: ErrorCommand) =>
   Match.value(command).pipe(
-    Match.tag("StepRunError", (cmd) => ({
-      opcode: Protocol.GeneratorOpcode.stepError({
-        info: cmd.info,
-        error: Protocol.UserError.fromUnknown(cmd.error),
-        noRetry: cmd.noRetry,
+    Match.tag("StepRunError", (cmd) =>
+      Failure.make({
+        opcode: Protocol.GeneratorOpcode.stepError({
+          info: cmd.info,
+          error: Protocol.UserError.fromUnknown(cmd.error),
+          noRetry: cmd.noRetry,
+        }),
+        retryAfterMs: Option.fromNullishOr(cmd.retryAfterMs),
       }),
-      retryAfterMs: Option.fromNullishOr(cmd.retryAfterMs),
-    })),
-    Match.tag("StepRunFailed", (cmd) => ({
-      opcode: Protocol.GeneratorOpcode.stepFailed({ info: cmd.info, error: Protocol.UserError.fromUnknown(cmd.error) }),
-      retryAfterMs: Option.none<number>(),
-    })),
+    ),
+    Match.tag("StepRunFailed", (cmd) =>
+      Failure.make({
+        opcode: Protocol.GeneratorOpcode.stepFailed({
+          info: cmd.info,
+          error: Protocol.UserError.fromUnknown(cmd.error),
+        }),
+        retryAfterMs: Option.none<number>(),
+      }),
+    ),
     Match.exhaustive,
   );

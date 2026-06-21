@@ -1,77 +1,7 @@
-import { Context, Effect, Layer, Option, Predicate, Ref, Schema } from "effect";
-import * as Protocol from "../protocol.js";
+import { Array as Arr, Context, Effect, Layer, Option, Ref } from "effect";
+import { ExecutionSuspension, SuspendedCommand, type GeneratorOpcode } from "../domain/ExecutionSuspension.js";
 import * as StepCommand from "../domain/StepCommand.js";
-import type * as Checkpoint from "../checkpoint.js";
 import { CurrentCheckpoint } from "./CheckpointContext.js";
-
-type GeneratorOpcode = typeof Protocol.GeneratorOpcode.Type;
-
-export class SuspendedCommand extends Schema.Class<SuspendedCommand>(
-  "effect-inngest/internal/runtime/SuspendedCommand",
-)({
-  opcode: Protocol.GeneratorOpcode,
-  sequence: Schema.Option(Schema.Number),
-  retryAfterMs: Schema.Option(Schema.Number),
-}) {
-  static fromPlanned(planned: Checkpoint.PlannedOpcode): SuspendedCommand {
-    return SuspendedCommand.make({
-      opcode: planned.opcode,
-      sequence: Option.some(planned.sequence),
-      retryAfterMs: Option.none(),
-    });
-  }
-
-  static fromOpcode(opcode: GeneratorOpcode, retryAfterMs: Option.Option<number> = Option.none()): SuspendedCommand {
-    return SuspendedCommand.make({ opcode, sequence: Option.none(), retryAfterMs });
-  }
-}
-
-export class ExecutionSuspension extends Schema.Class<ExecutionSuspension>(
-  "effect-inngest/internal/runtime/ExecutionSuspension",
-)({
-  completed: Schema.Array(Protocol.GeneratorOpcode),
-  opcodes: Schema.Array(Protocol.GeneratorOpcode),
-  suspendedCount: Schema.Number,
-  retryAfterMs: Schema.Option(Schema.Number),
-  hasRetriableStepError: Schema.Boolean,
-  hasNonRetriableError: Schema.Boolean,
-}) {
-  static from(args: {
-    readonly completed: ReadonlyArray<GeneratorOpcode>;
-    readonly suspended: ReadonlyArray<SuspendedCommand>;
-  }): ExecutionSuspension {
-    const suspended = args.suspended.toSorted((a, b) => {
-      if (Option.isNone(a.sequence) || Option.isNone(b.sequence)) {
-        return 0;
-      }
-      return a.sequence.value - b.sequence.value;
-    });
-    const opcodes = [...args.completed, ...suspended.map((entry) => entry.opcode)];
-    return ExecutionSuspension.make({
-      completed: [...args.completed],
-      opcodes,
-      suspendedCount: args.suspended.length,
-      retryAfterMs: suspended.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs ?? Option.none(),
-      hasRetriableStepError: ExecutionSuspension.hasRetriableStepError(opcodes),
-      hasNonRetriableError: ExecutionSuspension.hasNonRetriableError(opcodes),
-    });
-  }
-
-  private static hasRetriableStepError(opcodes: ReadonlyArray<GeneratorOpcode>): boolean {
-    return opcodes.some((op) => op.op === Protocol.Opcode.StepError);
-  }
-
-  private static hasNonRetriableError(opcodes: ReadonlyArray<GeneratorOpcode>): boolean {
-    return opcodes.some(
-      (op) =>
-        op.op === Protocol.Opcode.StepFailed ||
-        (op.op === Protocol.Opcode.StepError &&
-          Predicate.isObject(op.error) &&
-          Predicate.hasProperty(op.error, "noRetry") &&
-          op.error.noRetry === true),
-    );
-  }
-}
 
 export declare namespace StepCommandBus {
   export interface Service {
@@ -107,14 +37,12 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
   "effect-inngest/internal/runtime/StepCommandBus",
 ) {
   static readonly make = Effect.gen(function* () {
-    const suspended = yield* Ref.make<Array<SuspendedCommand>>([]);
+    const suspended = yield* Ref.make(Arr.empty<SuspendedCommand>());
 
     const suspendExecution = (command: SuspendedCommand) =>
-      Ref.update((current: Array<SuspendedCommand>) => [...current, command])(suspended).pipe(
-        Effect.andThen(Effect.interrupt),
-      );
+      Ref.update(suspended, Arr.append(command)).pipe(Effect.andThen(Effect.interrupt));
 
-    const takeSuspended = Ref.modify(suspended, (current) => [current, [] as Array<SuspendedCommand>]);
+    const takeSuspended = Ref.modify(suspended, (current) => [current, Arr.empty<SuspendedCommand>()]);
 
     const interrupted = Effect.gen(function* () {
       const completed = yield* completedFromCheckpoint;
@@ -122,16 +50,16 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
       return ExecutionSuspension.from({ completed, suspended: commands });
     });
 
-    return {
-      suspend: (command: StepCommand.YieldCommand) =>
+    return StepCommandBus.of({
+      suspend: (command) =>
         Effect.gen(function* () {
           const checkpoint = yield* CurrentCheckpoint;
           if (Option.isSome(checkpoint)) {
             yield* checkpoint.value.flush;
           }
-          return yield* suspendExecution(SuspendedCommand.fromPlanned(StepCommand.plannedSuspension(command)));
+          return yield* suspendExecution(SuspendedCommand.fromPlanned(StepCommand.plan(command)));
         }),
-      complete: (command: StepCommand.ResultCommand) =>
+      complete: (command) =>
         Effect.gen(function* () {
           const checkpoint = yield* CurrentCheckpoint;
           if (Option.isNone(checkpoint)) {
@@ -139,7 +67,7 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
           }
           return yield* checkpoint.value.record(StepCommand.checkpoint(command));
         }),
-      plan: (command: StepCommand.PlanCommand) =>
+      plan: (command) =>
         Effect.gen(function* () {
           const checkpoint = yield* CurrentCheckpoint;
           const planned = StepCommand.plan(command);
@@ -148,14 +76,11 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
           }
           return yield* checkpoint.value.plan(planned);
         }),
-      fail: (command: StepCommand.ErrorCommand) => {
-        const failed = StepCommand.failure(command);
-        return suspendExecution(SuspendedCommand.fromOpcode(failed.opcode, failed.retryAfterMs));
-      },
+      fail: (command) => suspendExecution(SuspendedCommand.fromFailure(StepCommand.failure(command))),
       planned: plannedFromCheckpoint,
       completed: completedFromCheckpoint,
       interrupted,
-    };
+    });
   });
 
   static readonly layer = Layer.effect(this, this.make);
