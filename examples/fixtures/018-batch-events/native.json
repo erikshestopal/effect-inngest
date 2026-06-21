@@ -1,186 +1,128 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/018-batch-events",
-      "path": "/examples/018-batch-events",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "018-batch-events",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/018-batch-events",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/018-batch-events",
-      "path": "/examples/018-batch-events",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/018-batch-events",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-018-batch-events",
-        "functions": [
-          {
-            "id": "examples-018-batch-events-batched-fn",
-            "name": "batched-fn",
-            "triggers": [
-              {
-                "event": "examples/018-batch-events/demo/batched"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/018-batch-events?fnId=examples-018-batch-events-batched-fn&stepId=step"
-                }
-              }
-            },
-            "batchEvents": {
-              "maxSize": 5,
-              "timeout": "1s"
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "98a58b28-4308-5425-8f3e-528861bfc15f"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/018-batch-events?fnId=examples-018-batch-events-batched-fn&stepId=step",
-      "path": "/examples/018-batch-events",
-      "query": {
-        "fnId": "examples-018-batch-events-batched-fn",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3a39ba96-a8fe-5e1e-8ae2-44c7408118db",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          "step_id": "step",
-          "use_api": false
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "defers": {},
-        "event": {
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/018-batch-events",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-018-batch-events",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "batchEvents": {
+                "maxSize": 5,
+                "timeout": "1s"
+              },
+              "id": "examples-018-batch-events-batched-fn",
+              "name": "batched-fn",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/018-batch-events?fnId=examples-018-batch-events-batched-fn&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/018-batch-events/demo/batched"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/018-batch-events",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {
+        "n": 2
+      },
+      "name": "examples/018-batch-events/demo/batched"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "n": 2
           },
@@ -188,43 +130,25 @@
           "name": "examples/018-batch-events/demo/batched",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "n": 2
-            },
-            "id": "<event-id>",
-            "name": "examples/018-batch-events/demo/batched",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "count": 1,
-            "sum": 2
-          }
         }
-      ]
+      ],
+      "event": {
+        "name": "examples/018-batch-events/demo/batched"
+      },
+      "functionId": "examples-018-batch-events-batched-fn",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "count": 1,
+          "sum": 2
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

@@ -1,277 +1,207 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out",
-      "path": "/examples/065-checkpointing-opt-out",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "065-checkpointing-opt-out",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/065-checkpointing-opt-out",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out",
-      "path": "/examples/065-checkpointing-opt-out",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/065-checkpointing-opt-out",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-065-checkpointing-opt-out",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+              "name": "checkpoint-opt-out",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/065-checkpointing-opt-out?fnId=examples-065-checkpointing-opt-out-checkpoint-opt-out&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/065-checkpointing-opt-out",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+  "events": [
+    {
+      "data": {
+        "tag": "opt-out-065"
       },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-065-checkpointing-opt-out",
-        "functions": [
+      "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "tag": "opt-out-065"
+          },
+          "id": "<event-id>",
+          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
+      },
+      "functionId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8": {
+          "data": "A"
+        },
+        "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98": {
+          "data": "B"
+        }
+      },
+      "response": {
+        "data": {
+          "tag": "opt-out-065"
+        },
+        "status": "complete"
+      },
+      "stack": ["86f7e437faa5a7fce15d1ddcb9eaeaea377667b8", "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "tag": "opt-out-065"
+          },
+          "id": "<event-id>",
+          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
+      },
+      "functionId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8": {
+          "data": "A"
+        }
+      },
+      "response": {
+        "body": [
           {
-            "id": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-            "name": "checkpoint-opt-out",
-            "triggers": [
-              {
-                "event": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out?fnId=examples-065-checkpointing-opt-out-checkpoint-opt-out&stepId=step"
-                }
-              }
+            "data": "B",
+            "displayName": "b",
+            "id": "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98",
+            "name": "b",
+            "op": "StepRun",
+            "opts": {},
+            "timing": {
+              "a": "<timing-a>",
+              "b": "<timing-b>"
+            },
+            "userland": {
+              "id": "b"
             }
           }
         ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
+        "status": 206
+      },
+      "stack": ["86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"],
+      "stepId": "step"
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "b4f4a8c7-b1c2-5452-b4f5-8a1ffd4cc9ad"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out?fnId=examples-065-checkpointing-opt-out-checkpoint-opt-out&stepId=step",
-      "path": "/examples/065-checkpointing-opt-out",
-      "query": {
-        "fnId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c57c76ab-da57-5165-97b3-e3046e8f1ec3",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "tag": "opt-out-065"
-          },
-          "id": "<event-id>",
-          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "tag": "opt-out-065"
-            },
-            "id": "<event-id>",
-            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
-          "op": "StepRun",
-          "name": "a",
-          "opts": {},
-          "displayName": "a",
-          "userland": {
-            "id": "a"
-          },
-          "data": "A",
-          "timing": {
-            "a": "<timing-a>",
-            "b": "<timing-b>"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out?fnId=examples-065-checkpointing-opt-out-checkpoint-opt-out&stepId=step",
-      "path": "/examples/065-checkpointing-opt-out",
-      "query": {
-        "fnId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c57c76ab-da57-5165-97b3-e3046e8f1ec3",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["86f7e437faa5a7fce15d1ddcb9eaeaea377667b8"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {
             "tag": "opt-out-065"
           },
@@ -279,142 +209,38 @@
           "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "tag": "opt-out-065"
-            },
-            "id": "<event-id>",
-            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8": {
-            "data": "A"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98",
-          "op": "StepRun",
-          "name": "b",
-          "opts": {},
-          "displayName": "b",
-          "userland": {
-            "id": "b"
-          },
-          "data": "B",
-          "timing": {
-            "a": "<timing-a>",
-            "b": "<timing-b>"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/065-checkpointing-opt-out?fnId=examples-065-checkpointing-opt-out-checkpoint-opt-out&stepId=step",
-      "path": "/examples/065-checkpointing-opt-out",
-      "query": {
-        "fnId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
-        "stepId": "step"
+      ],
+      "event": {
+        "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c57c76ab-da57-5165-97b3-e3046e8f1ec3",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["86f7e437faa5a7fce15d1ddcb9eaeaea377667b8", "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "tag": "opt-out-065"
-          },
-          "id": "<event-id>",
-          "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
+      "functionId": "examples-065-checkpointing-opt-out-checkpoint-opt-out",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "data": {
-              "tag": "opt-out-065"
+            "data": "A",
+            "displayName": "a",
+            "id": "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8",
+            "name": "a",
+            "op": "StepRun",
+            "opts": {},
+            "timing": {
+              "a": "<timing-a>",
+              "b": "<timing-b>"
             },
-            "id": "<event-id>",
-            "name": "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
-            "ts": "<event-ts>",
-            "user": {}
+            "userland": {
+              "id": "a"
+            }
           }
         ],
-        "steps": {
-          "86f7e437faa5a7fce15d1ddcb9eaeaea377667b8": {
-            "data": "A"
-          },
-          "e9d71f5ee7c92d6dc9e92ffdad17b8bd49418f98": {
-            "data": "B"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        "status": 206
       },
-      "body": {
-        "tag": "opt-out-065"
-      }
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

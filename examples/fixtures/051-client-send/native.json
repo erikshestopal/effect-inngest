@@ -1,118 +1,132 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/051-client-send",
-      "path": "/examples/051-client-send",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "051-client-send",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/051-client-send",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 0,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 0,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/051-client-send",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-051-client-send",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [],
+          "sdk": "<sdk>",
+          "url": "/examples/051-client-send",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/051-client-send",
-      "path": "/examples/051-client-send",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+  "events": [
+    {
+      "data": {
+        "amount": 99.99,
+        "orderId": "o1"
       },
-      "body": null
+      "id": "payment-o1-20240115",
+      "name": "examples/051-client-send/payment/received"
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    {
+      "data": {
+        "channel": "email",
+        "template": "order-confirmation",
+        "userId": "123"
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/051-client-send",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-051-client-send",
-        "functions": [],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
+      "name": "examples/051-client-send/notification/send"
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+    {
+      "data": {
+        "email": "alice@example.com",
+        "userId": "123"
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "eb5c7f19-dc0f-568f-8c7e-fb7a0214d20f"
-      }
+      "name": "examples/051-client-send/user/created"
+    },
+    {
+      "data": {
+        "orderId": "o1",
+        "total": 99.99,
+        "userId": "123"
+      },
+      "name": "examples/051-client-send/order/placed"
+    },
+    {
+      "data": {
+        "orderId": "o2",
+        "total": 149.99,
+        "userId": "456"
+      },
+      "name": "examples/051-client-send/order/placed"
     }
-  }
-]
+  ],
+  "executions": [],
+  "checkpoints": []
+}

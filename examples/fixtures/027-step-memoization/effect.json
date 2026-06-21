@@ -1,539 +1,320 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization",
-      "path": "/examples/027-step-memoization",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "027-step-memoization",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/027-step-memoization",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization",
-      "path": "/examples/027-step-memoization",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/027-step-memoization",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/027-step-memoization",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-027-step-memoization",
-        "functions": [
-          {
-            "id": "examples-027-step-memoization-memoization-demo",
-            "name": "memoization-demo",
-            "triggers": [
-              {
-                "event": "examples/027-step-memoization/demo/memoized"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-027-step-memoization",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-027-step-memoization-memoization-demo",
+              "name": "memoization-demo",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/027-step-memoization/demo/memoized"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/027-step-memoization",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "dc067ba9-d2f8-5abd-bc72-0944fe0d1417"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step",
-      "path": "/examples/027-step-memoization",
-      "query": {
-        "fnId": "examples-027-step-memoization-memoization-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+  "events": [
+    {
+      "data": {},
+      "name": "examples/027-step-memoization/demo/memoized"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {},
           "id": "<event-id>",
           "name": "examples/027-step-memoization/demo/memoized",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/027-step-memoization/demo/memoized",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "5c528ebc85c151361dc02ed08a25eb25f665fd8f",
-          "op": "Sleep",
-          "name": "1s",
-          "displayName": "checkpoint",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "checkpoint"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/027-step-memoization/demo/memoized"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "capture-time",
-            "displayName": "capture-time",
-            "userland": {
-              "id": "capture-time"
-            },
-            "opts": {},
-            "rawArgs": ["capture-time", null],
-            "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "d6e5b274b69685abf64a53dea0060613b96689ca",
-                "memoized": false,
-                "options": {
-                  "id": "capture-time",
-                  "name": "capture-time"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": 1781640067094,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "capture-random",
-            "displayName": "capture-random",
-            "userland": {
-              "id": "capture-random"
-            },
-            "opts": {},
-            "rawArgs": ["capture-random", null],
-            "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-                "memoized": false,
-                "options": {
-                  "id": "capture-random",
-                  "name": "capture-random"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": 0.9822634102762611,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/027-step-memoization?fnId=examples-027-step-memoization-memoization-demo&stepId=step",
-      "path": "/examples/027-step-memoization",
-      "query": {
-        "fnId": "examples-027-step-memoization-memoization-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "d6e5b274b69685abf64a53dea0060613b96689ca",
-              "845c91ac7c56024cd8b58d7bc5edd328c1662931",
-              "5c528ebc85c151361dc02ed08a25eb25f665fd8f"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-027-step-memoization-memoization-demo",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
+        "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
+          "data": "<dynamic-number>"
         },
-        "defers": {},
-        "event": {
+        "d6e5b274b69685abf64a53dea0060613b96689ca": {
+          "data": "<dynamic-number>"
+        }
+      },
+      "response": {
+        "data": {
+          "randomValue": "<random-value>",
+          "timestamp": "<timestamp>"
+        },
+        "status": "complete"
+      },
+      "stack": [
+        "d6e5b274b69685abf64a53dea0060613b96689ca",
+        "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+        "5c528ebc85c151361dc02ed08a25eb25f665fd8f"
+      ],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {},
           "id": "<event-id>",
           "name": "examples/027-step-memoization/demo/memoized",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/027-step-memoization/demo/memoized",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "5c528ebc85c151361dc02ed08a25eb25f665fd8f": null,
-          "845c91ac7c56024cd8b58d7bc5edd328c1662931": {
-            "data": 0.9822634102762611
-          },
-          "d6e5b274b69685abf64a53dea0060613b96689ca": {
-            "data": 1781640067094
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "timestamp": "<timestamp>",
-            "randomValue": 0.9822634102762611
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/027-step-memoization/demo/memoized"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "73cc9e73-a042-5c3c-90fe-1d75cf5f667e",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-027-step-memoization-memoization-demo",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "verify",
-            "displayName": "verify",
-            "userland": {
-              "id": "verify"
-            },
+            "displayName": "checkpoint",
+            "id": "5c528ebc85c151361dc02ed08a25eb25f665fd8f",
+            "name": "1s",
+            "op": "Sleep",
             "opts": {},
-            "rawArgs": ["verify", null],
-            "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
-                "memoized": false,
-                "options": {
-                  "id": "verify",
-                  "name": "verify"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+            "userland": {
+              "id": "checkpoint"
             }
           }
         ],
-        "ts": "<event-ts>"
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "<random-value>",
+              "displayName": "capture-random",
+              "id": "845c91ac7c56024cd8b58d7bc5edd328c1662931",
+              "mode": "sync",
+              "name": "capture-random",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "capture-random"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "<timestamp>",
+              "displayName": "capture-time",
+              "id": "d6e5b274b69685abf64a53dea0060613b96689ca",
+              "mode": "sync",
+              "name": "capture-time",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "capture-time"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "displayName": "verify",
+              "id": "86a4261d849a6e99b3c3a38f7585e3c7d4a91823",
+              "mode": "sync",
+              "name": "verify",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "verify"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

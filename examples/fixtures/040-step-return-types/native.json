@@ -1,669 +1,408 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/040-step-return-types",
-      "path": "/examples/040-step-return-types",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "040-step-return-types",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/040-step-return-types",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/040-step-return-types",
-      "path": "/examples/040-step-return-types",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/040-step-return-types",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-040-step-return-types",
-        "functions": [
-          {
-            "id": "examples-040-step-return-types-return-types-demo",
-            "name": "return-types-demo",
-            "triggers": [
-              {
-                "event": "examples/040-step-return-types/demo/return-types"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/040-step-return-types?fnId=examples-040-step-return-types-return-types-demo&stepId=step"
-                }
-              }
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "e6bbb8f1-06fa-586c-a493-20ffb1648cd4"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/040-step-return-types?fnId=examples-040-step-return-types-return-types-demo&stepId=step",
-      "path": "/examples/040-step-return-types",
-      "query": {
-        "fnId": "examples-040-step-return-types-return-types-demo",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          "step_id": "step",
-          "use_api": false
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "defers": {},
-        "event": {
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/040-step-return-types",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-040-step-return-types",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-040-step-return-types-return-types-demo",
+              "name": "return-types-demo",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/040-step-return-types?fnId=examples-040-step-return-types-return-types-demo&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/040-step-return-types/demo/return-types"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/040-step-return-types",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {},
+      "name": "examples/040-step-return-types/demo/return-types"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {},
           "id": "<event-id>",
           "name": "examples/040-step-return-types/demo/return-types",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/040-step-return-types/demo/return-types",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "stringResult": "hello",
-            "numberResult": 42,
-            "objectResult": {
-              "key": "test",
-              "count": 100
-            },
-            "arrayResult": [1, 2, 3, 4, 5],
-            "boolResult": true
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/040-step-return-types/demo/return-types"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "bb8954f975022ace90365e99e5913d001543e1d1",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "return-string",
-            "displayName": "return-string",
-            "userland": {
-              "id": "return-string"
-            },
-            "opts": {},
-            "rawArgs": ["return-string", null],
-            "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "bb8954f975022ace90365e99e5913d001543e1d1",
-                "memoized": false,
-                "options": {
-                  "id": "return-string",
-                  "name": "return-string"
-                },
-                "stepType": "run"
+      "functionId": "examples-040-step-return-types-return-types-demo",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "arrayResult": [1, 2, 3, 4, 5],
+          "boolResult": true,
+          "numberResult": 42,
+          "objectResult": {
+            "count": 100,
+            "key": "test"
+          },
+          "stringResult": "hello"
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "hello-42-test-5-true",
+              "displayName": "use-all-types",
+              "id": "271e04c6282f37df0262a993c4942fc3ce7e4825",
+              "mode": "sync",
+              "name": "use-all-types",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "use-all-types"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "hello",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "f414d0a95357a1dbdf860042fb912e738830905d",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "return-number",
-            "displayName": "return-number",
-            "userland": {
-              "id": "return-number"
-            },
-            "opts": {},
-            "rawArgs": ["return-number", null],
-            "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "f414d0a95357a1dbdf860042fb912e738830905d",
-                "memoized": false,
-                "options": {
-                  "id": "return-number",
-                  "name": "return-number"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "hello",
+              "displayName": "return-string",
+              "id": "bb8954f975022ace90365e99e5913d001543e1d1",
+              "mode": "sync",
+              "name": "return-string",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "return-string"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": 42,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "return-object",
-            "displayName": "return-object",
-            "userland": {
-              "id": "return-object"
-            },
-            "opts": {},
-            "rawArgs": ["return-object", null],
-            "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
-                "memoized": false,
-                "options": {
-                  "id": "return-object",
-                  "name": "return-object"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": [1, 2, 3, 4, 5],
+              "displayName": "return-array",
+              "id": "698ac4257503dbbbd154caf355a547bc18cea62a",
+              "mode": "sync",
+              "name": "return-array",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "return-array"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": {
-              "key": "test",
-              "count": 100
-            },
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "698ac4257503dbbbd154caf355a547bc18cea62a",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "return-array",
-            "displayName": "return-array",
-            "userland": {
-              "id": "return-array"
-            },
-            "opts": {},
-            "rawArgs": ["return-array", null],
-            "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "698ac4257503dbbbd154caf355a547bc18cea62a",
-                "memoized": false,
-                "options": {
-                  "id": "return-array",
-                  "name": "return-array"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": {
+                "count": 100,
+                "key": "test"
+              },
+              "displayName": "return-object",
+              "id": "7be1a57a6dbcd9c14d47b9cada8e549c04797252",
+              "mode": "sync",
+              "name": "return-object",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "return-object"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": [1, 2, 3, 4, 5],
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "df87611b931013d235001d63a109c5fa00312c33",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "return-boolean",
-            "displayName": "return-boolean",
-            "userland": {
-              "id": "return-boolean"
-            },
-            "opts": {},
-            "rawArgs": ["return-boolean", null],
-            "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "df87611b931013d235001d63a109c5fa00312c33",
-                "memoized": false,
-                "options": {
-                  "id": "return-boolean",
-                  "name": "return-boolean"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": 42,
+              "displayName": "return-number",
+              "id": "f414d0a95357a1dbdf860042fb912e738830905d",
+              "mode": "sync",
+              "name": "return-number",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "return-number"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": true,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 10,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 10,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "8b39c22f-9cea-5566-a618-9deb5eb2139d",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "271e04c6282f37df0262a993c4942fc3ce7e4825",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "use-all-types",
-            "displayName": "use-all-types",
-            "userland": {
-              "id": "use-all-types"
-            },
-            "opts": {},
-            "rawArgs": ["use-all-types", null],
-            "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "271e04c6282f37df0262a993c4942fc3ce7e4825",
-                "memoized": false,
-                "options": {
-                  "id": "use-all-types",
-                  "name": "use-all-types"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": true,
+              "displayName": "return-boolean",
+              "id": "df87611b931013d235001d63a109c5fa00312c33",
+              "mode": "sync",
+              "name": "return-boolean",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "return-boolean"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "hello-42-test-5-true",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

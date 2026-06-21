@@ -1,182 +1,155 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/050-complex-workflow",
-      "path": "/examples/050-complex-workflow",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "050-complex-workflow",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/050-complex-workflow",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/050-complex-workflow",
-      "path": "/examples/050-complex-workflow",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/050-complex-workflow",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-050-complex-workflow",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-050-complex-workflow-process-order",
+              "name": "process-order",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/050-complex-workflow?fnId=examples-050-complex-workflow-process-order&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/050-complex-workflow/examples/050/order/placed"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/050-complex-workflow",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+  "events": [
+    {
+      "data": {
+        "estimatedDelivery": "2026-06-25",
+        "orderId": "order-050"
       },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/050-complex-workflow",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-050-complex-workflow",
-        "functions": [
+      "name": "examples/050-complex-workflow/delivery/scheduled"
+    },
+    {
+      "data": {
+        "items": [
           {
-            "id": "examples-050-complex-workflow-process-order",
-            "name": "process-order",
-            "triggers": [
-              {
-                "event": "examples/050-complex-workflow/examples/050/order/placed"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/050-complex-workflow?fnId=examples-050-complex-workflow-process-order&stepId=step"
-                }
-              }
-            }
+            "price": 10,
+            "qty": 2,
+            "sku": "sku-1"
           }
         ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
+        "orderId": "order-050",
+        "total": 20,
+        "userId": "user-050"
+      },
+      "name": "examples/050-complex-workflow/examples/050/order/placed"
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+    {
+      "data": {
+        "orderId": "order-050",
+        "total": 20,
+        "userId": "user-050"
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "e0416ed2-db71-57c9-ba39-cf285bc6f7bf"
-      }
+      "name": "examples/050-complex-workflow/order/confirmed"
+    },
+    {
+      "data": {
+        "orderId": "order-050",
+        "transactionId": "txn-050"
+      },
+      "name": "examples/050-complex-workflow/examples/050/order/payment-received"
     }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/050-complex-workflow?fnId=examples-050-complex-workflow-process-order&stepId=step",
-      "path": "/examples/050-complex-workflow",
-      "query": {
-        "fnId": "examples-050-complex-workflow-process-order",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "items": [
               {
@@ -193,252 +166,52 @@
           "name": "examples/050-complex-workflow/examples/050/order/placed",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "items": [
-                {
-                  "price": 10,
-                  "qty": 2,
-                  "sku": "sku-1"
-                }
-              ],
-              "orderId": "order-050",
-              "total": 20,
-              "userId": "user-050"
-            },
-            "id": "<event-id>",
-            "name": "examples/050-complex-workflow/examples/050/order/placed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        }
+      ],
+      "event": {
+        "name": "examples/050-complex-workflow/examples/050/order/placed"
       },
-      "body": [
-        {
-          "id": "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8",
-          "op": "WaitForEvent",
+      "functionId": "examples-050-complex-workflow-process-order",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "380c861392c8f4e28e7463396b6828f1b81238f6": {
+          "data": true
+        },
+        "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8": {
+          "data": {
+            "orderId": "order-050",
+            "transactionId": "txn-050"
+          },
+          "id": "fixture-050-complex-workflow-0-after-0-0",
           "name": "examples/050-complex-workflow/examples/050/order/payment-received",
-          "displayName": "wait-for-payment",
-          "opts": {
-            "timeout": "30s",
-            "if": "async.data.orderId == \"order-050\""
-          },
-          "data": null,
-          "userland": {
-            "id": "wait-for-payment"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "validate-order",
-            "displayName": "validate-order",
-            "userland": {
-              "id": "validate-order"
-            },
-            "opts": {},
-            "rawArgs": ["validate-order", null],
-            "hashedId": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
-                "memoized": false,
-                "options": {
-                  "id": "validate-order",
-                  "name": "validate-order"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": true,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "380c861392c8f4e28e7463396b6828f1b81238f6",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "reserve-inventory",
-            "displayName": "reserve-inventory",
-            "userland": {
-              "id": "reserve-inventory"
-            },
-            "opts": {},
-            "rawArgs": ["reserve-inventory", null],
-            "hashedId": "380c861392c8f4e28e7463396b6828f1b81238f6",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "380c861392c8f4e28e7463396b6828f1b81238f6",
-                "memoized": false,
-                "options": {
-                  "id": "reserve-inventory",
-                  "name": "reserve-inventory"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": true,
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/050-complex-workflow?fnId=examples-050-complex-workflow-process-order&stepId=step",
-      "path": "/examples/050-complex-workflow",
-      "query": {
-        "fnId": "examples-050-complex-workflow-process-order",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
-              "380c861392c8f4e28e7463396b6828f1b81238f6",
-              "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
+          "ts": "<event-ts>",
+          "user": {}
         },
-        "defers": {},
-        "event": {
+        "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d": {
+          "data": true
+        }
+      },
+      "response": {
+        "data": {
+          "deliveryDate": "2026-06-25",
+          "orderId": "order-050",
+          "status": "completed",
+          "transactionId": "txn-050"
+        },
+        "status": "complete"
+      },
+      "stack": [
+        "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
+        "380c861392c8f4e28e7463396b6828f1b81238f6",
+        "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8"
+      ],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "items": [
               {
@@ -455,317 +228,255 @@
           "name": "examples/050-complex-workflow/examples/050/order/placed",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "items": [
-                {
-                  "price": 10,
-                  "qty": 2,
-                  "sku": "sku-1"
-                }
-              ],
-              "orderId": "order-050",
-              "total": 20,
-              "userId": "user-050"
-            },
-            "id": "<event-id>",
-            "name": "examples/050-complex-workflow/examples/050/order/placed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "380c861392c8f4e28e7463396b6828f1b81238f6": {
-            "data": true
-          },
-          "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8": {
-            "data": {
-              "orderId": "order-050",
-              "transactionId": "txn-050"
-            },
-            "id": "fixture-effect-050-complex-workflow-0-after-0-0",
-            "name": "examples/050-complex-workflow/examples/050/order/payment-received",
-            "ts": "<event-ts>",
-            "user": {}
-          },
-          "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d": {
-            "data": true
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "orderId": "order-050",
-            "status": "completed",
-            "transactionId": "txn-050",
-            "deliveryDate": "2026-06-20"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/050-complex-workflow/examples/050/order/placed"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-050-complex-workflow-process-order",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "sendEvent",
-            "displayName": "send-confirmation",
-            "userland": {
-              "id": "send-confirmation"
-            },
+            "displayName": "wait-for-payment",
+            "id": "5cb60a99e2e4e3944be0f5d63c9a6972d88db4e8",
+            "name": "examples/050-complex-workflow/examples/050/order/payment-received",
+            "op": "WaitForEvent",
             "opts": {
-              "type": "step.sendEvent"
+              "if": "async.data.orderId == \"order-050\"",
+              "timeout": "30s"
             },
-            "rawArgs": [
-              "send-confirmation",
-              {
-                "name": "examples/050-complex-workflow/order/confirmed",
-                "data": {
-                  "orderId": "order-050",
-                  "userId": "user-050",
-                  "total": 20
-                }
-              }
-            ],
-            "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
-                "memoized": false,
-                "options": {
-                  "id": "send-confirmation",
-                  "name": "send-confirmation"
-                },
-                "stepType": "sendEvent"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": {
-              "ids": ["<event-id>"]
-            },
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "schedule-delivery",
-            "displayName": "schedule-delivery",
             "userland": {
-              "id": "schedule-delivery"
-            },
-            "opts": {},
-            "rawArgs": ["schedule-delivery", null],
-            "hashedId": "91c46f0670afb468a102fea6c5016d548f550f3d",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "91c46f0670afb468a102fea6c5016d548f550f3d",
-                "memoized": false,
-                "options": {
-                  "id": "schedule-delivery",
-                  "name": "schedule-delivery"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "2026-06-20",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+              "id": "wait-for-payment"
             }
           }
         ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+        "status": 206
       },
-      "body": null
+      "stack": [],
+      "stepId": "step"
     }
-  },
-  {
-    "sequence": 10,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 10,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "cb0198ca-d3af-5002-ab1f-fff6abcdcd86",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "sendEvent",
-            "displayName": "notify-delivery",
-            "userland": {
-              "id": "notify-delivery"
-            },
-            "opts": {
-              "type": "step.sendEvent"
-            },
-            "rawArgs": [
-              "notify-delivery",
-              {
-                "name": "examples/050-complex-workflow/delivery/scheduled",
-                "data": {
-                  "orderId": "order-050",
-                  "estimatedDelivery": "2026-06-20"
-                }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "2026-06-25",
+              "displayName": "schedule-delivery",
+              "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
+              "mode": "sync",
+              "name": "schedule-delivery",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "schedule-delivery"
               }
-            ],
-            "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
-                "memoized": false,
-                "options": {
-                  "id": "notify-delivery",
-                  "name": "notify-delivery"
-                },
-                "stepType": "sendEvent"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": {
-              "ids": ["<event-id>"]
-            },
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": {
+                "ids": ["<event-id>"]
+              },
+              "displayName": "notify-delivery",
+              "id": "d00ea8ce085386cb563ccb89bc4bc8e910f8e69f",
+              "mode": "sync",
+              "name": "sendEvent",
+              "op": "StepRun",
+              "opts": {
+                "type": "step.sendEvent"
+              },
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "notify-delivery"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": {
+                "ids": ["<event-id>"]
+              },
+              "displayName": "send-confirmation",
+              "id": "ca96c4a01a9cc3fd9eb1b1252fc7c83f87662a6a",
+              "mode": "sync",
+              "name": "sendEvent",
+              "op": "StepRun",
+              "opts": {
+                "type": "step.sendEvent"
+              },
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "send-confirmation"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": true,
+              "displayName": "reserve-inventory",
+              "id": "380c861392c8f4e28e7463396b6828f1b81238f6",
+              "mode": "sync",
+              "name": "reserve-inventory",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "reserve-inventory"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": true,
+              "displayName": "validate-order",
+              "id": "bdafbaeb40b244f5a55151e2f6bab706f40b4c6d",
+              "mode": "sync",
+              "name": "validate-order",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "validate-order"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

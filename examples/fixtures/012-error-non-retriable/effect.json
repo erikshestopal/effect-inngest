@@ -1,324 +1,160 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/012-error-non-retriable",
-      "path": "/examples/012-error-non-retriable",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "012-error-non-retriable",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/012-error-non-retriable",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/012-error-non-retriable",
-      "path": "/examples/012-error-non-retriable",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/012-error-non-retriable",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/012-error-non-retriable",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-012-error-non-retriable",
-        "functions": [
-          {
-            "id": "examples-012-error-non-retriable-non-retriable",
-            "name": "non-retriable",
-            "triggers": [
-              {
-                "event": "examples/012-error-non-retriable/demo/non-retriable"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/012-error-non-retriable?fnId=examples-012-error-non-retriable-non-retriable&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-012-error-non-retriable",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-012-error-non-retriable-non-retriable",
+              "name": "non-retriable",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/012-error-non-retriable?fnId=examples-012-error-non-retriable-non-retriable&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/012-error-non-retriable/demo/non-retriable"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/012-error-non-retriable",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "b874714a-7660-528d-ba51-ef7a817e7d3b"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/012-error-non-retriable?fnId=examples-012-error-non-retriable-non-retriable&stepId=step",
-      "path": "/examples/012-error-non-retriable",
-      "query": {
-        "fnId": "examples-012-error-non-retriable-non-retriable",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "cd5407a2-bfea-5e77-aba2-d50863453671",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/012-error-non-retriable/demo/non-retriable",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/012-error-non-retriable/demo/non-retriable",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+  "events": [
+    {
+      "data": {},
+      "name": "examples/012-error-non-retriable/demo/non-retriable"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "a602e216eb44a3ac5e096036eeaaef6bb9159677",
-          "op": "StepFailed",
-          "name": "fail",
-          "displayName": "fail",
-          "error": {
-            "name": "NonRetriableError",
-            "message": "No retry",
-            "stack": "<stack>"
-          },
-          "data": {
-            "__serialized": true,
-            "name": "NonRetriableError",
-            "message": "No retry",
-            "stack": "<stack>"
-          },
-          "opts": {},
-          "userland": {
-            "id": "fail"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/012-error-non-retriable?fnId=examples-012-error-non-retriable-non-retriable&stepId=step",
-      "path": "/examples/012-error-non-retriable",
-      "query": {
-        "fnId": "examples-012-error-non-retriable-non-retriable",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "cd5407a2-bfea-5e77-aba2-d50863453671",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["a602e216eb44a3ac5e096036eeaaef6bb9159677"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {},
           "id": "<event-id>",
           "name": "examples/012-error-non-retriable/demo/non-retriable",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
+        }
+      ],
+      "event": {
+        "name": "examples/012-error-non-retriable/demo/non-retriable"
+      },
+      "functionId": "examples-012-error-non-retriable-non-retriable",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/012-error-non-retriable/demo/non-retriable",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "a602e216eb44a3ac5e096036eeaaef6bb9159677": {
+            "data": {
+              "message": "No retry",
+              "name": "<error-name>",
+              "stack": "<stack>"
+            },
+            "displayName": "fail",
             "error": {
               "message": "No retry",
-              "name": "NonRetriableError",
+              "name": "<error-name>",
               "stack": "<stack>"
-            }
+            },
+            "id": "a602e216eb44a3ac5e096036eeaaef6bb9159677",
+            "name": "fail",
+            "op": "StepFailed"
           }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 400,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        ],
+        "status": 206
       },
-      "body": {
-        "name": "StepError",
-        "message": "No retry",
-        "stack": "<stack>"
-      }
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

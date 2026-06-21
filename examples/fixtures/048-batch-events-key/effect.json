@@ -1,187 +1,137 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/048-batch-events-key",
-      "path": "/examples/048-batch-events-key",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "048-batch-events-key",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/048-batch-events-key",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/048-batch-events-key",
-      "path": "/examples/048-batch-events-key",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/048-batch-events-key",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-048-batch-events-key",
-        "functions": [
-          {
-            "id": "examples-048-batch-events-key-batch-keyed",
-            "name": "batch-keyed",
-            "triggers": [
-              {
-                "event": "examples/048-batch-events-key/demo/batch-keyed"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/048-batch-events-key?fnId=examples-048-batch-events-key-batch-keyed&stepId=step"
-                }
-              }
-            },
-            "batchEvents": {
-              "maxSize": 10,
-              "timeout": "1s",
-              "key": "event.data.userId"
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "12122de9-4741-5119-9c44-324a9235210f"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/048-batch-events-key?fnId=examples-048-batch-events-key-batch-keyed&stepId=step",
-      "path": "/examples/048-batch-events-key",
-      "query": {
-        "fnId": "examples-048-batch-events-key-batch-keyed",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "3b7151e3-e691-557b-abda-e5b180822b27",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          "step_id": "step",
-          "use_api": false
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "defers": {},
-        "event": {
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/048-batch-events-key",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-048-batch-events-key",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "batchEvents": {
+                "key": "event.data.userId",
+                "maxSize": 10,
+                "timeout": "1s"
+              },
+              "id": "examples-048-batch-events-key-batch-keyed",
+              "name": "batch-keyed",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/048-batch-events-key?fnId=examples-048-batch-events-key-batch-keyed&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/048-batch-events-key/demo/batch-keyed"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/048-batch-events-key",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {
+        "item": "a",
+        "userId": "user-048"
+      },
+      "name": "examples/048-batch-events-key/demo/batch-keyed"
+    },
+    {
+      "data": {
+        "item": "b",
+        "userId": "user-048"
+      },
+      "name": "examples/048-batch-events-key/demo/batch-keyed"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "item": "a",
             "userId": "user-048"
@@ -191,54 +141,35 @@
           "ts": "<event-ts>",
           "user": {}
         },
-        "events": [
-          {
-            "data": {
-              "item": "a",
-              "userId": "user-048"
-            },
-            "id": "<event-id>",
-            "name": "examples/048-batch-events-key/demo/batch-keyed",
-            "ts": "<event-ts>",
-            "user": {}
-          },
-          {
-            "data": {
-              "item": "b",
-              "userId": "user-048"
-            },
-            "id": "<event-id>",
-            "name": "examples/048-batch-events-key/demo/batch-keyed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
         {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
           "data": {
-            "userId": "user-048",
-            "items": ["a", "b"],
-            "count": 2
-          }
+            "item": "b",
+            "userId": "user-048"
+          },
+          "id": "<event-id>",
+          "name": "examples/048-batch-events-key/demo/batch-keyed",
+          "ts": "<event-ts>",
+          "user": {}
         }
-      ]
+      ],
+      "event": {
+        "name": "examples/048-batch-events-key/demo/batch-keyed"
+      },
+      "functionId": "examples-048-batch-events-key-batch-keyed",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "count": 2,
+          "items": ["a", "b"],
+          "userId": "user-048"
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

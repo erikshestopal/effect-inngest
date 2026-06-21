@@ -1,310 +1,183 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep",
-      "path": "/examples/103-httpapi-step-sleep",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "103-httpapi-step-sleep",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/103-httpapi-step-sleep",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep",
-      "path": "/examples/103-httpapi-step-sleep",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/103-httpapi-step-sleep",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-103-httpapi-step-sleep",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-103-httpapi-step-sleep-sleep-test",
+              "name": "sleep-test",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/103-httpapi-step-sleep?fnId=examples-103-httpapi-step-sleep-sleep-test&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/103-httpapi-step-sleep/demo/sleep"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/103-httpapi-step-sleep",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+  "events": [
+    {
+      "data": {},
+      "name": "examples/103-httpapi-step-sleep/demo/sleep"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/103-httpapi-step-sleep/demo/sleep",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/103-httpapi-step-sleep/demo/sleep"
       },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-103-httpapi-step-sleep",
-        "functions": [
+      "functionId": "examples-103-httpapi-step-sleep-sleep-test",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "daaad336276d15594d0e765f96c17cd746bf4971": null
+      },
+      "response": {
+        "data": {
+          "slept": true
+        },
+        "status": "complete"
+      },
+      "stack": ["daaad336276d15594d0e765f96c17cd746bf4971"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/103-httpapi-step-sleep/demo/sleep",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/103-httpapi-step-sleep/demo/sleep"
+      },
+      "functionId": "examples-103-httpapi-step-sleep-sleep-test",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "examples-103-httpapi-step-sleep-sleep-test",
-            "name": "sleep-test",
-            "triggers": [
-              {
-                "event": "examples/103-httpapi-step-sleep/demo/sleep"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep?fnId=examples-103-httpapi-step-sleep-sleep-test&stepId=step"
-                }
-              }
+            "displayName": "wait",
+            "id": "daaad336276d15594d0e765f96c17cd746bf4971",
+            "name": "1s",
+            "op": "Sleep",
+            "opts": {},
+            "userland": {
+              "id": "wait"
             }
           }
         ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+        "status": 206
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "c44be21c-d29e-528a-a061-be8a8d21e8df"
-      }
+      "stack": [],
+      "stepId": "step"
     }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep?fnId=examples-103-httpapi-step-sleep-sleep-test&stepId=step",
-      "path": "/examples/103-httpapi-step-sleep",
-      "query": {
-        "fnId": "examples-103-httpapi-step-sleep-sleep-test",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "2604ab8b-27be-5c56-9497-972d89b40702",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/103-httpapi-step-sleep/demo/sleep",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/103-httpapi-step-sleep/demo/sleep",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "daaad336276d15594d0e765f96c17cd746bf4971",
-          "op": "Sleep",
-          "name": "1s",
-          "displayName": "wait",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "wait"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/103-httpapi-step-sleep?fnId=examples-103-httpapi-step-sleep-sleep-test&stepId=step",
-      "path": "/examples/103-httpapi-step-sleep",
-      "query": {
-        "fnId": "examples-103-httpapi-step-sleep-sleep-test",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "2604ab8b-27be-5c56-9497-972d89b40702",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["daaad336276d15594d0e765f96c17cd746bf4971"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/103-httpapi-step-sleep/demo/sleep",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/103-httpapi-step-sleep/demo/sleep",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "daaad336276d15594d0e765f96c17cd746bf4971": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "slept": true
-          }
-        }
-      ]
-    }
-  }
-]
+  ],
+  "checkpoints": []
+}

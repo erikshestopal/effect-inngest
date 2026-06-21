@@ -1,306 +1,151 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/011-step-invoke",
-      "path": "/examples/011-step-invoke",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "011-step-invoke",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/011-step-invoke",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 2,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 2,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/011-step-invoke",
-      "path": "/examples/011-step-invoke",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/011-step-invoke",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/011-step-invoke",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-011-step-invoke",
-        "functions": [
-          {
-            "id": "examples-011-step-invoke-child-square",
-            "name": "child-square",
-            "triggers": [
-              {
-                "event": "examples/011-step-invoke/demo/invoke-child"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-011-step-invoke",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-011-step-invoke-child-square",
+              "name": "child-square",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/011-step-invoke?fnId=examples-011-step-invoke-child-square&stepId=step"
+                  }
+                }
               },
-              {
-                "event": "examples/011-step-invoke/demo/invoke-child-2"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/011-step-invoke?fnId=examples-011-step-invoke-child-square&stepId=step"
+              "triggers": [
+                {
+                  "event": "examples/011-step-invoke/demo/invoke-child"
+                },
+                {
+                  "event": "examples/011-step-invoke/demo/invoke-child-2"
                 }
-              }
-            }
-          },
-          {
-            "id": "examples-011-step-invoke-parent-invoke",
-            "name": "parent-invoke",
-            "triggers": [
-              {
-                "event": "examples/011-step-invoke/demo/invoke-parent"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/011-step-invoke?fnId=examples-011-step-invoke-parent-invoke&stepId=step"
+              ]
+            },
+            {
+              "id": "examples-011-step-invoke-parent-invoke",
+              "name": "parent-invoke",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/011-step-invoke?fnId=examples-011-step-invoke-parent-invoke&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/011-step-invoke/demo/invoke-parent"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/011-step-invoke",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/011-step-invoke?fnId=examples-011-step-invoke-parent-invoke&stepId=step",
-      "path": "/examples/011-step-invoke",
-      "query": {
-        "fnId": "examples-011-step-invoke-parent-invoke",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "number": 7
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "number": 7
-          },
-          "id": "<event-id>",
-          "name": "examples/011-step-invoke/demo/invoke-parent",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "number": 7
-            },
-            "id": "<event-id>",
-            "name": "examples/011-step-invoke/demo/invoke-parent",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+      "name": "examples/011-step-invoke/demo/invoke-parent"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-          "op": "InvokeFunction",
-          "displayName": "call-child",
-          "opts": {
-            "payload": {
-              "data": {
-                "value": 7
-              }
-            },
-            "function_id": "examples-011-step-invoke-child-square"
-          },
-          "userland": {
-            "id": "call-child"
-          },
-          "data": null
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/011-step-invoke?fnId=examples-011-step-invoke-child-square&stepId=step",
-      "path": "/examples/011-step-invoke",
-      "query": {
-        "fnId": "examples-011-step-invoke-child-square",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "a7f790d3-561c-5d0f-9dc4-c2675b874493",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {
             "_inngest": {
               "correlation_id": "<correlation_id>",
               "expire": "<expire>",
-              "fn_id": "examples-011-step-invoke-child-square",
+              "fn_id": "<fn_id>",
               "gid": "<gid>",
               "isr": {
                 "dsid": "<dsid>",
@@ -326,109 +171,28 @@
           "name": "inngest/function.invoked",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "correlation_id": "<correlation_id>",
-                "expire": "<expire>",
-                "fn_id": "examples-011-step-invoke-child-square",
-                "gid": "<gid>",
-                "isr": {
-                  "dsid": "<dsid>",
-                  "dstp": "<dstp>",
-                  "tp": "<traceparent>",
-                  "ts": "<event-ts>"
-                },
-                "name": "call-child",
-                "source_app_id": "4bb058b3-b74b-5a08-a109-98f01dc4fc4f",
-                "source_fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-                "source_fn_v": 1,
-                "tc": {
-                  "ctx": {
-                    "sid": "<sid>",
-                    "traceparent": "<traceparent>"
-                  },
-                  "ts": "<event-ts>"
-                }
-              },
-              "value": 7
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.invoked",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "squared": 49
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/011-step-invoke?fnId=examples-011-step-invoke-parent-invoke&stepId=step",
-      "path": "/examples/011-step-invoke",
-      "query": {
-        "fnId": "examples-011-step-invoke-parent-invoke",
-        "stepId": "step"
+      ],
+      "event": {
+        "name": "inngest/function.invoked"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "10b6e973-07c5-55b3-8344-6ca5725ce24b",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["93f72581df96e9a8f01f1481b3570b4e9370a0a6"]
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-011-step-invoke-child-square",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "squared": 49
         },
-        "defers": {},
-        "event": {
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "number": 7
           },
@@ -436,48 +200,74 @@
           "name": "examples/011-step-invoke/demo/invoke-parent",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "number": 7
-            },
-            "id": "<event-id>",
-            "name": "examples/011-step-invoke/demo/invoke-parent",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
-            "data": {
-              "squared": 49
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        }
+      ],
+      "event": {
+        "name": "examples/011-step-invoke/demo/invoke-parent"
       },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+      "functionId": "examples-011-step-invoke-parent-invoke",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
           "data": {
-            "result": 49
+            "squared": 49
           }
         }
-      ]
+      },
+      "response": {
+        "data": {
+          "result": 49
+        },
+        "status": "complete"
+      },
+      "stack": ["93f72581df96e9a8f01f1481b3570b4e9370a0a6"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "number": 7
+          },
+          "id": "<event-id>",
+          "name": "examples/011-step-invoke/demo/invoke-parent",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/011-step-invoke/demo/invoke-parent"
+      },
+      "functionId": "examples-011-step-invoke-parent-invoke",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "call-child",
+            "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "op": "InvokeFunction",
+            "opts": {
+              "function_id": "examples-011-step-invoke-child-square",
+              "payload": {
+                "data": {
+                  "value": 7
+                }
+              }
+            },
+            "userland": {
+              "id": "call-child"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

@@ -1,415 +1,200 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/013-retries-config",
-      "path": "/examples/013-retries-config",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "013-retries-config",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/013-retries-config",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/013-retries-config",
-      "path": "/examples/013-retries-config",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/013-retries-config",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/013-retries-config",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-013-retries-config",
-        "functions": [
-          {
-            "id": "examples-013-retries-config-retries-limited",
-            "name": "retries-limited",
-            "triggers": [
-              {
-                "event": "examples/013-retries-config/demo/retries-limited"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/013-retries-config?fnId=examples-013-retries-config-retries-limited&stepId=step"
-                },
-                "retries": {
-                  "attempts": 1
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-013-retries-config",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-013-retries-config-retries-limited",
+              "name": "retries-limited",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "retries": {
+                    "attempts": 1
+                  },
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/013-retries-config?fnId=examples-013-retries-config-retries-limited&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/013-retries-config/demo/retries-limited"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/013-retries-config",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "2afbfa96-4f9a-56d7-95a3-74af0413d1f8"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/013-retries-config?fnId=examples-013-retries-config-retries-limited&stepId=step",
-      "path": "/examples/013-retries-config",
-      "query": {
-        "fnId": "examples-013-retries-config-retries-limited",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "6f894da7-5fb9-5193-afa4-1750905f3aa4",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 2,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/013-retries-config/demo/retries-limited",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/013-retries-config/demo/retries-limited",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "false",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+  "events": [
+    {
+      "data": {},
+      "name": "examples/013-retries-config/demo/retries-limited"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "ac289ed37b21d5d6454db74354be0c8ff640aa3c",
-          "op": "StepError",
-          "name": "always-fail",
-          "displayName": "always-fail",
-          "error": {
-            "name": "IntentionalFailure",
-            "message": "Intentional failure",
-            "stack": "<stack>"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/013-retries-config?fnId=examples-013-retries-config-retries-limited&stepId=step",
-      "path": "/examples/013-retries-config",
-      "query": {
-        "fnId": "examples-013-retries-config-retries-limited",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "2",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 1,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "6f894da7-5fb9-5193-afa4-1750905f3aa4",
-          "generation_id": 2,
-          "job_id": "<job_id>",
-          "max_attempts": 2,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {},
           "id": "<event-id>",
           "name": "examples/013-retries-config/demo/retries-limited",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/013-retries-config/demo/retries-limited",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "ac289ed37b21d5d6454db74354be0c8ff640aa3c",
-          "op": "StepFailed",
-          "name": "always-fail",
-          "displayName": "always-fail",
-          "error": {
-            "name": "IntentionalFailure",
-            "message": "Intentional failure",
-            "stack": "<stack>"
-          },
-          "data": {
-            "__serialized": true,
-            "name": "IntentionalFailure",
-            "message": "Intentional failure",
-            "stack": "<stack>"
-          },
-          "opts": {},
-          "userland": {
-            "id": "always-fail"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/013-retries-config?fnId=examples-013-retries-config-retries-limited&stepId=step",
-      "path": "/examples/013-retries-config",
-      "query": {
-        "fnId": "examples-013-retries-config-retries-limited",
-        "stepId": "step"
+      ],
+      "event": {
+        "name": "examples/013-retries-config/demo/retries-limited"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "6f894da7-5fb9-5193-afa4-1750905f3aa4",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 2,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["ac289ed37b21d5d6454db74354be0c8ff640aa3c"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/013-retries-config/demo/retries-limited",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
+      "functionId": "examples-013-retries-config-retries-limited",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/013-retries-config/demo/retries-limited",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "ac289ed37b21d5d6454db74354be0c8ff640aa3c": {
+            "displayName": "always-fail",
             "error": {
               "message": "Intentional failure",
-              "name": "IntentionalFailure",
+              "name": "<error-name>",
               "stack": "<stack>"
-            }
+            },
+            "id": "ac289ed37b21d5d6454db74354be0c8ff640aa3c",
+            "name": "always-fail",
+            "op": "StepError"
           }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 400,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        ],
+        "status": 206
       },
-      "body": {
-        "name": "StepError",
-        "message": "Intentional failure",
-        "stack": "<stack>"
-      }
+      "stack": [],
+      "stepId": "step"
+    },
+    {
+      "attempt": 1,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/013-retries-config/demo/retries-limited",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/013-retries-config/demo/retries-limited"
+      },
+      "functionId": "examples-013-retries-config-retries-limited",
+      "generation": 2,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "data": {
+              "message": "Intentional failure",
+              "name": "<error-name>",
+              "stack": "<stack>"
+            },
+            "displayName": "always-fail",
+            "error": {
+              "message": "Intentional failure",
+              "name": "<error-name>",
+              "stack": "<stack>"
+            },
+            "id": "ac289ed37b21d5d6454db74354be0c8ff640aa3c",
+            "name": "always-fail",
+            "op": "StepFailed"
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

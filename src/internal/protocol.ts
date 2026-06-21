@@ -275,6 +275,7 @@ export class GeneratorOpcode extends Schema.Class<GeneratorOpcode>("GeneratorOpc
         opts: { type: "step.sendEvent" },
         userland: { id: args.info.id },
         data: args.data,
+        timing: { a: Date.now() * 1_000_000, b: 0 },
       },
     });
   }

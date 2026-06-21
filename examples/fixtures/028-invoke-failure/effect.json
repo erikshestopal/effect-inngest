@@ -1,297 +1,146 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/028-invoke-failure",
-      "path": "/examples/028-invoke-failure",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "028-invoke-failure",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/028-invoke-failure",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 2,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/028-invoke-failure",
-      "path": "/examples/028-invoke-failure",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/028-invoke-failure",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-028-invoke-failure",
-        "functions": [
-          {
-            "id": "examples-028-invoke-failure-failing-child",
-            "name": "failing-child",
-            "triggers": [
-              {
-                "event": "examples/028-invoke-failure/demo/failing-child"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-failing-child&stepId=step"
-                }
-              }
-            }
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          {
-            "id": "examples-028-invoke-failure-parent-invoker",
-            "name": "parent-invoker",
-            "triggers": [
-              {
-                "event": "examples/028-invoke-failure/demo/invoke-failing"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step"
-                }
-              }
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
+          "function_count": 2,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/028-invoke-failure",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "11280c06-205b-5b38-b329-4655c3d30871"
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step",
-      "path": "/examples/028-invoke-failure",
-      "query": {
-        "fnId": "examples-028-invoke-failure-parent-invoker",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-028-invoke-failure",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
           },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/028-invoke-failure/demo/invoke-failing",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/028-invoke-failure/demo/invoke-failing",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
-          "op": "InvokeFunction",
-          "displayName": "call-child",
-          "opts": {
-            "payload": {
-              "data": {}
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-028-invoke-failure-failing-child",
+              "name": "failing-child",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/028-invoke-failure?fnId=examples-028-invoke-failure-failing-child&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/028-invoke-failure/demo/failing-child"
+                }
+              ]
             },
-            "function_id": "examples-028-invoke-failure-failing-child"
-          },
-          "userland": {
-            "id": "call-child"
-          },
-          "data": null
-        }
-      ]
+            {
+              "id": "examples-028-invoke-failure-parent-invoker",
+              "name": "parent-invoker",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/028-invoke-failure/demo/invoke-failing"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/028-invoke-failure",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
   },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-failing-child&stepId=step",
-      "path": "/examples/028-invoke-failure",
-      "query": {
-        "fnId": "examples-028-invoke-failure-failing-child",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "b469a03b-9aa5-51f5-878b-747134678d2c",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+  "events": [
+    {
+      "data": {},
+      "name": "examples/028-invoke-failure/demo/invoke-failing"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "_inngest": {
               "correlation_id": "<correlation_id>",
               "expire": "<expire>",
-              "fn_id": "examples-028-invoke-failure-failing-child",
+              "fn_id": "<fn_id>",
               "gid": "<gid>",
               "isr": {
                 "dsid": "<dsid>",
@@ -316,154 +165,102 @@
           "name": "inngest/function.invoked",
           "ts": "<event-ts>",
           "user": {}
+        }
+      ],
+      "event": {
+        "name": "inngest/function.invoked"
+      },
+      "functionId": "examples-028-invoke-failure-failing-child",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": {
+          "message": "Child always fails",
+          "name": "<error-name>",
+          "stack": "<stack>"
         },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "correlation_id": "<correlation_id>",
-                "expire": "<expire>",
-                "fn_id": "examples-028-invoke-failure-failing-child",
-                "gid": "<gid>",
-                "isr": {
-                  "dsid": "<dsid>",
-                  "dstp": "<dstp>",
-                  "tp": "<traceparent>",
-                  "ts": "<event-ts>"
-                },
-                "name": "call-child",
-                "source_app_id": "11280c06-205b-5b38-b329-4655c3d30871",
-                "source_fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-                "source_fn_v": 1,
-                "tc": {
-                  "ctx": {
-                    "sid": "<sid>",
-                    "traceparent": "<traceparent>"
-                  },
-                  "ts": "<event-ts>"
-                }
-              }
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.invoked",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
+        "status": 400
+      },
+      "stack": [],
+      "stepId": "step"
     },
-    "response": {
-      "status": 400,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-no-retry": "true",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "name": "NonRetriableError",
-        "message": "Child always fails",
-        "stack": "<stack>"
-      }
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/028-invoke-failure?fnId=examples-028-invoke-failure-parent-invoker&stepId=step",
-      "path": "/examples/028-invoke-failure",
-      "query": {
-        "fnId": "examples-028-invoke-failure-parent-invoker",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "b79445ab-cb10-5083-b244-8717536e89fb",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["93f72581df96e9a8f01f1481b3570b4e9370a0a6"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {},
           "id": "<event-id>",
           "name": "examples/028-invoke-failure/demo/invoke-failing",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/028-invoke-failure/demo/invoke-failing",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
-            "error": {
-              "error": "NonRetriableError",
-              "message": "Child always fails",
-              "name": "NonRetriableError",
-              "stack": "<stack>"
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        }
+      ],
+      "event": {
+        "name": "examples/028-invoke-failure/demo/invoke-failing"
       },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "status": "caught-error",
-            "error": "Child always fails"
+      "functionId": "examples-028-invoke-failure-parent-invoker",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "93f72581df96e9a8f01f1481b3570b4e9370a0a6": {
+          "error": {
+            "message": "Child always fails",
+            "name": "<error-name>",
+            "stack": "<stack>"
           }
         }
-      ]
+      },
+      "response": {
+        "data": {
+          "error": "Child always fails",
+          "status": "caught-error"
+        },
+        "status": "complete"
+      },
+      "stack": ["93f72581df96e9a8f01f1481b3570b4e9370a0a6"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/028-invoke-failure/demo/invoke-failing",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/028-invoke-failure/demo/invoke-failing"
+      },
+      "functionId": "examples-028-invoke-failure-parent-invoker",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "call-child",
+            "id": "93f72581df96e9a8f01f1481b3570b4e9370a0a6",
+            "op": "InvokeFunction",
+            "opts": {
+              "function_id": "examples-028-invoke-failure-failing-child",
+              "payload": {
+                "data": {}
+              }
+            },
+            "userland": {
+              "id": "call-child"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

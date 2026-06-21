@@ -1,13 +1,13 @@
 {
   "schema": "inngest-protocol-canonical/v1",
-  "exampleId": "015-debounce",
+  "exampleId": "051-client-send",
   "runtime": "effect",
   "registration": {
     "introspection": {
       "request": {
         "body": null,
         "method": "GET",
-        "path": "/examples/015-debounce",
+        "path": "/examples/051-client-send",
         "query": {}
       },
       "response": {
@@ -15,7 +15,7 @@
           "extra": {
             "native_crypto": true
           },
-          "function_count": 1,
+          "function_count": 0,
           "has_event_key": false,
           "has_signing_key": false,
           "mode": "dev",
@@ -34,7 +34,7 @@
       "request": {
         "body": null,
         "method": "PUT",
-        "path": "/examples/015-debounce",
+        "path": "/examples/051-client-send",
         "query": {}
       },
       "response": {
@@ -55,39 +55,16 @@
     "register": {
       "request": {
         "body": {
-          "appName": "examples-015-debounce",
+          "appName": "examples-051-client-send",
           "capabilities": {
             "connect": "v1",
             "trust_probe": "v1"
           },
           "deployType": "ping",
           "framework": "bun",
-          "functions": [
-            {
-              "debounce": {
-                "period": "1s"
-              },
-              "id": "examples-015-debounce-debounced-fn",
-              "name": "debounced-fn",
-              "steps": {
-                "step": {
-                  "id": "step",
-                  "name": "step",
-                  "runtime": {
-                    "type": "http",
-                    "url": "/examples/015-debounce?fnId=examples-015-debounce-debounced-fn&stepId=step"
-                  }
-                }
-              },
-              "triggers": [
-                {
-                  "event": "examples/015-debounce/demo/debounced"
-                }
-              ]
-            }
-          ],
+          "functions": [],
           "sdk": "<sdk>",
-          "url": "/examples/015-debounce",
+          "url": "/examples/051-client-send",
           "v": "0.1"
         },
         "method": "POST",
@@ -112,42 +89,44 @@
   "events": [
     {
       "data": {
-        "seq": 1
+        "amount": 99.99,
+        "orderId": "o1"
       },
-      "name": "examples/015-debounce/demo/debounced"
-    }
-  ],
-  "executions": [
+      "id": "payment-o1-20240115",
+      "name": "examples/051-client-send/payment/received"
+    },
     {
-      "attempt": 0,
-      "batchEvents": [
-        {
-          "data": {
-            "seq": 1
-          },
-          "id": "<event-id>",
-          "name": "examples/015-debounce/demo/debounced",
-          "ts": "<event-ts>",
-          "user": {}
-        }
-      ],
-      "event": {
-        "name": "examples/015-debounce/demo/debounced"
+      "data": {
+        "channel": "email",
+        "template": "order-confirmation",
+        "userId": "123"
       },
-      "functionId": "examples-015-debounce-debounced-fn",
-      "generation": 1,
-      "kind": "root",
-      "memoizedSteps": {},
-      "response": {
-        "data": {
-          "processedAt": "<timestamp>",
-          "seq": 1
-        },
-        "status": "complete"
+      "name": "examples/051-client-send/notification/send"
+    },
+    {
+      "data": {
+        "email": "alice@example.com",
+        "userId": "123"
       },
-      "stack": [],
-      "stepId": "step"
+      "name": "examples/051-client-send/user/created"
+    },
+    {
+      "data": {
+        "orderId": "o1",
+        "total": 99.99,
+        "userId": "123"
+      },
+      "name": "examples/051-client-send/order/placed"
+    },
+    {
+      "data": {
+        "orderId": "o2",
+        "total": 149.99,
+        "userId": "456"
+      },
+      "name": "examples/051-client-send/order/placed"
     }
   ],
+  "executions": [],
   "checkpoints": []
 }

@@ -1,550 +1,151 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
-      "path": "/examples/053-step-invoke-options",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "053-step-invoke-options",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/053-step-invoke-options",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 2,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
-      "path": "/examples/053-step-invoke-options",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/053-step-invoke-options",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-053-step-invoke-options",
-        "functions": [
-          {
-            "id": "examples-053-step-invoke-options-worker-task",
-            "name": "worker-task",
-            "triggers": [
-              {
-                "event": "examples/053-step-invoke-options/demo/worker-task"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step"
-                },
-                "retries": {
-                  "attempts": 3
-                }
-              }
-            }
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          {
-            "id": "examples-053-step-invoke-options-orchestrator",
-            "name": "orchestrator",
-            "triggers": [
-              {
-                "event": "examples/053-step-invoke-options/demo/orchestrate"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step"
-                }
-              }
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
+          "function_count": 2,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/053-step-invoke-options",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "fd46353a-6fe7-5af1-b639-7572183f6165"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
-      "path": "/examples/053-step-invoke-options",
-      "query": {
-        "fnId": "examples-053-step-invoke-options-orchestrator",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
         },
-        "defers": {},
-        "event": {
-          "data": {
-            "taskId": "task-053"
-          },
-          "id": "<event-id>",
-          "name": "examples/053-step-invoke-options/demo/orchestrate",
-          "ts": "<event-ts>",
-          "user": {}
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
         },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-053"
-            },
-            "id": "<event-id>",
-            "name": "examples/053-step-invoke-options/demo/orchestrate",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
+        "status": 200
       }
     },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "98f60eef27694e38e56d53701e64d91e7b4b9166",
-          "op": "InvokeFunction",
-          "displayName": "invoke-worker",
-          "opts": {
-            "payload": {
-              "data": {
-                "taskId": "task-053",
-                "priority": "high"
-              }
-            },
-            "function_id": "examples-053-step-invoke-options-worker-task",
-            "timeout": "30s"
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-053-step-invoke-options",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
           },
-          "userland": {
-            "id": "invoke-worker"
-          },
-          "data": null
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step",
-      "path": "/examples/053-step-invoke-options",
-      "query": {
-        "fnId": "examples-053-step-invoke-options-worker-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "264c147f-9e82-5d6a-bbb6-30c6c7f216b6",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 4,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "_inngest": {
-              "correlation_id": "<correlation_id>",
-              "expire": "<expire>",
-              "fn_id": "examples-053-step-invoke-options-worker-task",
-              "gid": "<gid>",
-              "isr": {
-                "dsid": "<dsid>",
-                "dstp": "<dstp>",
-                "tp": "<traceparent>",
-                "ts": "<event-ts>"
-              },
-              "name": "invoke-worker",
-              "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-              "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-              "source_fn_v": 1,
-              "tc": {
-                "ctx": {
-                  "sid": "<sid>",
-                  "traceparent": "<traceparent>"
-                },
-                "ts": "<event-ts>"
-              }
-            },
-            "priority": "high",
-            "taskId": "task-053"
-          },
-          "id": "<event-id>",
-          "name": "inngest/function.invoked",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "correlation_id": "<correlation_id>",
-                "expire": "<expire>",
-                "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "<gid>",
-                "isr": {
-                  "dsid": "<dsid>",
-                  "dstp": "<dstp>",
-                  "tp": "<traceparent>",
-                  "ts": "<event-ts>"
-                },
-                "name": "invoke-worker",
-                "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                "source_fn_v": 1,
-                "tc": {
-                  "ctx": {
-                    "sid": "<sid>",
-                    "traceparent": "<traceparent>"
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-053-step-invoke-options-worker-task",
+              "name": "worker-task",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "retries": {
+                    "attempts": 3
                   },
-                  "ts": "<event-ts>"
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step"
+                  }
                 }
               },
-              "priority": "high",
-              "taskId": "task-053"
+              "triggers": [
+                {
+                  "event": "examples/053-step-invoke-options/demo/worker-task"
+                }
+              ]
             },
-            "id": "<event-id>",
-            "name": "inngest/function.invoked",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "completed": true,
-            "taskId": "task-053"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
-      "path": "/examples/053-step-invoke-options",
-      "query": {
-        "fnId": "examples-053-step-invoke-options-orchestrator",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "taskId": "task-053"
-          },
-          "id": "<event-id>",
-          "name": "examples/053-step-invoke-options/demo/orchestrate",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-053"
-            },
-            "id": "<event-id>",
-            "name": "examples/053-step-invoke-options/demo/orchestrate",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "98f60eef27694e38e56d53701e64d91e7b4b9166": {
-            "data": {
-              "completed": true,
-              "taskId": "task-053"
+            {
+              "id": "examples-053-step-invoke-options-orchestrator",
+              "name": "orchestrator",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/053-step-invoke-options/demo/orchestrate"
+                }
+              ]
             }
-          }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/053-step-invoke-options",
+          "v": "0.1"
         },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": [
-        {
-          "id": "f7931d4debe848361c612c75928abab74294ff1b",
-          "op": "InvokeFunction",
-          "displayName": "invoke-batch-worker",
-          "opts": {
-            "payload": {
-              "data": {
-                "taskId": "task-053-batch",
-                "priority": "low"
-              }
-            },
-            "function_id": "examples-053-step-invoke-options-worker-task",
-            "timeout": "5m"
-          },
-          "userland": {
-            "id": "invoke-batch-worker"
-          },
-          "data": null
-        }
-      ]
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
   },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-worker-task&stepId=step",
-      "path": "/examples/053-step-invoke-options",
-      "query": {
-        "fnId": "examples-053-step-invoke-options-worker-task",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "taskId": "task-053"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "264c147f-9e82-5d6a-bbb6-30c6c7f216b6",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 4,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+      "name": "examples/053-step-invoke-options/demo/orchestrate"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "_inngest": {
               "correlation_id": "<correlation_id>",
               "expire": "<expire>",
-              "fn_id": "examples-053-step-invoke-options-worker-task",
+              "fn_id": "<fn_id>",
               "gid": "<gid>",
               "isr": {
                 "dsid": "<dsid>",
@@ -571,111 +172,83 @@
           "name": "inngest/function.invoked",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "_inngest": {
-                "correlation_id": "<correlation_id>",
-                "expire": "<expire>",
-                "fn_id": "examples-053-step-invoke-options-worker-task",
-                "gid": "<gid>",
-                "isr": {
-                  "dsid": "<dsid>",
-                  "dstp": "<dstp>",
-                  "tp": "<traceparent>",
-                  "ts": "<event-ts>"
-                },
-                "name": "invoke-batch-worker",
-                "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
-                "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-                "source_fn_v": 1,
-                "tc": {
-                  "ctx": {
-                    "sid": "<sid>",
-                    "traceparent": "<traceparent>"
-                  },
-                  "ts": "<event-ts>"
-                }
-              },
-              "priority": "low",
-              "taskId": "task-053-batch"
-            },
-            "id": "<event-id>",
-            "name": "inngest/function.invoked",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "completed": true,
-            "taskId": "task-053-batch"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/053-step-invoke-options?fnId=examples-053-step-invoke-options-orchestrator&stepId=step",
-      "path": "/examples/053-step-invoke-options",
-      "query": {
-        "fnId": "examples-053-step-invoke-options-orchestrator",
-        "stepId": "step"
+      ],
+      "event": {
+        "name": "inngest/function.invoked"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166", "f7931d4debe848361c612c75928abab74294ff1b"]
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-053-step-invoke-options-worker-task",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "completed": true,
+          "taskId": "task-053-batch"
         },
-        "defers": {},
-        "event": {
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "_inngest": {
+              "correlation_id": "<correlation_id>",
+              "expire": "<expire>",
+              "fn_id": "<fn_id>",
+              "gid": "<gid>",
+              "isr": {
+                "dsid": "<dsid>",
+                "dstp": "<dstp>",
+                "tp": "<traceparent>",
+                "ts": "<event-ts>"
+              },
+              "name": "invoke-worker",
+              "source_app_id": "fd46353a-6fe7-5af1-b639-7572183f6165",
+              "source_fn_id": "0ba24fac-c702-5d97-9d41-71be640ef058",
+              "source_fn_v": 1,
+              "tc": {
+                "ctx": {
+                  "sid": "<sid>",
+                  "traceparent": "<traceparent>"
+                },
+                "ts": "<event-ts>"
+              }
+            },
+            "priority": "high",
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "inngest/function.invoked",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "inngest/function.invoked"
+      },
+      "functionId": "examples-053-step-invoke-options-worker-task",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "completed": true,
+          "taskId": "task-053"
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "taskId": "task-053"
           },
@@ -683,63 +256,144 @@
           "name": "examples/053-step-invoke-options/demo/orchestrate",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-053"
-            },
-            "id": "<event-id>",
-            "name": "examples/053-step-invoke-options/demo/orchestrate",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "98f60eef27694e38e56d53701e64d91e7b4b9166": {
-            "data": {
-              "completed": true,
-              "taskId": "task-053"
-            }
-          },
-          "f7931d4debe848361c612c75928abab74294ff1b": {
-            "data": {
-              "completed": true,
-              "taskId": "task-053-batch"
-            }
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        }
+      ],
+      "event": {
+        "name": "examples/053-step-invoke-options/demo/orchestrate"
       },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
+      "functionId": "examples-053-step-invoke-options-orchestrator",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "98f60eef27694e38e56d53701e64d91e7b4b9166": {
           "data": {
-            "orchestrated": true,
-            "workerResult": {
-              "completed": true,
-              "taskId": "task-053"
-            },
-            "batchResult": {
-              "completed": true,
-              "taskId": "task-053-batch"
-            }
+            "completed": true,
+            "taskId": "task-053"
+          }
+        },
+        "f7931d4debe848361c612c75928abab74294ff1b": {
+          "data": {
+            "completed": true,
+            "taskId": "task-053-batch"
           }
         }
-      ]
+      },
+      "response": {
+        "data": {
+          "batchResult": {
+            "completed": true,
+            "taskId": "task-053-batch"
+          },
+          "orchestrated": true,
+          "workerResult": {
+            "completed": true,
+            "taskId": "task-053"
+          }
+        },
+        "status": "complete"
+      },
+      "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166", "f7931d4debe848361c612c75928abab74294ff1b"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "examples/053-step-invoke-options/demo/orchestrate",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/053-step-invoke-options/demo/orchestrate"
+      },
+      "functionId": "examples-053-step-invoke-options-orchestrator",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "98f60eef27694e38e56d53701e64d91e7b4b9166": {
+          "data": {
+            "completed": true,
+            "taskId": "task-053"
+          }
+        }
+      },
+      "response": {
+        "body": [
+          {
+            "displayName": "invoke-batch-worker",
+            "id": "f7931d4debe848361c612c75928abab74294ff1b",
+            "op": "InvokeFunction",
+            "opts": {
+              "function_id": "examples-053-step-invoke-options-worker-task",
+              "payload": {
+                "data": {
+                  "priority": "low",
+                  "taskId": "task-053-batch"
+                }
+              },
+              "timeout": "5m"
+            },
+            "userland": {
+              "id": "invoke-batch-worker"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": ["98f60eef27694e38e56d53701e64d91e7b4b9166"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "taskId": "task-053"
+          },
+          "id": "<event-id>",
+          "name": "examples/053-step-invoke-options/demo/orchestrate",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/053-step-invoke-options/demo/orchestrate"
+      },
+      "functionId": "examples-053-step-invoke-options-orchestrator",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "invoke-worker",
+            "id": "98f60eef27694e38e56d53701e64d91e7b4b9166",
+            "op": "InvokeFunction",
+            "opts": {
+              "function_id": "examples-053-step-invoke-options-worker-task",
+              "payload": {
+                "data": {
+                  "priority": "high",
+                  "taskId": "task-053"
+                }
+              },
+              "timeout": "30s"
+            },
+            "userland": {
+              "id": "invoke-worker"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

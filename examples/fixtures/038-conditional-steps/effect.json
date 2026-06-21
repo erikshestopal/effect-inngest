@@ -1,182 +1,124 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
-      "path": "/examples/038-conditional-steps",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "038-conditional-steps",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/038-conditional-steps",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
-        },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
-      }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
-      "path": "/examples/038-conditional-steps",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
-      }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/038-conditional-steps",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-038-conditional-steps",
-        "functions": [
-          {
-            "id": "examples-038-conditional-steps-conditional-steps",
-            "name": "conditional-steps",
-            "triggers": [
-              {
-                "event": "examples/038-conditional-steps/demo/conditional"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/038-conditional-steps?fnId=examples-038-conditional-steps-conditional-steps&stepId=step"
-                }
-              }
-            }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "2aa66cff-8d7d-5a7e-8ab1-dc79da746c9b"
-      }
-    }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/038-conditional-steps?fnId=examples-038-conditional-steps-conditional-steps&stepId=step",
-      "path": "/examples/038-conditional-steps",
-      "query": {
-        "fnId": "examples-038-conditional-steps-conditional-steps",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
           },
-          "step_id": "step",
-          "use_api": false
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "defers": {},
-        "event": {
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/038-conditional-steps",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-038-conditional-steps",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-038-conditional-steps-conditional-steps",
+              "name": "conditional-steps",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/038-conditional-steps?fnId=examples-038-conditional-steps-conditional-steps&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/038-conditional-steps/demo/conditional"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/038-conditional-steps",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {
+        "shouldSkip": false
+      },
+      "name": "examples/038-conditional-steps/demo/conditional"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "shouldSkip": false
           },
@@ -184,335 +126,194 @@
           "name": "examples/038-conditional-steps/demo/conditional",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "shouldSkip": false
-            },
-            "id": "<event-id>",
-            "name": "examples/038-conditional-steps/demo/conditional",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "path": "full",
-            "result": "processed-1,processed-2,processed-3"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/038-conditional-steps/demo/conditional"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "80437a44a661d141174209119d54125a59a64b2a",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "setup",
-            "displayName": "setup",
-            "userland": {
-              "id": "setup"
-            },
-            "opts": {},
-            "rawArgs": ["setup", null],
-            "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "80437a44a661d141174209119d54125a59a64b2a",
-                "memoized": false,
-                "options": {
-                  "id": "setup",
-                  "name": "setup"
-                },
-                "stepType": "run"
+      "functionId": "examples-038-conditional-steps-conditional-steps",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "data": {
+          "path": "full",
+          "result": "processed-1,processed-2,processed-3"
+        },
+        "status": "complete"
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "initialized",
+              "displayName": "setup",
+              "id": "80437a44a661d141174209119d54125a59a64b2a",
+              "mode": "sync",
+              "name": "setup",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "setup"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "initialized",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "heavy-step-1",
-            "displayName": "heavy-step-1",
-            "userland": {
-              "id": "heavy-step-1"
-            },
-            "opts": {},
-            "rawArgs": ["heavy-step-1", null],
-            "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
-                "memoized": false,
-                "options": {
-                  "id": "heavy-step-1",
-                  "name": "heavy-step-1"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "processed-1",
+              "displayName": "heavy-step-1",
+              "id": "cb4895cbb442e082df09cf9a6e149b1ad6a9c4fb",
+              "mode": "sync",
+              "name": "heavy-step-1",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "heavy-step-1"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "processed-1",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "heavy-step-2",
-            "displayName": "heavy-step-2",
-            "userland": {
-              "id": "heavy-step-2"
-            },
-            "opts": {},
-            "rawArgs": ["heavy-step-2", null],
-            "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
-                "memoized": false,
-                "options": {
-                  "id": "heavy-step-2",
-                  "name": "heavy-step-2"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "processed-2",
+              "displayName": "heavy-step-2",
+              "id": "6dae10cd03445df9e4186a8debb428f4d5b239a9",
+              "mode": "sync",
+              "name": "heavy-step-2",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "heavy-step-2"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "processed-2",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "42805e12-9eb7-5444-bb3d-5438449b03e6",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "2878df8885808eb28275a24e12f920ed98457b86",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "heavy-step-3",
-            "displayName": "heavy-step-3",
-            "userland": {
-              "id": "heavy-step-3"
-            },
-            "opts": {},
-            "rawArgs": ["heavy-step-3", null],
-            "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "2878df8885808eb28275a24e12f920ed98457b86",
-                "memoized": false,
-                "options": {
-                  "id": "heavy-step-3",
-                  "name": "heavy-step-3"
-                },
-                "stepType": "run"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "processed-3",
+              "displayName": "heavy-step-3",
+              "id": "2878df8885808eb28275a24e12f920ed98457b86",
+              "mode": "sync",
+              "name": "heavy-step-3",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "heavy-step-3"
               }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "processed-3",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
             }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

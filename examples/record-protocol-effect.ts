@@ -13,32 +13,16 @@ import * as Layer from "effect/Layer";
 import * as Path from "effect/Path";
 import * as Ref from "effect/Ref";
 import * as Stream from "effect/Stream";
+import {
+  type ExampleCase,
+  type ExampleManifestEntry,
+  type ObservedExchange,
+  toCanonicalFixture,
+} from "./protocol-canonical.ts";
 
 type RuntimeName = "native" | "effect";
 type RuntimeArg = RuntimeName | "both";
 type Direction = "inbound" | "outbound";
-
-interface ExampleCase {
-  readonly kind: "event";
-  readonly eventKey?: string;
-  readonly events: ReadonlyArray<Record<string, unknown>>;
-  readonly afterEvents?: ReadonlyArray<{
-    readonly delayMs: number;
-    readonly eventKey?: string;
-    readonly events: ReadonlyArray<Record<string, unknown>>;
-  }>;
-  readonly expect?: ReadonlyArray<{
-    readonly functionId?: string;
-    readonly functionTag?: string;
-    readonly status?: string | ReadonlyArray<string>;
-  }>;
-}
-
-interface ExampleManifestEntry {
-  readonly id: string;
-  readonly path?: string;
-  readonly cases: ReadonlyArray<ExampleCase>;
-}
 
 interface HttpResult {
   readonly body: string;
@@ -52,13 +36,7 @@ interface ProcessHandle {
   readonly output: Ref.Ref<string>;
 }
 
-interface Exchange {
-  readonly sequence: number;
-  readonly direction: Direction;
-  readonly proxy: string;
-  readonly request: Record<string, unknown>;
-  readonly response: Record<string, unknown>;
-}
+type Exchange = ObservedExchange;
 
 interface RecordingState {
   readonly exchanges: Ref.Ref<Map<string, ReadonlyArray<Exchange>>>;
@@ -73,7 +51,7 @@ const examplesDir = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(examplesDir, "..");
 const fixturesRoot = join(examplesDir, "fixtures");
 
-const realDevOrigin = "http://127.0.0.1:8288";
+const realDevOrigin = "http://127.0.0.1:18288";
 const recordedDevOrigin = "http://127.0.0.1:18289";
 const recordedSdkOrigin = "http://127.0.0.1:19998";
 const realSdkOrigin = "http://127.0.0.1:19999";
@@ -168,6 +146,20 @@ const appNameToExampleId = (appName: unknown) =>
 
 const rawBodyRunId = (body: unknown) => (isObject(body) && typeof body.run_id === "string" ? body.run_id : undefined);
 
+const eventNameToExampleId = (eventName: unknown) => {
+  if (typeof eventName !== "string") return undefined;
+  const match = eventName.match(/^examples\/([^/]+)\//u);
+  return match?.[1];
+};
+
+const eventsBodyExampleId = (body: unknown) => {
+  const events = Array.isArray(body) ? body : [body];
+  return events
+    .filter(isObject)
+    .map((event) => eventNameToExampleId(event.name))
+    .find((id) => id !== undefined);
+};
+
 const rawBodyCtxRunId = (body: unknown) => {
   if (!isObject(body) || !isObject(body.ctx) || typeof body.ctx.run_id !== "string") return undefined;
   return body.ctx.run_id;
@@ -186,6 +178,10 @@ const identifyExchangeExample = (state: RecordingState, direction: Direction, pa
 
     if (path === "/fn/register" && isObject(body)) {
       return appNameToExampleId(body.appName);
+    }
+
+    if (path.startsWith("/e/")) {
+      return eventsBodyExampleId(body);
     }
 
     const checkpointRunId = rawBodyRunId(body);
@@ -343,6 +339,21 @@ const sanitizeVolatileProtocolFields = (value: unknown): unknown => {
   if (sanitized.tp !== undefined) sanitized.tp = "<traceparent>";
   if (sanitized.traceparent !== undefined) sanitized.traceparent = "<traceparent>";
   if (typeof sanitized.stack === "string") sanitized.stack = "<stack>";
+  if (typeof sanitized.eventId === "string") sanitized.eventId = "<event-id>";
+  if (sanitized.randomValue !== undefined) sanitized.randomValue = "<random-value>";
+  if (sanitized.displayName === "capture-time" && typeof sanitized.data === "number") {
+    sanitized.data = "<timestamp>";
+  }
+  if (sanitized.displayName === "capture-random" && typeof sanitized.data === "number") {
+    sanitized.data = "<random-value>";
+  }
+  if (Object.values(sanitized).every((child) => child === null || isObject(child))) {
+    for (const [key, child] of Object.entries(sanitized)) {
+      if (/^[a-f0-9]{40}$/u.test(key) && isObject(child) && typeof child.data === "number") {
+        sanitized[key] = { ...child, data: "<dynamic-number>" };
+      }
+    }
+  }
   if (Array.isArray(sanitized.ids) && sanitized.ids.every((id) => typeof id === "string")) {
     sanitized.ids = sanitized.ids.map(() => "<event-id>");
   }
@@ -630,7 +641,7 @@ const startDevServer = Effect.gen(function* () {
   if (!command) return yield* Effect.fail(new Error("Empty Inngest CLI command"));
   const devServer = yield* spawnManaged(
     command,
-    [...prefixArgs, "dev", "--no-discovery", "--no-poll", "--port", "8288", "--retry-interval", "1", "--tick", "10"],
+    [...prefixArgs, "dev", "--no-discovery", "--no-poll", "--port", "18288", "--retry-interval", "1", "--tick", "10"],
     "inngest dev server",
   );
   yield* waitForHttp(`${realDevOrigin}/dev`, 60_000, devServer);
@@ -670,7 +681,12 @@ const triggerCase = (
   caseIndex: number,
 ) =>
   Effect.gen(function* () {
-    if (caseData.kind !== "event") return yield* Effect.fail(new Error("Unsupported protocol fixture case kind"));
+    if (caseData.kind === "effect") {
+      return yield* http(`${realSdkOrigin}/__effect/examples/${example.id}/cases/${caseIndex}/run`, {
+        method: "POST",
+        timeoutMs: caseData.timeoutMs ?? 20_000,
+      }).pipe(Effect.flatMap((response) => assertOk(`run effect case ${example.id}`, response)));
+    }
     const fixturePrefix = `${runtimeName}-${example.id}`;
     yield* sendEvents(caseData.eventKey ?? "local", withFixtureIds(fixturePrefix, caseIndex, caseData.events));
     for (const [afterIndex, afterEvent] of (caseData.afterEvents ?? []).entries()) {
@@ -719,8 +735,14 @@ const hasTerminalOpcode = (body: unknown) =>
       (op.op === "RunComplete" || op.op === "SyncRunComplete" || op.op === "StepFailed"),
   );
 
+const schedulesRetry = (exchange: Exchange) =>
+  exchange.response.status !== 206 &&
+  isObject(exchange.response.headers) &&
+  exchange.response.headers["retry-after"] !== undefined &&
+  exchange.response.headers["x-inngest-no-retry"] !== "true";
+
 const isTerminalExecutionResponse = (exchange: Exchange) =>
-  exchange.response.status !== 206 || hasTerminalOpcode(exchange.response.body);
+  !schedulesRetry(exchange) && (exchange.response.status !== 206 || hasTerminalOpcode(exchange.response.body));
 
 const terminalExecutionCount = (
   exchanges: ReadonlyArray<Exchange>,
@@ -819,6 +841,8 @@ const removeSyncedApp = (sdkUrl: string) =>
 
 const fixtureFile = (exampleId: string, runtimeName: RuntimeName) =>
   join(fixturesRoot, exampleId, `${runtimeName}.json`);
+const rawFixtureFile = (exampleId: string, runtimeName: RuntimeName) =>
+  join(fixturesRoot, "_raw", "latest", exampleId, `${runtimeName}.raw.json`);
 const stepCompletionOrder = (exchange: Exchange) => (exchange.request.body as any)?.ctx?.stack?.stack ?? [];
 const isRootParallelPlan = (exchange: Exchange) =>
   exchange.direction === "inbound" &&
@@ -900,37 +924,79 @@ const canonicalizeParallelChildOrder = (ordered: ReadonlyArray<Exchange>) => {
   }));
 };
 
-const keepExpectedTerminalExecutions = (ordered: ReadonlyArray<Exchange>, example: ExampleManifestEntry) => {
-  const expectedFunctionIds = expectedRootFunctionIds(example);
-  const expectedTerminalCount = expectedTerminalExecutionCount(example);
-  let terminalCount = 0;
-  return ordered.filter((exchange) => {
-    if (!isTerminalExecutionResponse(exchange)) return true;
-    if (exchange.direction !== "inbound" || exchange.request.method !== "POST") return true;
-    if ((exchange.request.query as any)?.stepId !== "step") return true;
-    if (expectedFunctionIds.size > 0 && !expectedFunctionIds.has(String((exchange.request.query as any)?.fnId)))
-      return true;
-    terminalCount++;
-    return terminalCount <= expectedTerminalCount;
-  });
+const withoutSequence = (value: unknown): unknown => {
+  if (Array.isArray(value)) return value.map(withoutSequence);
+  if (!isObject(value)) return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([key]) => key !== "sequence")
+      .map(([key, child]) => [key, withoutSequence(child)] as const),
+  );
 };
+
+const sortFixtureExchanges = (exchanges: ReadonlyArray<Exchange>) =>
+  [...exchanges]
+    .sort((a, b) => JSON.stringify(withoutSequence(a)).localeCompare(JSON.stringify(withoutSequence(b))))
+    .map((exchange, index) => ({
+      ...exchange,
+      sequence: index + 1,
+      request: { ...exchange.request, sequence: index + 1 },
+    }));
 
 const writeFixture = (state: RecordingState, example: ExampleManifestEntry, runtimeName: RuntimeName) =>
   Effect.gen(function* () {
     const fs = yield* FileSystem.FileSystem;
     const path = yield* Path.Path;
     const exchanges = (yield* Ref.get(state.exchanges)).get(example.id) ?? [];
-    const ordered = keepExpectedTerminalExecutions(
-      canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence)),
-      example,
-    );
+    const ordered = canonicalizeParallelChildOrder([...exchanges].sort((a, b) => a.sequence - b.sequence));
     const outputFile = fixtureFile(example.id, runtimeName);
+    const rawOutputFile = rawFixtureFile(example.id, runtimeName);
+    const canonical = toCanonicalFixture({ example, runtime: runtimeName, exchanges: ordered });
     yield* fs.makeDirectory(path.dirname(outputFile), { recursive: true });
-    yield* fs.writeFileString(outputFile, `${JSON.stringify(ordered, null, 2)}\n`);
+    yield* fs.writeFileString(outputFile, `${JSON.stringify(canonical, null, 2)}\n`);
+    yield* fs.makeDirectory(path.dirname(rawOutputFile), { recursive: true });
+    yield* fs.writeFileString(rawOutputFile, `${JSON.stringify(sortFixtureExchanges(ordered), null, 2)}\n`);
   });
 
 const matchesFilters = (example: ExampleManifestEntry, filters: ReadonlyArray<string>) =>
   filters.length === 0 || filters.some((filter) => example.id.includes(filter) || example.path?.includes(filter));
+
+const isolatedExampleIds = new Set(["055-system-events"]);
+
+const splitExamples = (examples: ReadonlyArray<ExampleManifestEntry>) => ({
+  normal: examples.filter((example) => !isolatedExampleIds.has(example.id)),
+  isolated: examples.filter((example) => isolatedExampleIds.has(example.id)),
+});
+
+const recordNormalExamples = (
+  state: RecordingState,
+  server: ProcessHandle,
+  runtimeName: RuntimeName,
+  examples: ReadonlyArray<ExampleManifestEntry>,
+  concurrency: number,
+) =>
+  Effect.forEach(examples, (example) => recordExample(state, server, runtimeName, example), {
+    concurrency,
+    discard: true,
+  });
+
+const recordIsolatedExamples = (
+  state: RecordingState,
+  runtimeName: RuntimeName,
+  examples: ReadonlyArray<ExampleManifestEntry>,
+) =>
+  Effect.forEach(
+    examples,
+    (example) =>
+      Effect.scoped(
+        Effect.gen(function* () {
+          yield* startDevServer;
+          const server = yield* startRuntimeServer(runtimeName, example);
+          yield* recordExample(state, server, runtimeName, example);
+        }),
+      ),
+    { concurrency: 1, discard: true },
+  );
 
 const readExamples = (runtimeName: RuntimeName, filters: ReadonlyArray<string>) =>
   Effect.gen(function* () {
@@ -1007,21 +1073,21 @@ const program = (input: {
         targetOrigin: realDevOrigin,
       });
       for (const runtimeName of selectedRuntimes(input.runtime)) {
-        yield* Effect.scoped(
+        const isolated = yield* Effect.scoped(
           Effect.gen(function* () {
             yield* startDevServer;
             const server = yield* startRuntimeServer(runtimeName);
             const examples = yield* readExamples(runtimeName, input.only);
             if (examples.length === 0) {
               console.log(`no ${runtimeName} examples matched`);
-              return;
+              return [];
             }
-            yield* Effect.forEach(examples, (example) => recordExample(state, server, runtimeName, example), {
-              concurrency: input.concurrency,
-              discard: true,
-            });
+            const { normal, isolated } = splitExamples(examples);
+            yield* recordNormalExamples(state, server, runtimeName, normal, input.concurrency);
+            return isolated;
           }),
         );
+        yield* recordIsolatedExamples(state, runtimeName, isolated);
       }
     }),
   );

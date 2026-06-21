@@ -1,13 +1,13 @@
 {
   "schema": "inngest-protocol-canonical/v1",
-  "exampleId": "015-debounce",
+  "exampleId": "049-cron-timezone",
   "runtime": "effect",
   "registration": {
     "introspection": {
       "request": {
         "body": null,
         "method": "GET",
-        "path": "/examples/015-debounce",
+        "path": "/examples/049-cron-timezone",
         "query": {}
       },
       "response": {
@@ -34,7 +34,7 @@
       "request": {
         "body": null,
         "method": "PUT",
-        "path": "/examples/015-debounce",
+        "path": "/examples/049-cron-timezone",
         "query": {}
       },
       "response": {
@@ -55,7 +55,7 @@
     "register": {
       "request": {
         "body": {
-          "appName": "examples-015-debounce",
+          "appName": "examples-049-cron-timezone",
           "capabilities": {
             "connect": "v1",
             "trust_probe": "v1"
@@ -64,30 +64,27 @@
           "framework": "bun",
           "functions": [
             {
-              "debounce": {
-                "period": "1s"
-              },
-              "id": "examples-015-debounce-debounced-fn",
-              "name": "debounced-fn",
+              "id": "examples-049-cron-timezone-daily-9am-est",
+              "name": "daily-9am-est",
               "steps": {
                 "step": {
                   "id": "step",
                   "name": "step",
                   "runtime": {
                     "type": "http",
-                    "url": "/examples/015-debounce?fnId=examples-015-debounce-debounced-fn&stepId=step"
+                    "url": "/examples/049-cron-timezone?fnId=examples-049-cron-timezone-daily-9am-est&stepId=step"
                   }
                 }
               },
               "triggers": [
                 {
-                  "event": "examples/015-debounce/demo/debounced"
+                  "cron": "TZ=America/New_York 0 9 * * *"
                 }
               ]
             }
           ],
           "sdk": "<sdk>",
-          "url": "/examples/015-debounce",
+          "url": "/examples/049-cron-timezone",
           "v": "0.1"
         },
         "method": "POST",
@@ -109,45 +106,7 @@
       }
     }
   },
-  "events": [
-    {
-      "data": {
-        "seq": 1
-      },
-      "name": "examples/015-debounce/demo/debounced"
-    }
-  ],
-  "executions": [
-    {
-      "attempt": 0,
-      "batchEvents": [
-        {
-          "data": {
-            "seq": 1
-          },
-          "id": "<event-id>",
-          "name": "examples/015-debounce/demo/debounced",
-          "ts": "<event-ts>",
-          "user": {}
-        }
-      ],
-      "event": {
-        "name": "examples/015-debounce/demo/debounced"
-      },
-      "functionId": "examples-015-debounce-debounced-fn",
-      "generation": 1,
-      "kind": "root",
-      "memoizedSteps": {},
-      "response": {
-        "data": {
-          "processedAt": "<timestamp>",
-          "seq": 1
-        },
-        "status": "complete"
-      },
-      "stack": [],
-      "stepId": "step"
-    }
-  ],
+  "events": [],
+  "executions": [],
   "checkpoints": []
 }

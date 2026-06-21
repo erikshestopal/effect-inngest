@@ -1,524 +1,311 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed",
-      "path": "/examples/043-parallel-mixed",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "043-parallel-mixed",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/043-parallel-mixed",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed",
-      "path": "/examples/043-parallel-mixed",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/043-parallel-mixed",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/043-parallel-mixed",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-043-parallel-mixed",
-        "functions": [
-          {
-            "id": "examples-043-parallel-mixed-parallel-mixed",
-            "name": "parallel-mixed",
-            "triggers": [
-              {
-                "event": "examples/043-parallel-mixed/demo/parallel-mixed"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-043-parallel-mixed",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-043-parallel-mixed-parallel-mixed",
+              "name": "parallel-mixed",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/043-parallel-mixed/demo/parallel-mixed"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/043-parallel-mixed",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "825abf52-295f-5438-996e-deae60817a12"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "source": "parallel-mixed-function"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+      "name": "examples/043-parallel-mixed/demo/side-effect"
+    },
+    {
+      "data": {},
+      "name": "examples/043-parallel-mixed/demo/parallel-mixed"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {},
           "id": "<event-id>",
           "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "displayName": "compute",
-          "op": "StepPlanned",
-          "id": "24989d8ee41c1575924630844ad094b55e6b1445",
-          "name": "compute",
-          "opts": {},
-          "userland": {
-            "id": "compute"
-          },
-          "data": null
-        },
-        {
-          "id": "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
-          "op": "Sleep",
-          "name": "2s",
-          "displayName": "short-wait",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "short-wait"
-          }
-        },
-        {
-          "displayName": "notify",
-          "op": "StepPlanned",
-          "id": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-          "name": "sendEvent",
-          "opts": {
-            "type": "step.sendEvent"
-          },
-          "userland": {
-            "id": "notify"
-          },
-          "data": null
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa"
+      ],
+      "event": {
+        "name": "examples/043-parallel-mixed/demo/parallel-mixed"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": true,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-043-parallel-mixed-parallel-mixed",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "24989d8ee41c1575924630844ad094b55e6b1445": {
+          "data": "<dynamic-number>"
         },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-          "op": "StepRun",
-          "name": "sendEvent",
-          "opts": {
-            "type": "step.sendEvent"
-          },
-          "displayName": "notify",
-          "userland": {
-            "id": "notify"
-          },
+        "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
+        "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
           "data": {
             "ids": ["<event-id>"]
           }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=24989d8ee41c1575924630844ad094b55e6b1445",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "24989d8ee41c1575924630844ad094b55e6b1445"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "24989d8ee41c1575924630844ad094b55e6b1445"
+      "response": {
+        "data": {
+          "computed": 42,
+          "sent": true,
+          "slept": true
+        },
+        "status": "complete"
       },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": true,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {},
-          "id": "<event-id>",
-          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": 2
-      }
+      "stack": [
+        "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
+        "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
+        "24989d8ee41c1575924630844ad094b55e6b1445"
+      ],
+      "stepId": "step"
     },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "24989d8ee41c1575924630844ad094b55e6b1445",
-          "op": "StepRun",
-          "name": "compute",
-          "opts": {},
-          "displayName": "compute",
-          "userland": {
-            "id": "compute"
-          },
-          "data": 42,
-          "timing": {
-            "a": "<timing-a>",
-            "b": "<timing-b>"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/043-parallel-mixed?fnId=examples-043-parallel-mixed-parallel-mixed&stepId=step",
-      "path": "/examples/043-parallel-mixed",
-      "query": {
-        "fnId": "examples-043-parallel-mixed-parallel-mixed",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": true,
-          "env": "",
-          "fn_id": "c09e6ffb-3d08-59a1-ad9a-7f8a75a09f06",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 3,
-            "stack": [
-              "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
-              "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
-              "24989d8ee41c1575924630844ad094b55e6b1445"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {},
           "id": "<event-id>",
           "name": "examples/043-parallel-mixed/demo/parallel-mixed",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
+        }
+      ],
+      "event": {
+        "name": "examples/043-parallel-mixed/demo/parallel-mixed"
+      },
+      "functionId": "examples-043-parallel-mixed-parallel-mixed",
+      "generation": 1,
+      "kind": "parallel-child",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "data": {},
-            "id": "<event-id>",
-            "name": "examples/043-parallel-mixed/demo/parallel-mixed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "24989d8ee41c1575924630844ad094b55e6b1445": {
-            "data": 42
-          },
-          "4b397b3993da96cde2b317d851e2afa1d08ff0e9": null,
-          "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa": {
             "data": {
               "ids": ["<event-id>"]
+            },
+            "displayName": "notify",
+            "id": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
+            "name": "sendEvent",
+            "op": "StepRun",
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "timing": {
+              "a": "<timing-a>",
+              "b": "<timing-b>"
+            },
+            "userland": {
+              "id": "notify"
             }
           }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        ],
+        "status": 206
       },
-      "body": {
-        "computed": 42,
-        "slept": true,
-        "sent": true
-      }
+      "stack": [],
+      "stepId": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/043-parallel-mixed/demo/parallel-mixed"
+      },
+      "functionId": "examples-043-parallel-mixed-parallel-mixed",
+      "generation": 1,
+      "kind": "parallel-child",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "data": 42,
+            "displayName": "compute",
+            "id": "24989d8ee41c1575924630844ad094b55e6b1445",
+            "name": "compute",
+            "op": "StepRun",
+            "opts": {},
+            "timing": {
+              "a": "<timing-a>",
+              "b": "<timing-b>"
+            },
+            "userland": {
+              "id": "compute"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "24989d8ee41c1575924630844ad094b55e6b1445"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {},
+          "id": "<event-id>",
+          "name": "examples/043-parallel-mixed/demo/parallel-mixed",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/043-parallel-mixed/demo/parallel-mixed"
+      },
+      "functionId": "examples-043-parallel-mixed-parallel-mixed",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "compute",
+            "id": "24989d8ee41c1575924630844ad094b55e6b1445",
+            "name": "compute",
+            "op": "StepPlanned",
+            "opts": {},
+            "userland": {
+              "id": "compute"
+            }
+          },
+          {
+            "displayName": "short-wait",
+            "id": "4b397b3993da96cde2b317d851e2afa1d08ff0e9",
+            "name": "2s",
+            "op": "Sleep",
+            "opts": {},
+            "userland": {
+              "id": "short-wait"
+            }
+          },
+          {
+            "displayName": "notify",
+            "id": "4f08301dcb7bf7ec8486798a9d2a1d43f508c8aa",
+            "name": "sendEvent",
+            "op": "StepPlanned",
+            "opts": {
+              "type": "step.sendEvent"
+            },
+            "userland": {
+              "id": "notify"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
     }
-  }
-]
+  ],
+  "checkpoints": []
+}

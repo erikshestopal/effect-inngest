@@ -1,186 +1,128 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/025-concurrency-key",
-      "path": "/examples/025-concurrency-key",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "025-concurrency-key",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/025-concurrency-key",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/025-concurrency-key",
-      "path": "/examples/025-concurrency-key",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/025-concurrency-key",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/025-concurrency-key",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-025-concurrency-key",
-        "functions": [
-          {
-            "id": "examples-025-concurrency-key-user-processor",
-            "name": "user-processor",
-            "triggers": [
-              {
-                "event": "examples/025-concurrency-key/demo/concurrent-keyed"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/025-concurrency-key?fnId=examples-025-concurrency-key-user-processor&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-025-concurrency-key",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "concurrency": {
+                "key": "event.data.userId",
+                "limit": 1
+              },
+              "id": "examples-025-concurrency-key-user-processor",
+              "name": "user-processor",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/025-concurrency-key?fnId=examples-025-concurrency-key-user-processor&stepId=step"
+                  }
                 }
-              }
-            },
-            "concurrency": {
-              "key": "event.data.userId",
-              "limit": 1
+              },
+              "triggers": [
+                {
+                  "event": "examples/025-concurrency-key/demo/concurrent-keyed"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/025-concurrency-key",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "23017151-b38c-5b5a-98e2-56de76a70ed1"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/025-concurrency-key?fnId=examples-025-concurrency-key-user-processor&stepId=step",
-      "path": "/examples/025-concurrency-key",
-      "query": {
-        "fnId": "examples-025-concurrency-key-user-processor",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "userId": "user-025"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "1ca1675e-a7fc-564d-ad2f-65a9e8d701b0",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+      "name": "examples/025-concurrency-key/demo/concurrent-keyed"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "userId": "user-025"
           },
@@ -188,211 +130,110 @@
           "name": "examples/025-concurrency-key/demo/concurrent-keyed",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "userId": "user-025"
-            },
-            "id": "<event-id>",
-            "name": "examples/025-concurrency-key/demo/concurrent-keyed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "ba904789b6f90e72a1e78112beaeb19ba12bdfad",
-          "op": "Sleep",
-          "name": "1s",
-          "displayName": "simulate-work",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "simulate-work"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/025-concurrency-key/demo/concurrent-keyed"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "1ca1675e-a7fc-564d-ad2f-65a9e8d701b0",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-025-concurrency-key-user-processor",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "ba904789b6f90e72a1e78112beaeb19ba12bdfad": null,
+        "c2e2d6621334dc890bbd8a69430012c45a83bf65": {
+          "data": "Processing user-025"
+        }
+      },
+      "response": {
+        "data": {
+          "processed": "user-025"
+        },
+        "status": "complete"
+      },
+      "stack": ["c2e2d6621334dc890bbd8a69430012c45a83bf65", "ba904789b6f90e72a1e78112beaeb19ba12bdfad"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "userId": "user-025"
+          },
+          "id": "<event-id>",
+          "name": "examples/025-concurrency-key/demo/concurrent-keyed",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/025-concurrency-key/demo/concurrent-keyed"
+      },
+      "functionId": "examples-025-concurrency-key-user-processor",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "process",
-            "displayName": "process",
-            "userland": {
-              "id": "process"
-            },
+            "displayName": "simulate-work",
+            "id": "ba904789b6f90e72a1e78112beaeb19ba12bdfad",
+            "name": "1s",
+            "op": "Sleep",
             "opts": {},
-            "rawArgs": ["process", null],
-            "hashedId": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
-                "memoized": false,
-                "options": {
-                  "id": "process",
-                  "name": "process"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "Processing user-025",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+            "userland": {
+              "id": "simulate-work"
             }
           }
         ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+        "status": 206
       },
-      "body": null
+      "stack": [],
+      "stepId": "step"
     }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/025-concurrency-key?fnId=examples-025-concurrency-key-user-processor&stepId=step",
-      "path": "/examples/025-concurrency-key",
-      "query": {
-        "fnId": "examples-025-concurrency-key-user-processor",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "1ca1675e-a7fc-564d-ad2f-65a9e8d701b0",
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
           "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
           "qi_id": "<qi_id>",
           "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
           "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["c2e2d6621334dc890bbd8a69430012c45a83bf65", "ba904789b6f90e72a1e78112beaeb19ba12bdfad"]
-          },
-          "step_id": "step",
-          "use_api": false
+          "steps": [
+            {
+              "data": "Processing user-025",
+              "displayName": "process",
+              "id": "c2e2d6621334dc890bbd8a69430012c45a83bf65",
+              "mode": "sync",
+              "name": "process",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "process"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
         },
-        "defers": {},
-        "event": {
-          "data": {
-            "userId": "user-025"
-          },
-          "id": "<event-id>",
-          "name": "examples/025-concurrency-key/demo/concurrent-keyed",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "userId": "user-025"
-            },
-            "id": "<event-id>",
-            "name": "examples/025-concurrency-key/demo/concurrent-keyed",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "ba904789b6f90e72a1e78112beaeb19ba12bdfad": null,
-          "c2e2d6621334dc890bbd8a69430012c45a83bf65": {
-            "data": "Processing user-025"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "processed": "user-025"
-          }
-        }
-      ]
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

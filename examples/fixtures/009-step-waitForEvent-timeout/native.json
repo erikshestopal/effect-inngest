@@ -1,321 +1,192 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout",
-      "path": "/examples/009-step-waitForEvent-timeout",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "009-step-waitForEvent-timeout",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/009-step-waitForEvent-timeout",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout",
-      "path": "/examples/009-step-waitForEvent-timeout",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/009-step-waitForEvent-timeout",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-009-step-waitForEvent-timeout",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-009-step-waitForEvent-timeout-wait-timeout",
+              "name": "wait-timeout",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/009-step-waitForEvent-timeout",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+  "events": [
+    {
+      "data": {
+        "orderId": "timeout-009"
       },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-009-step-waitForEvent-timeout",
-        "functions": [
+      "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "orderId": "timeout-009"
+          },
+          "id": "<event-id>",
+          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
+      },
+      "functionId": "examples-009-step-waitForEvent-timeout-wait-timeout",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "dd4654a352d46a6f4b313e0b0dd326be36e5004c": null
+      },
+      "response": {
+        "data": {
+          "timedOut": true
+        },
+        "status": "complete"
+      },
+      "stack": ["dd4654a352d46a6f4b313e0b0dd326be36e5004c"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "orderId": "timeout-009"
+          },
+          "id": "<event-id>",
+          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
+      },
+      "functionId": "examples-009-step-waitForEvent-timeout-wait-timeout",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "examples-009-step-waitForEvent-timeout-wait-timeout",
-            "name": "wait-timeout",
-            "triggers": [
-              {
-                "event": "examples/009-step-waitForEvent-timeout/demo/wait-timeout"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step"
-                }
-              }
+            "displayName": "wait-for-signal",
+            "id": "dd4654a352d46a6f4b313e0b0dd326be36e5004c",
+            "name": "examples/009-step-waitForEvent-timeout/demo/timeout-signal",
+            "op": "WaitForEvent",
+            "opts": {
+              "if": "async.data.orderId == \"timeout-009\"",
+              "timeout": "5s"
+            },
+            "userland": {
+              "id": "wait-for-signal"
             }
           }
         ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+        "status": 206
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "0f703a62-6171-5999-95ab-5abdbef1cc97"
-      }
+      "stack": [],
+      "stepId": "step"
     }
-  },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
-      "path": "/examples/009-step-waitForEvent-timeout",
-      "query": {
-        "fnId": "examples-009-step-waitForEvent-timeout-wait-timeout",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "5e39f98b-bb38-5fbe-80eb-b94299089214",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "orderId": "timeout-009"
-          },
-          "id": "<event-id>",
-          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "orderId": "timeout-009"
-            },
-            "id": "<event-id>",
-            "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "dd4654a352d46a6f4b313e0b0dd326be36e5004c",
-          "op": "WaitForEvent",
-          "name": "examples/009-step-waitForEvent-timeout/demo/timeout-signal",
-          "displayName": "wait-for-signal",
-          "opts": {
-            "timeout": "5s",
-            "if": "async.data.orderId == \"timeout-009\""
-          },
-          "userland": {
-            "id": "wait-for-signal"
-          },
-          "data": null
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/009-step-waitForEvent-timeout?fnId=examples-009-step-waitForEvent-timeout-wait-timeout&stepId=step",
-      "path": "/examples/009-step-waitForEvent-timeout",
-      "query": {
-        "fnId": "examples-009-step-waitForEvent-timeout-wait-timeout",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "5e39f98b-bb38-5fbe-80eb-b94299089214",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 1,
-            "stack": ["dd4654a352d46a6f4b313e0b0dd326be36e5004c"]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
-          "data": {
-            "orderId": "timeout-009"
-          },
-          "id": "<event-id>",
-          "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
-          "ts": "<event-ts>",
-          "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "orderId": "timeout-009"
-            },
-            "id": "<event-id>",
-            "name": "examples/009-step-waitForEvent-timeout/demo/wait-timeout",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "dd4654a352d46a6f4b313e0b0dd326be36e5004c": null
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "timedOut": true
-          }
-        }
-      ]
-    }
-  }
-]
+  ],
+  "checkpoints": []
+}

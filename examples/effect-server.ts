@@ -4,9 +4,10 @@ import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { FetchHttpClient } from "effect/unstable/http";
+import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { InngestClient, InngestGroup } from "effect-inngest";
-import type { EventExampleCase, ExampleDefinition } from "./_support.ts";
+import type { AnyEffectExampleCase, EventExampleCase, ExampleDefinition } from "./_support.ts";
 
 const examplesDir = dirname(fileURLToPath(import.meta.url));
 
@@ -29,9 +30,11 @@ interface LoadedExample {
 interface RunnableExample {
   readonly appId: string;
   readonly cases: ReadonlyArray<EventExampleCase>;
+  readonly effectCases: ReadonlyArray<AnyEffectExampleCase>;
   readonly dispose: () => Promise<void>;
   readonly handler: (request: Request) => Promise<Response>;
   readonly id: string;
+  readonly layer: Layer.Layer<unknown, unknown, never>;
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null;
@@ -66,8 +69,9 @@ const loadExamples = async (): Promise<ReadonlyArray<LoadedExample>> => {
 
 const toRunnableExample = (example: LoadedExample): RunnableExample | undefined => {
   const eventCases = example.definition.cases.filter((exampleCase) => exampleCase.kind === "event");
+  const effectCases = example.definition.cases.filter((exampleCase) => exampleCase.kind === "effect");
 
-  if (!example.definition.group || !example.definition.handlers || eventCases.length === 0) {
+  if (!example.definition.group && effectCases.length === 0) {
     return undefined;
   }
 
@@ -79,10 +83,11 @@ const toRunnableExample = (example: LoadedExample): RunnableExample | undefined 
     apiBaseUrl: `${devUrl}/`,
     eventBaseUrl: `${devUrl}/`,
   }).pipe(Layer.provide(FetchHttpClient.layer));
-  const layer = Layer.mergeAll(example.definition.handlers, ClientLive, FetchHttpClient.layer);
-  const { handler, dispose } = InngestGroup.toWebHandler(example.definition.group, { layer });
+  const layer = Layer.mergeAll(example.definition.handlers ?? Layer.empty, ClientLive, FetchHttpClient.layer);
+  const group = example.definition.group ?? InngestGroup.make();
+  const { handler, dispose } = InngestGroup.toWebHandler(group, { layer });
 
-  return { appId, cases: eventCases, dispose, handler, id: example.definition.id };
+  return { appId, cases: eventCases, dispose, effectCases, handler, id: example.definition.id, layer };
 };
 
 const loadedExamples = await loadExamples();
@@ -103,7 +108,15 @@ if (missingExampleIds.length > 0) {
 const routes = new Map(runnableExamples.map((example) => [examplePath(example.id), example]));
 const manifest = runnableExamples.map((example) => ({
   appId: example.appId,
-  cases: example.cases,
+  cases: [
+    ...example.cases,
+    ...example.effectCases.map((effectCase, effectCaseIndex) => ({
+      effectCaseIndex,
+      expect: [],
+      kind: "effect" as const,
+      timeoutMs: effectCase.timeoutMs,
+    })),
+  ],
   id: example.id,
   path: examplePath(example.id),
 }));
@@ -133,6 +146,26 @@ const server = Bun.serve({
 
     if (url.pathname === "/__effect/examples") {
       return Response.json({ examples: manifest });
+    }
+
+    const runEffectCase = url.pathname.match(/^\/__effect\/examples\/([^/]+)\/cases\/(\d+)\/run$/u);
+    if (runEffectCase) {
+      const example = runnableExamples.find((entry) => entry.id === runEffectCase[1]);
+      const manifestCase = example
+        ? manifest.find((entry) => entry.id === example.id)?.cases[Number(runEffectCase[2])]
+        : undefined;
+      const effectCaseIndex =
+        manifestCase && "effectCaseIndex" in manifestCase ? manifestCase.effectCaseIndex : undefined;
+      const effectCase = typeof effectCaseIndex === "number" ? example?.effectCases[effectCaseIndex] : undefined;
+      if (!example || !effectCase) return new Response("Not found", { status: 404 });
+      const runnable = effectCase.effect.pipe(Effect.provide(example.layer)) as Effect.Effect<unknown, unknown>;
+      return Effect.runPromise(
+        runnable.pipe(
+          Effect.as({ ok: true }),
+          Effect.catchCause((cause) => Effect.succeed({ cause: String(cause), ok: false })),
+          Effect.map((body) => Response.json(body, { status: body.ok ? 200 : 500 })),
+        ),
+      );
     }
 
     const example = routes.get(url.pathname);

@@ -1,182 +1,124 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime",
-      "path": "/examples/063-checkpointing-max-runtime",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "063-checkpointing-max-runtime",
+  "runtime": "native",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/063-checkpointing-max-runtime",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime",
-      "path": "/examples/063-checkpointing-max-runtime",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/063-checkpointing-max-runtime",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-063-checkpointing-max-runtime",
-        "functions": [
-          {
-            "id": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
-            "name": "checkpoint-deadline",
-            "triggers": [
-              {
-                "event": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime?fnId=examples-063-checkpointing-max-runtime-checkpoint-deadline&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-063-checkpointing-max-runtime",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
+              "name": "checkpoint-deadline",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/063-checkpointing-max-runtime?fnId=examples-063-checkpointing-max-runtime-checkpoint-deadline&stepId=step"
+                  }
                 }
-              }
+              },
+              "triggers": [
+                {
+                  "event": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
+                }
+              ]
             }
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/063-checkpointing-max-runtime",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "01f055c1-3cbd-5d0a-b779-1250baec04b1"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime?fnId=examples-063-checkpointing-max-runtime-checkpoint-deadline&stepId=step",
-      "path": "/examples/063-checkpointing-max-runtime",
-      "query": {
-        "fnId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "runId": "deadline-063"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+      "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "runId": "deadline-063"
           },
@@ -184,313 +126,46 @@
           "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "runId": "deadline-063"
-            },
-            "id": "<event-id>",
-            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "displayName": "s4",
-          "op": "StepPlanned",
-          "id": "cf02869b109e668923aaa85773264c6ea487ee55",
-          "name": "s4",
-          "opts": {},
-          "userland": {
-            "id": "s4"
-          },
-          "data": null
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "640d87e741e6aa4c669a82a4cd304787960513ab",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "s1",
-            "displayName": "s1",
-            "userland": {
-              "id": "s1"
-            },
-            "opts": {},
-            "rawArgs": ["s1", null],
-            "hashedId": "640d87e741e6aa4c669a82a4cd304787960513ab",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "640d87e741e6aa4c669a82a4cd304787960513ab",
-                "memoized": false,
-                "options": {
-                  "id": "s1",
-                  "name": "s1"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "s1",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "4205714cdfe14ed9e3d030ddf7887781b964f510",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "s2",
-            "displayName": "s2",
-            "userland": {
-              "id": "s2"
-            },
-            "opts": {},
-            "rawArgs": ["s2", null],
-            "hashedId": "4205714cdfe14ed9e3d030ddf7887781b964f510",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "4205714cdfe14ed9e3d030ddf7887781b964f510",
-                "memoized": false,
-                "options": {
-                  "id": "s2",
-                  "name": "s2"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "s2",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
-      },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "dd33a084ba223dd231b0aa962f77a5920017bc8b",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "s3",
-            "displayName": "s3",
-            "userland": {
-              "id": "s3"
-            },
-            "opts": {},
-            "rawArgs": ["s3", null],
-            "hashedId": "dd33a084ba223dd231b0aa962f77a5920017bc8b",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "dd33a084ba223dd231b0aa962f77a5920017bc8b",
-                "memoized": false,
-                "options": {
-                  "id": "s3",
-                  "name": "s3"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "s3",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime?fnId=examples-063-checkpointing-max-runtime-checkpoint-deadline&stepId=cf02869b109e668923aaa85773264c6ea487ee55",
-      "path": "/examples/063-checkpointing-max-runtime",
-      "query": {
-        "fnId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
-        "stepId": "cf02869b109e668923aaa85773264c6ea487ee55"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "cf02869b109e668923aaa85773264c6ea487ee55"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": [
-              "640d87e741e6aa4c669a82a4cd304787960513ab",
-              "4205714cdfe14ed9e3d030ddf7887781b964f510",
-              "dd33a084ba223dd231b0aa962f77a5920017bc8b"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "4205714cdfe14ed9e3d030ddf7887781b964f510": {
+          "data": "s2"
         },
-        "defers": {},
-        "event": {
+        "640d87e741e6aa4c669a82a4cd304787960513ab": {
+          "data": "s1"
+        },
+        "cf02869b109e668923aaa85773264c6ea487ee55": {
+          "data": "s4"
+        },
+        "dd33a084ba223dd231b0aa962f77a5920017bc8b": {
+          "data": "s3"
+        }
+      },
+      "response": {
+        "data": {
+          "count": 5
+        },
+        "status": "complete"
+      },
+      "stack": [
+        "640d87e741e6aa4c669a82a4cd304787960513ab",
+        "4205714cdfe14ed9e3d030ddf7887781b964f510",
+        "dd33a084ba223dd231b0aa962f77a5920017bc8b",
+        "cf02869b109e668923aaa85773264c6ea487ee55"
+      ],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "runId": "deadline-063"
           },
@@ -498,109 +173,56 @@
           "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
+      },
+      "functionId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
+      "generation": 1,
+      "kind": "parallel-child",
+      "memoizedSteps": {
+        "4205714cdfe14ed9e3d030ddf7887781b964f510": {
+          "data": "s2"
         },
-        "events": [
+        "640d87e741e6aa4c669a82a4cd304787960513ab": {
+          "data": "s1"
+        },
+        "dd33a084ba223dd231b0aa962f77a5920017bc8b": {
+          "data": "s3"
+        }
+      },
+      "response": {
+        "body": [
           {
-            "data": {
-              "runId": "deadline-063"
+            "data": "s4",
+            "displayName": "s4",
+            "id": "cf02869b109e668923aaa85773264c6ea487ee55",
+            "name": "s4",
+            "op": "StepRun",
+            "opts": {},
+            "timing": {
+              "a": "<timing-a>",
+              "b": "<timing-b>"
             },
-            "id": "<event-id>",
-            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
-            "ts": "<event-ts>",
-            "user": {}
+            "userland": {
+              "id": "s4"
+            }
           }
         ],
-        "steps": {
-          "4205714cdfe14ed9e3d030ddf7887781b964f510": {
-            "data": "s2"
-          },
-          "640d87e741e6aa4c669a82a4cd304787960513ab": {
-            "data": "s1"
-          },
-          "dd33a084ba223dd231b0aa962f77a5920017bc8b": {
-            "data": "s3"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
+        "status": 206
+      },
+      "stack": [
+        "640d87e741e6aa4c669a82a4cd304787960513ab",
+        "4205714cdfe14ed9e3d030ddf7887781b964f510",
+        "dd33a084ba223dd231b0aa962f77a5920017bc8b"
+      ],
+      "stepId": "cf02869b109e668923aaa85773264c6ea487ee55"
     },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
+    {
+      "attempt": 0,
+      "batchEvents": [
         {
-          "id": "cf02869b109e668923aaa85773264c6ea487ee55",
-          "op": "StepRun",
-          "name": "s4",
-          "opts": {},
-          "displayName": "s4",
-          "userland": {
-            "id": "s4"
-          },
-          "data": "s4",
-          "timing": {
-            "a": "<timing-a>",
-            "b": "<timing-b>"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/063-checkpointing-max-runtime?fnId=examples-063-checkpointing-max-runtime-checkpoint-deadline&stepId=step",
-      "path": "/examples/063-checkpointing-max-runtime",
-      "query": {
-        "fnId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 4,
-            "stack": [
-              "640d87e741e6aa4c669a82a4cd304787960513ab",
-              "4205714cdfe14ed9e3d030ddf7887781b964f510",
-              "dd33a084ba223dd231b0aa962f77a5920017bc8b",
-              "cf02869b109e668923aaa85773264c6ea487ee55"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
           "data": {
             "runId": "deadline-063"
           },
@@ -608,128 +230,202 @@
           "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "runId": "deadline-063"
-            },
-            "id": "<event-id>",
-            "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "4205714cdfe14ed9e3d030ddf7887781b964f510": {
-            "data": "s2"
-          },
-          "640d87e741e6aa4c669a82a4cd304787960513ab": {
-            "data": "s1"
-          },
-          "cf02869b109e668923aaa85773264c6ea487ee55": {
-            "data": "s4"
-          },
-          "dd33a084ba223dd231b0aa962f77a5920017bc8b": {
-            "data": "s3"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "count": 5
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 10,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 10,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "09440fc6-a974-5097-b6e1-030b7fb4ff1a",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-063-checkpointing-max-runtime-checkpoint-deadline",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "a17a5326f2e39180944411e24041543fbc693e23",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "s5",
-            "displayName": "s5",
-            "userland": {
-              "id": "s5"
-            },
+            "displayName": "s4",
+            "id": "cf02869b109e668923aaa85773264c6ea487ee55",
+            "name": "s4",
+            "op": "StepPlanned",
             "opts": {},
-            "rawArgs": ["s5", null],
-            "hashedId": "a17a5326f2e39180944411e24041543fbc693e23",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "a17a5326f2e39180944411e24041543fbc693e23",
-                "memoized": false,
-                "options": {
-                  "id": "s5",
-                  "name": "s5"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "s5",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+            "userland": {
+              "id": "s4"
             }
           }
         ],
-        "ts": "<event-ts>"
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "s1",
+              "displayName": "s1",
+              "id": "640d87e741e6aa4c669a82a4cd304787960513ab",
+              "mode": "sync",
+              "name": "s1",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "s1"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "s2",
+              "displayName": "s2",
+              "id": "4205714cdfe14ed9e3d030ddf7887781b964f510",
+              "mode": "sync",
+              "name": "s2",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "s2"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "s3",
+              "displayName": "s3",
+              "id": "dd33a084ba223dd231b0aa962f77a5920017bc8b",
+              "mode": "sync",
+              "name": "s3",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "s3"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "s5",
+              "displayName": "s5",
+              "id": "a17a5326f2e39180944411e24041543fbc693e23",
+              "mode": "sync",
+              "name": "s5",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "s5"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}

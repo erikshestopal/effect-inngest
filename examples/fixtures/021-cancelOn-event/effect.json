@@ -1,188 +1,130 @@
-[
-  {
-    "sequence": 1,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 1,
-      "method": "GET",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event",
-      "path": "/examples/021-cancelOn-event",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "021-cancelOn-event",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/021-cancelOn-event",
+        "query": {}
       },
-      "body": null
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": {
-        "extra": {
-          "native_crypto": true
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
         },
-        "has_event_key": false,
-        "has_signing_key": false,
-        "function_count": 1,
-        "mode": "dev",
-        "schema_version": "2024-05-24"
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 2,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 2,
-      "method": "PUT",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event",
-      "path": "/examples/021-cancelOn-event",
-      "query": {},
-      "headers": {
-        "user-agent": "<sdk>"
-      },
-      "body": null
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/021-cancelOn-event",
+        "query": {}
       },
-      "body": {
-        "message": "Successfully registered",
-        "modified": true
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
       }
-    }
-  },
-  {
-    "sequence": 3,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 3,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/fn/register",
-      "path": "/fn/register",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true",
-        "x-inngest-sync-kind": "out_of_band"
-      },
-      "body": {
-        "url": "http://127.0.0.1:19998/examples/021-cancelOn-event",
-        "deployType": "ping",
-        "framework": "bun",
-        "appName": "examples-021-cancelOn-event",
-        "functions": [
-          {
-            "id": "examples-021-cancelOn-event-long-task",
-            "name": "long-task",
-            "triggers": [
-              {
-                "event": "examples/021-cancelOn-event/task/started"
-              }
-            ],
-            "steps": {
-              "step": {
-                "id": "step",
-                "name": "step",
-                "runtime": {
-                  "type": "http",
-                  "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step"
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-021-cancelOn-event",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "cancel": [
+                {
+                  "event": "examples/021-cancelOn-event/task/cancelled",
+                  "if": "async.data.taskId == event.data.taskId"
                 }
-              }
-            },
-            "cancel": [
-              {
-                "event": "examples/021-cancelOn-event/task/cancelled",
-                "if": "async.data.taskId == event.data.taskId"
-              }
-            ]
-          }
-        ],
-        "sdk": "<sdk>",
-        "v": "0.1",
-        "capabilities": {
-          "trust_probe": "v1",
-          "connect": "v1"
-        }
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "text/plain; charset=utf-8",
-        "x-inngest-server-kind": "dev"
+              ],
+              "id": "examples-021-cancelOn-event-long-task",
+              "name": "long-task",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/021-cancelOn-event/task/started"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/021-cancelOn-event",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
       },
-      "body": {
-        "ok": true,
-        "modified": true,
-        "sync_id": "<sync-id>",
-        "app_id": "e1a8a8b8-de6d-54d4-855c-7d3e353e0895"
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     }
   },
-  {
-    "sequence": 4,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 4,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
+  "events": [
+    {
+      "data": {
+        "taskId": "task-021"
       },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "-1",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 0,
-            "stack": []
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+      "name": "examples/021-cancelOn-event/task/started"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "taskId": "task-021"
           },
@@ -190,163 +132,42 @@
           "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "examples/021-cancelOn-event/task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {},
-        "use_api": false,
-        "version": -1
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "859e1632ab0214dcec1dc35596a5a8d8169a433d",
-          "op": "Sleep",
-          "name": "3s",
-          "displayName": "wait-1",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "wait-1"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 5,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 5,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/021-cancelOn-event/task/started"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
-          {
-            "id": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "step-1",
-            "displayName": "step-1",
-            "userland": {
-              "id": "step-1"
-            },
-            "opts": {},
-            "rawArgs": ["step-1", null],
-            "hashedId": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
-                "memoized": false,
-                "options": {
-                  "id": "step-1",
-                  "name": "step-1"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "Started task task-021",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
-            }
-          }
-        ],
-        "ts": "<event-ts>"
-      }
-    },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 6,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 6,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 2,
-            "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"]
-          },
-          "step_id": "step",
-          "use_api": false
+      "functionId": "examples-021-cancelOn-event-long-task",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "76d4b828e1c56bd7c77b9ff42209bf70deba64ec": null,
+        "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
+        "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
+          "data": "Started task task-021"
         },
-        "defers": {},
-        "event": {
+        "e64b25e67dec6c8d30e63029286ad7b6d263931d": {
+          "data": "Still running..."
+        }
+      },
+      "response": {
+        "data": {
+          "status": "completed"
+        },
+        "status": "complete"
+      },
+      "stack": [
+        "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
+        "859e1632ab0214dcec1dc35596a5a8d8169a433d",
+        "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+        "76d4b828e1c56bd7c77b9ff42209bf70deba64ec"
+      ],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "taskId": "task-021"
           },
@@ -354,173 +175,42 @@
           "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "examples/021-cancelOn-event/task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
-          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
-            "data": "Started task task-021"
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "id": "76d4b828e1c56bd7c77b9ff42209bf70deba64ec",
-          "op": "Sleep",
-          "name": "3s",
-          "displayName": "wait-2",
-          "opts": {},
-          "data": null,
-          "userland": {
-            "id": "wait-2"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 7,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 7,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/021-cancelOn-event/task/started"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-021-cancelOn-event-long-task",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
+        "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
+          "data": "Started task task-021"
+        }
+      },
+      "response": {
+        "body": [
           {
-            "id": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "step-2",
-            "displayName": "step-2",
-            "userland": {
-              "id": "step-2"
-            },
+            "displayName": "wait-2",
+            "id": "76d4b828e1c56bd7c77b9ff42209bf70deba64ec",
+            "name": "3s",
+            "op": "Sleep",
             "opts": {},
-            "rawArgs": ["step-2", null],
-            "hashedId": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
-                "memoized": false,
-                "options": {
-                  "id": "step-2",
-                  "name": "step-2"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "Still running...",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+            "userland": {
+              "id": "wait-2"
             }
           }
         ],
-        "ts": "<event-ts>"
-      }
+        "status": 206
+      },
+      "stack": ["cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa", "859e1632ab0214dcec1dc35596a5a8d8169a433d"],
+      "stepId": "step"
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
-      },
-      "body": null
-    }
-  },
-  {
-    "sequence": 8,
-    "direction": "inbound",
-    "proxy": "inngest-to-sdk",
-    "request": {
-      "sequence": 8,
-      "method": "POST",
-      "url": "http://127.0.0.1:19998/examples/021-cancelOn-event?fnId=examples-021-cancelOn-event-long-task&stepId=step",
-      "path": "/examples/021-cancelOn-event",
-      "query": {
-        "fnId": "examples-021-cancelOn-event-long-task",
-        "stepId": "step"
-      },
-      "headers": {
-        "account-id": "00000000-0000-4000-a000-000000000000",
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-generation-id": "1",
-        "x-inngest-req-version": "2",
-        "x-inngest-step-id": "step"
-      },
-      "body": {
-        "ctx": {
-          "attempt": 0,
-          "disable_immediate_execution": false,
-          "env": "",
-          "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-          "generation_id": 1,
-          "job_id": "<job_id>",
-          "max_attempts": 5,
-          "qi_id": "<qi_id>",
-          "request_id": "<request_id>",
-          "run_id": "<run_id>",
-          "stack": {
-            "current": 4,
-            "stack": [
-              "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
-              "859e1632ab0214dcec1dc35596a5a8d8169a433d",
-              "e64b25e67dec6c8d30e63029286ad7b6d263931d",
-              "76d4b828e1c56bd7c77b9ff42209bf70deba64ec"
-            ]
-          },
-          "step_id": "step",
-          "use_api": false
-        },
-        "defers": {},
-        "event": {
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
           "data": {
             "taskId": "task-021"
           },
@@ -528,124 +218,160 @@
           "name": "examples/021-cancelOn-event/task/started",
           "ts": "<event-ts>",
           "user": {}
-        },
-        "events": [
-          {
-            "data": {
-              "taskId": "task-021"
-            },
-            "id": "<event-id>",
-            "name": "examples/021-cancelOn-event/task/started",
-            "ts": "<event-ts>",
-            "user": {}
-          }
-        ],
-        "steps": {
-          "76d4b828e1c56bd7c77b9ff42209bf70deba64ec": null,
-          "859e1632ab0214dcec1dc35596a5a8d8169a433d": null,
-          "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa": {
-            "data": "Started task task-021"
-          },
-          "e64b25e67dec6c8d30e63029286ad7b6d263931d": {
-            "data": "Still running..."
-          }
-        },
-        "use_api": false,
-        "version": 2
-      }
-    },
-    "response": {
-      "status": 206,
-      "headers": {
-        "content-type": "application/json",
-        "user-agent": "<sdk>",
-        "x-inngest-framework": "bun",
-        "x-inngest-req-version": "2",
-        "x-inngest-sdk": "<sdk>",
-        "x-inngest-sdk-handled": "true"
-      },
-      "body": [
-        {
-          "op": "RunComplete",
-          "id": "0737c22d3bfae812339732d14d8c7dbd6dc4e09c",
-          "data": {
-            "status": "completed"
-          }
         }
-      ]
-    }
-  },
-  {
-    "sequence": 9,
-    "direction": "outbound",
-    "proxy": "sdk-to-inngest",
-    "request": {
-      "sequence": 9,
-      "method": "POST",
-      "url": "http://127.0.0.1:18289/v1/checkpoint/<run_id>/async",
-      "path": "/v1/checkpoint/<run_id>/async",
-      "query": {},
-      "headers": {
-        "authorization": "<redacted>",
-        "content-type": "application/json",
-        "user-agent": "<sdk>"
+      ],
+      "event": {
+        "name": "examples/021-cancelOn-event/task/started"
       },
-      "body": {
-        "run_id": "<run_id>",
-        "fn_id": "f3091efe-d01c-559f-b361-6850c0e0af85",
-        "qi_id": "<qi_id>",
-        "request_id": "<request_id>",
-        "generation_id": 1,
-        "request_started_at": "<request_started_at>",
-        "steps": [
+      "functionId": "examples-021-cancelOn-event-long-task",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
           {
-            "id": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
-            "mode": "sync",
-            "op": "StepRun",
-            "name": "step-3",
-            "displayName": "step-3",
-            "userland": {
-              "id": "step-3"
-            },
+            "displayName": "wait-1",
+            "id": "859e1632ab0214dcec1dc35596a5a8d8169a433d",
+            "name": "3s",
+            "op": "Sleep",
             "opts": {},
-            "rawArgs": ["step-3", null],
-            "hashedId": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
-            "promise": {},
-            "fulfilled": true,
-            "hasStepState": true,
-            "handled": true,
-            "middleware": {
-              "stepInfo": {
-                "hashedId": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
-                "memoized": false,
-                "options": {
-                  "id": "step-3",
-                  "name": "step-3"
-                },
-                "stepType": "run"
-              }
-            },
-            "memoizationDeferred": {
-              "promise": {}
-            },
-            "transformedResultPromise": {},
-            "data": "Almost done...",
-            "timing": {
-              "a": "<timing-a>",
-              "b": "<timing-b>"
+            "userland": {
+              "id": "wait-1"
             }
           }
         ],
-        "ts": "<event-ts>"
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "Almost done...",
+              "displayName": "step-3",
+              "id": "bfb15544034000a9bd6fcb08f844bd2914fc8b2c",
+              "mode": "sync",
+              "name": "step-3",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "step-3"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
       }
     },
-    "response": {
-      "status": 200,
-      "headers": {
-        "content-type": "application/json",
-        "x-inngest-server-kind": "dev"
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "Started task task-021",
+              "displayName": "step-1",
+              "id": "cd59ee9a8137151d1499d3d2eb40ba51aa91e0aa",
+              "mode": "sync",
+              "name": "step-1",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "step-1"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
       },
-      "body": null
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "Still running...",
+              "displayName": "step-2",
+              "id": "e64b25e67dec6c8d30e63029286ad7b6d263931d",
+              "mode": "sync",
+              "name": "step-2",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "step-2"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
     }
-  }
-]
+  ]
+}
