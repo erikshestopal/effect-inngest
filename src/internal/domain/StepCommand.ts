@@ -60,6 +60,7 @@ export class StepRunFailed extends Schema.TaggedClass<StepRunFailed>()("StepRunF
 export class Failure extends Schema.Class<Failure>("effect-inngest/internal/domain/StepCommand/Failure")({
   opcode: Protocol.GeneratorOpcode,
   retryAfterMs: Schema.Option(Schema.Number),
+  noRetry: Schema.Boolean,
 }) {}
 
 export class PlannedOpcode extends Schema.Class<PlannedOpcode>(
@@ -133,6 +134,7 @@ export const failure = (command: ErrorCommand) =>
           noRetry: cmd.noRetry,
         }),
         retryAfterMs: Option.fromNullishOr(cmd.retryAfterMs),
+        noRetry: cmd.noRetry === true,
       }),
     ),
     Match.tag("StepRunFailed", (cmd) =>
@@ -142,6 +144,7 @@ export const failure = (command: ErrorCommand) =>
           error: Protocol.UserError.fromUnknown(cmd.error),
         }),
         retryAfterMs: Option.none<number>(),
+        noRetry: true,
       }),
     ),
     Match.exhaustive,
