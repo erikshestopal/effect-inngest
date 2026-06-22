@@ -26,12 +26,35 @@ export const stepDecodeError = (args: { readonly stepId: string; readonly cause:
     cause: args.cause,
   });
 
+export const failDecode = (args: {
+  readonly stepId: string;
+  readonly cause: unknown;
+}): Effect.Effect<never, StepError> => Effect.fail(stepDecodeError(args));
+
+export const orStepDecodeError = <A, E, R>(
+  effect: Effect.Effect<A, E, R>,
+  args: { readonly stepId: string },
+): Effect.Effect<A, StepError, R> =>
+  effect.pipe(Effect.mapError((cause) => stepDecodeError({ stepId: args.stepId, cause })));
+
+export const decodeJson = <S extends Schema.Codec<unknown, Schema.Json, never, never>>(args: {
+  readonly schema: S;
+  readonly value: unknown;
+  readonly stepId: string;
+}): Effect.Effect<S["Type"], StepError> =>
+  orStepDecodeError(Schema.decodeUnknownEffect(args.schema)(args.value), { stepId: args.stepId });
+
+export const encodeJson = <S extends Schema.Codec<unknown, unknown, never, never>>(args: {
+  readonly schema: S;
+  readonly value: unknown;
+  readonly stepId: string;
+}): Effect.Effect<Schema.Json, StepError> =>
+  orStepDecodeError(Schema.encodeUnknownEffect(Schema.toCodecJson(args.schema))(args.value), { stepId: args.stepId });
+
 export const encodeUnknownJson = (args: {
   readonly value: unknown;
   readonly stepId: string;
 }): Effect.Effect<Schema.Json, StepError> =>
   Predicate.isUndefined(args.value)
     ? Effect.succeed(null)
-    : Schema.decodeUnknownEffect(Schema.Json)(args.value).pipe(
-        Effect.mapError((cause) => stepDecodeError({ stepId: args.stepId, cause })),
-      );
+    : orStepDecodeError(Schema.decodeUnknownEffect(Schema.Json)(args.value), { stepId: args.stepId });

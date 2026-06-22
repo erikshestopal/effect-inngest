@@ -42,19 +42,13 @@ export function run<S extends JsonSchema, Err, R>(args: {
   const decodeMemo = (data: unknown, stepId: string): Effect.Effect<void | S["Type"], StepError> => {
     if (args.options) {
       const schema: Schema.Codec<S["Type"], Schema.Json, never, never> = Schema.toCodecJson(args.options.schema);
-      return Schema.decodeUnknownEffect(schema)(data).pipe(
-        Effect.mapError((cause) => StepResult.stepDecodeError({ stepId, cause })),
-      );
+      return StepResult.decodeJson({ schema, value: data, stepId });
     }
     return Effect.void;
   };
 
   const encodeResult = (value: unknown, stepId: string) =>
-    args.options
-      ? Schema.encodeUnknownEffect(Schema.toCodecJson(args.options.schema))(value).pipe(
-          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId, cause })),
-        )
-      : Effect.succeed(undefined);
+    args.options ? StepResult.encodeJson({ schema: args.options.schema, value, stepId }) : Effect.succeed(undefined);
 
   return Effect.gen(function* () {
     const identity = yield* StepIdentity;

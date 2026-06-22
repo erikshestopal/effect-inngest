@@ -24,14 +24,13 @@ export const waitForEvent = <E extends EventPayload.EventSchema>(args: {
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
-        EventPayload.decodeMemoData(args.event)(data).pipe(
+        StepResult.orStepDecodeError(EventPayload.decodeMemoData(args.event)(data), { stepId: info.id }).pipe(
           Effect.map(Option.some),
-          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
         ),
       ),
       Match.tag("MemoTimeout", () => Effect.succeed(Option.none())),
-      Match.tag("MemoError", ({ error }) => Effect.fail(StepResult.stepDecodeError({ stepId: info.id, cause: error }))),
-      Match.tag("MemoInput", ({ input }) => Effect.fail(StepResult.stepDecodeError({ stepId: info.id, cause: input }))),
+      Match.tag("MemoError", ({ error }) => StepResult.failDecode({ stepId: info.id, cause: error })),
+      Match.tag("MemoInput", ({ input }) => StepResult.failDecode({ stepId: info.id, cause: input })),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (!args.input.shouldExecuteStep(info)) {

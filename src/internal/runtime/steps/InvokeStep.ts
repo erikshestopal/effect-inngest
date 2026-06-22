@@ -24,9 +24,11 @@ export const invoke = <F extends InngestFunction.Any>(args: {
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
-        Schema.decodeUnknownEffect(
-          Schema.toCodecJson(args.options.function.success as JsonSchema<InngestFunction.Success<F>>),
-        )(data).pipe(Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause }))),
+        StepResult.decodeJson({
+          schema: Schema.toCodecJson(args.options.function.success as JsonSchema<InngestFunction.Success<F>>),
+          value: data,
+          stepId: info.id,
+        }),
       ),
       Match.tag("MemoError", ({ error }) =>
         Effect.fail(
