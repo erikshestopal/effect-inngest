@@ -1,3 +1,4 @@
+import type * as Headers from "effect/unstable/http/Headers";
 import { Cause, Effect, Exit, Match, Option } from "effect";
 import { InngestConfig } from "../../Client.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
@@ -8,10 +9,7 @@ import * as ExecutionHeaders from "./ExecutionHeaders.js";
 import { ExecutionResult } from "./ExecutionResult.js";
 import * as HandlerRun from "./HandlerRun.js";
 
-const fromSuccess = (args: {
-  readonly completion: HandlerRun.HandlerCompletion;
-  readonly headers: Record<string, string>;
-}) =>
+const fromSuccess = (args: { readonly completion: HandlerRun.HandlerCompletion; readonly headers: Headers.Headers }) =>
   Effect.gen(function* () {
     const bus = yield* StepCommandBus;
     const checkpoint = yield* CurrentCheckpoint;
@@ -36,7 +34,7 @@ const fromSuccess = (args: {
     );
   });
 
-const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly headers: Record<string, string> }) =>
+const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly headers: Headers.Headers }) =>
   Effect.gen(function* () {
     const bus = yield* StepCommandBus;
     const commands = yield* bus.takeSuspension();

@@ -1,3 +1,4 @@
+import * as Headers from "effect/unstable/http/Headers";
 import { Duration, Option, Schema } from "effect";
 import type { ClientConfig } from "../../Client.js";
 import type { ExecutionSuspension } from "../domain/ExecutionSuspension.js";
@@ -50,37 +51,36 @@ export class RetryDisposition extends Schema.Class<RetryDisposition>(
       noRetry: isNonRetriableError(error) || (isStepError(error) && error.noRetry === true),
     });
   }
+
+  toHeaders(): Headers.Headers {
+    if (Option.isSome(this.retryAfterMs)) {
+      return Headers.fromInput({
+        [Protocol.Headers.NoRetry]: "false",
+        [Protocol.Headers.RetryAfter]: String(Math.ceil(this.retryAfterMs.value / 1000)),
+      });
+    }
+
+    if (this.noRetry) {
+      return Headers.fromInput({ [Protocol.Headers.NoRetry]: "true" });
+    }
+
+    if (this.isFailure) {
+      return Headers.fromInput({ [Protocol.Headers.NoRetry]: "false" });
+    }
+
+    return Headers.empty;
+  }
 }
 
-export const base = (config: ClientConfig): Record<string, string> => ({
-  "Content-Type": "application/json",
-  "User-Agent": `effect-inngest:v${SDK_VERSION}`,
-  [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
-  [Protocol.Headers.SDKHandled]: "true",
-  [Protocol.Headers.RequestVersion]: "2",
-  ...(config.framework ? { [Protocol.Headers.Framework]: config.framework } : {}),
-});
+export const base = (config: ClientConfig): Headers.Headers =>
+  Headers.fromInput({
+    "Content-Type": "application/json",
+    "User-Agent": `effect-inngest:v${SDK_VERSION}`,
+    [Protocol.Headers.SDK]: `effect-inngest:v${SDK_VERSION}`,
+    [Protocol.Headers.SDKHandled]: "true",
+    [Protocol.Headers.RequestVersion]: "2",
+    ...(config.framework ? { [Protocol.Headers.Framework]: config.framework } : {}),
+  });
 
-export const withRetryDisposition = (args: {
-  readonly headers: Record<string, string>;
-  readonly disposition: RetryDisposition;
-}): Record<string, string> => {
-  const { headers, disposition } = args;
-  if (Option.isSome(disposition.retryAfterMs)) {
-    return {
-      ...headers,
-      [Protocol.Headers.NoRetry]: "false",
-      [Protocol.Headers.RetryAfter]: String(Math.ceil(disposition.retryAfterMs.value / 1000)),
-    };
-  }
-
-  if (disposition.noRetry) {
-    return { ...headers, [Protocol.Headers.NoRetry]: "true" };
-  }
-
-  if (disposition.isFailure) {
-    return { ...headers, [Protocol.Headers.NoRetry]: "false" };
-  }
-
-  return headers;
-};
+export const merge = (headers: Headers.Headers, retry: RetryDisposition): Headers.Headers =>
+  Headers.merge(headers, retry.toHeaders());
