@@ -100,13 +100,23 @@ export const hashSigningKey = (signingKey: string): string =>
 export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature", {
   make: (config: SignatureConfig) =>
     Effect.gen(function* () {
-      const signingKey = config.signingKey.pipe(Option.flatMap(PreparedSigningKey.decode));
-      const fallbackSigningKey = config.signingKeyFallback.pipe(Option.flatMap(PreparedSigningKey.decode));
+      const signingKey =
+        config.verification === "disabled"
+          ? Option.none<PreparedSigningKey>()
+          : config.signingKey.pipe(Option.flatMap(PreparedSigningKey.decode));
+      const fallbackSigningKey =
+        config.verification === "disabled"
+          ? Option.none<PreparedSigningKey>()
+          : config.signingKeyFallback.pipe(Option.flatMap(PreparedSigningKey.decode));
 
-      if (Option.isSome(config.signingKey) && Option.isNone(signingKey)) {
+      if (config.verification === "required" && Option.isSome(config.signingKey) && Option.isNone(signingKey)) {
         return yield* SignatureError.make({ reason: "invalid_format", message: "Invalid signing key" });
       }
-      if (Option.isSome(config.signingKeyFallback) && Option.isNone(fallbackSigningKey)) {
+      if (
+        config.verification === "required" &&
+        Option.isSome(config.signingKeyFallback) &&
+        Option.isNone(fallbackSigningKey)
+      ) {
         return yield* SignatureError.make({ reason: "invalid_format", message: "Invalid signing key" });
       }
 
@@ -134,13 +144,16 @@ export class Signature extends Context.Service<Signature, SignatureService>()("e
       });
 
       const sign = Effect.fn("effect-inngest/Signature/sign")(function* (body: Uint8Array) {
-        const key = yield* Option.match(signingKey, {
+        const key = yield* Option.match(config.signingKey, {
           onNone: () =>
             SignatureError.make({
               reason: "missing_signing_key",
               message: "No signing key configured for signing",
             }),
-          onSome: Effect.succeed,
+          onSome: (key) =>
+            Effect.fromOption(PreparedSigningKey.decode(key)).pipe(
+              Effect.mapError(() => SignatureError.make({ reason: "invalid_format", message: "Invalid signing key" })),
+            ),
         });
 
         const now = yield* DateTime.now;

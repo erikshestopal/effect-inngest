@@ -65,6 +65,13 @@ describe("Signature.verify", () => {
         yield* sig.verify(SignedPayload.make({ body: TEST_BODY, signature: Option.none() }));
       }).pipe(Effect.provide(layer({ verification: "disabled", signingKey: TEST_SIGNING_KEY }))),
     );
+
+    it.live("bypasses invalid configured signing key", () =>
+      Effect.gen(function* () {
+        const sig = yield* Signature;
+        yield* sig.verify(SignedPayload.make({ body: TEST_BODY, signature: Option.none() }));
+      }).pipe(Effect.provide(layer({ verification: "disabled", signingKey: "local" }))),
+    );
   });
 
   describe("required verification", () => {
@@ -216,6 +223,18 @@ describe("Signature.sign", () => {
         expect(result.failure.reason).toBe("missing_signing_key");
       }
     }).pipe(Effect.provide(layer({ verification: "disabled" }))),
+  );
+
+  it.live("fails with invalid configured signing key", () =>
+    Effect.gen(function* () {
+      const sig = yield* Signature;
+      const result = yield* sig.sign(TEST_BODY).pipe(Effect.result);
+
+      expect(Result.isFailure(result)).toBe(true);
+      if (Result.isFailure(result)) {
+        expect(result.failure.reason).toBe("invalid_format");
+      }
+    }).pipe(Effect.provide(layer({ verification: "disabled", signingKey: "local" }))),
   );
 });
 

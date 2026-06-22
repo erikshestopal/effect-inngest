@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.3.0-beta.3
+
+### Patch Changes
+
+- Skip signing key validation when request signature verification is disabled in dev mode.
+
 ## 0.3.0-beta.2
 
 ### Patch Changes

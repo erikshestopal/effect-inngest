@@ -4,5 +4,11 @@
   "initialVersions": {
     "effect-inngest": "0.1.3"
   },
-  "changesets": ["clean-penguins-drum", "effect-v4-upgrade", "fresh-buses-smile", "silly-plants-count"]
+  "changesets": [
+    "clean-penguins-drum",
+    "effect-v4-upgrade",
+    "fresh-buses-smile",
+    "quiet-keys-verify",
+    "silly-plants-count"
+  ]
 }
