@@ -1,4 +1,4 @@
-import { Option, Predicate, Schema } from "effect";
+import { Array as Arr, Option, Predicate, Schema } from "effect";
 import type * as InngestEvent from "../../Event.js";
 import type { EventTrigger, InngestFunction } from "../../Function.js";
 
@@ -19,7 +19,7 @@ const isEventTrigger = (trigger: InngestFunction.Any["triggers"][number]): trigg
   isEventTriggerShape(trigger);
 
 export const eventSchemas = <F extends InngestFunction.Any>(fn: F): ReadonlyArray<InngestFunction.Events<F>> =>
-  fn.triggers.filter(isEventTrigger).map((trigger) => trigger.event as InngestFunction.Events<F>);
+  Arr.map(Arr.filter(fn.triggers, isEventTrigger), (trigger) => trigger.event as InngestFunction.Events<F>);
 
 export const eventSchemaFor = <F extends InngestFunction.Any>(args: {
   readonly fn: F;

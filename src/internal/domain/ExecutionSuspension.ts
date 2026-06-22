@@ -1,4 +1,4 @@
-import { Option, Schema } from "effect";
+import { Array as Arr, Option, Schema } from "effect";
 import * as Protocol from "../protocol.js";
 import type * as StepCommand from "./StepCommand.js";
 
@@ -69,7 +69,9 @@ export class ExecutionSuspension extends Schema.Class<ExecutionSuspension>(
       completed: [...args.completed],
       opcodes,
       suspendedCount: args.suspended.length,
-      retryAfterMs: suspended.find((entry) => Option.isSome(entry.retryAfterMs))?.retryAfterMs ?? Option.none(),
+      retryAfterMs: Arr.findFirst(suspended, (entry) => Option.isSome(entry.retryAfterMs)).pipe(
+        Option.flatMap((entry) => entry.retryAfterMs),
+      ),
       hasFailure: suspended.some((entry) => entry.isFailure),
       noRetry: suspended.some((entry) => entry.noRetry),
     });

@@ -65,10 +65,10 @@ export const toHttpApp = (group: InngestGroup.Any) =>
       );
 
       const params = yield* Schema.decodeUnknownEffect(ExecuteParamsSchema)(UrlParams.fromInput(url.searchParams)).pipe(
-        Effect.catch(() =>
+        Effect.catch((error) =>
           Effect.fail(
             HttpServerResponse.jsonUnsafe(
-              { error: "Missing or invalid fnId query parameter" },
+              { error: `Missing or invalid fnId query parameter: ${String(error)}` },
               { status: 400, headers: { [Protocol.Headers.NoRetry]: "true" } },
             ),
           ),

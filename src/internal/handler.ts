@@ -52,7 +52,8 @@ export interface HandlerResponse<T> {
 export const verifyAndParseRequestBody = Effect.fn("effect-inngest/handler/verifyAndParseRequestBody")(function* (
   request: HttpServerRequest.HttpServerRequest,
 ) {
-  const body = yield* SdkRequest.bodyUint8Array(request).pipe(
+  const body = yield* request.arrayBuffer.pipe(
+    Effect.map((buffer) => new Uint8Array(buffer)),
     Effect.mapError((error) => {
       const msg =
         Predicate.hasProperty(error, "message") && Predicate.isString(error.message) ? error.message : "unknown";
@@ -135,7 +136,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
   return yield* Effect.gen(function* () {
     const response = yield* httpClient.execute(request).pipe(Effect.scoped);
     const responseBody = yield* HttpClientResponse.schemaBodyJson(Protocol.RegisterServerResponse)(response).pipe(
-      Effect.catch(() => Effect.succeed({ error: "Unknown registration response" } as const)),
+      Effect.catch((error) => Effect.succeed({ error: `Invalid registration response: ${String(error)}` } as const)),
     );
 
     if (response.status !== 200 || !Predicate.hasProperty(responseBody, "ok")) {

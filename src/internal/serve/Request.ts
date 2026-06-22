@@ -3,13 +3,6 @@ import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
 import { Effect, Function, Option, Schema } from "effect";
 import * as Protocol from "../protocol.js";
 import { Signature, SignatureError, SignatureHeader, SignedPayload } from "./Signature.js";
-export { SignatureError } from "./Signature.js";
-
-export const bodyUint8Array = Effect.fn("effect-inngest/serve/request/bodyUint8Array")(function* (
-  request: HttpServerRequest.HttpServerRequest,
-) {
-  return yield* request.arrayBuffer.pipe(Effect.map((buffer) => new Uint8Array(buffer)));
-});
 
 export const verifySignature: {
   (request: HttpServerRequest.HttpServerRequest): (body: Uint8Array) => Effect.Effect<void, SignatureError, Signature>;

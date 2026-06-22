@@ -6,7 +6,6 @@ import type { SendEventError, StepError } from "../errors.js";
 import type * as EventPayload from "../codec/EventPayload.js";
 import { CurrentExecutionInput } from "../domain/ExecutionInput.js";
 import type { StepInput } from "../domain/StepInput.js";
-import { EventApi, type OutgoingEvent } from "./EventApi.js";
 import { CurrentCheckpoint } from "./CheckpointContext.js";
 import { HandlerFiberScope } from "./HandlerFiberScope.js";
 import { StepCommandBus } from "./StepCommandBus.js";
@@ -72,6 +71,11 @@ export interface Invoke {
   ): Effect.Effect<InngestFunction.Success<F>, StepError>;
 }
 
+export interface OutgoingEvent {
+  readonly name: string;
+  readonly data: unknown;
+}
+
 export interface SendEvent {
   (
     id: StepInput,
@@ -99,12 +103,10 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
     const config = yield* InngestConfig;
     const identity = yield* StepIdentity;
     const bus = yield* StepCommandBus;
-    const eventApi = yield* EventApi;
     const handlerFiberScope = yield* HandlerFiberScope;
     const runtime = pipe(
       Context.make(StepIdentity, identity),
       Context.add(StepCommandBus, bus),
-      Context.add(EventApi, eventApi),
       Context.add(CurrentExecutionInput, input),
       Context.add(CurrentCheckpoint, checkpoint),
       Context.add(InngestConfig, config),
@@ -155,5 +157,5 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
 
   static readonly layer = Layer.effect(this, this.make);
 
-  static readonly live = this.layer.pipe(Layer.provide(StepCommandBus.layer), Layer.provide(EventApi.layer));
+  static readonly live = this.layer.pipe(Layer.provide(StepCommandBus.layer));
 }

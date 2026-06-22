@@ -5,7 +5,6 @@ import type { CheckpointConfig } from "../checkpoint.js";
 import * as Protocol from "../protocol.js";
 import { CurrentExecutionInput, ExecutionInput } from "../domain/ExecutionInput.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
-import { EventApi } from "../runtime/EventApi.js";
 import { HandlerFiberScope } from "../runtime/HandlerFiberScope.js";
 import { StepCommandBus } from "../runtime/StepCommandBus.js";
 import { StepIdentity } from "../runtime/StepIdentity.js";
@@ -26,13 +25,11 @@ export const provide =
       });
       const bus = yield* StepCommandBus.make;
       const identity = yield* StepIdentity.make;
-      const eventApi = yield* EventApi.make;
       const baseContext = Context.make(CurrentExecutionInput, input).pipe(
         Context.add(CurrentCheckpoint, checkpoint),
         Context.add(InngestConfig, client.config),
         Context.add(StepCommandBus, bus),
         Context.add(StepIdentity, identity),
-        Context.add(EventApi, eventApi),
         Context.add(HandlerFiberScope, {
           isForkedFromHandlerRoot: Effect.map(Effect.fiberId, (fiberId) => fiberId !== rootFiberId),
         }),

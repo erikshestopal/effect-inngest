@@ -1,8 +1,9 @@
 import { Array as Arr, Effect, Match, Predicate, Schema } from "effect";
+import { InngestClient } from "../../../Client.js";
 import { SendEventError } from "../../errors.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
-import { EventApi, type OutgoingEvent } from "../EventApi.js";
+import type { OutgoingEvent } from "../StepTools.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
 
@@ -22,7 +23,6 @@ export const sendEvent = (args: {
   Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const bus = yield* StepCommandBus;
-    const eventApi = yield* EventApi;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
@@ -51,7 +51,7 @@ export const sendEvent = (args: {
           }
 
           const events = Arr.ensure(args.payload);
-          const result = yield* eventApi.send(events);
+          const result = yield* InngestClient.use((client) => client.sendEvent(events));
           yield* bus.complete(
             StepCommand.SendEventResult.make({
               info,

@@ -1,7 +1,7 @@
 /**
  * @since 0.1.0
  */
-import { Array as Arr, Duration, Predicate, Schema } from "effect";
+import { Array as Arr, Duration, Option, Predicate, Schema } from "effect";
 import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Checkpoint from "./internal/checkpoint.js";
 import type { CheckpointingOption } from "./internal/checkpoint.js";
@@ -524,14 +524,20 @@ const Proto = {
       scope: option.scope,
     });
 
-    const concurrency =
-      opts.concurrency != null
-        ? Predicate.isNumber(opts.concurrency)
-          ? { limit: opts.concurrency }
-          : Array.isArray(opts.concurrency)
-            ? (opts.concurrency as readonly [ConcurrencyOption, ConcurrencyOption]).map(serializeConcurrencyOption)
-            : serializeConcurrencyOption(opts.concurrency as ConcurrencyOption)
-        : undefined;
+    const isConcurrencyOptions = (
+      value: NonNullable<FunctionOptions["concurrency"]>,
+    ): value is readonly [ConcurrencyOption, ConcurrencyOption] => Arr.isArray(value);
+
+    const concurrency = Option.fromNullishOr(opts.concurrency).pipe(
+      Option.map((value) =>
+        Predicate.isNumber(value)
+          ? { limit: value }
+          : isConcurrencyOptions(value)
+            ? Arr.map(value, serializeConcurrencyOption)
+            : serializeConcurrencyOption(value),
+      ),
+      Option.getOrUndefined,
+    );
 
     const priority = opts.priority ? { run: opts.priority.run } : undefined;
     const singleton = opts.singleton ? { key: opts.singleton.key, mode: opts.singleton.mode } : undefined;
