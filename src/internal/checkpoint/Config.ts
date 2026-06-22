@@ -1,23 +1,6 @@
-/**
- * Checkpoint configuration for spec §10 async checkpointing.
- *
- * Sync checkpointing (§10.3.2 / §10.4.2) is intentionally out of scope —
- * it requires a durable endpoint primitive the SDK does not yet expose.
- *
- * @internal
- */
 import { Duration, Predicate, Schema } from "effect";
 import { InngestDuration } from "../wire/Duration.js";
 
-/**
- * User-facing checkpointing option, accepted on `ClientConfig.checkpointing`
- * and `FunctionOptions.checkpointing`.
- *
- * - `false` disables checkpointing entirely (no API calls; classic 206-per-step).
- * - `true` enables checkpointing with the safe defaults
- *   (`bufferedSteps: 1`, `maxInterval: 0`, `maxRuntime: 10 seconds`).
- * - An object lets you tune `bufferedSteps`, `maxInterval`, `maxRuntime`.
- */
 export type CheckpointingOption =
   | boolean
   | {
@@ -26,9 +9,6 @@ export type CheckpointingOption =
       readonly maxRuntime?: Duration.Input;
     };
 
-/**
- * Resolved internal config — defaults applied, durations normalized.
- */
 export interface CheckpointConfig {
   readonly bufferedSteps: number;
   readonly maxInterval: Duration.Duration;
@@ -51,14 +31,6 @@ const normalize = (option: Exclude<CheckpointingOption, boolean>): CheckpointCon
     : DEFAULTS.maxRuntime,
 });
 
-/**
- * Resolve final config from function-level + client-level settings.
- *
- * Precedence: function-level explicit > client-level explicit > built-in
- * defaults (default-ON, matching the TS reference SDK).
- *
- * Returns `undefined` if either level explicitly disables checkpointing.
- */
 export const resolveConfig = (
   fnLevel: CheckpointingOption | undefined,
   clientLevel: CheckpointingOption | undefined,
@@ -89,9 +61,6 @@ export const resolveConfig = (
   return DEFAULTS;
 };
 
-/**
- * Registration payload fragment per spec §10.1.1.
- */
 export interface RegistrationFragment {
   readonly batch_steps: number;
   readonly batch_interval: string;

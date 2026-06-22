@@ -1,7 +1,3 @@
-/**
- * Driver execution facade.
- * @internal
- */
 import { Context, Effect, Layer, Option } from "effect";
 import type { InngestFunction } from "../Function.js";
 import { InngestClient } from "../Client.js";

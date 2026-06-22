@@ -1,7 +1,3 @@
-/**
- * Signature verification service for Inngest requests.
- * @internal
- */
 import * as NodeCrypto from "node:crypto";
 import { Array as Arr, Context, DateTime, Encoding, Effect, Layer, Option, Schema } from "effect";
 import { InngestClient } from "../../Client.js";

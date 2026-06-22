@@ -1,7 +1,3 @@
-/**
- * HTTP adapter boundary for Inngest routes.
- * @internal
- */
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpEffect from "effect/unstable/http/HttpEffect";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";

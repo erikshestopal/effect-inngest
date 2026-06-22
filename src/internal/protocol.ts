@@ -1,7 +1,3 @@
-/**
- * Wire protocol schemas and opcode factories for Inngest communication.
- * @internal
- */
 import { Effect, Predicate, SchemaTransformation, Struct, Schema } from "effect";
 import type { StepInfo } from "./domain/StepInfo.js";
 
@@ -413,19 +409,11 @@ export const IntrospectionAuthenticated = IntrospectionBase.pipe(
 
 export const IntrospectionResponse = Schema.Union([IntrospectionAuthenticated, IntrospectionUnauthenticated]);
 
-/**
- * SDK → executor response shape for PUT sync requests per spec §4.3.1.
- */
 export const RegisterResponse = Schema.Struct({
   message: Schema.String,
   modified: Schema.Boolean,
 });
 
-/**
- * Executor → SDK response shape from `POST /fn/register` per spec §4.3.4.
- * On success the body has `{ ok: true, modified?: boolean }`; on failure
- * the body may carry an `error` string.
- */
 export const RegisterServerResponse = Schema.Union([
   Schema.Struct({
     ok: Schema.Literal(true),

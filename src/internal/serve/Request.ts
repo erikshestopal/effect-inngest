@@ -1,7 +1,3 @@
-/**
- * Inbound SDK request verification and decoding boundary.
- * @internal
- */
 import * as Headers from "effect/unstable/http/Headers";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
 import { Effect, Function, Option, Schema } from "effect";

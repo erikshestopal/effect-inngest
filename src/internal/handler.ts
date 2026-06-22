@@ -1,7 +1,3 @@
-/**
- * Internal handler implementation.
- * @internal
- */
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";

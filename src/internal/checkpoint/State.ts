@@ -1,52 +1,23 @@
-/**
- * Per-execution checkpoint state for spec §10 async checkpointing.
- *
- * @internal
- */
 import { Array as Arr, Clock, Duration, Effect, Option, Ref, Result } from "effect";
 import type { CheckpointConfig } from "./Config.js";
 import type { CheckpointApiError } from "./Error.js";
 import type * as StepCommand from "../domain/StepCommand.js";
 import type * as Protocol from "../protocol.js";
 
-/**
- * Per-execution state for checkpoint mode. NOT a `Context.Service` — each
- * `execute` call constructs its own and passes it directly to step tools and
- * the driver.
- *
- * Internal `Ref`s are closure-private; only effectful ops are exposed. All
- * ops are safe to sequence from a single fiber; the buffer/interval/runtime
- * primitives are not designed for concurrent fibers (none are spawned today).
- */
 export interface CheckpointState {
   readonly config: CheckpointConfig;
   readonly runId: string;
   readonly fnId: string;
   readonly qiId: string;
-  /** Append a planned/async opcode discovered during a root parallel pass. */
   readonly plan: (planned: StepCommand.PlannedOpcode) => Effect.Effect<void>;
-  /** Atomic snapshot + clear for planned opcodes; never sent via async checkpoint. */
   readonly takePlanned: () => Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
-  /** Append a sync opcode; flush if `bufferedSteps` or `maxInterval` reached. */
   readonly record: (op: typeof Protocol.GeneratorOpcode.Type) => Effect.Effect<void>;
-  /**
-   * Best-effort flush. On API error the buffered steps are re-prepended so
-   * `completed` can include them in the terminal 206 (no step loss per §10.4.3).
-   */
   readonly flush: Effect.Effect<void>;
-  /** Atomic snapshot + clear, for terminal response assembly. */
   readonly takeCompleted: () => Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
-  /** Signal that the handler's `maxRuntime` deadline fired (spec §10.4.1 #7). */
   readonly markRuntimeExceeded: Effect.Effect<void>;
-  /** Query whether the `maxRuntime` deadline fired. */
   readonly isRuntimeExceeded: Effect.Effect<boolean>;
 }
 
-/**
- * Construct a `CheckpointState`. Caller supplies a pre-bound `checkpointAsync`
- * callback (typically `(steps) => client.checkpointAsync({runId, fnId, qiId, steps})`),
- * so this module has no dependency on `InngestClient`.
- */
 export const make = (args: {
   readonly config: CheckpointConfig;
   readonly runId: string;
