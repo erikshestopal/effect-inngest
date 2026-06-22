@@ -24,11 +24,10 @@ export const invoke = <F extends InngestFunction.Any>(args: {
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
-        StepResult.decodeJson({
-          schema: Schema.toCodecJson(args.options.function.success as JsonSchema<InngestFunction.Success<F>>),
-          value: data,
-          stepId: info.id,
-        }),
+        StepResult.decodeJson(
+          Schema.toCodecJson(args.options.function.success as JsonSchema<InngestFunction.Success<F>>),
+          info.id,
+        )(data),
       ),
       Match.tag("MemoError", ({ error }) =>
         Effect.fail(
