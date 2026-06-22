@@ -30,6 +30,47 @@ const PaymentProcess = InngestEvent.make(
   }),
 );
 
+type Expect<T extends true> = T;
+type IsReadonlyArray<T> = T extends ReadonlyArray<unknown> ? true : false;
+
+const NonBatchedHandlerEventFn = InngestFunction.make("non-batched-handler-event", {
+  trigger: { event: UserCreated },
+  retries: 0,
+  success: Schema.Void,
+});
+
+type NonBatchedHandlerEvent = InngestFunction.InngestFunction.EventType<typeof NonBatchedHandlerEventFn>;
+type NonBatchedHandlerEventIsSingle = Expect<IsReadonlyArray<NonBatchedHandlerEvent> extends false ? true : false>;
+
+const BatchHandlerEventFn = InngestFunction.make("batched-handler-event", {
+  trigger: { event: UserCreated },
+  batchEvents: { maxSize: 10, timeout: Duration.seconds(1) },
+  success: Schema.Void,
+});
+
+type BatchHandlerEvent = InngestFunction.InngestFunction.EventType<typeof BatchHandlerEventFn>;
+type BatchHandlerEventIsArray = Expect<IsReadonlyArray<BatchHandlerEvent>>;
+
+const readNonBatchedHandlerEvent = (event: NonBatchedHandlerEvent) => event.data.userId;
+const readBatchedHandlerEvent = (events: BatchHandlerEvent) => events[0]?.data.userId;
+
+const StepRunItem = Schema.Struct({ id: Schema.String });
+const StepRunTypeContractFn = InngestFunction.make("step-run-type-contract", {
+  trigger: { event: UserCreated },
+  success: Schema.Struct({ count: Schema.Number }),
+});
+const StepRunTypeContractGroup = InngestGroup.make(StepRunTypeContractFn);
+const StepRunTypeContractHandlers = StepRunTypeContractGroup.toLayer({
+  "step-run-type-contract": ({ step }) =>
+    Effect.gen(function* () {
+      const items = yield* step.run("load-items", Effect.succeed([{ id: "a" }]), {
+        schema: Schema.Array(StepRunItem),
+      });
+      const ids: ReadonlyArray<string> = items.map((item) => item.id);
+      return { count: ids.length };
+    }),
+});
+
 const mockHttpClient = HttpClient.make((req) =>
   Effect.succeed(
     HttpClientResponse.fromWeb(

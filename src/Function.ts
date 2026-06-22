@@ -23,6 +23,7 @@ export const TypeId: unique symbol = Symbol.for("effect-inngest/Function");
 export type TypeId = typeof TypeId;
 
 export type EventSchema = InngestEvent.EventDefinition;
+type EventEnvelope<Event extends EventSchema> = InngestEvent.EventType<Event>;
 
 /**
  * An event-based trigger configuration.
@@ -443,9 +444,13 @@ export declare namespace InngestFunction {
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =
     F extends InngestFunction<any, infer T, any, any> ? (T extends EventTrigger<infer E> ? E : never) : never;
-  export type EventPayload<F> = InngestEvent.EventType<Events<F>>;
-  export type EventType<F> =
-    Options<F> extends { readonly batchEvents: BatchEventsOption } ? ReadonlyArray<EventPayload<F>> : EventPayload<F>;
+  export type EventPayload<F> = EventEnvelope<Events<F>>;
+  export type HasBatchEvents<O> = O extends { readonly batchEvents: infer BatchEvents }
+    ? Exclude<BatchEvents, undefined> extends BatchEventsOption
+      ? true
+      : false
+    : false;
+  export type EventType<F> = HasBatchEvents<Options<F>> extends true ? ReadonlyArray<EventPayload<F>> : EventPayload<F>;
 
   export type SuccessSchema<F> = F extends InngestFunction<any, any, infer S, any> ? S : never;
   export type Success<F> = Schema.Schema.Type<SuccessSchema<F>>;

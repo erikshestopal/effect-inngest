@@ -41,7 +41,7 @@ export type HandlerFn<F extends InngestFunction.Any> = (
  * @category models
  */
 export type HandlersFrom<Fns extends InngestFunction.Any> = {
-  readonly [F in Fns as InngestFunction.Tag<F>]: HandlerFn<F>;
+  readonly [Tag in InngestFunction.Tag<Fns>]: HandlerFrom<Fns, Tag>;
 };
 
 /**
