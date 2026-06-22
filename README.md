@@ -25,14 +25,16 @@
 Effect Inngest brings the power of [Effect](https://effect.website) to [Inngest's](https://inngest.com) durable execution platform. Define event schemas once, and types flow automatically through triggers, handlers, and step operations — no manual annotations needed.
 
 ```typescript
-import { InngestFunction, InngestGroup, InngestClient } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
 import { Effect, Schema, Layer } from "effect";
 
-// Define events as TaggedClass
-class UserSignup extends Schema.TaggedClass<UserSignup>()("user/signup", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+const UserSignup = InngestEvent.make(
+  "user/signup",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
 // Create a function — event type is inferred from the trigger
 const ProcessSignup = InngestFunction.make("process-signup", {
@@ -43,17 +45,15 @@ const ProcessSignup = InngestFunction.make("process-signup", {
 // Create group and implement handler
 const Group = InngestGroup.make(ProcessSignup);
 
-class UserOnboarded extends Schema.TaggedClass<UserOnboarded>()("user/onboarded", {
-  userId: Schema.String,
-}) {}
+const UserOnboarded = InngestEvent.make("user/onboarded", Schema.Struct({ userId: Schema.String }));
 
 const Handlers = Group.toLayer({
   "process-signup": ({ event, step }) =>
     Effect.gen(function* () {
-      // event is typed as UserSignup
-      yield* step.run("send-welcome", sendWelcomeEmail(event.email));
+      // event is typed as { name: "user/signup", data: { userId, email } }
+      yield* step.run("send-welcome", sendWelcomeEmail(event.data.email));
       yield* step.sleep("delay", "1 hour");
-      yield* step.sendEvent("notify", new UserOnboarded({ userId: event.userId }));
+      yield* step.sendEvent("notify", UserOnboarded.make({ userId: event.data.userId }));
     }),
 });
 ```
@@ -109,17 +109,18 @@ import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
 import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
 import * as HttpServer from "@effect/platform/HttpServer";
 import { Duration, Effect, Layer, Schema } from "effect";
-import { InngestFunction, InngestGroup, InngestClient } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
 
-// 1. Define your events as TaggedClass
-class UserSignup extends Schema.TaggedClass<UserSignup>()("user/signup", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+// 1. Define your events as Effect schemas
+const UserSignup = InngestEvent.make(
+  "user/signup",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
-class UserWelcomeSent extends Schema.TaggedClass<UserWelcomeSent>()("user/welcome-sent", {
-  userId: Schema.String,
-}) {}
+const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ userId: Schema.String }));
 
 // 2. Define your functions
 const ProcessSignup = InngestFunction.make("process-signup", {
@@ -138,17 +139,19 @@ const App = InngestGroup.make(ProcessSignup, DailyDigest);
 const Handlers = App.toLayer({
   "process-signup": ({ event, step }) =>
     Effect.gen(function* () {
-      // event is typed as UserSignup
-      yield* Effect.log(`Processing signup for ${event.email}`);
+      // event is typed as { name: "user/signup", data: { userId, email } }
+      yield* Effect.log(`Processing signup for ${event.data.email}`);
 
-      // Durable step - memoized across retries
-      const user = yield* step.run("create-user", Effect.succeed({ id: event.userId, email: event.email }));
+      // Durable value-returning steps need a replay schema
+      const user = yield* step.run("create-user", Effect.succeed({ id: event.data.userId, email: event.data.email }), {
+        schema: Schema.Struct({ id: Schema.String, email: Schema.String }),
+      });
 
       // Sleep durably
       yield* step.sleep("welcome-delay", Duration.seconds(5));
 
       // Send follow-up event
-      yield* step.sendEvent("notify", new UserWelcomeSent({ userId: user.id }));
+      yield* step.sendEvent("notify", UserWelcomeSent.make({ userId: user.id }));
 
       return { welcomed: true };
     }),
@@ -197,17 +200,18 @@ import { FetchHttpClient } from "@effect/platform";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
 import { Duration, Effect, Layer, Schema } from "effect";
 import { InngestApiGroup, layerGroup } from "effect-inngest/HttpApi";
-import { InngestClient, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
 
 // 1. Define your events
-class UserSignup extends Schema.TaggedClass<UserSignup>()("user/signup", {
-  userId: Schema.String,
-  email: Schema.String,
-}) {}
+const UserSignup = InngestEvent.make(
+  "user/signup",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+  }),
+);
 
-class UserWelcomeSent extends Schema.TaggedClass<UserWelcomeSent>()("user/welcome-sent", {
-  userId: Schema.String,
-}) {}
+const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ userId: Schema.String }));
 
 // 2. Define functions
 const ProcessSignup = InngestFunction.make("process-signup", {
@@ -226,10 +230,12 @@ const App = InngestGroup.make(ProcessSignup, DailyDigest);
 const Handlers = App.toLayer({
   "process-signup": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* Effect.log(`Processing signup for ${event.email}`);
-      const user = yield* step.run("create-user", Effect.succeed({ id: event.userId, email: event.email }));
+      yield* Effect.log(`Processing signup for ${event.data.email}`);
+      const user = yield* step.run("create-user", Effect.succeed({ id: event.data.userId, email: event.data.email }), {
+        schema: Schema.Struct({ id: Schema.String, email: Schema.String }),
+      });
       yield* step.sleep("welcome-delay", Duration.seconds(5));
-      yield* step.sendEvent("notify", new UserWelcomeSent({ userId: user.id }));
+      yield* step.sendEvent("notify", UserWelcomeSent.make({ userId: user.id }));
       return { welcomed: true };
     }),
   "daily-digest": ({ step }) => step.run("send-digest", Effect.log("Sending daily digest...")),
@@ -262,22 +268,31 @@ BunRuntime.runMain(Layer.launch(Server));
 
 ## Getting Started
 
-### 1. Define your events as TaggedClass
+### 1. Define your events
 
 ```typescript
 import { Schema } from "effect";
+import { InngestEvent } from "effect-inngest";
 
-class UserSignup extends Schema.TaggedClass<UserSignup>()("user/signup", {
-  userId: Schema.String,
-  email: Schema.String,
-  plan: Schema.Literal("free", "pro", "enterprise"),
-}) {}
+const UserSignup = InngestEvent.make(
+  "user/signup",
+  Schema.Struct({
+    userId: Schema.String,
+    email: Schema.String,
+    plan: Schema.Literal("free", "pro", "enterprise"),
+  }),
+);
 
-class OrderPlaced extends Schema.TaggedClass<OrderPlaced>()("order/placed", {
-  orderId: Schema.String,
-  items: Schema.Array(Schema.Struct({ sku: Schema.String, qty: Schema.Number })),
-  total: Schema.Number,
-}) {}
+const OrderPlaced = InngestEvent.make(
+  "order/placed",
+  Schema.Struct({
+    orderId: Schema.String,
+    items: Schema.Array(Schema.Struct({ sku: Schema.String, qty: Schema.Number })),
+    total: Schema.Number,
+  }),
+);
+
+const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ userId: Schema.String }));
 ```
 
 ### 2. Define your functions
@@ -311,7 +326,7 @@ const HandlersLive = AppFunctions.toLayer({
     Effect.gen(function* () {
       yield* step.run("create-user", createUser(event));
       yield* step.sleep("delay", Duration.minutes(5));
-      yield* step.sendEvent("welcome", new UserWelcomeSent({ userId: event.userId }));
+      yield* step.sendEvent("welcome", UserWelcomeSent.make({ userId: event.data.userId }));
       return { welcomeEmailSent: true };
     }),
 
@@ -350,8 +365,8 @@ All step operations are durable — they're memoized and survive retries:
 ```typescript
 ({ step }) =>
   Effect.gen(function* () {
-    // Run any Effect with memoization
-    const user = yield* step.run("fetch-user", fetchUser(userId));
+    // Run an Effect with memoization. Value-returning steps require a replay schema.
+    const user = yield* step.run("fetch-user", fetchUser(userId), { schema: User });
 
     // Sleep for a duration
     yield* step.sleep("wait", Duration.hours(24));
@@ -372,7 +387,7 @@ All step operations are durable — they're memoized and survive retries:
     });
 
     // Send events
-    yield* step.sendEvent("notify", new OrderShipped({ orderId }));
+    yield* step.sendEvent("notify", OrderShipped.make({ orderId }));
   });
 ```
 
@@ -384,7 +399,11 @@ Run steps in parallel with Effect's concurrency:
 const [user, orders, prefs] =
   yield *
   Effect.all(
-    [step.run("user", fetchUser(id)), step.run("orders", fetchOrders(id)), step.run("prefs", fetchPreferences(id))],
+    [
+      step.run("user", fetchUser(id), { schema: User }),
+      step.run("orders", fetchOrders(id), { schema: Schema.Array(Order) }),
+      step.run("prefs", fetchPreferences(id), { schema: Preferences }),
+    ],
     { concurrency: "unbounded" },
   );
 ```
@@ -409,7 +428,7 @@ const HandlersLive = AppFunctions.toLayer({
   "process-signup": ({ event, step }) =>
     Effect.gen(function* () {
       const email = yield* EmailService;
-      yield* step.run("send", email.send(event.email, "Welcome!"));
+      yield* step.run("send", email.send(event.data.email, "Welcome!"));
       return { welcomeEmailSent: true };
     }),
 });
@@ -452,13 +471,14 @@ const ProcessOrder = InngestFunction.make("process-order", {
 Control retry behavior with typed errors:
 
 ```typescript
+import { Duration, Effect } from "effect";
 import { NonRetriableError, RetryAfterError } from "effect-inngest";
 
 // Don't retry this error
-yield * new NonRetriableError({ message: "Card permanently declined" });
+yield * Effect.fail(NonRetriableError.make({ message: "Card permanently declined" }));
 
-// Retry after a specific duration (retryAfter in milliseconds)
-yield * new RetryAfterError({ message: "Rate limited", retryAfter: 60000 });
+// Retry after a specific duration
+yield * Effect.fail(RetryAfterError.make({ message: "Rate limited", retryAfter: Duration.seconds(30) }));
 ```
 
 ---
@@ -472,19 +492,21 @@ yield * new RetryAfterError({ message: "Rate limited", retryAfter: 60000 });
 | `InngestFunction`   | Function definition with trigger-based event inference |
 | `InngestGroup`      | Group functions, create handlers, and serve HTTP       |
 | `InngestClient`     | Client configuration and event operations              |
+| `InngestEvent`      | Event schema constructor with typed `.make` envelopes  |
 | `NonRetriableError` | Error to skip retries                                  |
 | `RetryAfterError`   | Error to retry after delay                             |
 
 ### Step Methods
 
-| Method                                     | Description                        |
-| ------------------------------------------ | ---------------------------------- |
-| `step.run(id, effect)`                     | Execute an effect with memoization |
-| `step.sleep(id, duration)`                 | Sleep for a duration               |
-| `step.sleepUntil(id, timestamp)`           | Sleep until a timestamp            |
-| `step.waitForEvent(id, EventSchema, opts)` | Wait for an event with timeout     |
-| `step.invoke(id, opts)`                    | Invoke another function            |
-| `step.sendEvent(id, TaggedEvent)`          | Send events to Inngest             |
+| Method                                           | Description                                     |
+| ------------------------------------------------ | ----------------------------------------------- |
+| `step.run(id, effect)`                           | Execute a void effect with memoization          |
+| `step.run(id, effect, { schema })`               | Execute a value-returning effect with replay IO |
+| `step.sleep(id, duration)`                       | Sleep for a duration                            |
+| `step.sleepUntil(id, timestamp)`                 | Sleep until a timestamp                         |
+| `step.waitForEvent(id, InngestEvent, opts)`      | Wait for an event with timeout                  |
+| `step.invoke(id, opts)`                          | Invoke another function                         |
+| `step.sendEvent(id, InngestEvent.make(payload))` | Send events to Inngest                          |
 
 ---
 

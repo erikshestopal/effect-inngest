@@ -8,17 +8,19 @@
  * @example
  * ```ts
  * import { Effect, Schema } from "effect"
- * import { InngestFunction, InngestGroup } from "effect-inngest"
+ * import { InngestEvent, InngestFunction, InngestGroup } from "effect-inngest"
  *
- * // Define events as TaggedClass
- * class UserCreated extends Schema.TaggedClass<UserCreated>()("user/created", {
- *   userId: Schema.String,
- *   email: Schema.String,
- * }) {}
+ * const UserCreated = InngestEvent.make(
+ *   "user/created",
+ *   Schema.Struct({
+ *     userId: Schema.String,
+ *     email: Schema.String,
+ *   }),
+ * )
  *
  * // Define functions
  * const SendWelcomeEmail = InngestFunction.make("send-welcome-email", {
- *   event: UserCreated,
+ *   trigger: { event: UserCreated },
  *   success: Schema.Void,
  *   retries: 3,
  * })
@@ -28,9 +30,9 @@
  *
  * // Implement handlers
  * const HandlersLive = MyGroup.toLayer({
- *   "send-welcome-email": (event) =>
+ *   "send-welcome-email": ({ event }) =>
  *     Effect.gen(function* () {
- *       yield* sendEmail(event.email)
+ *       yield* sendEmail(event.data.email)
  *     }),
  * })
  * ```
@@ -97,7 +99,7 @@ export * as InngestGroup from "./Group.js";
  *
  * // Use in your program
  * const program = Effect.gen(function* () {
- *   const client = yield* InngestClient.InngestClientTag
+ *   const client = yield* InngestClient.InngestClient
  *   yield* client.sendEvent([{ name: "user/created", data: { userId: "123" } }])
  * })
  * ```
