@@ -958,6 +958,14 @@ const writeFixture = (state: RecordingState, example: ExampleManifestEntry, runt
     yield* fs.writeFileString(rawOutputFile, `${JSON.stringify(sortFixtureExchanges(ordered), null, 2)}\n`);
   });
 
+const formatFixtures = Effect.gen(function* () {
+  const spawner = yield* ChildProcessSpawner.ChildProcessSpawner;
+  const exitCode = yield* spawner.exitCode(ChildProcess.make("vp", ["fmt", fixturesRoot]));
+  if (exitCode !== ChildProcessSpawner.ExitCode(0)) {
+    return yield* Effect.fail(new Error("vp fmt failed for generated fixtures"));
+  }
+});
+
 const matchesFilters = (example: ExampleManifestEntry, filters: ReadonlyArray<string>) =>
   filters.length === 0 || filters.some((filter) => example.id.includes(filter) || example.path?.includes(filter));
 
@@ -1089,6 +1097,7 @@ const program = (input: {
         );
         yield* recordIsolatedExamples(state, runtimeName, isolated);
       }
+      yield* formatFixtures;
     }),
   );
 

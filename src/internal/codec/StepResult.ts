@@ -74,7 +74,7 @@ export const encodeStepRunMemo =
   <A>(schema: OptionalMemoCodec<A>, stepId: string) =>
   (value: unknown): Effect.Effect<Schema.Json | undefined, StepError> =>
     Option.match(schema, {
-      onNone: () => Effect.succeed(undefined),
+      onNone: () => (Predicate.isUndefined(value) ? Effect.succeed(undefined) : decodeMemo(Schema.Json, stepId)(value)),
       onSome: (codec) => encodeMemo(codec, stepId)(value),
     });
 
