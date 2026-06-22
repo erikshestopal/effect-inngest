@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.3.0-beta.2
+
+### Patch Changes
+
+- Fix handler event type inference for mixed batched and non-batched groups, and add public type coverage for router launch composition.
+
 ## 0.3.0-beta.1
 
 ### Patch Changes
