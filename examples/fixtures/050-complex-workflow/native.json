@@ -109,7 +109,7 @@
   "events": [
     {
       "data": {
-        "estimatedDelivery": "2026-06-26",
+        "estimatedDelivery": "2026-06-25",
         "orderId": "order-050"
       },
       "name": "examples/050-complex-workflow/delivery/scheduled"
@@ -194,7 +194,7 @@
       },
       "response": {
         "data": {
-          "deliveryDate": "2026-06-26",
+          "deliveryDate": "2026-06-25",
           "orderId": "order-050",
           "status": "completed",
           "transactionId": "txn-050"
@@ -271,7 +271,7 @@
           "run_id": "<run_id>",
           "steps": [
             {
-              "data": "2026-06-26",
+              "data": "2026-06-25",
               "displayName": "schedule-delivery",
               "id": "91c46f0670afb468a102fea6c5016d548f550f3d",
               "mode": "sync",
