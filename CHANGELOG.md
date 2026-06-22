@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.3.0-beta.1
+
+### Patch Changes
+
+- Fix public declaration exports and update `cancelOn.event` to use event definitions.
+
 ## 0.3.0-beta.0
 
 ### Minor Changes

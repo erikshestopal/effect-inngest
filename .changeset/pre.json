@@ -4,5 +4,5 @@
   "initialVersions": {
     "effect-inngest": "0.1.3"
   },
-  "changesets": ["effect-v4-upgrade", "fresh-buses-smile"]
+  "changesets": ["clean-penguins-drum", "effect-v4-upgrade", "fresh-buses-smile"]
 }
