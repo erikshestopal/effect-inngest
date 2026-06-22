@@ -17,21 +17,21 @@ export { CheckpointApiError } from "./internal/checkpoint.js";
  * @category type ids
  * @internal
  */
-const TypeId: unique symbol = Symbol.for("effect-inngest/Client");
+export const TypeId: unique symbol = Symbol.for("effect-inngest/Client");
 
 /**
  * @since 0.1.0
  * @category type ids
  * @internal
  */
-type TypeId = typeof TypeId;
+export type TypeId = typeof TypeId;
 
 const DEFAULT_EVENT_BASE_URL = "https://inn.gs/";
 const DEFAULT_API_BASE_URL = "https://api.inngest.com/";
 const DEFAULT_DEV_SERVER_URL = "http://localhost:8288/";
 const SDK_VERSION = "2.0.0";
 
-type ClientMode = "dev" | "cloud";
+export type ClientMode = "dev" | "cloud";
 
 export interface ClientConfig {
   /**
@@ -147,15 +147,15 @@ const SendEventResponse = Schema.Struct({
   status: Schema.optional(Schema.Number),
 });
 
-type EventPayload = typeof EventPayload.Type;
-type SendEventResponse = typeof SendEventResponse.Type;
+export type EventPayload = typeof EventPayload.Type;
+export type SendEventResponse = typeof SendEventResponse.Type;
 
-class SendEventError extends Schema.TaggedErrorClass<SendEventError>()("SendEventError", {
+export class SendEventError extends Schema.TaggedErrorClass<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
 }) {}
 
-interface InngestClientService {
+export interface InngestClientService {
   readonly [TypeId]: TypeId;
   readonly config: ClientConfig;
   readonly mode: ClientMode;

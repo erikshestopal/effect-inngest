@@ -20,7 +20,7 @@ export const TaskCancelled = InngestEvent.make(
 
 const LongTaskFn = InngestFunction.make("long-task", {
   trigger: { event: TaskStarted },
-  cancelOn: [{ event: "examples/021-cancelOn-event/task/cancelled", if: "async.data.taskId == event.data.taskId" }],
+  cancelOn: [{ event: TaskCancelled, if: "async.data.taskId == event.data.taskId" }],
   success: Schema.Struct({ status: Schema.String }),
 });
 

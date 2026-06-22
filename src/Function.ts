@@ -22,7 +22,7 @@ export const TypeId: unique symbol = Symbol.for("effect-inngest/Function");
  */
 export type TypeId = typeof TypeId;
 
-type EventSchema = InngestEvent.EventDefinition;
+export type EventSchema = InngestEvent.EventDefinition;
 
 /**
  * An event-based trigger configuration.
@@ -59,7 +59,7 @@ export type Trigger<E extends EventSchema = EventSchema> = EventTrigger<E> | Cro
  */
 export type TriggerInput<E extends EventSchema = EventSchema> = Trigger<E> | ReadonlyArray<Trigger<E>>;
 
-interface ConcurrencyOption {
+export interface ConcurrencyOption {
   /**
    * The concurrency limit for this option, adding a limit on how many concurrent
    * steps can execute at once.
@@ -90,7 +90,7 @@ interface ConcurrencyOption {
   readonly scope?: "fn" | "env" | "account";
 }
 
-interface RateLimitOption {
+export interface RateLimitOption {
   /**
    * An optional key to use for rate limiting, similar to idempotency.
    */
@@ -107,7 +107,7 @@ interface RateLimitOption {
   readonly period: Duration.Input;
 }
 
-interface ThrottleOption {
+export interface ThrottleOption {
   /**
    * An optional expression which returns a throttling key for controlling throttling.
    * Every unique key is its own throttle limit. Event data may be used within this
@@ -135,7 +135,7 @@ interface ThrottleOption {
   readonly burst?: number;
 }
 
-interface DebounceOption {
+export interface DebounceOption {
   /**
    * An optional key to use for debouncing.
    */
@@ -154,7 +154,7 @@ interface DebounceOption {
   readonly timeout?: Duration.Input;
 }
 
-interface BatchEventsOption {
+export interface BatchEventsOption {
   /**
    * The maximum number of events to be consumed in one batch.
    */
@@ -178,7 +178,7 @@ interface BatchEventsOption {
   readonly if?: string;
 }
 
-interface PriorityOption {
+export interface PriorityOption {
   /**
    * An expression to use to determine the priority of a function run. The
    * expression can return a number between `-600` and `600`, where `600`
@@ -189,7 +189,7 @@ interface PriorityOption {
   readonly run?: string;
 }
 
-interface TimeoutsOption {
+export interface TimeoutsOption {
   /**
    * Start represents the timeout for starting a function. If the time
    * between scheduling and starting a function exceeds this value, the
@@ -208,7 +208,7 @@ interface TimeoutsOption {
   readonly finish?: Duration.Input;
 }
 
-interface SingletonOption {
+export interface SingletonOption {
   /**
    * An optional key expression used to scope singleton execution.
    * Each unique key has its own singleton lock. Event data can be referenced,
@@ -224,11 +224,11 @@ interface SingletonOption {
   readonly mode: "skip" | "cancel";
 }
 
-interface CancellationOption {
+export interface CancellationOption {
   /**
    * The name of the event that should cancel the function run.
    */
-  readonly event: string;
+  readonly event: EventSchema;
 
   /**
    * The expression that must evaluate to true in order to cancel the function run. There
@@ -246,7 +246,7 @@ interface CancellationOption {
   readonly timeout?: Duration.Input;
 }
 
-type Retries = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
+export type Retries = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
 /**
  * @since 0.1.0
@@ -343,12 +343,12 @@ export interface FunctionOptions {
   readonly checkpointing?: CheckpointingOption;
 }
 
-interface RegistrationConfig {
+export interface RegistrationConfig {
   readonly appId: string;
   readonly url: string;
 }
 
-interface FunctionRegistration {
+export interface FunctionRegistration {
   readonly id: string;
   readonly name: string;
   readonly triggers: ReadonlyArray<{
@@ -481,7 +481,7 @@ const Proto = {
 
     const opts = this.options;
     const cancel = opts.cancelOn?.map((c) => ({
-      event: c.event,
+      event: c.event.identifier,
       if: c.if,
       timeout: c.timeout ? encodeDuration(c.timeout) : undefined,
     }));

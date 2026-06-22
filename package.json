@@ -42,6 +42,10 @@
       "types": "./dist/Client.d.ts",
       "import": "./src/Client.ts"
     },
+    "./Event": {
+      "types": "./dist/Event.d.ts",
+      "import": "./src/Event.ts"
+    },
     "./Events": {
       "types": "./dist/Events.d.ts",
       "import": "./src/Events.ts"
@@ -70,6 +74,10 @@
       "./Client": {
         "types": "./dist/Client.d.ts",
         "import": "./dist/Client.js"
+      },
+      "./Event": {
+        "types": "./dist/Event.d.ts",
+        "import": "./dist/Event.js"
       },
       "./Events": {
         "types": "./dist/Events.d.ts",

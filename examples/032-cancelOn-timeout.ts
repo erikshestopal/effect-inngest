@@ -22,7 +22,7 @@ const CancellableJobFn = InngestFunction.make("cancellable-job", {
   trigger: { event: JobStarted },
   cancelOn: [
     {
-      event: "examples/032-cancelOn-timeout/job/cancelled",
+      event: JobCancelled,
       if: "async.data.jobId == event.data.jobId",
       timeout: "60 seconds",
     },

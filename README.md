@@ -459,7 +459,7 @@ const ProcessOrder = InngestFunction.make("process-order", {
   debounce: { period: Duration.seconds(5) },
   idempotency: "event.data.orderId",
   timeouts: { finish: Duration.hours(1) },
-  cancelOn: [{ event: "order/cancelled", if: "event.data.orderId == async.data.orderId" }],
+  cancelOn: [{ event: OrderCancelled, if: "event.data.orderId == async.data.orderId" }],
   priority: { run: "event.data.isPremium ? 100 : 0" },
 });
 ```

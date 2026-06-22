@@ -123,12 +123,13 @@ describe("InngestFunction.toRegistration coverage", () => {
       userId: Schema.String,
     }),
   );
+  const CancelEvent = InngestEvent.make("cancel/event");
 
   it("serializes function with cancelOn", () => {
     const fn = InngestFunction.make("cancel-fn", {
       trigger: { event: TestEvent },
       success: Schema.Void,
-      cancelOn: [{ event: "cancel/event", if: "event.data.reason != ''" }],
+      cancelOn: [{ event: CancelEvent, if: "event.data.reason != ''" }],
     });
 
     const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
@@ -152,7 +153,7 @@ describe("InngestFunction.toRegistration coverage", () => {
     const fn = InngestFunction.make("full-fn", {
       trigger: { event: TestEvent },
       success: Schema.Void,
-      cancelOn: [{ event: "cancel/event" }],
+      cancelOn: [{ event: CancelEvent }],
       timeouts: { finish: Duration.minutes(30) },
     });
 
