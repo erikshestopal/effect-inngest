@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.3.0-beta.4
+
+### Patch Changes
+
+- Fix checkpointing async dispatch behavior.
+
 ## 0.3.0-beta.3
 
 ### Patch Changes
