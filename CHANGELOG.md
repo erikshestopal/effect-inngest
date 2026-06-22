@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.3.0-beta.0
+
+### Minor Changes
+
+- Release the Effect v4 runtime refactor, event definition API, protocol recorder, schema-aware step APIs, and stabilized execution seams.
+
 ## 0.2.0-beta.0
 
 ### Minor Changes
