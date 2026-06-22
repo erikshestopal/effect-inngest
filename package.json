@@ -99,7 +99,7 @@
     "lint": "vp lint --fix --type-aware --type-check --promise-plugin && sg scan src",
     "ast-grep": "sg scan src",
     "typecheck": "tsgo --noEmit",
-    "prepare": "vp config && effect-language-service patch && effect-tsgo patch",
+    "prepare": "vp config && effect-tsgo patch",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "bun run build && changeset publish"
