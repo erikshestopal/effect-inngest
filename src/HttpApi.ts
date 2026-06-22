@@ -78,7 +78,13 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
         .handleRaw("execute", ({ query, request }) =>
           InternalHandler.verifyAndParseRequestBody(request).pipe(
             Effect.flatMap((payload) =>
-              InternalHandler.handleExecution({ group, fnId: query.fnId, urlStepId: query.stepId, body: payload }),
+              InternalHandler.handleExecution({
+                group,
+                fnId: query.fnId,
+                urlStepId: query.stepId,
+                body: payload,
+                headers: request.headers,
+              }),
             ),
             Effect.map((r) => r.body),
           ),

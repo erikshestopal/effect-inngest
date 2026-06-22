@@ -1,0 +1,295 @@
+{
+  "schema": "inngest-protocol-canonical/v1",
+  "exampleId": "070-checkpointing-run-id-wait",
+  "runtime": "effect",
+  "registration": {
+    "introspection": {
+      "request": {
+        "body": null,
+        "method": "GET",
+        "path": "/examples/070-checkpointing-run-id-wait",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "extra": {
+            "native_crypto": true
+          },
+          "function_count": 1,
+          "has_event_key": false,
+          "has_signing_key": false,
+          "mode": "dev",
+          "schema_version": "2024-05-24"
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true"
+        },
+        "status": 200
+      }
+    },
+    "sync": {
+      "request": {
+        "body": null,
+        "method": "PUT",
+        "path": "/examples/070-checkpointing-run-id-wait",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "message": "Successfully registered",
+          "modified": true
+        },
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-framework": "bun",
+          "x-inngest-req-version": "2",
+          "x-inngest-sdk-handled": "true",
+          "x-inngest-sync-kind": "out_of_band"
+        },
+        "status": 200
+      }
+    },
+    "register": {
+      "request": {
+        "body": {
+          "appName": "examples-070-checkpointing-run-id-wait",
+          "capabilities": {
+            "connect": "v1",
+            "trust_probe": "v1"
+          },
+          "deployType": "ping",
+          "framework": "bun",
+          "functions": [
+            {
+              "id": "examples-070-checkpointing-run-id-wait-checkpoint-run-id-wait",
+              "name": "checkpoint-run-id-wait",
+              "steps": {
+                "step": {
+                  "id": "step",
+                  "name": "step",
+                  "runtime": {
+                    "type": "http",
+                    "url": "/examples/070-checkpointing-run-id-wait?fnId=examples-070-checkpointing-run-id-wait-checkpoint-run-id-wait&stepId=step"
+                  }
+                }
+              },
+              "triggers": [
+                {
+                  "event": "examples/070-checkpointing-run-id-wait/demo/start"
+                }
+              ]
+            }
+          ],
+          "sdk": "<sdk>",
+          "url": "/examples/070-checkpointing-run-id-wait",
+          "v": "0.1"
+        },
+        "method": "POST",
+        "path": "/fn/register",
+        "query": {}
+      },
+      "response": {
+        "body": {
+          "app_id": "<app-id>",
+          "modified": true,
+          "ok": true,
+          "sync_id": "<sync-id>"
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  },
+  "events": [
+    {
+      "data": {
+        "extractionId": "exr_070_current"
+      },
+      "name": "examples/070-checkpointing-run-id-wait/demo/start"
+    },
+    {
+      "data": {
+        "runId": "exr_070_current"
+      },
+      "name": "examples/070-checkpointing-run-id-wait/demo/completed"
+    }
+  ],
+  "executions": [
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "extractionId": "exr_070_current"
+          },
+          "id": "<event-id>",
+          "name": "examples/070-checkpointing-run-id-wait/demo/start",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/070-checkpointing-run-id-wait/demo/start"
+      },
+      "functionId": "examples-070-checkpointing-run-id-wait-checkpoint-run-id-wait",
+      "generation": 1,
+      "kind": "continuation",
+      "memoizedSteps": {
+        "2225a44a4720690dc1652abeadaaac09ab19ec1e": {
+          "data": "exr_070_current"
+        },
+        "817514419343498353e3ef76e7d0a853187cf3c8": {
+          "data": {
+            "runId": "exr_070_current"
+          },
+          "id": "fixture-070-checkpointing-run-id-wait-0-after-0-0",
+          "name": "examples/070-checkpointing-run-id-wait/demo/completed",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      },
+      "response": {
+        "data": {
+          "finalizedRunId": "exr_070_current",
+          "submittedRunId": "exr_070_current"
+        },
+        "status": "complete"
+      },
+      "stack": ["2225a44a4720690dc1652abeadaaac09ab19ec1e", "817514419343498353e3ef76e7d0a853187cf3c8"],
+      "stepId": "step"
+    },
+    {
+      "attempt": 0,
+      "batchEvents": [
+        {
+          "data": {
+            "extractionId": "exr_070_current"
+          },
+          "id": "<event-id>",
+          "name": "examples/070-checkpointing-run-id-wait/demo/start",
+          "ts": "<event-ts>",
+          "user": {}
+        }
+      ],
+      "event": {
+        "name": "examples/070-checkpointing-run-id-wait/demo/start"
+      },
+      "functionId": "examples-070-checkpointing-run-id-wait-checkpoint-run-id-wait",
+      "generation": 1,
+      "kind": "root",
+      "memoizedSteps": {},
+      "response": {
+        "body": [
+          {
+            "displayName": "wait-for-extraction",
+            "id": "817514419343498353e3ef76e7d0a853187cf3c8",
+            "name": "examples/070-checkpointing-run-id-wait/demo/completed",
+            "op": "WaitForEvent",
+            "opts": {
+              "if": "async.data.runId == \"exr_070_current\"",
+              "timeout": "30s"
+            },
+            "userland": {
+              "id": "wait-for-extraction"
+            }
+          }
+        ],
+        "status": 206
+      },
+      "stack": [],
+      "stepId": "step"
+    }
+  ],
+  "checkpoints": [
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "exr_070_current",
+              "displayName": "finalize-extraction",
+              "id": "73dc9891677b5efe3d31591854929febc878c03e",
+              "mode": "sync",
+              "name": "finalize-extraction",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "finalize-extraction"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    },
+    {
+      "request": {
+        "body": {
+          "fn_id": "<fn_id>",
+          "generation_id": 1,
+          "qi_id": "<qi_id>",
+          "request_id": "<request_id>",
+          "request_started_at": "<request_started_at>",
+          "run_id": "<run_id>",
+          "steps": [
+            {
+              "data": "exr_070_current",
+              "displayName": "submit-extraction",
+              "id": "2225a44a4720690dc1652abeadaaac09ab19ec1e",
+              "mode": "sync",
+              "name": "submit-extraction",
+              "op": "StepRun",
+              "opts": {},
+              "timing": {
+                "a": "<timing-a>",
+                "b": "<timing-b>"
+              },
+              "userland": {
+                "id": "submit-extraction"
+              }
+            }
+          ],
+          "ts": "<event-ts>"
+        },
+        "method": "POST",
+        "path": "/v1/checkpoint/<run>/async",
+        "query": {}
+      },
+      "response": {
+        "body": null,
+        "headers": {
+          "content-type": "application/json",
+          "x-inngest-server-kind": "dev"
+        },
+        "status": 200
+      }
+    }
+  ]
+}

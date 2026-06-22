@@ -1,13 +1,13 @@
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as Headers from "effect/unstable/http/Headers";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
 import { Cause, Context, Effect, Option, Predicate, Schema } from "effect";
 import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
 import type { InngestGroup } from "../Group.js";
 import * as Checkpoint from "./checkpoint.js";
-import { SignatureError } from "./serve/Signature.js";
 import * as SdkRequest from "./serve/Request.js";
 import * as Protocol from "./protocol.js";
 export { SignatureError } from "./serve/Signature.js";
@@ -130,9 +130,6 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
     }),
   );
 
-  // Spec §4.3.1: PUT sync responds with `{ message: string; modified: boolean }`.
-  // Spec §4.3.3 / §4.3.4: 500 on failure with `modified: false`; 200 on success
-  // with the executor-supplied `modified` value (or `false` if omitted).
   return yield* Effect.gen(function* () {
     const response = yield* httpClient.execute(request).pipe(Effect.scoped);
     const responseBody = yield* HttpClientResponse.schemaBodyJson(Protocol.RegisterServerResponse)(response).pipe(
@@ -163,9 +160,6 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
     } as HandlerResponse<typeof Protocol.RegisterResponse.Type>;
   }).pipe(
     Effect.catchCause((cause) => {
-      // Network/transport failure (e.g. die from HttpClient mock). Per
-      // §4.3.3 SHOULD return 500 with the body shape; never let the
-      // toWebHandler default 500 wrapper escape.
       const errorOpt = Cause.findErrorOption(cause);
       const dieReason = cause.reasons.find(Cause.isDieReason);
       const message = Option.isSome(errorOpt)
@@ -197,6 +191,7 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
   readonly fnId: string;
   readonly urlStepId: string | undefined;
   readonly body: typeof Protocol.SDKRequestBody.Type;
+  readonly headers?: Headers.Headers;
 }) {
   const client = yield* InngestClient;
   const context = yield* Effect.context<never>();
@@ -209,9 +204,6 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
   const entry = fn ? (context.mapUnsafe.get(fn.key) as Handler<string> | undefined) : undefined;
 
   if (!fn || !entry) {
-    // Spec §4.4.1: unknown function MUST return 500 with the error payload
-    // at the response root (no { error: ... } envelope).
-    // Spec §4.4.3 pair rule: 500 MUST pair with X-Inngest-No-Retry: false.
     return {
       status: 500 as const,
       headers: { ...baseHeaders(client.config.framework), [Protocol.Headers.NoRetry]: "false" },
@@ -220,41 +212,54 @@ export const handleExecution = Effect.fn("effect-inngest/handler/handleExecution
   }
 
   const requestedStepId = args.urlStepId === "step" ? undefined : args.urlStepId;
+  const headerRequestId = args.headers
+    ? Option.getOrUndefined(Headers.get(args.headers, Protocol.Headers.RequestId))
+    : undefined;
+  const requestId = headerRequestId ?? args.body.ctx.request_id;
+  const rawGenerationId = args.headers
+    ? Option.getOrUndefined(Headers.get(args.headers, Protocol.Headers.GenerationId))
+    : undefined;
+  const parsedGenerationId = rawGenerationId ? Number(rawGenerationId) : undefined;
+  const generationId =
+    Predicate.isNumber(parsedGenerationId) && Number.isInteger(parsedGenerationId)
+      ? parsedGenerationId
+      : args.body.ctx.generation_id;
 
-  // Non-root URL stepId takes precedence over body.ctx.step_id. The root
-  // `stepId=step` identifies the function run step, not a targeted child step.
+  const withExecutionHeaders = (ctx: typeof Protocol.SDKRequestContext.Type) =>
+    Protocol.SDKRequestContext.make({
+      fn_id: ctx.fn_id,
+      run_id: ctx.run_id,
+      env: ctx.env,
+      step_id: requestedStepId ?? ctx.step_id,
+      attempt: ctx.attempt,
+      max_attempts: ctx.max_attempts,
+      qi_id: ctx.qi_id,
+      ...(Predicate.isNotUndefined(requestId) ? { request_id: requestId } : {}),
+      ...(Predicate.isNotUndefined(generationId) ? { generation_id: generationId } : {}),
+      disable_immediate_execution: ctx.disable_immediate_execution,
+      use_api: ctx.use_api,
+      stack: ctx.stack,
+    });
+
   const effectiveBody =
     requestedStepId && requestedStepId !== args.body.ctx.step_id
       ? Protocol.SDKRequestBody.make({
           event: args.body.event,
           events: args.body.events,
           steps: args.body.steps,
-          ctx: Protocol.SDKRequestContext.make({
-            fn_id: args.body.ctx.fn_id,
-            run_id: args.body.ctx.run_id,
-            env: args.body.ctx.env,
-            step_id: requestedStepId,
-            attempt: args.body.ctx.attempt,
-            max_attempts: args.body.ctx.max_attempts,
-            qi_id: args.body.ctx.qi_id,
-            ...(Predicate.isNotUndefined(args.body.ctx.request_id) ? { request_id: args.body.ctx.request_id } : {}),
-            ...(Predicate.isNotUndefined(args.body.ctx.generation_id)
-              ? { generation_id: args.body.ctx.generation_id }
-              : {}),
-            disable_immediate_execution: args.body.ctx.disable_immediate_execution,
-            use_api: args.body.ctx.use_api,
-            stack: args.body.ctx.stack,
-          }),
+          ctx: withExecutionHeaders(args.body.ctx),
           version: args.body.version,
           use_api: args.body.use_api,
         })
-      : args.body;
+      : Protocol.SDKRequestBody.make({
+          event: args.body.event,
+          events: args.body.events,
+          steps: args.body.steps,
+          ctx: withExecutionHeaders(args.body.ctx),
+          version: args.body.version,
+          use_api: args.body.use_api,
+        });
 
-  // Checkpoint mode entry decision (spec §10):
-  //   - non-root URL stepId NOT set (we are not running a targeted child step)
-  //   - ctx.fn_id present (executor knows the function)
-  //   - ctx.disable_immediate_execution false (executor allowed it)
-  //   - resolved per-fn or per-client config not opted out
   const enterCheckpoint =
     !requestedStepId &&
     effectiveBody.ctx.fn_id !== "" &&

@@ -10,7 +10,15 @@ import type { CheckpointApiError } from "../../src/internal/checkpoint.js";
 
 interface CapturedCheckpoint {
   readonly url: string;
-  readonly body: { run_id: string; fn_id: string; qi_id: string; steps: ReadonlyArray<{ op: string; id: string }> };
+  readonly body: {
+    run_id: string;
+    fn_id: string;
+    qi_id: string;
+    request_id?: string;
+    generation_id?: number;
+    request_started_at?: number;
+    steps: ReadonlyArray<{ op: string; id: string }>;
+  };
 }
 
 const decodeBody = (body: { readonly _tag: string; readonly body?: Uint8Array; readonly text?: string }): unknown => {
@@ -55,13 +63,19 @@ const makeRequest = (options: {
   readonly steps?: Record<string, unknown>;
   readonly stepIdQuery?: string;
   readonly disableImmediateExecution?: boolean;
+  readonly requestId?: string;
+  readonly generationId?: string;
 }) => {
   const url = options.stepIdQuery
     ? `http://localhost/?fnId=${options.fnId}&stepId=${options.stepIdQuery}`
     : `http://localhost/?fnId=${options.fnId}`;
   return new Request(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(options.requestId ? { "x-request-id": options.requestId } : {}),
+      ...(options.generationId ? { "x-inngest-generation-id": options.generationId } : {}),
+    },
     body: JSON.stringify(
       Protocol.SDKRequestBody.make({
         event: Protocol.InngestEvent.make({ name: options.eventName, data: options.eventData, id: "evt", ts: 1 }),
@@ -294,6 +308,39 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     }),
   );
 
+  it.effect("forwards request identity headers to async checkpoint API", () =>
+    Effect.gen(function* () {
+      const { captures, layer } = setup(({ step }) =>
+        Effect.gen(function* () {
+          yield* step.run("submit-extraction", Effect.succeed("exr_current"), { schema: Schema.String });
+          yield* step.waitForEvent("wait-for-extraction", TestEvent, { timeout: "5 minutes" });
+          return "done";
+        }),
+      );
+      const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer });
+      try {
+        yield* Effect.tryPromise(() =>
+          handler(
+            makeRequest({
+              fnId: "ckpt-fn",
+              eventName: "ckpt/test",
+              eventData: { value: "v" },
+              requestId: "req-current-dispatch",
+              generationId: "42",
+            }),
+          ),
+        );
+
+        expect(captures).toHaveLength(1);
+        expect(captures[0]!.body.request_id).toBe("req-current-dispatch");
+        expect(captures[0]!.body.generation_id).toBe(42);
+        expect(captures[0]!.body.request_started_at).toEqual(expect.any(Number));
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
+  );
+
   it.effect("includes buffered steps before StepError on failure", () =>
     Effect.gen(function* () {
       // bufferedSteps=10 keeps step "a" in the buffer when "boom" fails, so
@@ -363,6 +410,48 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
         }
       }),
     { timeout: 30_000 },
+  );
+
+  it.effect("does not fall back to inline opcodes after stale async checkpoint dispatch", () =>
+    Effect.gen(function* () {
+      const { layer } = setup(
+        ({ step }) =>
+          Effect.gen(function* () {
+            const runId = yield* step.run("submit-extraction", Effect.succeed("exr_current"), {
+              schema: Schema.String,
+            });
+            yield* step.waitForEvent("wait-for-extraction", TestEvent, {
+              timeout: "5 minutes",
+              if: `async.data.runId == ${JSON.stringify(runId)}`,
+            });
+            return { runId };
+          }),
+        {
+          responder: () => new Response("stale dispatch", { status: 409 }),
+          checkpointing: { bufferedSteps: 1, maxRuntime: "30 seconds" },
+          checkpointRetrySchedule: Schedule.recurs(0),
+        },
+      );
+      const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer });
+      try {
+        const response = yield* Effect.tryPromise(() =>
+          handler(makeRequest({ fnId: "ckpt-fn", eventName: "ckpt/test", eventData: { value: "v" } })),
+        );
+        const body = (yield* Effect.tryPromise(() => response.json())) as unknown;
+        const opcodes = Array.isArray(body) ? (body as Array<{ op: string; data?: unknown }>) : [];
+
+        expect(response.status).toBe(400);
+        expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
+        expect(body).toMatchObject({
+          name: "StepError",
+          message: "Stale dispatch: checkpoint returned 409",
+        });
+        expect(opcodes.find((op) => op.op === "StepRun" && op.data === "exr_current")).toBeUndefined();
+        expect(opcodes.find((op) => op.op === "WaitForEvent")).toBeUndefined();
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
   );
 
   it.effect("stepId=step enters checkpoint mode", () =>

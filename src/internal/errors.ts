@@ -31,6 +31,4 @@ export class RetryAfterError extends Schema.TaggedErrorClass<RetryAfterError>()(
   cause: Schema.optional(Schema.Unknown),
 }) {}
 
-export const isRetryAfterError: (u: unknown) => u is RetryAfterError = Predicate.isTagged("RetryAfterError") as (
-  u: unknown,
-) => u is RetryAfterError;
+export const isRetryAfterError = Schema.is(RetryAfterError);

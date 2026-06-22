@@ -95,6 +95,7 @@ export const toHttpApp = (group: InngestGroup.Any) =>
         fnId: params.fnId,
         urlStepId: params.stepId,
         body,
+        headers: request.headers,
       });
 
       return yield* HttpServerResponse.json(result.body, {

@@ -1,8 +1,10 @@
 import type * as Headers from "effect/unstable/http/Headers";
 import { Cause, Effect, Exit, Match, Option } from "effect";
 import { InngestConfig } from "../../Client.js";
+import type * as CheckpointAbort from "../checkpoint/Abort.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
 import { StepCommandBus } from "../runtime/StepCommandBus.js";
+import { StepError } from "../errors.js";
 import * as Protocol from "../protocol.js";
 import { ExecutionFailure } from "./ExecutionFailure.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
@@ -34,8 +36,38 @@ const fromSuccess = (args: { readonly completion: HandlerRun.HandlerCompletion; 
     );
   });
 
+const fromCheckpointAbort = (args: {
+  readonly abort: CheckpointAbort.CheckpointAbort;
+  readonly headers: Headers.Headers;
+}) =>
+  Match.value(args.abort).pipe(
+    Match.tag("StaleDispatch", () => {
+      const error = new StepError({
+        stepId: "checkpoint",
+        message: "Stale dispatch: checkpoint returned 409",
+        noRetry: true,
+      });
+
+      return ExecutionResult.userError({
+        error,
+        headers: args.headers,
+        disposition: ExecutionHeaders.RetryDisposition.fromError(error),
+      });
+    }),
+    Match.exhaustive,
+  );
+
 const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly headers: Headers.Headers }) =>
   Effect.gen(function* () {
+    const checkpoint = yield* CurrentCheckpoint;
+
+    if (Cause.hasInterruptsOnly(args.cause) && Option.isSome(checkpoint)) {
+      const abort = yield* checkpoint.value.abort;
+      if (Option.isSome(abort)) {
+        return fromCheckpointAbort({ abort: abort.value, headers: args.headers });
+      }
+    }
+
     const bus = yield* StepCommandBus;
     const commands = yield* bus.takeSuspension();
 
@@ -64,8 +96,19 @@ const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly head
 export const fromExit = (exit: Exit.Exit<HandlerRun.HandlerCompletion, unknown>) =>
   Effect.gen(function* () {
     const config = yield* InngestConfig;
-    const bus = yield* StepCommandBus;
     const headers = ExecutionHeaders.base(config);
+
+    if (Exit.isFailure(exit) && Cause.hasInterruptsOnly(exit.cause)) {
+      const checkpoint = yield* CurrentCheckpoint;
+      if (Option.isSome(checkpoint)) {
+        const abort = yield* checkpoint.value.abort;
+        if (Option.isSome(abort)) {
+          return fromCheckpointAbort({ abort: abort.value, headers });
+        }
+      }
+    }
+
+    const bus = yield* StepCommandBus;
     const planned = yield* bus.takePlanned();
 
     if (planned.length > 0) {

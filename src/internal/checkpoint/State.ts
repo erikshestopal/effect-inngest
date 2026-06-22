@@ -1,4 +1,5 @@
 import { Array as Arr, Clock, Duration, Effect, Option, Ref, Result } from "effect";
+import * as CheckpointAbort from "./Abort.js";
 import type { CheckpointConfig } from "./Config.js";
 import type { CheckpointApiError } from "./Error.js";
 import type * as StepCommand from "../domain/StepCommand.js";
@@ -16,6 +17,7 @@ export interface CheckpointState {
   readonly takeCompleted: () => Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   readonly markRuntimeExceeded: Effect.Effect<void>;
   readonly isRuntimeExceeded: Effect.Effect<boolean>;
+  readonly abort: Effect.Effect<Option.Option<CheckpointAbort.CheckpointAbort>>;
 }
 
 export const make = (args: {
@@ -32,6 +34,7 @@ export const make = (args: {
     const plannedBuffer = Ref.makeUnsafe<ReadonlyArray<StepCommand.PlannedOpcode>>(Arr.empty());
     const intervalStartedAt = Ref.makeUnsafe<Option.Option<number>>(Option.none());
     const runtimeExceeded = Ref.makeUnsafe(false);
+    const abort = Ref.makeUnsafe<Option.Option<CheckpointAbort.CheckpointAbort>>(Option.none());
 
     const maxIntervalMs = Duration.toMillis(args.config.maxInterval);
 
@@ -50,6 +53,10 @@ export const make = (args: {
       }
       const result = yield* Effect.result(args.checkpointAsync(steps));
       if (Result.isFailure(result)) {
+        if (result.failure.status === 409) {
+          yield* Ref.set(abort, Option.some(CheckpointAbort.StaleDispatch.make({})));
+          return yield* Effect.interrupt;
+        }
         // Restore at the head so subsequent `completed` includes them in the 206.
         yield* Ref.update(buffer, (current) => [...steps, ...current]);
         return;
@@ -103,5 +110,6 @@ export const make = (args: {
       takeCompleted,
       markRuntimeExceeded: Ref.set(runtimeExceeded, true),
       isRuntimeExceeded: Ref.get(runtimeExceeded),
+      abort: Ref.get(abort),
     };
   });
