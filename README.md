@@ -111,7 +111,7 @@ import * as HttpServer from "@effect/platform/HttpServer";
 import { Duration, Effect, Layer, Schema } from "effect";
 import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
 
-// 1. Define your events as Effect schemas
+// 1. Define your Inngest event definitions
 const UserSignup = InngestEvent.make(
   "user/signup",
   Schema.Struct({
