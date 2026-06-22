@@ -438,7 +438,7 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, Schema.Codec<unknown, unknown, never, never>, FunctionOptions>;
+  export type Any = InngestFunction<string, Trigger, Schema.Codec<any, any, never, never>, FunctionOptions>;
   export type Tag<F> = F extends InngestFunction<infer T, any, any, any> ? T : never;
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =

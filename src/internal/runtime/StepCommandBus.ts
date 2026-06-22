@@ -13,6 +13,9 @@ export declare namespace StepCommandBus {
     readonly planCheckpointedFork: (
       command: StepCommand.PlanCommand,
     ) => Effect.Effect<boolean, never, CurrentExecutionInput | HandlerFiberScope>;
+    readonly planCheckpointedRunBoundary: (
+      command: StepCommand.PlanCommand,
+    ) => Effect.Effect<boolean, never, CurrentExecutionInput | HandlerFiberScope>;
     readonly fail: (command: StepCommand.ErrorCommand) => Effect.Effect<void>;
     readonly takePlanned: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
     readonly takeCompleted: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
@@ -23,7 +26,7 @@ export declare namespace StepCommandBus {
 const plannedFromCheckpoint = CurrentCheckpoint.pipe(
   Effect.flatMap(
     Option.match({
-      onNone: () => Effect.succeed([] as ReadonlyArray<GeneratorOpcode>),
+      onNone: () => Effect.succeed(Arr.empty<GeneratorOpcode>()),
       onSome: (state) => state.takePlanned(),
     }),
   ),
@@ -32,7 +35,7 @@ const plannedFromCheckpoint = CurrentCheckpoint.pipe(
 const completedFromCheckpoint = CurrentCheckpoint.pipe(
   Effect.flatMap(
     Option.match({
-      onNone: () => Effect.succeed([] as ReadonlyArray<GeneratorOpcode>),
+      onNone: () => Effect.succeed(Arr.empty<GeneratorOpcode>()),
       onSome: (state) => state.takeCompleted(),
     }),
   ),
@@ -81,6 +84,20 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
         return true;
       });
 
+    const planCheckpointedRunBoundary = (command: StepCommand.PlanCommand) =>
+      Effect.gen(function* () {
+        const input = yield* CurrentExecutionInput;
+        const checkpoint = yield* CurrentCheckpoint;
+
+        if (input.isFunctionRun() && Option.isSome(checkpoint) && (yield* checkpoint.value.isRuntimeExceeded)) {
+          yield* checkpoint.value.flush;
+          yield* plan(command);
+          return yield* Effect.interrupt;
+        }
+
+        return yield* planCheckpointedFork(command);
+      });
+
     return StepCommandBus.of({
       suspend: (command) =>
         Effect.gen(function* () {
@@ -100,6 +117,7 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
         }),
       plan,
       planCheckpointedFork,
+      planCheckpointedRunBoundary,
       fail: (command) => suspendExecution(SuspendedCommand.fromFailure(StepCommand.failure(command))),
       takePlanned: () => plannedFromCheckpoint,
       takeCompleted: () => completedFromCheckpoint,

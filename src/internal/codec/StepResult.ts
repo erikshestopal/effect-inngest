@@ -1,5 +1,7 @@
-import { Effect, Function, Predicate, Schema } from "effect";
+import { Effect, Function, Option, Predicate, Schema } from "effect";
 import { StepError } from "../errors.js";
+
+export type OptionalMemoCodec<A> = Option.Option<Schema.Codec<A, Schema.Json, never, never>>;
 
 const messageFromCause = (cause: unknown): string => {
   if (Predicate.hasProperty(cause, "cause")) {
@@ -37,33 +39,57 @@ export const mapMemoDecodeError: {
 );
 
 export const decodeMemo: {
-  <S extends Schema.Codec<unknown, Schema.Json, never, never>>(
-    schema: S,
+  <A>(
+    schema: Schema.Codec<A, Schema.Json, never, never>,
     stepId: string,
-  ): (value: unknown) => Effect.Effect<S["Type"], StepError>;
-  <S extends Schema.Codec<unknown, Schema.Json, never, never>>(
-    value: unknown,
-    schema: S,
-    stepId: string,
-  ): Effect.Effect<S["Type"], StepError>;
-} = Function.dual(
-  3,
-  <S extends Schema.Codec<unknown, Schema.Json, never, never>>(value: unknown, schema: S, stepId: string) =>
-    Schema.decodeUnknownEffect(schema)(value).pipe(mapMemoDecodeError(stepId)),
+  ): (value: unknown) => Effect.Effect<A, StepError>;
+  <A>(value: unknown, schema: Schema.Codec<A, Schema.Json, never, never>, stepId: string): Effect.Effect<A, StepError>;
+} = Function.dual(3, <A>(value: unknown, schema: Schema.Codec<A, Schema.Json, never, never>, stepId: string) =>
+  Schema.decodeUnknownEffect(schema)(value).pipe(mapMemoDecodeError(stepId)),
 );
 
 export const encodeMemo: {
-  <S extends Schema.Codec<unknown, unknown, never, never>>(
-    schema: S,
+  <A, I>(
+    schema: Schema.Codec<A, I, never, never>,
     stepId: string,
   ): (value: unknown) => Effect.Effect<Schema.Json, StepError>;
-  <S extends Schema.Codec<unknown, unknown, never, never>>(
+  <A, I>(
     value: unknown,
-    schema: S,
+    schema: Schema.Codec<A, I, never, never>,
     stepId: string,
   ): Effect.Effect<Schema.Json, StepError>;
-} = Function.dual(
-  3,
-  <S extends Schema.Codec<unknown, unknown, never, never>>(value: unknown, schema: S, stepId: string) =>
-    Schema.encodeUnknownEffect(Schema.toCodecJson(schema))(value).pipe(mapMemoDecodeError(stepId)),
+} = Function.dual(3, <A, I>(value: unknown, schema: Schema.Codec<A, I, never, never>, stepId: string) =>
+  Schema.encodeUnknownEffect(Schema.toCodecJson(schema))(value).pipe(mapMemoDecodeError(stepId)),
 );
+
+export const decodeStepRunMemo =
+  <A>(schema: OptionalMemoCodec<A>, stepId: string) =>
+  (value: unknown): Effect.Effect<A | void, StepError> =>
+    Option.match(schema, {
+      onNone: () => Effect.void,
+      onSome: (codec) => decodeMemo(codec, stepId)(value),
+    });
+
+export const encodeStepRunMemo =
+  <A>(schema: OptionalMemoCodec<A>, stepId: string) =>
+  (value: unknown): Effect.Effect<Schema.Json | undefined, StepError> =>
+    Option.match(schema, {
+      onNone: () => Effect.succeed(undefined),
+      onSome: (codec) => encodeMemo(codec, stepId)(value),
+    });
+
+export const failStepRunMemoError = (stepId: string, error: unknown): Effect.Effect<never, StepError> =>
+  Effect.fail(
+    StepError.make({
+      stepId,
+      message: Predicate.hasProperty(error, "message") ? String(error.message) : "Step failed",
+      noRetry: true,
+      cause: error,
+    }),
+  );
+
+export const failStepRunMemoTimeout = (stepId: string): Effect.Effect<never, StepError> =>
+  Effect.fail(StepError.make({ stepId, message: "Step timed out", noRetry: true }));
+
+export const failUnexpectedStepRunMemoInput = (stepId: string, input: unknown): Effect.Effect<never, StepError> =>
+  Effect.fail(StepError.make({ stepId, message: "Unexpected step result type: input", cause: input }));

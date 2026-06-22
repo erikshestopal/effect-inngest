@@ -1,4 +1,4 @@
-import { Context, Duration, Effect, Layer, Option, Schema, pipe } from "effect";
+import { Context, Duration, Effect, Layer, Option, Predicate, Schema, pipe } from "effect";
 import { InngestClient, InngestConfig } from "../../Client.js";
 import type * as InngestEvent from "../../Event.js";
 import type { InngestFunction } from "../../Function.js";
@@ -8,6 +8,7 @@ import { CurrentExecutionInput } from "../domain/ExecutionInput.js";
 import type { StepInput } from "../domain/StepInput.js";
 import { EventApi, type OutgoingEvent } from "./EventApi.js";
 import { CurrentCheckpoint } from "./CheckpointContext.js";
+import { HandlerFiberScope } from "./HandlerFiberScope.js";
 import { StepCommandBus } from "./StepCommandBus.js";
 import { StepIdentity } from "./StepIdentity.js";
 import * as InvokeStep from "./steps/InvokeStep.js";
@@ -99,6 +100,7 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
     const identity = yield* StepIdentity;
     const bus = yield* StepCommandBus;
     const eventApi = yield* EventApi;
+    const handlerFiberScope = yield* HandlerFiberScope;
     const runtime = pipe(
       Context.make(StepIdentity, identity),
       Context.add(StepCommandBus, bus),
@@ -106,27 +108,48 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
       Context.add(CurrentExecutionInput, input),
       Context.add(CurrentCheckpoint, checkpoint),
       Context.add(InngestConfig, config),
+      Context.add(HandlerFiberScope, handlerFiberScope),
     );
 
+    function run<Err, R>(id: StepInput, effect: Effect.Effect<void, Err, R>): Effect.Effect<void, StepError | Err, R>;
+    function run<S extends JsonSchema, Err, R>(
+      id: StepInput,
+      effect: Effect.Effect<Schema.Schema.Type<S>, Err, R>,
+      options: RunOptions<S>,
+    ): Effect.Effect<Schema.Schema.Type<S>, StepError | Err, R>;
+    function run<S extends JsonSchema, Err, R>(
+      id: StepInput,
+      effect: Effect.Effect<void | Schema.Schema.Type<S>, Err, R>,
+      options?: RunOptions<S>,
+    ) {
+      if (Predicate.isNotUndefined(options)) {
+        return StepRun.run({ input, id: identity.reserve(id), effect, options }).pipe(Effect.provide(runtime));
+      }
+      return StepRun.run({ input, id: identity.reserve(id), effect }).pipe(Effect.provide(runtime));
+    }
+
+    const sleep: Sleep = (id, duration) =>
+      SleepStep.sleep({ input, id: identity.reserve(id), duration }).pipe(Effect.provide(runtime));
+
+    const sleepUntil: SleepUntil = (id, timestamp) =>
+      SleepUntilStep.sleepUntil({ input, id: identity.reserve(id), timestamp }).pipe(Effect.provide(runtime));
+
+    const waitForEvent: WaitForEvent = (id, event, options) =>
+      WaitForEventStep.waitForEvent({ input, id: identity.reserve(id), event, options }).pipe(Effect.provide(runtime));
+
+    const invoke: Invoke = (id, options) =>
+      InvokeStep.invoke({ input, id: identity.reserve(id), options }).pipe(Effect.provide(runtime));
+
+    const sendEvent: SendEvent = (id, payload) =>
+      SendEventStep.sendEvent({ input, id: identity.reserve(id), payload }).pipe(Effect.provide(runtime));
+
     return {
-      run: ((id, effect, options) =>
-        StepRun.run({ input, id: identity.reserve(id), effect, options }).pipe(Effect.provide(runtime))) as Run,
-      sleep: ((id, duration) =>
-        SleepStep.sleep({ input, id: identity.reserve(id), duration }).pipe(Effect.provide(runtime))) as Sleep,
-      sleepUntil: ((id, timestamp) =>
-        SleepUntilStep.sleepUntil({ input, id: identity.reserve(id), timestamp }).pipe(
-          Effect.provide(runtime),
-        )) as SleepUntil,
-      waitForEvent: ((id, event, options) =>
-        WaitForEventStep.waitForEvent({ input, id: identity.reserve(id), event, options }).pipe(
-          Effect.provide(runtime),
-        )) as WaitForEvent,
-      invoke: ((id, options) =>
-        InvokeStep.invoke({ input, id: identity.reserve(id), options }).pipe(Effect.provide(runtime))) as Invoke,
-      sendEvent: ((id, payload) =>
-        SendEventStep.sendEvent({ input, id: identity.reserve(id), payload }).pipe(
-          Effect.provide(runtime),
-        )) as SendEvent,
+      run,
+      sleep,
+      sleepUntil,
+      waitForEvent,
+      invoke,
+      sendEvent,
     };
   });
 

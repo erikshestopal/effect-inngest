@@ -2,7 +2,6 @@ import { Effect, Option, Schema } from "effect";
 import type { InngestFunction } from "../../Function.js";
 import * as HandlerContext from "../runtime/HandlerContext.js";
 import { CurrentCheckpoint } from "../runtime/CheckpointContext.js";
-import { HandlerFiberScope } from "../runtime/HandlerFiberScope.js";
 
 export class HandlerSucceeded extends Schema.TaggedClass<HandlerSucceeded>()("HandlerSucceeded", {
   value: Schema.Unknown,
@@ -19,11 +18,9 @@ export const run = <F extends InngestFunction.Any, R>(args: {
   readonly fn: F;
   readonly handler: (ctx: HandlerContext.HandlerContext<F>) => Effect.Effect<InngestFunction.Success<F>, unknown, R>;
 }) =>
-  HandlerFiberScope.withRoot(
-    HandlerContext.make({ fn: args.fn }).pipe(
-      Effect.flatMap(args.handler),
-      Effect.map((value) => HandlerSucceeded.make({ value })),
-    ),
+  HandlerContext.make({ fn: args.fn }).pipe(
+    Effect.flatMap(args.handler),
+    Effect.map((value) => HandlerSucceeded.make({ value })),
   );
 
 export const withCheckpointDeadline = <E, R>(effect: Effect.Effect<HandlerCompletion, E, R>) =>

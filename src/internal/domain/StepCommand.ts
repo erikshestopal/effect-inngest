@@ -1,4 +1,5 @@
-import { Match, Option, Schema } from "effect";
+import { Duration, Match, Option, Schema } from "effect";
+import { isNonRetriableError, isRetryAfterError } from "../errors.js";
 import * as Protocol from "../protocol.js";
 import { StepInfo } from "./StepInfo.js";
 
@@ -75,6 +76,20 @@ export type ResultCommand = StepRunResult | SendEventResult;
 export type PlanCommand = YieldCommand | StepRunPlanned | SendEventPlanned;
 export type ErrorCommand = StepRunError | StepRunFailed;
 export type StepCommand = YieldCommand | ResultCommand | PlanCommand | ErrorCommand;
+
+export const stepRunFailureForAttempt = (args: {
+  readonly info: StepInfo;
+  readonly error: unknown;
+  readonly attempt: number;
+  readonly maxAttempts: number;
+}): StepRunError | StepRunFailed => {
+  const noRetry = isNonRetriableError(args.error) ? true : undefined;
+  const retryAfterMs = isRetryAfterError(args.error) ? Duration.toMillis(args.error.retryAfter) : undefined;
+
+  return noRetry === true || args.attempt >= args.maxAttempts - 1
+    ? StepRunFailed.make({ info: args.info, error: args.error })
+    : StepRunError.make({ info: args.info, error: args.error, noRetry, retryAfterMs });
+};
 
 export const suspension = (command: YieldCommand) =>
   Match.value(command).pipe(
