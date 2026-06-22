@@ -25,7 +25,15 @@ export default defineConfig({
     },
   },
   pack: {
-    entry: ["src/index.ts", "src/Client.ts", "src/Events.ts", "src/Function.ts", "src/Group.ts", "src/HttpApi.ts"],
+    entry: [
+      "src/index.ts",
+      "src/Client.ts",
+      "src/Event.ts",
+      "src/Events.ts",
+      "src/Function.ts",
+      "src/Group.ts",
+      "src/HttpApi.ts",
+    ],
     format: "esm",
     dts: true,
     clean: true,

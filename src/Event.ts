@@ -9,9 +9,9 @@
 import { Predicate, Schema } from "effect";
 import type { MakeOptions } from "effect/Schema";
 
-const TypeId: unique symbol = Symbol.for("effect-inngest/Event");
+export const TypeId: unique symbol = Symbol.for("effect-inngest/Event");
 
-interface EventOptions extends MakeOptions {
+export interface EventOptions extends MakeOptions {
   readonly id?: string;
   readonly ts?: number;
   readonly v?: string;
