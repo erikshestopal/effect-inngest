@@ -8,6 +8,11 @@ const ItemSchema = Schema.Struct({
   value: Schema.Number,
 });
 
+const ProcessedItemSchema = Schema.Struct({
+  id: Schema.String,
+  processedValue: Schema.Number,
+});
+
 const DemoLargePayload = InngestEvent.make(
   "examples/039-large-payload/demo/large-payload",
   Schema.Struct({
@@ -37,11 +42,13 @@ const HandlersLive = Group.toLayer({
             processedValue: item.value * 2,
           })),
         ),
+        { schema: Schema.Array(ProcessedItemSchema) },
       );
 
       const totalValue = yield* step.run(
         "calculate-total",
         Effect.succeed(event.data.items.reduce((sum, item) => sum + item.value, 0)),
+        { schema: Schema.Number },
       );
 
       return {

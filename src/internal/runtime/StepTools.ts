@@ -23,14 +23,6 @@ export interface RunOptions<S extends JsonSchema> {
   readonly schema: S;
 }
 
-export type RunOutput<A> = [A] extends [never]
-  ? never
-  : [A] extends [void]
-    ? null
-    : A extends Schema.Json
-      ? A
-      : Schema.Json;
-
 export interface WaitForEventOptions {
   readonly timeout: Duration.Input;
   readonly if?: string;
@@ -48,7 +40,7 @@ export type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.Even
   : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventPayload<F> };
 
 export interface Run {
-  <A, Err, R>(id: StepInput, effect: Effect.Effect<A, Err, R>): Effect.Effect<RunOutput<A>, StepError | Err, R>;
+  <Err, R>(id: StepInput, effect: Effect.Effect<void, Err, R>): Effect.Effect<void, StepError | Err, R>;
   <S extends JsonSchema, Err, R>(
     id: StepInput,
     effect: Effect.Effect<Schema.Schema.Type<S>, Err, R>,

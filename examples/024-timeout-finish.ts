@@ -17,9 +17,9 @@ const Group = InngestGroup.make(LongRunningFn);
 const HandlersLive = Group.toLayer({
   "long-running-task": ({ step }) =>
     Effect.gen(function* () {
-      yield* step.run("work-1", Effect.succeed("Phase 1 done"));
+      yield* step.run("work-1", Effect.succeed("Phase 1 done"), { schema: Schema.String });
       yield* step.sleep("long-wait", Duration.seconds(5));
-      yield* step.run("work-2", Effect.succeed("Phase 2 done"));
+      yield* step.run("work-2", Effect.succeed("Phase 2 done"), { schema: Schema.String });
       return { status: "completed" };
     }),
 });

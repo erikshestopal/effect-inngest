@@ -145,8 +145,8 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     Effect.gen(function* () {
       const { captures, layer } = setup(({ step }) =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
-          yield* step.run("b", Effect.succeed("B"));
+          yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
+          yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
           return "done";
         }),
       );
@@ -173,9 +173,9 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       const { captures, layer } = setup(
         ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed(1));
-            yield* step.run("b", Effect.succeed(2));
-            yield* step.run("c", Effect.succeed(3));
+            yield* step.run("a", Effect.succeed(1), { schema: Schema.Number });
+            yield* step.run("b", Effect.succeed(2), { schema: Schema.Number });
+            yield* step.run("c", Effect.succeed(3), { schema: Schema.Number });
             return "done";
           }),
         { checkpointing: { bufferedSteps: 2 } },
@@ -243,7 +243,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       const { captures, layer } = setup(
         ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
+            yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
             yield* step.sleep("nap", "5 minutes");
             return "x";
           }),
@@ -273,8 +273,8 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     Effect.gen(function* () {
       const { captures, layer } = setup(({ step }) =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
-          yield* step.run("b", Effect.succeed("B"));
+          yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
+          yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
           return "done";
         }),
       );
@@ -301,7 +301,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       const { layer } = setup(
         ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
+            yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
             // Intentional global Error to test arbitrary user failure paths
             // eslint-disable-next-line effect-inngest/no-global-error-in-effect-fail
             return yield* step.run("boom", Effect.fail(new Error("kaboom")));
@@ -333,8 +333,8 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
         const { captures, layer } = setup(
           ({ step }) =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
-              yield* step.run("b", Effect.succeed("B"));
+              yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
+              yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
               return "done";
             }),
           {
@@ -398,7 +398,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     Effect.gen(function* () {
       const { captures, layer } = setup(({ step }) =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
+          yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
           return "done";
         }),
       );
@@ -429,7 +429,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
     Effect.gen(function* () {
       const { captures, layer } = setup(({ step }) =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
+          yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
           return "done";
         }),
       );
@@ -466,7 +466,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       const HandlersLive = GroupOff.toLayer({
         "ckpt-off": ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
+            yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
             return "done";
           }),
       });

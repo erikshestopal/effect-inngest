@@ -28,10 +28,10 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-buffered": ({ event, step }) =>
     Effect.gen(function* () {
-      const a = yield* step.run("a", Effect.succeed(event.data.base + 1));
-      const b = yield* step.run("b", Effect.succeed(event.data.base + 2));
-      const c = yield* step.run("c", Effect.succeed(event.data.base + 3));
-      const d = yield* step.run("d", Effect.succeed(event.data.base + 4));
+      const a = yield* step.run("a", Effect.succeed(event.data.base + 1), { schema: Schema.Number });
+      const b = yield* step.run("b", Effect.succeed(event.data.base + 2), { schema: Schema.Number });
+      const c = yield* step.run("c", Effect.succeed(event.data.base + 3), { schema: Schema.Number });
+      const d = yield* step.run("d", Effect.succeed(event.data.base + 4), { schema: Schema.Number });
       return { total: a + b + c + d };
     }),
 });

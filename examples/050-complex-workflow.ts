@@ -70,6 +70,7 @@ const HandlersLive = Group.toLayer({
           const calculatedTotal = event.data.items.reduce((sum, item) => sum + item.qty * item.price, 0);
           return calculatedTotal === event.data.total;
         }),
+        { schema: Schema.Boolean },
       );
 
       if (!isValid) {
@@ -135,6 +136,7 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`Delivery scheduled for: ${isoDate}`);
           return isoDate;
         }),
+        { schema: Schema.String },
       );
 
       yield* step.sendEvent(

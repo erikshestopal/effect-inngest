@@ -123,7 +123,10 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
         "parallel-sleep": ({ event, step }) =>
           Effect.gen(function* () {
             const [data, _] = yield* Effect.all(
-              [step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`)), step.sleep("wait", "5 seconds")],
+              [
+                step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`), { schema: Schema.String }),
+                step.sleep("wait", "5 seconds"),
+              ],
               { concurrency: "unbounded" },
             );
             return { data, sleepCompleted: true };
@@ -199,8 +202,8 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
       const HandlersLive = Group.toLayer({
         "multi-step": ({ step }) =>
           Effect.gen(function* () {
-            const a = yield* step.run("step-a", Effect.succeed("A"));
-            const b = yield* step.run("step-b", Effect.succeed("B"));
+            const a = yield* step.run("step-a", Effect.succeed("A"), { schema: Schema.String });
+            const b = yield* step.run("step-b", Effect.succeed("B"), { schema: Schema.String });
             return { result: `${a}-${b}` };
           }),
       });
@@ -325,7 +328,7 @@ describe("Regression: step.invoke payload must be event data directly", () => {
           }),
         "child-fn": ({ event, step }) =>
           Effect.gen(function* () {
-            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
+            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2), { schema: Schema.Number });
             return { doubled };
           }),
       });
@@ -455,7 +458,9 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
         "non-retriable-fn": ({ step }) =>
-          step.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" }))),
+          step.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" })), {
+            schema: Schema.Struct({ result: Schema.String }),
+          }),
       });
 
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });
@@ -803,9 +808,9 @@ describe("Regression: disable_immediate_execution must not block target step", (
       const HandlersLive = Group.toLayer({
         sequential: ({ step }) =>
           Effect.gen(function* () {
-            const a = yield* step.run("first", Effect.succeed("first"));
-            const b = yield* step.run("second", Effect.succeed("second"));
-            const c = yield* step.run("third", Effect.succeed("third"));
+            const a = yield* step.run("first", Effect.succeed("first"), { schema: Schema.String });
+            const b = yield* step.run("second", Effect.succeed("second"), { schema: Schema.String });
+            const c = yield* step.run("third", Effect.succeed("third"), { schema: Schema.String });
             return { steps: [a, b, c] };
           }),
       });

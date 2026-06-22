@@ -11,6 +11,8 @@ const FetchUserDataResult = Schema.Struct({
   orders: Schema.Array(Schema.String),
   preferences: Schema.Struct({ theme: Schema.String }),
 });
+const UserResult = Schema.Struct({ id: Schema.String, name: Schema.String });
+const PreferencesResult = Schema.Struct({ theme: Schema.String });
 
 const UserRequested = InngestEvent.make(
   "user/requested",
@@ -42,9 +44,13 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" }), {
+                  schema: UserResult,
+                }),
+                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"]), {
+                  schema: Schema.Array(Schema.String),
+                }),
+                step.run("fetch-preferences", Effect.succeed({ theme: "dark" }), { schema: PreferencesResult }),
               ],
               { concurrency: "unbounded" },
             );
@@ -106,9 +112,13 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" }), {
+                  schema: UserResult,
+                }),
+                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"]), {
+                  schema: Schema.Array(Schema.String),
+                }),
+                step.run("fetch-preferences", Effect.succeed({ theme: "dark" }), { schema: PreferencesResult }),
               ],
               { concurrency: "unbounded" },
             );
@@ -175,9 +185,13 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" }), {
+                  schema: UserResult,
+                }),
+                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"]), {
+                  schema: Schema.Array(Schema.String),
+                }),
+                step.run("fetch-preferences", Effect.succeed({ theme: "dark" }), { schema: PreferencesResult }),
               ],
               { concurrency: "unbounded" },
             );
@@ -245,9 +259,13 @@ describe("TB-009: Parallel Step Execution", () => {
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" }), {
+                  schema: UserResult,
+                }),
+                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"]), {
+                  schema: Schema.Array(Schema.String),
+                }),
+                step.run("fetch-preferences", Effect.succeed({ theme: "dark" }), { schema: PreferencesResult }),
               ],
               { concurrency: "unbounded" },
             );
@@ -339,7 +357,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
+                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`), { schema: Schema.String }),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },
@@ -397,7 +415,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
+                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`), { schema: Schema.String }),
                 step.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },

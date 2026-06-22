@@ -23,15 +23,17 @@ const Group = InngestGroup.make(ConditionalFn);
 const HandlersLive = Group.toLayer({
   "conditional-steps": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("setup", Effect.succeed("initialized"));
+      yield* step.run("setup", Effect.succeed("initialized"), { schema: Schema.String });
 
       if (event.data.shouldSkip) {
-        const quickResult = yield* step.run("quick-path", Effect.succeed("skipped heavy work"));
+        const quickResult = yield* step.run("quick-path", Effect.succeed("skipped heavy work"), {
+          schema: Schema.String,
+        });
         return { path: "quick", result: quickResult };
       } else {
-        const step1 = yield* step.run("heavy-step-1", Effect.succeed("processed-1"));
-        const step2 = yield* step.run("heavy-step-2", Effect.succeed("processed-2"));
-        const step3 = yield* step.run("heavy-step-3", Effect.succeed("processed-3"));
+        const step1 = yield* step.run("heavy-step-1", Effect.succeed("processed-1"), { schema: Schema.String });
+        const step2 = yield* step.run("heavy-step-2", Effect.succeed("processed-2"), { schema: Schema.String });
+        const step3 = yield* step.run("heavy-step-3", Effect.succeed("processed-3"), { schema: Schema.String });
         return { path: "full", result: `${step1},${step2},${step3}` };
       }
     }),

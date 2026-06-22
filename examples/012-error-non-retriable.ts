@@ -14,7 +14,10 @@ const NonRetriableFn = InngestFunction.make("non-retriable", {
 const Group = InngestGroup.make(NonRetriableFn);
 
 const HandlersLive = Group.toLayer({
-  "non-retriable": ({ step }) => step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" }))),
+  "non-retriable": ({ step }) =>
+    step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })), {
+      schema: Schema.Struct({ success: Schema.Boolean }),
+    }),
 });
 
 export default defineExample({

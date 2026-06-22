@@ -149,9 +149,9 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
         const { captures, layer } = setup(
           ({ step }) =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
+              yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
               yield* Effect.sleep("75 millis");
-              yield* step.run("b", Effect.succeed("B"));
+              yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
               return "done";
             }),
           { bufferedSteps: 10, maxRuntime: "25 millis" },
@@ -191,10 +191,10 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
         const { captures, layer } = setup(
           ({ step }) =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
+              yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
               yield* Effect.sleep("120 millis");
-              yield* step.run("b", Effect.succeed("B"));
-              yield* step.run("c", Effect.succeed("C"));
+              yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
+              yield* step.run("c", Effect.succeed("C"), { schema: Schema.String });
               return "done";
             }),
           { bufferedSteps: 10, maxInterval: "50 millis", maxRuntime: "30 seconds" },

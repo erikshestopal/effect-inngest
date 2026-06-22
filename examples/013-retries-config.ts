@@ -25,6 +25,7 @@ const HandlersLive = Group.toLayer({
         yield* Effect.log("Attempt failed - will retry");
         return yield* new IntentionalFailure({ message: "Intentional failure" });
       }),
+      { schema: Schema.Struct({ success: Schema.Boolean }) },
     ),
 });
 

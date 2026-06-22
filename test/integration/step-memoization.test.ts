@@ -38,7 +38,9 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity), {
+              schema: Schema.Number,
+            });
             return { orderId: event.data.orderId, total };
           }),
       });
@@ -82,7 +84,9 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity), {
+              schema: Schema.Number,
+            });
             return { orderId: event.data.orderId, total };
           }),
       });

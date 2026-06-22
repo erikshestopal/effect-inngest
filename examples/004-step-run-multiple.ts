@@ -27,6 +27,7 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`doubling ${event.data.value}`);
           return event.data.value * 2;
         }),
+        { schema: Schema.Number },
       );
       const result = yield* step.run(
         "add-ten",
@@ -34,6 +35,7 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`adding 10 to ${doubled}`);
           return doubled + 10;
         }),
+        { schema: Schema.Number },
       );
       yield* Effect.log(`step-chain result: ${result}`);
       return { result };

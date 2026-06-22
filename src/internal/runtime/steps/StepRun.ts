@@ -2,32 +2,68 @@ import { Duration, Effect, Match, Option, Predicate, Schema } from "effect";
 import { isNonRetriableError, isRetryAfterError, StepError } from "../../errors.js";
 import * as StepResult from "../../codec/StepResult.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
+import { CurrentExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
 import { CurrentCheckpoint } from "../CheckpointContext.js";
-import type { JsonSchema, RunOptions, RunOutput } from "../StepTools.js";
+import { HandlerFiberScope } from "../HandlerFiberScope.js";
+import type { JsonSchema, RunOptions } from "../StepTools.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
 
-export const run = <A, Err, R>(args: {
+export function run<Err, R>(args: {
   readonly input: ExecutionInput;
   readonly id: StepReservation;
-  readonly effect: Effect.Effect<A, Err, R>;
-  readonly options?: RunOptions<JsonSchema<A>>;
-}) =>
-  Effect.gen(function* () {
+  readonly effect: Effect.Effect<void, Err, R>;
+}): Effect.Effect<
+  void,
+  StepError | Err,
+  R | StepIdentity | StepCommandBus | typeof CurrentCheckpoint | CurrentExecutionInput | HandlerFiberScope
+>;
+export function run<S extends JsonSchema, Err, R>(args: {
+  readonly input: ExecutionInput;
+  readonly id: StepReservation;
+  readonly effect: Effect.Effect<S["Type"], Err, R>;
+  readonly options: RunOptions<S>;
+}): Effect.Effect<
+  S["Type"],
+  StepError | Err,
+  R | StepIdentity | StepCommandBus | typeof CurrentCheckpoint | CurrentExecutionInput | HandlerFiberScope
+>;
+export function run<S extends JsonSchema, Err, R>(args: {
+  readonly input: ExecutionInput;
+  readonly id: StepReservation;
+  readonly effect: Effect.Effect<S["Type"] | void, Err, R>;
+  readonly options?: RunOptions<S>;
+}): Effect.Effect<
+  void | S["Type"],
+  StepError | Err,
+  R | StepIdentity | StepCommandBus | typeof CurrentCheckpoint | CurrentExecutionInput | HandlerFiberScope
+> {
+  const decodeMemo = (data: unknown, stepId: string): Effect.Effect<void | S["Type"], StepError> => {
+    if (args.options) {
+      const schema: Schema.Codec<S["Type"], Schema.Json, never, never> = Schema.toCodecJson(args.options.schema);
+      return Schema.decodeUnknownEffect(schema)(data).pipe(
+        Effect.mapError((cause) => StepResult.stepDecodeError({ stepId, cause })),
+      );
+    }
+    return Effect.void;
+  };
+
+  const encodeResult = (value: unknown, stepId: string) =>
+    args.options
+      ? Schema.encodeUnknownEffect(Schema.toCodecJson(args.options.schema))(value).pipe(
+          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId, cause })),
+        )
+      : Effect.succeed(undefined);
+
+  return Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const bus = yield* StepCommandBus;
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
     return yield* Match.value(memo).pipe(
-      Match.tag("MemoData", ({ data }) =>
-        args.options?.schema
-          ? Schema.decodeUnknownEffect(Schema.toCodecJson(args.options.schema))(data).pipe(
-              Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
-            )
-          : Effect.succeed(data as RunOutput<A>),
-      ),
+      Match.tag("MemoData", ({ data }) => decodeMemo(data, info.id)),
       Match.tag("MemoError", ({ error }) =>
         Effect.fail(
           StepError.make({
@@ -79,16 +115,10 @@ export const run = <A, Err, R>(args: {
               },
               onSuccess: (value) =>
                 Effect.gen(function* () {
-                  const data = Predicate.isUndefined(value)
-                    ? undefined
-                    : args.options?.schema
-                      ? yield* Schema.encodeEffect(Schema.toCodecJson(args.options.schema))(value).pipe(
-                          Effect.mapError((cause) => StepResult.stepDecodeError({ stepId: info.id, cause })),
-                        )
-                      : yield* StepResult.encodeUnknownJson({ value, stepId: info.id });
+                  const data = yield* encodeResult(value, info.id);
 
                   yield* bus.complete(StepCommand.StepRunResult.make({ info, data }));
-                  return args.options?.schema ? value : (data as RunOutput<A>);
+                  return yield* decodeMemo(data, info.id);
                 }),
             }),
             Effect.catchDefect((defect) => bus.fail(StepCommand.StepRunError.make({ info, error: defect }))),
@@ -98,3 +128,4 @@ export const run = <A, Err, R>(args: {
       Match.exhaustive,
     );
   });
+}

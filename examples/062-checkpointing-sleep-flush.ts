@@ -29,8 +29,8 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-sleep": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("prepare-a", Effect.succeed("a"));
-      yield* step.run("prepare-b", Effect.succeed("b"));
+      yield* step.run("prepare-a", Effect.succeed("a"), { schema: Schema.String });
+      yield* step.run("prepare-b", Effect.succeed("b"), { schema: Schema.String });
       yield* step.sleep("nap", "2 seconds");
       return { tag: event.data.tag };
     }),

@@ -128,7 +128,7 @@ describe("TB-006: Send Event", () => {
       const HandlersLive = Group.toLayer({
         "process-signup": ({ event, step }) =>
           Effect.gen(function* () {
-            const userId = yield* step.run("create-user", Effect.succeed(`user_123`));
+            const userId = yield* step.run("create-user", Effect.succeed(`user_123`), { schema: Schema.String });
 
             yield* step.sendEvent(
               "send-welcome",

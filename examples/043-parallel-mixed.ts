@@ -27,7 +27,7 @@ const HandlersLive = Group.toLayer({
 
       const [computed, _sleptResult, _sentResult] = yield* Effect.all(
         [
-          step.run("compute", Effect.succeed(42)),
+          step.run("compute", Effect.succeed(42), { schema: Schema.Number }),
           step.sleep("short-wait", Duration.seconds(2)),
           step.sendEvent("notify", DemoSideEffect.make({ source: "parallel-mixed-function" })),
         ],

@@ -20,7 +20,7 @@ const Group = InngestGroup.make(StepSingleFn);
 const HandlersLive = Group.toLayer({
   "step-single": ({ event, step }) =>
     Effect.gen(function* () {
-      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
+      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2), { schema: Schema.Number });
       return { doubled };
     }),
 });

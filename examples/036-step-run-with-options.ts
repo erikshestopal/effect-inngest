@@ -15,11 +15,13 @@ const Group = InngestGroup.make(StepOptionsFn);
 const HandlersLive = Group.toLayer({
   "step-options-demo": ({ step }) =>
     Effect.gen(function* () {
-      const result1 = yield* step.run("basic-step", Effect.succeed("basic"));
+      const result1 = yield* step.run("basic-step", Effect.succeed("basic"), { schema: Schema.String });
 
-      const result2 = yield* step.run({ id: "named-step", name: "Named Step" }, Effect.succeed("with-name"));
+      const result2 = yield* step.run({ id: "named-step", name: "Named Step" }, Effect.succeed("with-name"), {
+        schema: Schema.String,
+      });
 
-      const result3 = yield* step.run("third-step", Effect.succeed("completed"));
+      const result3 = yield* step.run("third-step", Effect.succeed("completed"), { schema: Schema.String });
 
       return { results: [result1, result2, result3] };
     }),

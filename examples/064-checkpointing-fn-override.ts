@@ -30,9 +30,9 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-override": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"));
-      yield* step.run("b", Effect.succeed("B"));
-      yield* step.run("c", Effect.succeed("C"));
+      yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
+      yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
+      yield* step.run("c", Effect.succeed("C"), { schema: Schema.String });
       return { key: event.data.key };
     }),
 });

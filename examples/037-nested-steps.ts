@@ -20,13 +20,15 @@ const Group = InngestGroup.make(NestedStepsFn);
 const HandlersLive = Group.toLayer({
   "nested-steps-demo": ({ step }) =>
     Effect.gen(function* () {
-      const level1 = yield* step.run("level-1", Effect.succeed(10));
+      const level1 = yield* step.run("level-1", Effect.succeed(10), { schema: Schema.Number });
 
-      const level2 = yield* step.run("level-2", Effect.succeed(level1 * 2));
+      const level2 = yield* step.run("level-2", Effect.succeed(level1 * 2), { schema: Schema.Number });
 
-      const level3 = yield* step.run("level-3", Effect.succeed(level2 + 5));
+      const level3 = yield* step.run("level-3", Effect.succeed(level2 + 5), { schema: Schema.Number });
 
-      const final = yield* step.run("final-computation", Effect.succeed(level1 + level2 + level3));
+      const final = yield* step.run("final-computation", Effect.succeed(level1 + level2 + level3), {
+        schema: Schema.Number,
+      });
 
       return { level1, level2, level3, final };
     }),

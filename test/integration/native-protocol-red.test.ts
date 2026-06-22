@@ -164,9 +164,9 @@ describe("native v4 protocol RED regressions", () => {
           Effect.gen(function* () {
             const results = yield* Effect.all(
               [
-                step.run("step-1", Effect.succeed(1)),
-                step.run("step-2", Effect.succeed(2)),
-                step.run("step-3", Effect.succeed(3)),
+                step.run("step-1", Effect.succeed(1), { schema: Schema.Number }),
+                step.run("step-2", Effect.succeed(2), { schema: Schema.Number }),
+                step.run("step-3", Effect.succeed(3), { schema: Schema.Number }),
               ],
               { concurrency: "unbounded" },
             );
@@ -206,9 +206,9 @@ describe("native v4 protocol RED regressions", () => {
           Effect.gen(function* () {
             const results = yield* Effect.all(
               [
-                step.run("step-1", Effect.succeed(1)),
-                step.run("step-2", Effect.succeed(2)),
-                step.run("step-3", Effect.succeed(3)),
+                step.run("step-1", Effect.succeed(1), { schema: Schema.Number }),
+                step.run("step-2", Effect.succeed(2), { schema: Schema.Number }),
+                step.run("step-3", Effect.succeed(3), { schema: Schema.Number }),
               ],
               { concurrency: "unbounded" },
             );
@@ -290,7 +290,7 @@ describe("native v4 protocol RED regressions", () => {
           Effect.gen(function* () {
             yield* Effect.all(
               [
-                step.run("compute", Effect.succeed("ok")),
+                step.run("compute", Effect.succeed("ok"), { schema: Schema.String }),
                 step.sleep("wait", "2 seconds"),
                 step.sendEvent("notify", EmailSend.make({ to: "a@example.com" })),
               ],
@@ -490,7 +490,9 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "non-retriable-native": ({ step }) =>
           Effect.gen(function* () {
-            return yield* step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })));
+            return yield* step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })), {
+              schema: Schema.Struct({ ok: Schema.Boolean }),
+            });
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
@@ -522,7 +524,9 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "retry-final-native": ({ step }) =>
           Effect.gen(function* () {
-            return yield* step.run("always-fail", Effect.fail(new TestProtocolError({ message: "boom" })));
+            return yield* step.run("always-fail", Effect.fail(new TestProtocolError({ message: "boom" })), {
+              schema: Schema.Struct({ ok: Schema.Boolean }),
+            });
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
@@ -562,7 +566,9 @@ describe("native v4 protocol RED regressions", () => {
         "step-catch-native": ({ step }) =>
           Effect.gen(function* () {
             const result = yield* step
-              .run("risky-step", Effect.fail(new TestProtocolError({ message: "Something went wrong" })))
+              .run("risky-step", Effect.fail(new TestProtocolError({ message: "Something went wrong" })), {
+                schema: Schema.String,
+              })
               .pipe(Effect.catch((error: unknown) => Effect.succeed(`Caught error: ${String(error)}`)));
             return { result };
           }),
@@ -601,6 +607,7 @@ describe("native v4 protocol RED regressions", () => {
               run.attempt < 1
                 ? Effect.fail(new RetryAfterError({ message: "Attempt 0 failed", retryAfter: Duration.seconds(1) }))
                 : Effect.succeed(run.attempt + 1),
+              { schema: Schema.Number },
             );
             return { attempts };
           }),
@@ -679,10 +686,10 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "buffered-native": ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed(1));
-            yield* step.run("b", Effect.succeed(2));
-            yield* step.run("c", Effect.succeed(3));
-            yield* step.run("d", Effect.succeed(4));
+            yield* step.run("a", Effect.succeed(1), { schema: Schema.Number });
+            yield* step.run("b", Effect.succeed(2), { schema: Schema.Number });
+            yield* step.run("c", Effect.succeed(3), { schema: Schema.Number });
+            yield* step.run("d", Effect.succeed(4), { schema: Schema.Number });
             return { ok: true };
           }),
       });
@@ -721,8 +728,8 @@ describe("native v4 protocol RED regressions", () => {
       const handlers = Group.toLayer({
         "sleep-flush-native": ({ step }) =>
           Effect.gen(function* () {
-            yield* step.run("prepare-a", Effect.succeed(1));
-            yield* step.run("prepare-b", Effect.succeed(2));
+            yield* step.run("prepare-a", Effect.succeed(1), { schema: Schema.Number });
+            yield* step.run("prepare-b", Effect.succeed(2), { schema: Schema.Number });
             yield* step.sleep("wait", "2 seconds");
             return { ok: true };
           }),

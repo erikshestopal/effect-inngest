@@ -16,7 +16,7 @@ const Group = InngestGroup.make(SlowStartFn);
 const HandlersLive = Group.toLayer({
   "slow-start-task": ({ step }) =>
     Effect.gen(function* () {
-      yield* step.run("quick-work", Effect.succeed("Started successfully"));
+      yield* step.run("quick-work", Effect.succeed("Started successfully"), { schema: Schema.String });
       return { status: "completed" };
     }),
 });

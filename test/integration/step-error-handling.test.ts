@@ -65,7 +65,7 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               // This step will receive memoized error
-              yield* step.run("will-fail", Effect.succeed("ok"));
+              yield* step.run("will-fail", Effect.succeed("ok"), { schema: Schema.String });
               return { result: "done" };
             }),
         });
@@ -118,7 +118,9 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               // This step fails intentionally - use failWith helper to avoid lint warning
-              const result = yield* step.run("will-fail", failWith(new Error("Intentional failure")));
+              const result = yield* step.run("will-fail", failWith(new Error("Intentional failure")), {
+                schema: Schema.String,
+              });
               return { result };
             }),
         });
@@ -169,7 +171,7 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               const customError = new Error("Error with stack");
-              const result = yield* step.run("step-with-stack", failWith(customError));
+              const result = yield* step.run("step-with-stack", failWith(customError), { schema: Schema.String });
               return { result };
             }),
         });
@@ -371,6 +373,7 @@ describe("TB-010: Step Error Handling", () => {
                 Effect.sync(() => {
                   throw new RangeError("Sync thrown in step.run");
                 }),
+                { schema: Schema.Struct({ result: Schema.String }) },
               );
             }),
         });
@@ -409,6 +412,7 @@ describe("TB-010: Step Error Handling", () => {
                 Effect.sync(() => {
                   throw "string error thrown";
                 }),
+                { schema: Schema.Struct({ result: Schema.String }) },
               );
             }),
         });

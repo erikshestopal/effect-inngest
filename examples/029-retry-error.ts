@@ -35,6 +35,7 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`Success on attempt ${attempt}`);
           return attempt + 1;
         }),
+        { schema: Schema.Number },
       );
       return { attempts: result };
     }),

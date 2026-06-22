@@ -73,6 +73,7 @@ describe("RetryAfterError Behavior", () => {
                     retryAfter: Duration.seconds(5),
                   }),
                 ),
+                { schema: Schema.String },
               );
               return { result };
             }),
@@ -120,6 +121,7 @@ describe("RetryAfterError Behavior", () => {
                     retryAfter: Duration.seconds(5),
                   }),
                 ),
+                { schema: Schema.String },
               );
               return { result };
             }),

@@ -29,8 +29,8 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-opt-out": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"));
-      yield* step.run("b", Effect.succeed("B"));
+      yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
+      yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
       return { tag: event.data.tag };
     }),
 });

@@ -21,22 +21,26 @@ const Group = InngestGroup.make(ReturnTypesFn);
 const HandlersLive = Group.toLayer({
   "return-types-demo": ({ step }) =>
     Effect.gen(function* () {
-      const stringResult: string = yield* step.run("return-string", Effect.succeed("hello"));
+      const stringResult: string = yield* step.run("return-string", Effect.succeed("hello"), { schema: Schema.String });
 
-      const numberResult: number = yield* step.run("return-number", Effect.succeed(42));
+      const numberResult: number = yield* step.run("return-number", Effect.succeed(42), { schema: Schema.Number });
 
       const objectResult: { key: string; count: number } = yield* step.run(
         "return-object",
         Effect.succeed({ key: "test", count: 100 }),
+        { schema: Schema.Struct({ key: Schema.String, count: Schema.Number }) },
       );
 
-      const arrayResult: number[] = yield* step.run("return-array", Effect.succeed([1, 2, 3, 4, 5]));
+      const arrayResult: ReadonlyArray<number> = yield* step.run("return-array", Effect.succeed([1, 2, 3, 4, 5]), {
+        schema: Schema.Array(Schema.Number),
+      });
 
-      const boolResult: boolean = yield* step.run("return-boolean", Effect.succeed(true));
+      const boolResult: boolean = yield* step.run("return-boolean", Effect.succeed(true), { schema: Schema.Boolean });
 
       const combined = yield* step.run(
         "use-all-types",
         Effect.succeed(`${stringResult}-${numberResult}-${objectResult.key}-${arrayResult.length}-${boolResult}`),
+        { schema: Schema.String },
       );
 
       yield* Effect.log(`Combined: ${combined}`);

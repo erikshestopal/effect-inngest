@@ -23,8 +23,8 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       const [sum, product] = yield* Effect.all(
         [
-          step.run("sum", Effect.succeed(event.data.a + event.data.b)),
-          step.run("product", Effect.succeed(event.data.a * event.data.b)),
+          step.run("sum", Effect.succeed(event.data.a + event.data.b), { schema: Schema.Number }),
+          step.run("product", Effect.succeed(event.data.a * event.data.b), { schema: Schema.Number }),
         ],
         { concurrency: "unbounded" },
       );

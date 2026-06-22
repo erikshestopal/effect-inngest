@@ -27,6 +27,7 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`doubling ${event.data.value}`);
           return event.data.value * 2;
         }),
+        { schema: Schema.Number },
       );
       yield* Effect.log(`step-single doubled: ${doubled}`);
       return { doubled };
