@@ -6,7 +6,7 @@ import * as StepResult from "../../codec/StepResult.js";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
-import type { InvokeOptions, JsonSchema } from "../StepTools.js";
+import type { InvokeOptions } from "../StepTools.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
 
@@ -24,10 +24,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
 
     return yield* Match.value(memo).pipe(
       Match.tag("MemoData", ({ data }) =>
-        StepResult.decodeJson(
-          Schema.toCodecJson(args.options.function.success as JsonSchema<InngestFunction.Success<F>>),
-          info.id,
-        )(data),
+        StepResult.decodeMemo(Schema.toCodecJson(args.options.function.success), info.id)(data),
       ),
       Match.tag("MemoError", ({ error }) =>
         Effect.fail(

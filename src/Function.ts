@@ -421,7 +421,7 @@ interface FunctionRegistration {
 export interface InngestFunction<
   Tag extends string,
   Triggers extends Trigger,
-  Success extends Schema.Top,
+  Success extends Schema.Codec<unknown, unknown, never, never>,
   Options extends FunctionOptions = FunctionOptions,
 > extends Pipeable {
   readonly [TypeId]: TypeId;
@@ -438,7 +438,7 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, Schema.Top, FunctionOptions>;
+  export type Any = InngestFunction<string, Trigger, Schema.Codec<unknown, unknown, never, never>, FunctionOptions>;
   export type Tag<F> = F extends InngestFunction<infer T, any, any, any> ? T : never;
   export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
   export type Events<F> =
@@ -447,7 +447,8 @@ export declare namespace InngestFunction {
   export type EventType<F> =
     Options<F> extends { readonly batchEvents: BatchEventsOption } ? ReadonlyArray<EventPayload<F>> : EventPayload<F>;
 
-  export type Success<F> = F extends InngestFunction<any, any, infer S, any> ? Schema.Schema.Type<S> : never;
+  export type SuccessSchema<F> = F extends InngestFunction<any, any, infer S, any> ? S : never;
+  export type Success<F> = Schema.Schema.Type<SuccessSchema<F>>;
   export type Options<F> = F extends InngestFunction<any, any, any, infer O> ? O : never;
 }
 
@@ -623,7 +624,7 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
 export function make<
   const Tag extends string,
   T extends TriggerInput,
-  S extends Schema.Top,
+  S extends Schema.Codec<unknown, unknown, never, never>,
   const O extends FunctionOptions = {},
 >(
   tag: Tag,
