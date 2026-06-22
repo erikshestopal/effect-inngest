@@ -1,5 +1,4 @@
 import { Option, Schema } from "effect";
-import type * as Checkpoint from "../checkpoint.js";
 import * as Protocol from "../protocol.js";
 import type * as StepCommand from "./StepCommand.js";
 
@@ -12,7 +11,7 @@ export class SuspendedCommand extends Schema.Class<SuspendedCommand>("effect-inn
     retryAfterMs: Schema.Option(Schema.Number),
   },
 ) {
-  static fromPlanned(planned: Checkpoint.PlannedOpcode): SuspendedCommand {
+  static fromPlanned(planned: StepCommand.PlannedOpcode): SuspendedCommand {
     return SuspendedCommand.make({
       opcode: planned.opcode,
       sequence: Option.some(planned.sequence),

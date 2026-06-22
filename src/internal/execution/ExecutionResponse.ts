@@ -15,7 +15,7 @@ const fromSuccess = (args: {
   Effect.gen(function* () {
     const bus = yield* StepCommandBus;
     const checkpoint = yield* CurrentCheckpoint;
-    const completed = yield* bus.completed;
+    const completed = yield* bus.takeCompleted();
 
     if (Option.isSome(checkpoint)) {
       const terminal = Match.value(args.completion).pipe(
@@ -39,7 +39,7 @@ const fromSuccess = (args: {
 const fromFailure = (args: { readonly cause: Cause.Cause<unknown>; readonly headers: Record<string, string> }) =>
   Effect.gen(function* () {
     const bus = yield* StepCommandBus;
-    const commands = yield* bus.interrupted;
+    const commands = yield* bus.takeSuspension();
 
     if (commands.suspendedCount > 0 && Cause.hasInterruptsOnly(args.cause)) {
       return ExecutionResult.opcodesWithRetry({
@@ -68,7 +68,7 @@ export const fromExit = (exit: Exit.Exit<HandlerRun.HandlerCompletion, unknown>)
     const config = yield* InngestConfig;
     const bus = yield* StepCommandBus;
     const headers = ExecutionHeaders.base(config);
-    const planned = yield* bus.planned;
+    const planned = yield* bus.takePlanned();
 
     if (planned.length > 0) {
       return ExecutionResult.opcodes({ opcodes: planned, headers });

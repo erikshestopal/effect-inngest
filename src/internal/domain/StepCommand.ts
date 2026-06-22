@@ -1,5 +1,4 @@
 import { Match, Option, Schema } from "effect";
-import * as Checkpoint from "../checkpoint.js";
 import * as Protocol from "../protocol.js";
 import { StepInfo } from "./StepInfo.js";
 
@@ -63,6 +62,13 @@ export class Failure extends Schema.Class<Failure>("effect-inngest/internal/doma
   retryAfterMs: Schema.Option(Schema.Number),
 }) {}
 
+export class PlannedOpcode extends Schema.Class<PlannedOpcode>(
+  "effect-inngest/internal/domain/StepCommand/PlannedOpcode",
+)({
+  opcode: Protocol.GeneratorOpcode,
+  sequence: Schema.Number,
+}) {}
+
 export type YieldCommand = Sleep | WaitForEvent | InvokeFunction;
 export type ResultCommand = StepRunResult | SendEventResult;
 export type PlanCommand = YieldCommand | StepRunPlanned | SendEventPlanned;
@@ -105,7 +111,7 @@ export const checkpoint = (command: ResultCommand) =>
   );
 
 export const plan = (command: PlanCommand) =>
-  Checkpoint.PlannedOpcode.make({
+  PlannedOpcode.make({
     opcode: Match.value(command).pipe(
       Match.tag("Sleep", (cmd) => suspension(cmd)),
       Match.tag("WaitForEvent", (cmd) => suspension(cmd)),

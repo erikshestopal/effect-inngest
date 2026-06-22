@@ -162,7 +162,7 @@ describe("Checkpoint config (spec §10.1)", () => {
         expect(flushed.length).toBe(1);
         expect(flushed[0]).toHaveLength(2);
 
-        const remaining = yield* state.completed;
+        const remaining = yield* state.takeCompleted();
         expect(remaining).toHaveLength(0);
       }),
     );
@@ -181,7 +181,7 @@ describe("Checkpoint config (spec §10.1)", () => {
 
         yield* state.record(op("a") as never);
         // Flush failed → buffer restored
-        const drained = yield* state.completed;
+        const drained = yield* state.takeCompleted();
         expect(drained).toHaveLength(1);
       }),
     );

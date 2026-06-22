@@ -9,9 +9,9 @@ export declare namespace StepCommandBus {
     readonly complete: (command: StepCommand.ResultCommand) => Effect.Effect<void>;
     readonly plan: (command: StepCommand.PlanCommand) => Effect.Effect<void>;
     readonly fail: (command: StepCommand.ErrorCommand) => Effect.Effect<void>;
-    readonly planned: Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
-    readonly completed: Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
-    readonly interrupted: Effect.Effect<ExecutionSuspension>;
+    readonly takePlanned: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
+    readonly takeCompleted: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
+    readonly takeSuspension: () => Effect.Effect<ExecutionSuspension>;
   }
 }
 
@@ -19,7 +19,7 @@ const plannedFromCheckpoint = CurrentCheckpoint.pipe(
   Effect.flatMap(
     Option.match({
       onNone: () => Effect.succeed([] as ReadonlyArray<GeneratorOpcode>),
-      onSome: (state) => state.planned,
+      onSome: (state) => state.takePlanned(),
     }),
   ),
 );
@@ -28,7 +28,7 @@ const completedFromCheckpoint = CurrentCheckpoint.pipe(
   Effect.flatMap(
     Option.match({
       onNone: () => Effect.succeed([] as ReadonlyArray<GeneratorOpcode>),
-      onSome: (state) => state.completed,
+      onSome: (state) => state.takeCompleted(),
     }),
   ),
 );
@@ -44,11 +44,12 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
 
     const takeSuspended = Ref.modify(suspended, (current) => [current, Arr.empty<SuspendedCommand>()]);
 
-    const interrupted = Effect.gen(function* () {
-      const completed = yield* completedFromCheckpoint;
-      const commands = yield* takeSuspended;
-      return ExecutionSuspension.from({ completed, suspended: commands });
-    });
+    const takeSuspension = () =>
+      Effect.gen(function* () {
+        const completed = yield* completedFromCheckpoint;
+        const commands = yield* takeSuspended;
+        return ExecutionSuspension.from({ completed, suspended: commands });
+      });
 
     return StepCommandBus.of({
       suspend: (command) =>
@@ -77,9 +78,9 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
           return yield* checkpoint.value.plan(planned);
         }),
       fail: (command) => suspendExecution(SuspendedCommand.fromFailure(StepCommand.failure(command))),
-      planned: plannedFromCheckpoint,
-      completed: completedFromCheckpoint,
-      interrupted,
+      takePlanned: () => plannedFromCheckpoint,
+      takeCompleted: () => completedFromCheckpoint,
+      takeSuspension,
     });
   });
 

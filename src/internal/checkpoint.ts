@@ -7,14 +7,10 @@
  *
  * @internal
  */
-import { Clock, Duration, Effect, Option, Predicate, Ref, Result, Schema } from "effect";
+import { Array as Arr, Clock, Duration, Effect, Option, Predicate, Ref, Result, Schema } from "effect";
 import { InngestDuration } from "./wire/Duration.js";
 import * as Protocol from "./protocol.js";
-
-export class PlannedOpcode extends Schema.Class<PlannedOpcode>("effect-inngest/internal/checkpoint/PlannedOpcode")({
-  opcode: Protocol.GeneratorOpcode,
-  sequence: Schema.Number,
-}) {}
+import type * as StepCommand from "./domain/StepCommand.js";
 
 /**
  * Tagged error returned by `InngestClient.checkpointAsync` when the API call
@@ -137,9 +133,9 @@ export interface CheckpointState {
   readonly fnId: string;
   readonly qiId: string;
   /** Append a planned/async opcode discovered during a root parallel pass. */
-  readonly plan: (planned: PlannedOpcode) => Effect.Effect<void>;
+  readonly plan: (planned: StepCommand.PlannedOpcode) => Effect.Effect<void>;
   /** Atomic snapshot + clear for planned opcodes; never sent via async checkpoint. */
-  readonly planned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
+  readonly takePlanned: () => Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   /** Append a sync opcode; flush if `bufferedSteps` or `maxInterval` reached. */
   readonly record: (op: typeof Protocol.GeneratorOpcode.Type) => Effect.Effect<void>;
   /**
@@ -148,7 +144,7 @@ export interface CheckpointState {
    */
   readonly flush: Effect.Effect<void>;
   /** Atomic snapshot + clear, for terminal response assembly. */
-  readonly completed: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
+  readonly takeCompleted: () => Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>;
   /** Signal that the handler's `maxRuntime` deadline fired (spec §10.4.1 #7). */
   readonly markRuntimeExceeded: Effect.Effect<void>;
   /** Query whether the `maxRuntime` deadline fired. */
@@ -170,8 +166,8 @@ export const make = (args: {
   ) => Effect.Effect<void, CheckpointApiError>;
 }): Effect.Effect<CheckpointState> =>
   Effect.sync(() => {
-    const buffer = Ref.makeUnsafe<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>([]);
-    const plannedBuffer = Ref.makeUnsafe<ReadonlyArray<PlannedOpcode>>([]);
+    const buffer = Ref.makeUnsafe<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>>(Arr.empty());
+    const plannedBuffer = Ref.makeUnsafe<ReadonlyArray<StepCommand.PlannedOpcode>>(Arr.empty());
     const intervalStartedAt = Ref.makeUnsafe<Option.Option<number>>(Option.none());
     const runtimeExceeded = Ref.makeUnsafe(false);
 
@@ -185,7 +181,7 @@ export const make = (args: {
     const flushInner: Effect.Effect<void> = Effect.gen(function* () {
       const steps = yield* Ref.modify(buffer, (current) => [
         current,
-        [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>,
+        Arr.empty<typeof Protocol.GeneratorOpcode.Type>(),
       ]);
       if (steps.length === 0) {
         return;
@@ -221,21 +217,17 @@ export const make = (args: {
         }
       });
 
-    const completed: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
-      buffer,
-      (current) => [current, [] as ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>],
-    );
+    const takeCompleted = (): Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> =>
+      Ref.modify(buffer, (current) => [current, Arr.empty<typeof Protocol.GeneratorOpcode.Type>()]);
 
-    const plan = (planned: PlannedOpcode): Effect.Effect<void> =>
+    const plan = (planned: StepCommand.PlannedOpcode): Effect.Effect<void> =>
       Ref.update(plannedBuffer, (current) => [...current, planned]);
 
-    const planned: Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> = Ref.modify(
-      plannedBuffer,
-      (current) => [
+    const takePlanned = (): Effect.Effect<ReadonlyArray<typeof Protocol.GeneratorOpcode.Type>> =>
+      Ref.modify(plannedBuffer, (current) => [
         [...current].sort((a, b) => a.sequence - b.sequence).map((entry) => entry.opcode),
-        [] as ReadonlyArray<PlannedOpcode>,
-      ],
-    );
+        Arr.empty<StepCommand.PlannedOpcode>(),
+      ]);
 
     return {
       config: args.config,
@@ -243,10 +235,10 @@ export const make = (args: {
       fnId: args.fnId,
       qiId: args.qiId,
       plan,
-      planned,
+      takePlanned,
       record,
       flush: flushInner,
-      completed,
+      takeCompleted,
       markRuntimeExceeded: Ref.set(runtimeExceeded, true),
       isRuntimeExceeded: Ref.get(runtimeExceeded),
     };
