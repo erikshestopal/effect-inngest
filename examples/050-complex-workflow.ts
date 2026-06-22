@@ -131,9 +131,7 @@ const HandlersLive = Group.toLayer({
       const deliveryDate: string = yield* step.run(
         "schedule-delivery",
         Effect.gen(function* () {
-          const delivery = new Date();
-          delivery.setDate(delivery.getDate() + 4);
-          const isoDate = delivery.toISOString().slice(0, 10);
+          const isoDate = "2026-06-25";
           yield* Effect.log(`Delivery scheduled for: ${isoDate}`);
           return isoDate;
         }),

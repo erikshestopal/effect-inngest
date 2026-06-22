@@ -64,9 +64,7 @@ export default defineNativeExample((inngest) => {
       });
 
       const deliveryDate = await step.run("schedule-delivery", () => {
-        const delivery = new Date();
-        delivery.setDate(delivery.getDate() + 4);
-        const isoDate = delivery.toISOString().slice(0, 10);
+        const isoDate = "2026-06-25";
         logger.info(`Delivery scheduled for: ${isoDate}`);
         return isoDate;
       });
