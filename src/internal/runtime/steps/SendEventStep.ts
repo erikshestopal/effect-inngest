@@ -1,12 +1,18 @@
-import { Array as Arr, Effect, Match, Option } from "effect";
+import { Array as Arr, Effect, Match, Predicate, Schema } from "effect";
 import { SendEventError } from "../../errors.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
-import { CurrentCheckpoint } from "../CheckpointContext.js";
 import { EventApi, type OutgoingEvent } from "../EventApi.js";
-import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
+
+const SendEventMemoData = Schema.Struct({ ids: Schema.Array(Schema.String) });
+
+const sendEventDecodeError = (error: unknown) =>
+  SendEventError.make({
+    message: `Invalid sendEvent memo data: ${Predicate.hasProperty(error, "message") ? String(error.message) : String(error)}`,
+    events: [],
+  });
 
 export const sendEvent = (args: {
   readonly input: ExecutionInput;
@@ -21,7 +27,9 @@ export const sendEvent = (args: {
     const memo = args.input.memoForStep(info);
 
     return yield* Match.value(memo).pipe(
-      Match.tag("MemoData", ({ data }) => Effect.succeed(data as { readonly ids: ReadonlyArray<string> })),
+      Match.tag("MemoData", ({ data }) =>
+        Schema.decodeUnknownEffect(SendEventMemoData)(data).pipe(Effect.mapError(sendEventDecodeError)),
+      ),
       Match.tag("MemoError", () => Effect.fail(SendEventError.make({ message: "SendEvent failed", events: [] }))),
       Match.tag("MemoTimeout", () => Effect.fail(SendEventError.make({ message: "SendEvent timed out", events: [] }))),
       Match.tag("MemoInput", () => Effect.succeed({ ids: [] })),
@@ -31,17 +39,14 @@ export const sendEvent = (args: {
             return { ids: [] };
           }
 
+          const planned = StepCommand.SendEventPlanned.make({ info, sequence: args.id.sequence });
+
           if (args.input.shouldPlanStep(info)) {
-            yield* bus.plan(StepCommand.SendEventPlanned.make({ info, sequence: args.id.sequence }));
+            yield* bus.plan(planned);
             return { ids: [] };
           }
 
-          const checkpoint = yield* CurrentCheckpoint;
-          const scope = yield* HandlerFiberScope;
-          const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
-
-          if (args.input.isFunctionRun() && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
-            yield* bus.plan(StepCommand.SendEventPlanned.make({ info, sequence: args.id.sequence }));
+          if (yield* bus.planCheckpointedFork(planned)) {
             return { ids: [] };
           }
 

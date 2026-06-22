@@ -111,6 +111,7 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
       Context.make(StepIdentity, identity),
       Context.add(StepCommandBus, bus),
       Context.add(EventApi, eventApi),
+      Context.add(CurrentExecutionInput, input),
       Context.add(CurrentCheckpoint, checkpoint),
       Context.add(InngestConfig, config),
     );

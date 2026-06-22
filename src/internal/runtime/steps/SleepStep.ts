@@ -1,9 +1,7 @@
-import { Duration, Effect, Option, Predicate, Schema } from "effect";
+import { Duration, Effect, Predicate, Schema } from "effect";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
-import { CurrentCheckpoint } from "../CheckpointContext.js";
-import { HandlerFiberScope } from "../HandlerFiberScope.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
 
@@ -18,11 +16,7 @@ export const sleep = (args: {
     const info = yield* identity.resolve(args.id);
     const memo = args.input.memoForStep(info);
 
-    if (!Predicate.isTagged(memo, "MemoNone")) {
-      return;
-    }
-
-    if (!args.input.shouldExecuteStep(info)) {
+    if (!Predicate.isTagged(memo, "MemoNone") || !args.input.shouldExecuteStep(info)) {
       return;
     }
 
@@ -32,12 +26,8 @@ export const sleep = (args: {
       duration: Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(args.duration)),
     });
 
-    const checkpoint = yield* CurrentCheckpoint;
-    const scope = yield* HandlerFiberScope;
-    const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
-
-    if (args.input.isFunctionRun() && Option.isSome(checkpoint) && isForkedFromHandlerRoot) {
-      return yield* bus.plan(command);
+    if (yield* bus.planCheckpointedFork(command)) {
+      return;
     }
 
     return yield* bus.suspend(command);

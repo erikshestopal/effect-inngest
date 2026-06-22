@@ -1,13 +1,18 @@
 import { Array as Arr, Context, Effect, Layer, Option, Ref } from "effect";
+import { CurrentExecutionInput } from "../domain/ExecutionInput.js";
 import { ExecutionSuspension, SuspendedCommand, type GeneratorOpcode } from "../domain/ExecutionSuspension.js";
 import * as StepCommand from "../domain/StepCommand.js";
 import { CurrentCheckpoint } from "./CheckpointContext.js";
+import { HandlerFiberScope } from "./HandlerFiberScope.js";
 
 export declare namespace StepCommandBus {
   export interface Service {
     readonly suspend: (command: StepCommand.YieldCommand) => Effect.Effect<void>;
     readonly complete: (command: StepCommand.ResultCommand) => Effect.Effect<void>;
     readonly plan: (command: StepCommand.PlanCommand) => Effect.Effect<void>;
+    readonly planCheckpointedFork: (
+      command: StepCommand.PlanCommand,
+    ) => Effect.Effect<boolean, never, CurrentExecutionInput | HandlerFiberScope>;
     readonly fail: (command: StepCommand.ErrorCommand) => Effect.Effect<void>;
     readonly takePlanned: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
     readonly takeCompleted: () => Effect.Effect<ReadonlyArray<GeneratorOpcode>>;
@@ -51,6 +56,31 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
         return ExecutionSuspension.from({ completed, suspended: commands });
       });
 
+    const plan = (command: StepCommand.PlanCommand) =>
+      Effect.gen(function* () {
+        const checkpoint = yield* CurrentCheckpoint;
+        const planned = StepCommand.plan(command);
+        if (Option.isNone(checkpoint)) {
+          return yield* suspendExecution(SuspendedCommand.fromPlanned(planned));
+        }
+        return yield* checkpoint.value.plan(planned);
+      });
+
+    const planCheckpointedFork = (command: StepCommand.PlanCommand) =>
+      Effect.gen(function* () {
+        const input = yield* CurrentExecutionInput;
+        const checkpoint = yield* CurrentCheckpoint;
+        const scope = yield* HandlerFiberScope;
+        const isForkedFromHandlerRoot = yield* scope.isForkedFromHandlerRoot;
+
+        if (!input.isFunctionRun() || Option.isNone(checkpoint) || !isForkedFromHandlerRoot) {
+          return false;
+        }
+
+        yield* plan(command);
+        return true;
+      });
+
     return StepCommandBus.of({
       suspend: (command) =>
         Effect.gen(function* () {
@@ -68,15 +98,8 @@ export class StepCommandBus extends Context.Service<StepCommandBus, StepCommandB
           }
           return yield* checkpoint.value.record(StepCommand.checkpoint(command));
         }),
-      plan: (command) =>
-        Effect.gen(function* () {
-          const checkpoint = yield* CurrentCheckpoint;
-          const planned = StepCommand.plan(command);
-          if (Option.isNone(checkpoint)) {
-            return yield* suspendExecution(SuspendedCommand.fromPlanned(planned));
-          }
-          return yield* checkpoint.value.plan(planned);
-        }),
+      plan,
+      planCheckpointedFork,
       fail: (command) => suspendExecution(SuspendedCommand.fromFailure(StepCommand.failure(command))),
       takePlanned: () => plannedFromCheckpoint,
       takeCompleted: () => completedFromCheckpoint,
