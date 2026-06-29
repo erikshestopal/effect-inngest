@@ -38,7 +38,7 @@ export interface EventTrigger<E extends EventSchema = EventSchema> {
   readonly if?: string;
 }
 
-interface NormalizedEventTrigger<E extends EventSchema = EventSchema> {
+export interface NormalizedEventTrigger<E extends EventSchema = EventSchema> {
   readonly event: E;
   readonly if?: string;
 }
@@ -60,9 +60,13 @@ export interface CronTrigger {
  * @since 0.1.0
  * @category triggers
  */
-type NormalizedTrigger<E extends EventSchema = EventSchema> = NormalizedEventTrigger<E> | CronTrigger;
+export type NormalizedTrigger<E extends EventSchema = EventSchema> = NormalizedEventTrigger<E> | CronTrigger;
 
-export type Trigger<E extends EventSchema = EventSchema> = E | InngestCron.CronDefinition | EventTrigger<E>;
+export type Trigger<E extends EventSchema = EventSchema> =
+  | E
+  | InngestCron.CronDefinition
+  | EventTrigger<E>
+  | CronTrigger;
 
 export type TriggerDefinition<E extends EventSchema = EventSchema> = Trigger<E>;
 
@@ -608,7 +612,7 @@ const Proto = {
   },
 };
 
-type NormalizeTrigger<T> = T extends EventSchema
+export type NormalizeTrigger<T> = T extends EventSchema
   ? NormalizedEventTrigger<T>
   : T extends InngestCron.CronDefinition
     ? CronTrigger
@@ -618,7 +622,7 @@ type NormalizeTrigger<T> = T extends EventSchema
         ? T
         : never;
 
-type NormalizeTriggers<T extends TriggerInput> =
+export type NormalizeTriggers<T extends TriggerInput> =
   T extends ReadonlyArray<infer Item> ? NormalizeTrigger<Item> : NormalizeTrigger<T>;
 
 const normalizeTrigger = (trigger: TriggerDefinition): NormalizedTrigger => {

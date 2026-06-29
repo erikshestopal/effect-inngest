@@ -8,6 +8,7 @@ import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 import {
   InngestClient,
+  InngestCron,
   InngestEvent,
   InngestEvents,
   InngestFunction,
@@ -33,6 +34,23 @@ const PaymentProcess = InngestEvent.make(
 
 type Expect<T extends true> = T;
 type IsReadonlyArray<T> = T extends ReadonlyArray<unknown> ? true : false;
+
+const NamedNormalizedTrigger: InngestFunction.NormalizedEventTrigger<typeof UserCreated> = { event: UserCreated };
+const CronObjectTriggerFn = InngestFunction.make("cron-object-trigger-contract", {
+  trigger: { cron: "0 0 * * *", jitter: "5m" },
+});
+const CronDefinitionTriggerFn = InngestFunction.make("cron-definition-trigger-contract", {
+  trigger: InngestCron.make("0 * * * *"),
+});
+
+type NormalizedUserCreatedTrigger = InngestFunction.NormalizeTriggers<typeof UserCreated>;
+type NormalizedTriggerIsNamed = Expect<
+  NormalizedUserCreatedTrigger extends InngestFunction.NormalizedEventTrigger<typeof UserCreated> ? true : false
+>;
+type CronObjectTrigger = InngestFunction.InngestFunction.Triggers<typeof CronObjectTriggerFn>;
+type CronObjectTriggerIsCron = Expect<CronObjectTrigger extends InngestFunction.CronTrigger ? true : false>;
+type CronDefinitionTrigger = InngestFunction.InngestFunction.Triggers<typeof CronDefinitionTriggerFn>;
+type CronDefinitionTriggerIsCron = Expect<CronDefinitionTrigger extends InngestFunction.CronTrigger ? true : false>;
 
 const NonBatchedHandlerEventFn = InngestFunction.make("non-batched-handler-event", {
   trigger: UserCreated,
