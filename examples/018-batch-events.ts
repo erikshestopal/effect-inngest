@@ -11,7 +11,7 @@ const DemoBatched = InngestEvent.make(
 );
 
 const BatchedFn = InngestFunction.make("batched-fn", {
-  trigger: { event: DemoBatched },
+  trigger: DemoBatched,
   batchEvents: { maxSize: 5, timeout: "1 second" },
 });
 

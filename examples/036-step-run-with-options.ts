@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoStepOptions = InngestEvent.make("examples/036-step-run-with-options/demo/step-options", Schema.Struct({}));
 
 const StepOptionsFn = InngestFunction.make("step-options-demo", {
-  trigger: { event: DemoStepOptions },
+  trigger: DemoStepOptions,
 });
 
 const Group = InngestGroup.make(StepOptionsFn);

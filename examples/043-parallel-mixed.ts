@@ -14,7 +14,7 @@ const DemoSideEffect = InngestEvent.make(
 );
 
 const ParallelMixedFn = InngestFunction.make("parallel-mixed", {
-  trigger: { event: DemoParallelMixed },
+  trigger: DemoParallelMixed,
 });
 
 const Group = InngestGroup.make(ParallelMixedFn);

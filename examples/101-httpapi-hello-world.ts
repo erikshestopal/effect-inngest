@@ -11,7 +11,7 @@ const DemoHello = InngestEvent.make(
 );
 
 const HelloFn = InngestFunction.make("hello-world", {
-  trigger: { event: DemoHello },
+  trigger: DemoHello,
 });
 
 const Group = InngestGroup.make(HelloFn);

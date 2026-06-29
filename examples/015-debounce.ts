@@ -11,7 +11,7 @@ const DemoDebounced = InngestEvent.make(
 );
 
 const DebouncedFn = InngestFunction.make("debounced-fn", {
-  trigger: { event: DemoDebounced },
+  trigger: DemoDebounced,
   debounce: { period: "1 second" },
 });
 

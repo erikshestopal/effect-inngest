@@ -10,7 +10,7 @@ class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
 const DemoStepCatch = InngestEvent.make("examples/026-step-error-catch/demo/step-catch", Schema.Struct({}));
 
 const StepCatchFn = InngestFunction.make("step-catch-handler", {
-  trigger: { event: DemoStepCatch },
+  trigger: DemoStepCatch,
 });
 
 const Group = InngestGroup.make(StepCatchFn);

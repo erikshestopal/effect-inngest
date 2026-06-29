@@ -21,7 +21,7 @@ const DemoInvoicePaid = InngestEvent.make(
 );
 
 const WaitMatchFn = InngestFunction.make("wait-for-invoice-payment", {
-  trigger: { event: DemoWaitMatch },
+  trigger: DemoWaitMatch,
 });
 
 const Group = InngestGroup.make(WaitMatchFn);

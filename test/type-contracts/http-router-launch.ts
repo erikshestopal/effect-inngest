@@ -6,7 +6,7 @@ import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effe
 const Start = InngestEvent.make("start", Schema.Struct({}));
 
 const Fn = InngestFunction.make("Fn", {
-  trigger: { event: Start },
+  trigger: Start,
 });
 
 const Group = InngestGroup.make(Fn);

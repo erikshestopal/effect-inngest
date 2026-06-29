@@ -15,7 +15,7 @@ const TestEvent = InngestEvent.make(
 );
 
 const TestFn = InngestFunction.make("spec-test-fn", {
-  trigger: { event: TestEvent },
+  trigger: TestEvent,
 });
 
 const TestGroup = InngestGroup.make(TestFn);

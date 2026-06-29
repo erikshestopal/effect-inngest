@@ -19,7 +19,7 @@ const CompletedEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-run-id-wait", {
-  trigger: { event: StartEvent },
+  trigger: StartEvent,
   checkpointing: { bufferedSteps: 1 },
 });
 

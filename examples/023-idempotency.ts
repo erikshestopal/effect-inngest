@@ -11,7 +11,7 @@ const DemoIdempotent = InngestEvent.make(
 );
 
 const IdempotentFn = InngestFunction.make("checkout-handler", {
-  trigger: { event: DemoIdempotent },
+  trigger: DemoIdempotent,
   idempotency: "event.data.cartId",
 });
 

@@ -11,7 +11,7 @@ const DemoRateKeyed = InngestEvent.make(
 );
 
 const RateLimitKeyedFn = InngestFunction.make("rate-limit-keyed", {
-  trigger: { event: DemoRateKeyed },
+  trigger: DemoRateKeyed,
   rateLimit: {
     limit: 2,
     period: "1 minute",

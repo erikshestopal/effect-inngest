@@ -12,7 +12,7 @@ const DemoConcurrentKeyed = InngestEvent.make(
 );
 
 const KeyedConcurrentFn = InngestFunction.make("user-processor", {
-  trigger: { event: DemoConcurrentKeyed },
+  trigger: DemoConcurrentKeyed,
   concurrency: { limit: 1, key: "event.data.userId" },
 });
 

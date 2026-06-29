@@ -25,12 +25,12 @@ const PaymentProcess = InngestEvent.make(
 describe("TB-005: Invoke Function", () => {
   // Child function that will be invoked
   const ProcessPayment = InngestFunction.make("process-payment", {
-    trigger: { event: PaymentProcess },
+    trigger: PaymentProcess,
   });
 
   // Parent function that invokes child
   const OrderWorkflow = InngestFunction.make("order-workflow", {
-    trigger: { event: OrderCreated },
+    trigger: OrderCreated,
   });
 
   const Group = InngestGroup.make(ProcessPayment, OrderWorkflow);

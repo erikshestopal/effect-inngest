@@ -10,7 +10,7 @@ class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("
 const DemoRetriesLimited = InngestEvent.make("examples/013-retries-config/demo/retries-limited", Schema.Struct({}));
 
 const RetriesLimitedFn = InngestFunction.make("retries-limited", {
-  trigger: { event: DemoRetriesLimited },
+  trigger: DemoRetriesLimited,
   retries: 1,
 });
 

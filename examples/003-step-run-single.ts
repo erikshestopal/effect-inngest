@@ -11,7 +11,7 @@ const DemoStepSingle = InngestEvent.make(
 );
 
 const StepSingleFn = InngestFunction.make("step-single", {
-  trigger: { event: DemoStepSingle },
+  trigger: DemoStepSingle,
 });
 
 const Group = InngestGroup.make(StepSingleFn);

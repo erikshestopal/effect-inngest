@@ -11,7 +11,7 @@ const DemoRateLimited = InngestEvent.make(
 );
 
 const RateLimitedFn = InngestFunction.make("rate-limited-fn", {
-  trigger: { event: DemoRateLimited },
+  trigger: DemoRateLimited,
   rateLimit: { limit: 1, period: "1 second" },
 });
 

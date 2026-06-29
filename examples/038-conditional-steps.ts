@@ -11,7 +11,7 @@ const DemoConditional = InngestEvent.make(
 );
 
 const ConditionalFn = InngestFunction.make("conditional-steps", {
-  trigger: { event: DemoConditional },
+  trigger: DemoConditional,
 });
 
 const Group = InngestGroup.make(ConditionalFn);

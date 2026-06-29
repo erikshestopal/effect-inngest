@@ -88,7 +88,7 @@ const MaxRuntimeEvent = InngestEvent.make(
 
 describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () => {
   const Fn = InngestFunction.make("ckpt-deadline-fn", {
-    trigger: { event: MaxRuntimeEvent },
+    trigger: MaxRuntimeEvent,
   });
   const Group = InngestGroup.make(Fn);
 

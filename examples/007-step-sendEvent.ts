@@ -19,7 +19,7 @@ const DemoNotification = InngestEvent.make(
 );
 
 const SendSingleFn = InngestFunction.make("send-single", {
-  trigger: { event: DemoSendSingle },
+  trigger: DemoSendSingle,
 });
 
 const Group = InngestGroup.make(SendSingleFn);

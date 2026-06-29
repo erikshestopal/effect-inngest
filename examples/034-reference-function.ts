@@ -17,11 +17,11 @@ const DemoHelperEvent = InngestEvent.make(
 );
 
 const HelperFn = InngestFunction.make("helper-function", {
-  trigger: { event: DemoHelperEvent },
+  trigger: DemoHelperEvent,
 });
 
 const InvokerFn = InngestFunction.make("invoke-by-reference", {
-  trigger: { event: DemoReferenceInvoke },
+  trigger: DemoReferenceInvoke,
 });
 
 const Group = InngestGroup.make(HelperFn, InvokerFn);

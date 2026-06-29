@@ -23,7 +23,7 @@ const UserRequested = InngestEvent.make(
 
 describe("TB-009: Parallel Step Execution", () => {
   const FetchUserData = InngestFunction.make("fetch-user-data", {
-    trigger: { event: UserRequested },
+    trigger: UserRequested,
   });
 
   const Group = InngestGroup.make(FetchUserData);
@@ -307,7 +307,7 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
   });
 
   const MixedStepsFunction = InngestFunction.make("mixed-steps", {
-    trigger: { event: TaskStarted },
+    trigger: TaskStarted,
   });
 
   const MixedGroup = InngestGroup.make(MixedStepsFunction);

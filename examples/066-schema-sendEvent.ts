@@ -13,7 +13,7 @@ const DemoSchemaNotification = InngestEvent.make(
 );
 
 const SchemaSendEventFn = InngestFunction.make("schema-sendEvent-demo", {
-  trigger: { event: DemoSchemaSendStart },
+  trigger: DemoSchemaSendStart,
 });
 
 const Group = InngestGroup.make(SchemaSendEventFn);

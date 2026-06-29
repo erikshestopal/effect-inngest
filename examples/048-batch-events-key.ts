@@ -12,7 +12,7 @@ const DemoBatchKeyed = InngestEvent.make(
 );
 
 const BatchKeyedFn = InngestFunction.make("batch-keyed", {
-  trigger: { event: DemoBatchKeyed },
+  trigger: DemoBatchKeyed,
   batchEvents: {
     maxSize: 10,
     timeout: "1 second",

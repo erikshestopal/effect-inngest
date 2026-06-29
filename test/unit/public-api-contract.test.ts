@@ -35,7 +35,7 @@ type Expect<T extends true> = T;
 type IsReadonlyArray<T> = T extends ReadonlyArray<unknown> ? true : false;
 
 const NonBatchedHandlerEventFn = InngestFunction.make("non-batched-handler-event", {
-  trigger: { event: UserCreated },
+  trigger: UserCreated,
   retries: 0,
 });
 
@@ -43,7 +43,7 @@ type NonBatchedHandlerEvent = InngestFunction.InngestFunction.EventType<typeof N
 type NonBatchedHandlerEventIsSingle = Expect<IsReadonlyArray<NonBatchedHandlerEvent> extends false ? true : false>;
 
 const BatchHandlerEventFn = InngestFunction.make("batched-handler-event", {
-  trigger: { event: UserCreated },
+  trigger: UserCreated,
   batchEvents: { maxSize: 10, timeout: Duration.seconds(1) },
 });
 
@@ -55,7 +55,7 @@ const readBatchedHandlerEvent = (events: BatchHandlerEvent) => events[0]?.data.u
 
 const StepRunItem = Schema.Struct({ id: Schema.String });
 const StepRunTypeContractFn = InngestFunction.make("step-run-type-contract", {
-  trigger: { event: UserCreated },
+  trigger: UserCreated,
 });
 const StepRunTypeContractGroup = InngestGroup.make(StepRunTypeContractFn);
 const StepRunTypeContractHandlers = StepRunTypeContractGroup.toLayer({
@@ -179,7 +179,7 @@ describe("Public handler contracts", () => {
     Effect.gen(function* () {
       const TestService = Context.Service<{ readonly prefix: string }>("TestService");
       const ProcessUser = InngestFunction.make("process-user", {
-        trigger: { event: UserCreated },
+        trigger: UserCreated,
       });
       const group = InngestGroup.make(ProcessUser);
 
@@ -218,7 +218,7 @@ describe("Public handler contracts", () => {
   it.effect("normalizes function return values through JSON wire semantics", () =>
     Effect.gen(function* () {
       const ProcessUser = InngestFunction.make("process-user", {
-        trigger: { event: UserCreated },
+        trigger: UserCreated,
       });
       const group = InngestGroup.make(ProcessUser);
       const handlers = group.toLayer({
@@ -262,7 +262,7 @@ describe("Public handler contracts", () => {
   it.effect("invoked executions expose only the user payload to handlers", () =>
     Effect.gen(function* () {
       const ProcessPayment = InngestFunction.make("process-payment", {
-        trigger: { event: PaymentProcess },
+        trigger: PaymentProcess,
       });
       const group = InngestGroup.make(ProcessPayment);
       const handlers = group.toLayer({
@@ -297,7 +297,7 @@ describe("Public handler contracts", () => {
   it.effect("function-level NonRetriableError sets the no-retry response header", () =>
     Effect.gen(function* () {
       const ProcessUser = InngestFunction.make("process-user", {
-        trigger: { event: UserCreated },
+        trigger: UserCreated,
       });
       const group = InngestGroup.make(ProcessUser);
       const handlers = group.toLayer({
@@ -339,7 +339,7 @@ describe("Public handler contracts", () => {
   it.effect("function-level RetryAfterError returns a Retry-After header", () =>
     Effect.gen(function* () {
       const ProcessUser = InngestFunction.make("process-user", {
-        trigger: { event: UserCreated },
+        trigger: UserCreated,
       });
       const group = InngestGroup.make(ProcessUser);
       const handlers = group.toLayer({

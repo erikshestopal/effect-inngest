@@ -92,7 +92,7 @@ describe("Checkpoint config (spec §10.1)", () => {
 
     it("serializes checkpoint config into registration payload", () => {
       const Fn = InngestFunction.make("ckpt-fn", {
-        trigger: { event: Trigger },
+        trigger: Trigger,
         checkpointing: { bufferedSteps: 2, maxInterval: "500 millis", maxRuntime: "8 seconds" },
       });
       const reg = Fn.toRegistration({ appId: "app", url: "http://x/api/inngest" });
@@ -105,7 +105,7 @@ describe("Checkpoint config (spec §10.1)", () => {
 
     it("checkpointing true uses defaults", () => {
       const Fn = InngestFunction.make("ckpt-fn", {
-        trigger: { event: Trigger },
+        trigger: Trigger,
         checkpointing: true,
       });
       const reg = Fn.toRegistration({ appId: "app", url: "http://x/api/inngest" });
@@ -118,7 +118,7 @@ describe("Checkpoint config (spec §10.1)", () => {
 
     it("checkpointing false omits registration block", () => {
       const Fn = InngestFunction.make("ckpt-fn", {
-        trigger: { event: Trigger },
+        trigger: Trigger,
         checkpointing: false,
       });
       const reg = Fn.toRegistration({ appId: "app", url: "http://x/api/inngest" });
@@ -127,7 +127,7 @@ describe("Checkpoint config (spec §10.1)", () => {
 
     it("absent checkpointing leaves block undefined (client-level decides at runtime)", () => {
       const Fn = InngestFunction.make("ckpt-fn", {
-        trigger: { event: Trigger },
+        trigger: Trigger,
       });
       const reg = Fn.toRegistration({ appId: "app", url: "http://x/api/inngest" });
       expect(reg.checkpoint).toBeUndefined();

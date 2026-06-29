@@ -11,7 +11,7 @@ const DemoEcho = InngestEvent.make(
 );
 
 const EchoFn = InngestFunction.make("echo-data", {
-  trigger: { event: DemoEcho },
+  trigger: DemoEcho,
 });
 
 const Group = InngestGroup.make(EchoFn);

@@ -11,7 +11,7 @@ const DemoStepChain = InngestEvent.make(
 );
 
 const StepChainFn = InngestFunction.make("step-chain", {
-  trigger: { event: DemoStepChain },
+  trigger: DemoStepChain,
 });
 
 const Group = InngestGroup.make(StepChainFn);

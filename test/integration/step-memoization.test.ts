@@ -19,7 +19,7 @@ const OrderPlaced = InngestEvent.make(
 
 describe("TB-002: Step Memoization", () => {
   const ProcessOrder = InngestFunction.make("process-order", {
-    trigger: { event: OrderPlaced },
+    trigger: OrderPlaced,
   });
 
   const Group = InngestGroup.make(ProcessOrder);

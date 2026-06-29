@@ -21,7 +21,7 @@ const DemoSendNotification = InngestEvent.make(
 );
 
 const ProcessItemFn = InngestFunction.make("process-item", {
-  trigger: { event: DemoProcessItem },
+  trigger: DemoProcessItem,
   concurrency: {
     limit: 5,
     scope: "fn",
@@ -30,7 +30,7 @@ const ProcessItemFn = InngestFunction.make("process-item", {
 });
 
 const SendNotificationFn = InngestFunction.make("send-notification", {
-  trigger: { event: DemoSendNotification },
+  trigger: DemoSendNotification,
   concurrency: {
     limit: 10,
     scope: "env",
@@ -39,7 +39,7 @@ const SendNotificationFn = InngestFunction.make("send-notification", {
 });
 
 const ExternalApiCallFn = InngestFunction.make("external-api-call", {
-  trigger: { event: DemoProcessItem },
+  trigger: DemoProcessItem,
   concurrency: {
     limit: 2,
     scope: "account",

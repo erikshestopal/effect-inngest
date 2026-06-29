@@ -12,11 +12,11 @@ const DemoInvokeParent = InngestEvent.make("examples/059-schema-invoke-result/de
 const DemoInvokeChild = InngestEvent.make("examples/059-schema-invoke-result/demo/child", Schema.Struct({}));
 
 const ChildFn = InngestFunction.make("schema-invoke-child", {
-  trigger: { event: DemoInvokeChild },
+  trigger: DemoInvokeChild,
 });
 
 const ParentFn = InngestFunction.make("schema-invoke-parent", {
-  trigger: { event: DemoInvokeParent },
+  trigger: DemoInvokeParent,
 });
 
 const Group = InngestGroup.make(ChildFn, ParentFn);

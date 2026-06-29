@@ -11,7 +11,7 @@ const DemoThrottleKeyed = InngestEvent.make(
 );
 
 const ThrottleKeyedFn = InngestFunction.make("throttle-keyed", {
-  trigger: { event: DemoThrottleKeyed },
+  trigger: DemoThrottleKeyed,
   throttle: {
     limit: 1,
     period: "1 second",

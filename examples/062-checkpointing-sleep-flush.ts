@@ -17,7 +17,7 @@ const SleepEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-sleep", {
-  trigger: { event: SleepEvent }, // bufferedSteps high enough that the sleep-flush is what actually triggers
+  trigger: SleepEvent, // bufferedSteps high enough that the sleep-flush is what actually triggers
   // the checkpoint POST.
   checkpointing: { bufferedSteps: 10 },
 });

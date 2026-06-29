@@ -14,7 +14,7 @@ const Cancelled = InngestEvent.make(
 );
 
 const CancellableTask = InngestFunction.make("cancellable-task", {
-  trigger: { event: Started },
+  trigger: Started,
   cancelOn: [{ event: Cancelled, if: "async.data.taskId == event.data.taskId" }],
 });
 

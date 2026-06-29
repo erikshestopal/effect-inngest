@@ -19,7 +19,7 @@ const OptOutEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-opt-out", {
-  trigger: { event: OptOutEvent },
+  trigger: OptOutEvent,
   checkpointing: false,
 });
 

@@ -13,7 +13,7 @@ const DemoSchemaWorkflowResult = InngestEvent.make(
 );
 
 const SchemaWorkflowResultFn = InngestFunction.make("schema-workflow-result-demo", {
-  trigger: { event: DemoSchemaWorkflowResult },
+  trigger: DemoSchemaWorkflowResult,
 });
 
 const Group = InngestGroup.make(SchemaWorkflowResultFn);

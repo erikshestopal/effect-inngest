@@ -156,7 +156,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("parallel Inngest.run root request returns StepPlanned ops, not checkpointed StepRun ops", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("parallel-root", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -197,7 +197,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("parallel targeted child request returns one inline StepRun and no checkpoint POST", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("parallel-target", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -280,7 +280,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("mixed parallel root request plans Inngest.run and sendEvent alongside Sleep", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("parallel-mixed-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -319,7 +319,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("sendEvent uses native StepRun name and missing-key event endpoint", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("send-event-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -355,7 +355,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("batched sendEvent also checkpoints a native sendEvent StepRun", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("send-event-batch-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -394,7 +394,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("waitForEvent opcode name is the waited event name, not the user step id", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("wait-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -430,10 +430,10 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("invoke opcode omits name and sends only payload.data like native SDK", () =>
     Effect.gen(function* () {
       const Child = InngestFunction.make("child-square", {
-        trigger: { event: ChildInput },
+        trigger: ChildInput,
       });
       const Parent = InngestFunction.make("invoke-parent-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Parent, Child);
       const captures: Array<CapturedRequest> = [];
@@ -476,7 +476,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("NonRetriableError inside Inngest.run emits StepFailed with no-retry header", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("non-retriable-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -507,7 +507,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("last retry attempt emits StepFailed instead of another StepError", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("retry-final-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -545,7 +545,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("a caught Inngest.run failure still yields StepError before user catch recovery", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("step-catch-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -580,7 +580,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("retry-success step attempt returns inline StepRun and does not async-checkpoint it", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("retry-success-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -625,7 +625,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("top-level RetryAfterError returns 500 with Retry-After and no RunComplete", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("retry-after-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
       });
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
@@ -660,7 +660,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("buffered checkpointing drains all completed StepRuns to async checkpoints before RunComplete", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("buffered-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
         checkpointing: { bufferedSteps: 2, maxRuntime: "30 seconds" },
       });
       const Group = InngestGroup.make(Fn);
@@ -701,7 +701,7 @@ describe("native v4 protocol RED regressions", () => {
   it.effect("sleep flushes buffered StepRuns to async checkpoint and returns only Sleep", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("sleep-flush-native", {
-        trigger: { event: DemoEvent },
+        trigger: DemoEvent,
         checkpointing: { bufferedSteps: 10, maxRuntime: "30 seconds" },
       });
       const Group = InngestGroup.make(Fn);

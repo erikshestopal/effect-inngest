@@ -12,7 +12,7 @@ const DemoDebounceKeyed = InngestEvent.make(
 );
 
 const DebounceKeyedFn = InngestFunction.make("debounce-keyed", {
-  trigger: { event: DemoDebounceKeyed },
+  trigger: DemoDebounceKeyed,
   debounce: {
     period: "1 second",
     key: "event.data.userId",

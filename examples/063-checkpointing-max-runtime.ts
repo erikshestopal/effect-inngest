@@ -20,7 +20,7 @@ const DeadlineEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-deadline", {
-  trigger: { event: DeadlineEvent },
+  trigger: DeadlineEvent,
   checkpointing: { bufferedSteps: 1, maxRuntime: "150 millis" },
 });
 

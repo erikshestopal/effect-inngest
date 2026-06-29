@@ -19,7 +19,7 @@ const BasicEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-basic", {
-  trigger: { event: BasicEvent },
+  trigger: BasicEvent,
 });
 
 const Group = InngestGroup.make(Fn);

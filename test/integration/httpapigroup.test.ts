@@ -16,7 +16,7 @@ const UserCreated = InngestEvent.make(
 
 describe("TB-012: HttpApiGroup Integration", () => {
   const ProcessUser = InngestFunction.make("process-user", {
-    trigger: { event: UserCreated },
+    trigger: UserCreated,
   });
 
   const Group = InngestGroup.make(ProcessUser);

@@ -25,7 +25,7 @@ const OrderApproved = InngestEvent.make(
 
 describe("TB-004: Wait For Event", () => {
   const ApprovalFlow = InngestFunction.make("approval-flow", {
-    trigger: { event: OrderPending },
+    trigger: OrderPending,
   });
 
   const Group = InngestGroup.make(ApprovalFlow);

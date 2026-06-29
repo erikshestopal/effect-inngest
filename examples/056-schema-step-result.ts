@@ -13,7 +13,7 @@ const DemoSchemaStepResult = InngestEvent.make(
 );
 
 const SchemaStepResultFn = InngestFunction.make("schema-step-result-demo", {
-  trigger: { event: DemoSchemaStepResult },
+  trigger: DemoSchemaStepResult,
 });
 
 const Group = InngestGroup.make(SchemaStepResultFn);

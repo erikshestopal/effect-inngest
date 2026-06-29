@@ -7,7 +7,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoNonRetriable = InngestEvent.make("examples/012-error-non-retriable/demo/non-retriable", Schema.Struct({}));
 
 const NonRetriableFn = InngestFunction.make("non-retriable", {
-  trigger: { event: DemoNonRetriable },
+  trigger: DemoNonRetriable,
 });
 
 const Group = InngestGroup.make(NonRetriableFn);

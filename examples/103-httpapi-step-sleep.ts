@@ -7,7 +7,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoSleep = InngestEvent.make("examples/103-httpapi-step-sleep/demo/sleep", Schema.Struct({}));
 
 const SleepFn = InngestFunction.make("sleep-test", {
-  trigger: { event: DemoSleep },
+  trigger: DemoSleep,
 });
 
 const Group = InngestGroup.make(SleepFn);

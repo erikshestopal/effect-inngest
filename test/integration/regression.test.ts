@@ -100,7 +100,7 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
    * Fix: Changed checkMemoized to use `in` operator to check key existence.
    */
   const ParallelSleepFn = InngestFunction.make("parallel-sleep", {
-    trigger: { event: TestParallelSleep },
+    trigger: TestParallelSleep,
   });
 
   const Group = InngestGroup.make(ParallelSleepFn);
@@ -187,7 +187,7 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
    * Fix: Handler now overrides body.ctx.step_id with URL stepId when provided.
    */
   const MultiStepFn = InngestFunction.make("multi-step", {
-    trigger: { event: TestMultiStep },
+    trigger: TestMultiStep,
   });
 
   const Group = InngestGroup.make(MultiStepFn);
@@ -299,11 +299,11 @@ describe("Regression: Inngest.invoke payload must be event data directly", () =>
    * Fix: Changed Driver.ts to send opts.payload = options.data (event data directly).
    */
   const ChildFn = InngestFunction.make("child-fn", {
-    trigger: { event: TestChild },
+    trigger: TestChild,
   });
 
   const ParentFn = InngestFunction.make("parent-fn", {
-    trigger: { event: TestParent },
+    trigger: TestParent,
   });
 
   const Group = InngestGroup.make(ParentFn, ChildFn);
@@ -410,7 +410,7 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
    * @see .research/012-error-non-retriable.ts
    */
   const NonRetriableFn = InngestFunction.make("non-retriable-fn", {
-    trigger: { event: TestNonRetriable },
+    trigger: TestNonRetriable,
   });
 
   const Group = InngestGroup.make(NonRetriableFn);
@@ -509,7 +509,7 @@ describe("Regression: Batch events handler receives array of event data", () => 
    * @see .research/048-batch-events-key.ts
    */
   const BatchFn = InngestFunction.make("batch-fn", {
-    trigger: { event: TestBatchEvent }, // Must have batchEvents configured to trigger batch mode
+    trigger: TestBatchEvent, // Must have batchEvents configured to trigger batch mode
     batchEvents: { maxSize: 10, timeout: Duration.seconds(1) },
   });
 
@@ -620,7 +620,7 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
    * @see test/integration/wait-for-event.test.ts
    */
   const WaitFn = InngestFunction.make("wait-fn", {
-    trigger: { event: TestWaitEvent },
+    trigger: TestWaitEvent,
   });
 
   const Group = InngestGroup.make(WaitFn);
@@ -778,7 +778,7 @@ describe("Regression: disable_immediate_execution must not block target step", (
    * BEFORE checking disable_immediate_execution.
    */
   const SequentialFn = InngestFunction.make("sequential", {
-    trigger: { event: TestSequential },
+    trigger: TestSequential,
   });
 
   const Group = InngestGroup.make(SequentialFn);

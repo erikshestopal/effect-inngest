@@ -10,11 +10,11 @@ const DemoInvokeFailing = InngestEvent.make("examples/028-invoke-failure/demo/in
 const DemoFailingChild = InngestEvent.make("examples/028-invoke-failure/demo/failing-child", Schema.Struct({}));
 
 const FailingChildFn = InngestFunction.make("failing-child", {
-  trigger: { event: DemoFailingChild },
+  trigger: DemoFailingChild,
 });
 
 const ParentFn = InngestFunction.make("parent-invoker", {
-  trigger: { event: DemoInvokeFailing },
+  trigger: DemoInvokeFailing,
 });
 
 const Group = InngestGroup.make(FailingChildFn, ParentFn);

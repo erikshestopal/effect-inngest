@@ -15,20 +15,20 @@ class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("
 }) {}
 
 const TriggerFailure = InngestFunction.make("trigger-failure", {
-  trigger: { event: DemoTriggerFailure },
+  trigger: DemoTriggerFailure,
   retries: 0,
 });
 
 const HandleFailure = InngestFunction.make("handle-failure", {
-  trigger: { event: InngestEvents.FunctionFailed },
+  trigger: InngestEvents.FunctionFailed,
 });
 
 const TrackCompletion = InngestFunction.make("track-completion", {
-  trigger: { event: InngestEvents.FunctionFinishedSuccess },
+  trigger: InngestEvents.FunctionFinishedSuccess,
 });
 
 const HandleCancellation = InngestFunction.make("handle-cancellation", {
-  trigger: { event: InngestEvents.FunctionCancelled },
+  trigger: InngestEvents.FunctionCancelled,
 });
 
 const Group = InngestGroup.make(TriggerFailure, HandleFailure, TrackCompletion, HandleCancellation);

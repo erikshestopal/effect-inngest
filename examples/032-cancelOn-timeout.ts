@@ -19,7 +19,7 @@ export const JobCancelled = InngestEvent.make(
 );
 
 const CancellableJobFn = InngestFunction.make("cancellable-job", {
-  trigger: { event: JobStarted },
+  trigger: JobStarted,
   cancelOn: [
     {
       event: JobCancelled,

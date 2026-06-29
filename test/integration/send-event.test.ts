@@ -97,7 +97,7 @@ const EmailSend = InngestEvent.make(
 
 describe("TB-006: Send Event", () => {
   const ProcessSignup = InngestFunction.make("process-signup", {
-    trigger: { event: UserSignup },
+    trigger: UserSignup,
   });
 
   const Group = InngestGroup.make(ProcessSignup);

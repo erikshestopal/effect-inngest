@@ -36,7 +36,7 @@ const OrderPlaced = InngestEvent.make(
 describe("InngestFunction.make", () => {
   it("creates function with single event trigger", () => {
     const fn = InngestFunction.make("process-user", {
-      trigger: { event: UserCreated },
+      trigger: UserCreated,
     });
 
     expect(fn._tag).toBe("process-user");
@@ -45,7 +45,7 @@ describe("InngestFunction.make", () => {
 
   it("creates function with multiple event triggers", () => {
     const fn = InngestFunction.make("multi-trigger", {
-      trigger: [{ event: UserCreated }, { event: UserUpdated }],
+      trigger: [UserCreated, UserUpdated],
     });
 
     expect(fn._tag).toBe("multi-trigger");
@@ -54,7 +54,7 @@ describe("InngestFunction.make", () => {
 
   it("stores additional options", () => {
     const fn = InngestFunction.make("with-options", {
-      trigger: { event: UserCreated },
+      trigger: UserCreated,
       concurrency: { limit: 5 },
       retries: 3,
     });
@@ -75,11 +75,11 @@ describe("InngestFunction.make", () => {
 
 describe("InngestGroup.make", () => {
   const ProcessUser = InngestFunction.make("process-user", {
-    trigger: { event: UserCreated },
+    trigger: UserCreated,
   });
 
   const ProcessOrder = InngestFunction.make("process-order", {
-    trigger: { event: OrderPlaced },
+    trigger: OrderPlaced,
   });
 
   it("creates group from single function", () => {
@@ -197,7 +197,7 @@ describe("InngestGroup coverage", () => {
   );
 
   const TestFn = InngestFunction.make("test-fn", {
-    trigger: { event: TestEvent },
+    trigger: TestEvent,
   });
 
   describe("make", () => {
@@ -264,7 +264,7 @@ describe("InngestGroup.toLayerHandler coverage", () => {
   );
 
   const coverageTestFn = InngestFunction.make("coverage-test-fn", {
-    trigger: { event: CoverageTestEvent },
+    trigger: CoverageTestEvent,
   });
 
   const coverageTestGroup = InngestGroup.make(coverageTestFn);

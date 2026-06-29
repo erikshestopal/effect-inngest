@@ -7,7 +7,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoMemoized = InngestEvent.make("examples/027-step-memoization/demo/memoized", Schema.Struct({}));
 
 const MemoizedFn = InngestFunction.make("memoization-demo", {
-  trigger: { event: DemoMemoized },
+  trigger: DemoMemoized,
 });
 
 const Group = InngestGroup.make(MemoizedFn);

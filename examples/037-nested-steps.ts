@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoNested = InngestEvent.make("examples/037-nested-steps/demo/nested", Schema.Struct({}));
 
 const NestedStepsFn = InngestFunction.make("nested-steps-demo", {
-  trigger: { event: DemoNested },
+  trigger: DemoNested,
 });
 
 const Group = InngestGroup.make(NestedStepsFn);

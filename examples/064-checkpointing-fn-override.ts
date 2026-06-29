@@ -19,7 +19,7 @@ const OverrideEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-override", {
-  trigger: { event: OverrideEvent }, // Overrides client-level `bufferedSteps: 5` → flush-per-Inngest.
+  trigger: OverrideEvent, // Overrides client-level `bufferedSteps: 5` → flush-per-Inngest.
   checkpointing: { bufferedSteps: 1 },
 });
 

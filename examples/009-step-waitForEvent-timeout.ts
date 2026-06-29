@@ -20,7 +20,7 @@ const DemoTimeoutSignal = InngestEvent.make(
 );
 
 const WaitTimeoutFn = InngestFunction.make("wait-timeout", {
-  trigger: { event: DemoWaitTimeout },
+  trigger: DemoWaitTimeout,
 });
 
 const Group = InngestGroup.make(WaitTimeoutFn);

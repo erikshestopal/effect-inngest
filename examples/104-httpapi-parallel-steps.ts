@@ -12,7 +12,7 @@ const DemoParallel = InngestEvent.make(
 );
 
 const ParallelFn = InngestFunction.make("parallel-test", {
-  trigger: { event: DemoParallel },
+  trigger: DemoParallel,
 });
 
 const Group = InngestGroup.make(ParallelFn);

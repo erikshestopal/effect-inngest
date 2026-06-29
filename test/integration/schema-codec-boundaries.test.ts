@@ -28,7 +28,7 @@ describe("Schema codec boundaries", () => {
   it.effect("decodes function event data with the trigger event schema", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("schema-event-input", {
-        trigger: { event: PageRequested },
+        trigger: PageRequested,
       });
       const Group = InngestGroup.make(Fn);
       const HandlersLive = Group.toLayer({
@@ -62,7 +62,7 @@ describe("Schema codec boundaries", () => {
   it.effect("replays Inngest.run memo data as raw JSON", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("schema-step-run-classic", {
-        trigger: { event: WorkflowStarted },
+        trigger: WorkflowStarted,
         checkpointing: false,
       });
       const Group = InngestGroup.make(Fn);

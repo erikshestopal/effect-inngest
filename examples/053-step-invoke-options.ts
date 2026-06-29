@@ -20,12 +20,12 @@ const DemoWorkerTask = InngestEvent.make(
 );
 
 const WorkerFn = InngestFunction.make("worker-task", {
-  trigger: { event: DemoWorkerTask },
+  trigger: DemoWorkerTask,
   retries: 3,
 });
 
 const OrchestratorFn = InngestFunction.make("orchestrator", {
-  trigger: { event: DemoOrchestrate },
+  trigger: DemoOrchestrate,
 });
 
 const Group = InngestGroup.make(WorkerFn, OrchestratorFn);

@@ -25,7 +25,7 @@
 Effect Inngest brings the power of [Effect](https://effect.website) to [Inngest's](https://inngest.com) durable execution platform. Define event schemas once, and types flow automatically through triggers, handlers, and step operations — no manual annotations needed.
 
 ```typescript
-import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest, InngestCron } from "effect-inngest";
 import { Effect, Schema, Layer } from "effect";
 
 const UserSignup = InngestEvent.make(
@@ -38,7 +38,7 @@ const UserSignup = InngestEvent.make(
 
 // Create a function — event type is inferred from the trigger
 const ProcessSignup = InngestFunction.make("process-signup", {
-  trigger: { event: UserSignup },
+  trigger: UserSignup,
 });
 
 // Create group and implement handler
@@ -108,7 +108,7 @@ import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
 import * as HttpMiddleware from "@effect/platform/HttpMiddleware";
 import * as HttpServer from "@effect/platform/HttpServer";
 import { Duration, Effect, Layer, Schema } from "effect";
-import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest, InngestCron } from "effect-inngest";
 
 // 1. Define your Inngest event definitions
 const UserSignup = InngestEvent.make(
@@ -123,11 +123,11 @@ const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ u
 
 // 2. Define your functions
 const ProcessSignup = InngestFunction.make("process-signup", {
-  trigger: { event: UserSignup },
+  trigger: UserSignup,
 });
 
 const DailyDigest = InngestFunction.make("daily-digest", {
-  trigger: { cron: "0 9 * * *" },
+  trigger: InngestCron.make("0 9 * * *"),
 });
 
 // 3. Create function group and implement handlers
@@ -198,7 +198,7 @@ import { FetchHttpClient } from "@effect/platform";
 import { BunHttpServer, BunRuntime } from "@effect/platform-bun";
 import { Duration, Effect, Layer, Schema } from "effect";
 import { InngestApiGroup, layerGroup } from "effect-inngest/HttpApi";
-import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest } from "effect-inngest";
+import { InngestClient, InngestEvent, InngestFunction, InngestGroup, Inngest, InngestCron } from "effect-inngest";
 
 // 1. Define your events
 const UserSignup = InngestEvent.make(
@@ -213,11 +213,11 @@ const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ u
 
 // 2. Define functions
 const ProcessSignup = InngestFunction.make("process-signup", {
-  trigger: { event: UserSignup },
+  trigger: UserSignup,
 });
 
 const DailyDigest = InngestFunction.make("daily-digest", {
-  trigger: { cron: "0 9 * * *" },
+  trigger: InngestCron.make("0 9 * * *"),
 });
 
 // 3. Create group and handlers
@@ -295,16 +295,16 @@ const UserWelcomeSent = InngestEvent.make("user/welcome-sent", Schema.Struct({ u
 ### 2. Define your functions
 
 ```typescript
-import { InngestFunction } from "effect-inngest";
+import { InngestCron, InngestFunction } from "effect-inngest";
 
 // Event-triggered function
 const ProcessSignup = InngestFunction.make("process-signup", {
-  trigger: [{ event: UserSignup }], // pass multiple triggers as Array.
+  trigger: UserSignup,
 });
 
 // Cron-triggered function
 const DailyReport = InngestFunction.make("daily-report", {
-  trigger: { cron: "0 9 * * *" },
+  trigger: InngestCron.make("0 9 * * *"),
 });
 ```
 
@@ -446,7 +446,7 @@ Configure retries, concurrency, rate limiting, and more:
 
 ```typescript
 const ProcessOrder = InngestFunction.make("process-order", {
-  trigger: { event: OrderPlaced },
+  trigger: OrderPlaced,
   retries: 5,
   concurrency: { limit: 10, key: "event.data.userId" },
   rateLimit: { limit: 100, period: Duration.minutes(1) },

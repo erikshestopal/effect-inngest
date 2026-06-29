@@ -19,7 +19,7 @@ export const TaskCancelled = InngestEvent.make(
 );
 
 const LongTaskFn = InngestFunction.make("long-task", {
-  trigger: { event: TaskStarted },
+  trigger: TaskStarted,
   cancelOn: [{ event: TaskCancelled, if: "async.data.taskId == event.data.taskId" }],
 });
 

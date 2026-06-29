@@ -26,11 +26,11 @@ const DemoInvokeChild2 = InngestEvent.make(
 );
 
 const ChildFn = InngestFunction.make("child-square", {
-  trigger: [{ event: DemoInvokeChild }, { event: DemoInvokeChild2 }],
+  trigger: [DemoInvokeChild, DemoInvokeChild2],
 });
 
 const ParentFn = InngestFunction.make("parent-invoke", {
-  trigger: { event: DemoInvokeParent },
+  trigger: DemoInvokeParent,
 });
 
 const Group = InngestGroup.make(ChildFn, ParentFn);

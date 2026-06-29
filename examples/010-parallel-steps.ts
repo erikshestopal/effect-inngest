@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoParallel = InngestEvent.make("examples/010-parallel-steps/demo/parallel", Schema.Struct({}));
 
 const ParallelFn = InngestFunction.make("parallel-steps", {
-  trigger: { event: DemoParallel },
+  trigger: DemoParallel,
 });
 
 const Group = InngestGroup.make(ParallelFn);

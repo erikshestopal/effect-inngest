@@ -18,7 +18,7 @@ const BufferedEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-buffered", {
-  trigger: { event: BufferedEvent },
+  trigger: BufferedEvent,
   checkpointing: { bufferedSteps: 2 },
 });
 

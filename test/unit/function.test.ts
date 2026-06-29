@@ -7,7 +7,7 @@ import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestEvent, Inngest } from "../../src/index.js";
+import { InngestFunction, InngestEvent, Inngest, InngestCron } from "../../src/index.js";
 
 describe("InngestFunction coverage", () => {
   const TestEvent = InngestEvent.make(
@@ -20,7 +20,7 @@ describe("InngestFunction coverage", () => {
   describe("make", () => {
     it("creates function with event trigger", () => {
       const fn = InngestFunction.make("test-fn", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
       });
 
       expect(fn._tag).toBe("test-fn");
@@ -29,7 +29,7 @@ describe("InngestFunction coverage", () => {
 
     it("creates function with cron trigger", () => {
       const fn = InngestFunction.make("cron-fn", {
-        trigger: { cron: "0 9 * * *" },
+        trigger: InngestCron.make("0 9 * * *"),
       });
 
       expect(fn._tag).toBe("cron-fn");
@@ -38,7 +38,7 @@ describe("InngestFunction coverage", () => {
 
     it("creates function with multiple triggers", () => {
       const fn = InngestFunction.make("multi-fn", {
-        trigger: [{ event: TestEvent }, { cron: "0 * * * *" }],
+        trigger: [TestEvent, InngestCron.make("0 * * * *")],
       });
 
       expect(fn.triggers).toHaveLength(2);
@@ -46,7 +46,7 @@ describe("InngestFunction coverage", () => {
 
     it("creates function with options", () => {
       const fn = InngestFunction.make("options-fn", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
         retries: 5,
         concurrency: { limit: 10 },
       });
@@ -59,7 +59,7 @@ describe("InngestFunction coverage", () => {
   describe("toRegistration", () => {
     it("generates registration for event trigger", () => {
       const fn = InngestFunction.make("test-fn", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
       });
 
       const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
@@ -71,12 +71,22 @@ describe("InngestFunction coverage", () => {
 
     it("generates registration for cron trigger", () => {
       const fn = InngestFunction.make("cron-fn", {
-        trigger: { cron: "0 9 * * *" },
+        trigger: InngestCron.make("0 9 * * *"),
       });
 
       const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
 
       expect(reg.triggers).toEqual([{ cron: "0 9 * * *" }]);
+    });
+
+    it("generates registration for cron trigger with jitter", () => {
+      const fn = InngestFunction.make("cron-fn", {
+        trigger: InngestCron.make("0 9 * * *", { jitter: "30s" }),
+      });
+
+      const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });
+
+      expect(reg.triggers).toEqual([{ cron: "0 9 * * *", jitter: "30s" }]);
     });
 
     it("generates registration with CEL expression", () => {
@@ -91,10 +101,10 @@ describe("InngestFunction coverage", () => {
 
     it("serializes retries only when explicitly configured", () => {
       const defaultFn = InngestFunction.make("default-retries-fn", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
       });
       const customFn = InngestFunction.make("custom-retries-fn", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
         retries: 5,
       });
 
@@ -118,7 +128,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes function with cancelOn", () => {
     const fn = InngestFunction.make("cancel-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       cancelOn: [{ event: CancelEvent, if: "event.data.reason != ''" }],
     });
 
@@ -129,7 +139,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes function with timeouts", () => {
     const fn = InngestFunction.make("timeout-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       timeouts: { start: Duration.minutes(5), finish: Duration.hours(1) },
     });
 
@@ -140,7 +150,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes function with both cancelOn and timeouts", () => {
     const fn = InngestFunction.make("full-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       cancelOn: [{ event: CancelEvent }],
       timeouts: { finish: Duration.minutes(30) },
     });
@@ -153,7 +163,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes rateLimit", () => {
     const fn = InngestFunction.make("rate-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       rateLimit: { key: "event.data.userId", limit: 1, period: Duration.days(1) },
     });
 
@@ -164,7 +174,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes throttle", () => {
     const fn = InngestFunction.make("throttle-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       throttle: { key: "event.data.userId", limit: 5, period: Duration.hours(1), burst: 2 },
     });
 
@@ -175,7 +185,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes debounce", () => {
     const fn = InngestFunction.make("debounce-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       debounce: { key: "event.data.userId", period: Duration.seconds(30), timeout: Duration.minutes(5) },
     });
 
@@ -186,7 +196,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes concurrency as number", () => {
     const fn = InngestFunction.make("conc-num-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       concurrency: 10,
     });
 
@@ -197,7 +207,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes concurrency as object", () => {
     const fn = InngestFunction.make("conc-obj-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       concurrency: { limit: 5, key: "event.data.userId", scope: "fn" },
     });
 
@@ -208,7 +218,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes concurrency as tuple", () => {
     const fn = InngestFunction.make("conc-tuple-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       concurrency: [
         { limit: 5, key: "event.data.userId" },
         { limit: 100, scope: "account" },
@@ -225,7 +235,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes priority", () => {
     const fn = InngestFunction.make("priority-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       priority: { run: "event.data.plan == 'enterprise' ? 180 : 0" },
     });
 
@@ -236,7 +246,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes singleton", () => {
     const fn = InngestFunction.make("singleton-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       singleton: { key: "event.data.userId", mode: "cancel" },
     });
 
@@ -247,7 +257,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes batchEvents", () => {
     const fn = InngestFunction.make("batch-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       batchEvents: { maxSize: 100, timeout: Duration.seconds(10), key: "event.data.org" },
     });
 
@@ -258,7 +268,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("serializes idempotency", () => {
     const fn = InngestFunction.make("idemp-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
       idempotency: "event.data.userId",
     });
 
@@ -269,7 +279,7 @@ describe("InngestFunction.toRegistration coverage", () => {
 
   it("omits missing optional fields", () => {
     const fn = InngestFunction.make("minimal-fn", {
-      trigger: { event: TestEvent },
+      trigger: TestEvent,
     });
 
     const reg = fn.toRegistration({ appId: "my-app", url: "http://localhost:3000" });

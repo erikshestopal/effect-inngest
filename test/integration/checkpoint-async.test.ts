@@ -126,7 +126,7 @@ const TestEvent = InngestEvent.make("ckpt/test", Schema.Struct({ value: Schema.S
 
 describe("Checkpoint async integration (spec §10.4.1)", () => {
   const Fn = InngestFunction.make("ckpt-fn", {
-    trigger: { event: TestEvent },
+    trigger: TestEvent,
   });
   const Group = InngestGroup.make(Fn);
 
@@ -542,7 +542,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
   it.effect("function-level false disables checkpoint mode", () =>
     Effect.gen(function* () {
       const FnOff = InngestFunction.make("ckpt-off", {
-        trigger: { event: TestEvent },
+        trigger: TestEvent,
         checkpointing: false,
       });
       const GroupOff = InngestGroup.make(FnOff);

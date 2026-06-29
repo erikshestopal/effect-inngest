@@ -27,7 +27,7 @@ const DemoWithServices = InngestEvent.make(
 );
 
 const ServiceFn = InngestFunction.make("service-handler", {
-  trigger: { event: DemoWithServices },
+  trigger: DemoWithServices,
 });
 
 const Group = InngestGroup.make(ServiceFn);

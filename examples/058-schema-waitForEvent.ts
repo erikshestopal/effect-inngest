@@ -15,7 +15,7 @@ const DemoPageReady = InngestEvent.make(
 );
 
 const SchemaWaitForEventFn = InngestFunction.make("schema-waitForEvent-demo", {
-  trigger: { event: DemoWaitStart },
+  trigger: DemoWaitStart,
 });
 
 const Group = InngestGroup.make(SchemaWaitForEventFn);

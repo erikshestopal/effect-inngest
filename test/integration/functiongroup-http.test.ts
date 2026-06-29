@@ -28,11 +28,11 @@ const TestOther = InngestEvent.make(
 );
 
 const testFunction = InngestFunction.make("test-fn", {
-  trigger: { event: TestEvent },
+  trigger: TestEvent,
 });
 
 const testFunction2 = InngestFunction.make("test-fn-2", {
-  trigger: { event: TestOther },
+  trigger: TestOther,
 });
 
 const testGroup = InngestGroup.make(testFunction, testFunction2);
@@ -239,7 +239,7 @@ describe("InngestGroup.toWebHandler POST /", () => {
         }),
       );
       const noHandlerFn = InngestFunction.make("no-handler-fn", {
-        trigger: { event: NoHandlerEvent },
+        trigger: NoHandlerEvent,
       });
       const noHandlerGroup = InngestGroup.make(noHandlerFn);
 

@@ -16,7 +16,7 @@ const TestHello = InngestEvent.make(
 
 describe("TB-001: Hello World", () => {
   const HelloWorld = InngestFunction.make("hello-world", {
-    trigger: { event: TestHello },
+    trigger: TestHello,
   });
 
   const Group = InngestGroup.make(HelloWorld);

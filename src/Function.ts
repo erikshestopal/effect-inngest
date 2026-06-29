@@ -6,7 +6,9 @@ import { pipeArguments, type Pipeable } from "effect/Pipeable";
 import * as Checkpoint from "./internal/checkpoint.js";
 import type { CheckpointingOption } from "./internal/checkpoint.js";
 import { InngestDuration } from "./internal/wire/Duration.js";
-import type * as InngestEvent from "./Event.js";
+import * as InngestEvent from "./Event.js";
+import type * as InngestCron from "./Cron.js";
+import { isCron } from "./Cron.js";
 
 export type { CheckpointingOption } from "./internal/checkpoint.js";
 
@@ -33,6 +35,11 @@ type EventEnvelope<Event extends EventSchema> = InngestEvent.EventType<Event>;
  */
 export interface EventTrigger<E extends EventSchema = EventSchema> {
   readonly event: E;
+  readonly if: string;
+}
+
+interface NormalizedEventTrigger<E extends EventSchema = EventSchema> {
+  readonly event: E;
   readonly if?: string;
 }
 
@@ -44,6 +51,7 @@ export interface EventTrigger<E extends EventSchema = EventSchema> {
  */
 export interface CronTrigger {
   readonly cron: string;
+  readonly jitter?: string;
 }
 
 /**
@@ -52,13 +60,19 @@ export interface CronTrigger {
  * @since 0.1.0
  * @category triggers
  */
-export type Trigger<E extends EventSchema = EventSchema> = EventTrigger<E> | CronTrigger;
+type NormalizedTrigger<E extends EventSchema = EventSchema> = NormalizedEventTrigger<E> | CronTrigger;
+
+export type Trigger<E extends EventSchema = EventSchema> = E | InngestCron.CronDefinition | EventTrigger<E>;
+
+export type TriggerDefinition<E extends EventSchema = EventSchema> = Trigger<E>;
 
 /**
  * @since 0.1.0
  * @category triggers
  */
-export type TriggerInput<E extends EventSchema = EventSchema> = Trigger<E> | ReadonlyArray<Trigger<E>>;
+export type TriggerInput<E extends EventSchema = EventSchema> =
+  | TriggerDefinition<E>
+  | ReadonlyArray<TriggerDefinition<E>>;
 
 export interface ConcurrencyOption {
   /**
@@ -356,6 +370,7 @@ export interface FunctionRegistration {
     event?: string;
     cron?: string;
     expression?: string;
+    jitter?: string;
   }>;
   readonly steps: {
     readonly step: {
@@ -421,7 +436,7 @@ export interface FunctionRegistration {
  */
 export interface InngestFunction<
   Tag extends string,
-  Triggers extends Trigger,
+  Triggers extends NormalizedTrigger,
   Options extends FunctionOptions = FunctionOptions,
 > extends Pipeable {
   readonly [TypeId]: TypeId;
@@ -437,11 +452,11 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, FunctionOptions>;
+  export type Any = InngestFunction<string, NormalizedTrigger, FunctionOptions>;
   export type Tag<F> = F extends InngestFunction<infer T, any, any> ? T : never;
   export type Triggers<F> = F extends InngestFunction<any, infer T, any> ? T : never;
   export type Events<F> =
-    F extends InngestFunction<any, infer T, any> ? (T extends EventTrigger<infer E> ? E : never) : never;
+    F extends InngestFunction<any, infer T, any> ? (T extends NormalizedEventTrigger<infer E> ? E : never) : never;
   export type EventPayload<F> = EventEnvelope<Events<F>>;
   export type HasBatchEvents<O> = O extends { readonly batchEvents: infer BatchEvents }
     ? Exclude<BatchEvents, undefined> extends BatchEventsOption
@@ -453,7 +468,7 @@ export declare namespace InngestFunction {
   export type Options<F> = F extends InngestFunction<any, any, infer O> ? O : never;
 }
 
-const isEventTrigger = (t: Trigger): t is EventTrigger => Predicate.hasProperty(t, "event");
+const isEventTrigger = (t: NormalizedTrigger): t is NormalizedEventTrigger => Predicate.hasProperty(t, "event");
 
 const encodeDuration = (input: Duration.Input): string =>
   Schema.encodeSync(InngestDuration)(Duration.fromInputUnsafe(input));
@@ -476,7 +491,7 @@ const Proto = {
       if (isEventTrigger(t)) {
         triggers.push({ event: t.event.identifier, expression: t.if });
       } else {
-        triggers.push({ cron: t.cron });
+        triggers.push({ cron: t.cron, ...(Predicate.isNotUndefined(t.jitter) ? { jitter: t.jitter } : {}) });
       }
     }
 
@@ -593,7 +608,30 @@ const Proto = {
   },
 };
 
-type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger> ? T[number] : T;
+type NormalizeTrigger<T> = T extends EventSchema
+  ? NormalizedEventTrigger<T>
+  : T extends InngestCron.CronDefinition
+    ? CronTrigger
+    : T extends EventTrigger<infer E>
+      ? NormalizedEventTrigger<E>
+      : T extends CronTrigger
+        ? T
+        : never;
+
+type NormalizeTriggers<T extends TriggerInput> =
+  T extends ReadonlyArray<infer Item> ? NormalizeTrigger<Item> : NormalizeTrigger<T>;
+
+const normalizeTrigger = (trigger: TriggerDefinition): NormalizedTrigger => {
+  if (InngestEvent.isEventSchema(trigger)) {
+    return { event: trigger };
+  }
+
+  if (isCron(trigger)) {
+    return { cron: trigger.cron, ...(Predicate.isNotUndefined(trigger.jitter) ? { jitter: trigger.jitter } : {}) };
+  }
+
+  return trigger;
+};
 
 /**
  * @since 0.1.0
@@ -602,7 +640,7 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
  * ```ts
  * // Event trigger
  * const Fn1 = InngestFunction.make("Hello", {
- *   trigger: { event: HelloEvent },
+ *   trigger: HelloEvent,
  * })
  *
  * // Event trigger with CEL filter
@@ -612,14 +650,14 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
  *
  * // Cron trigger
  * const Fn3 = InngestFunction.make("Scheduled", {
- *   trigger: { cron: "0 * * * *" },
+ *   trigger: InngestCron.make("0 * * * *"),
  * })
  *
  * // Multiple triggers
  * const Fn4 = InngestFunction.make("Multi", {
  *   trigger: [
- *     { event: HelloEvent },
- *     { cron: "0 0 * * *" },
+ *     HelloEvent,
+ *     InngestCron.make("0 0 * * *"),
  *   ],
  * })
  * ```
@@ -631,7 +669,7 @@ export function make<const Tag extends string, T extends TriggerInput, const O e
   const fn = Object.create(Proto);
   fn._tag = tag;
   fn.key = `effect-inngest/Function/${tag}`;
-  fn.triggers = Arr.ensure(options.trigger);
+  fn.triggers = Arr.map(Arr.ensure(options.trigger), normalizeTrigger);
   fn.options = options;
   return fn;
 }

@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoSleepUntil = InngestEvent.make("examples/006-step-sleepUntil/demo/sleep-until", Schema.Struct({}));
 
 const SleepUntilFn = InngestFunction.make("sleep-until", {
-  trigger: { event: DemoSleepUntil },
+  trigger: DemoSleepUntil,
 });
 
 const Group = InngestGroup.make(SleepUntilFn);

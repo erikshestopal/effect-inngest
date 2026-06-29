@@ -8,7 +8,7 @@ const DemoHello = InngestEvent.make("examples/001-hello-world/demo/hello", Schem
 const DemoBye = InngestEvent.make("examples/001-hello-world/demo/bye", Schema.Struct({ lastName: Schema.Number }));
 
 const HelloFn = InngestFunction.make("hello-world", {
-  trigger: [{ event: DemoHello }, { event: DemoBye }],
+  trigger: [DemoHello, DemoBye],
 });
 
 const Group = InngestGroup.make(HelloFn);

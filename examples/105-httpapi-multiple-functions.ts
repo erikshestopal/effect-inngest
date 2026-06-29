@@ -19,11 +19,11 @@ const UserDeleted = InngestEvent.make(
 );
 
 const OnUserCreated = InngestFunction.make("on-user-created", {
-  trigger: { event: UserCreated },
+  trigger: UserCreated,
 });
 
 const OnUserDeleted = InngestFunction.make("on-user-deleted", {
-  trigger: { event: UserDeleted },
+  trigger: UserDeleted,
 });
 
 const Group = InngestGroup.make(OnUserCreated, OnUserDeleted);

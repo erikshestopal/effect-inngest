@@ -47,7 +47,7 @@ const DeliveryScheduled = InngestEvent.make(
 );
 
 const OrderWorkflowFn = InngestFunction.make("process-order", {
-  trigger: { event: OrderPlaced },
+  trigger: OrderPlaced,
 });
 
 const Group = InngestGroup.make(OrderWorkflowFn);

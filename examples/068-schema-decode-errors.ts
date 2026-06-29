@@ -16,22 +16,22 @@ const PageReady = InngestEvent.make("examples/068-schema-decode-errors/page-read
 const ChildInput = InngestEvent.make("examples/068-schema-decode-errors/child", Schema.Struct({}));
 
 const StepRunFn = InngestFunction.make("schema-step-run-decode-error", {
-  trigger: { event: Started },
+  trigger: Started,
   checkpointing: false,
 });
 
 const WaitForEventFn = InngestFunction.make("schema-waitForEvent-decode-error", {
-  trigger: { event: Started },
+  trigger: Started,
   checkpointing: false,
 });
 
 const ChildFn = InngestFunction.make("schema-invoke-decode-error-child", {
-  trigger: { event: ChildInput },
+  trigger: ChildInput,
   checkpointing: false,
 });
 
 const InvokeFn = InngestFunction.make("schema-invoke-decode-error", {
-  trigger: { event: Started },
+  trigger: Started,
   checkpointing: false,
 });
 

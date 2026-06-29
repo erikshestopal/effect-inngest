@@ -7,7 +7,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoLongRunning = InngestEvent.make("examples/024-timeout-finish/demo/long-running", Schema.Struct({}));
 
 const LongRunningFn = InngestFunction.make("long-running-task", {
-  trigger: { event: DemoLongRunning },
+  trigger: DemoLongRunning,
   timeouts: { finish: "2 seconds" },
 });
 

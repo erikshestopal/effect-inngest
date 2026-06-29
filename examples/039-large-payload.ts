@@ -21,7 +21,7 @@ const DemoLargePayload = InngestEvent.make(
 );
 
 const LargePayloadFn = InngestFunction.make("process-large-payload", {
-  trigger: { event: DemoLargePayload },
+  trigger: DemoLargePayload,
 });
 
 const Group = InngestGroup.make(LargePayloadFn);

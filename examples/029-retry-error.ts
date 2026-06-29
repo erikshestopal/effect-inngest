@@ -8,7 +8,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoRetryError = InngestEvent.make("examples/029-retry-error/demo/retry-error", Schema.Struct({}));
 
 const RetryFn = InngestFunction.make("retry-demo", {
-  trigger: { event: DemoRetryError },
+  trigger: DemoRetryError,
   retries: 5,
 });
 

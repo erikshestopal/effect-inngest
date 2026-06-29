@@ -11,7 +11,7 @@ const DemoConcurrent = InngestEvent.make(
 );
 
 const ConcurrentFn = InngestFunction.make("concurrent-fn", {
-  trigger: { event: DemoConcurrent },
+  trigger: DemoConcurrent,
   concurrency: { limit: 1 },
 });
 

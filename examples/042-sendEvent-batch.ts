@@ -14,7 +14,7 @@ const DemoNotification = InngestEvent.make(
 );
 
 const SendBatchFn = InngestFunction.make("send-batch", {
-  trigger: { event: DemoSendBatch },
+  trigger: DemoSendBatch,
 });
 
 const Group = InngestGroup.make(SendBatchFn);

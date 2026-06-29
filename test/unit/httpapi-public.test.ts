@@ -18,7 +18,7 @@ const UserCreated = InngestEvent.make(
 );
 
 const ProcessUser = InngestFunction.make("process-user", {
-  trigger: { event: UserCreated },
+  trigger: UserCreated,
 });
 
 const Group = InngestGroup.make(ProcessUser);

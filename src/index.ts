@@ -20,7 +20,7 @@
  *
  * // Define functions
  * const SendWelcomeEmail = InngestFunction.make("send-welcome-email", {
- *   trigger: { event: UserCreated },
+ *   trigger: UserCreated,
  *   retries: 3,
  * })
  *
@@ -48,6 +48,14 @@ export * as InngestFunction from "./Function.js";
  * @since 0.1.0
  */
 export * as InngestEvent from "./Event.js";
+
+/**
+ * Public cron trigger helpers.
+ *
+ * @module InngestCron
+ * @since 0.1.0
+ */
+export * as InngestCron from "./Cron.js";
 
 /**
  * This module provides types and functions for grouping Inngest functions
@@ -159,7 +167,7 @@ export * as InngestHttpApi from "./HttpApi.js";
  *
  * // React to function failures
  * const HandleFailure = InngestFunction.make("handle-failure", {
- *   trigger: { event: InngestEvents.FunctionFailed },
+ *   trigger: InngestEvents.FunctionFailed,
  * })
  * ```
  *

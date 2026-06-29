@@ -1,10 +1,10 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestFunction, InngestCron, InngestGroup } from "effect-inngest";
 import { defineExample, invokeCase } from "./_support.ts";
 
 const CronFn = InngestFunction.make("cron-every-minute", {
-  trigger: { cron: "* * * * *" },
+  trigger: InngestCron.make("* * * * *"),
 });
 
 const Group = InngestGroup.make(CronFn);

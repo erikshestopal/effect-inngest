@@ -11,7 +11,7 @@ const DemoPriority = InngestEvent.make(
 );
 
 const PriorityFn = InngestFunction.make("priority-handler", {
-  trigger: { event: DemoPriority },
+  trigger: DemoPriority,
   priority: { run: "event.data.plan == 'enterprise' ? 100 : 0" },
 });
 

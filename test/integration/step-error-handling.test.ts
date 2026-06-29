@@ -15,7 +15,7 @@ const TestErrorStep = InngestEvent.make(
 
 describe("TB-010: Step Error Handling", () => {
   const FailingStepFn = InngestFunction.make("failing-step-fn", {
-    trigger: { event: TestErrorStep },
+    trigger: TestErrorStep,
   });
 
   const Group = InngestGroup.make(FailingStepFn);
@@ -210,11 +210,11 @@ describe("TB-010: Step Error Handling", () => {
     );
 
     const TargetFn = InngestFunction.make("target-fn", {
-      trigger: { event: TestTarget },
+      trigger: TestTarget,
     });
 
     const InvokerFn = InngestFunction.make("invoker-fn", {
-      trigger: { event: TestInvoke },
+      trigger: TestInvoke,
     });
 
     const InvokeGroup = InngestGroup.make(TargetFn, InvokerFn);
@@ -456,11 +456,11 @@ describe("TB-010: Step Error Handling", () => {
       );
 
       const FnA = InngestFunction.make("fn-a", {
-        trigger: { event: TestA },
+        trigger: TestA,
       });
 
       const FnB = InngestFunction.make("fn-b", {
-        trigger: { event: TestB },
+        trigger: TestB,
       });
 
       const MultiGroup = InngestGroup.make(FnA, FnB);

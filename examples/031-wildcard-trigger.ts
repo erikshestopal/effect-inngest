@@ -18,7 +18,7 @@ const UserDeleted = InngestEvent.make(
 );
 
 const UserEventsFn = InngestFunction.make("handle-user-events", {
-  trigger: [{ event: UserCreated }, { event: UserDeleted }],
+  trigger: [UserCreated, UserDeleted],
 });
 
 const Group = InngestGroup.make(UserEventsFn);

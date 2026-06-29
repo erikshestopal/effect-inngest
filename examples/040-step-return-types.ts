@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoReturnTypes = InngestEvent.make("examples/040-step-return-types/demo/return-types", Schema.Struct({}));
 
 const ReturnTypesFn = InngestFunction.make("return-types-demo", {
-  trigger: { event: DemoReturnTypes },
+  trigger: DemoReturnTypes,
 });
 
 const Group = InngestGroup.make(ReturnTypesFn);

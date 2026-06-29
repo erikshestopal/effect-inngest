@@ -6,7 +6,7 @@ import { defineExample, eventCase } from "./_support.ts";
 const DemoSlowStart = InngestEvent.make("examples/033-timeout-start/demo/slow-start", Schema.Struct({}));
 
 const SlowStartFn = InngestFunction.make("slow-start-task", {
-  trigger: { event: DemoSlowStart },
+  trigger: DemoSlowStart,
   timeouts: { start: "10 seconds" },
 });
 

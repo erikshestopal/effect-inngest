@@ -18,7 +18,7 @@ const UserUpdated = InngestEvent.make(
 );
 
 const UserHandlerFn = InngestFunction.make("user-handler", {
-  trigger: [{ event: UserCreated }, { event: UserUpdated }],
+  trigger: [UserCreated, UserUpdated],
 });
 
 const Group = InngestGroup.make(UserHandlerFn);

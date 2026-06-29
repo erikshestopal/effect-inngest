@@ -42,6 +42,10 @@
       "types": "./dist/Client.d.ts",
       "import": "./src/Client.ts"
     },
+    "./Cron": {
+      "types": "./dist/Cron.d.ts",
+      "import": "./src/Cron.ts"
+    },
     "./Event": {
       "types": "./dist/Event.d.ts",
       "import": "./src/Event.ts"
@@ -78,6 +82,10 @@
       "./Client": {
         "types": "./dist/Client.d.ts",
         "import": "./dist/Client.js"
+      },
+      "./Cron": {
+        "types": "./dist/Cron.d.ts",
+        "import": "./dist/Cron.js"
       },
       "./Event": {
         "types": "./dist/Event.d.ts",

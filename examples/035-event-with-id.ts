@@ -11,7 +11,7 @@ const DemoIdempotentEvent = InngestEvent.make(
 );
 
 const IdempotentFn = InngestFunction.make("idempotent-handler", {
-  trigger: { event: DemoIdempotentEvent },
+  trigger: DemoIdempotentEvent,
 });
 
 const Group = InngestGroup.make(IdempotentFn);

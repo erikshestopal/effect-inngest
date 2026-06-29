@@ -17,7 +17,7 @@ const TestRetryAfter = InngestEvent.make(
 
 describe("RetryAfterError Behavior", () => {
   const RetryAfterFn = InngestFunction.make("retry-after-fn", {
-    trigger: { event: TestRetryAfter },
+    trigger: TestRetryAfter,
   });
 
   const Group = InngestGroup.make(RetryAfterFn);

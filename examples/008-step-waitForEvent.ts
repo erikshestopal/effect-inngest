@@ -21,7 +21,7 @@ const DemoWaitComplete = InngestEvent.make(
 );
 
 const WaitForEventFn = InngestFunction.make("wait-for-event", {
-  trigger: { event: DemoWaitStart },
+  trigger: DemoWaitStart,
 });
 
 const Group = InngestGroup.make(WaitForEventFn);
