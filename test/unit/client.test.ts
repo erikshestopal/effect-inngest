@@ -102,6 +102,37 @@ describe("InngestClient coverage", () => {
       }),
     );
 
+    it.effect("uses the local dev fallback key when event key is blank", () =>
+      Effect.gen(function* () {
+        const requestedUrls: Array<string> = [];
+        const mockHttpClient = HttpClient.make((req) => {
+          requestedUrls.push(req.url);
+
+          return Effect.succeed(
+            HttpClientResponse.fromWeb(
+              req,
+              new Response(JSON.stringify({ ids: ["evt-1"], status: 200 }), {
+                status: 200,
+                headers: { "Content-Type": "text/plain; charset=utf-8" },
+              }),
+            ),
+          );
+        });
+
+        const layer = InngestClient.layer({ id: "test-app", eventKey: "", mode: "dev" }).pipe(
+          Layer.provide(Layer.succeed(HttpClient.HttpClient, mockHttpClient)),
+        );
+
+        const result = yield* Effect.gen(function* () {
+          const client = yield* InngestClient.InngestClient;
+          return yield* client.sendEvent([{ name: "test/event", data: { userId: "u1" } }]);
+        }).pipe(Effect.provide(layer));
+
+        expect(result.ids).toEqual(["evt-1"]);
+        expect(requestedUrls).toEqual(["http://localhost:8288/e/NO_EVENT_KEY_SET"]);
+      }),
+    );
+
     it("fails without event key in cloud mode", async () => {
       const mockHttpClient = HttpClient.make((req) =>
         Effect.succeed(HttpClientResponse.fromWeb(req, new Response("{}", { status: 200 }))),

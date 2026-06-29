@@ -253,7 +253,7 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Ef
         );
       }
 
-      const key = config.eventKey ?? "NO_EVENT_KEY_SET";
+      const key = config.eventKey || "NO_EVENT_KEY_SET";
       const url = new URL(`e/${key}`, eventBaseUrl).toString();
       const eventNames = events.map((e) => e.name);
       const now = yield* Clock.currentTimeMillis;
