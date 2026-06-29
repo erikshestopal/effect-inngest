@@ -1,5 +1,15 @@
 # effect-inngest
 
+## 1.0.0-beta.5
+
+### Major Changes
+
+- [`acac676`](https://github.com/erikshestopal/effect-inngest/commit/acac67658f4df6eca9ae89cafcc841a1f4ff454d) Thanks [@erikshestopal](https://github.com/erikshestopal)! - Remove public result schemas, move durable workflow operations from handler-scoped `step.*` tools to module-level `Inngest.*` functions, and simplify function triggers to accept event definitions or `InngestCron.make(...)` directly. Step and function results are normalized through JSON wire semantics before memoization/replay.
+
+### Minor Changes
+
+- [`1a0fe79`](https://github.com/erikshestopal/effect-inngest/commit/1a0fe79a4e6eac39453d7de73a2d563295f7c45d) Thanks [@erikshestopal](https://github.com/erikshestopal)! - Treat blank event keys as missing when sending events in dev mode.
+
 ## 0.3.0-beta.4
 
 ### Patch Changes
