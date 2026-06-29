@@ -1,6 +1,6 @@
 # effect-inngest
 
-## 0.3.0-beta.5
+## 0.4.0-beta1
 
 ### Minor Changes
 
