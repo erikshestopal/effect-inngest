@@ -27,6 +27,15 @@ describe("InngestFunction coverage", () => {
       expect(fn.triggers).toHaveLength(1);
     });
 
+    it("creates function with event object trigger", () => {
+      const fn = InngestFunction.make("test-fn", {
+        trigger: { event: TestEvent },
+      });
+
+      expect(fn._tag).toBe("test-fn");
+      expect(fn.triggers).toHaveLength(1);
+    });
+
     it("creates function with cron trigger", () => {
       const fn = InngestFunction.make("cron-fn", {
         trigger: InngestCron.make("0 9 * * *"),

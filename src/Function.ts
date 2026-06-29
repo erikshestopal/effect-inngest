@@ -35,7 +35,7 @@ type EventEnvelope<Event extends EventSchema> = InngestEvent.EventType<Event>;
  */
 export interface EventTrigger<E extends EventSchema = EventSchema> {
   readonly event: E;
-  readonly if: string;
+  readonly if?: string;
 }
 
 interface NormalizedEventTrigger<E extends EventSchema = EventSchema> {
