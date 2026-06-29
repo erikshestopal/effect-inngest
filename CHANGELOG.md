@@ -1,5 +1,11 @@
 # effect-inngest
 
+## 0.4.0-beta2
+
+### Patch Changes
+
+- [`b238e91`](https://github.com/erikshestopal/effect-inngest/commit/b238e91206a31b8700355b77f5b60f4672cadcea) Thanks [@erikshestopal](https://github.com/erikshestopal)! - Export normalized trigger types used by function declarations and accept cron trigger objects.
+
 ## 0.4.0-beta1
 
 ### Minor Changes
