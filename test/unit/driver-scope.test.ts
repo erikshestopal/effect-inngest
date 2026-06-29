@@ -33,7 +33,6 @@ const TestEvent = InngestEvent.make(
 
 const testFn = InngestFunction.make("scope-test-fn", {
   trigger: { event: TestEvent },
-  success: Schema.Void,
 });
 
 const makeEvent = () => ProtocolInngestEvent.make({ name: "test/scope-event", data: { userId: "u1" }, id: "evt-1" });
@@ -141,7 +140,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
 
       const handlerFn = InngestFunction.make("handler-scope-fn", {
         trigger: { event: TestEvent },
-        success: Schema.String,
       });
 
       const result = yield* execute({
@@ -168,7 +166,6 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
 
       const handlerFn = InngestFunction.make("multi-finalizer-fn", {
         trigger: { event: TestEvent },
-        success: Schema.String,
       });
 
       const result = yield* execute({

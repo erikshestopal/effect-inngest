@@ -8,16 +8,12 @@ const DemoNonRetriable = InngestEvent.make("examples/012-error-non-retriable/dem
 
 const NonRetriableFn = InngestFunction.make("non-retriable", {
   trigger: { event: DemoNonRetriable },
-  success: Schema.Struct({ success: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(NonRetriableFn);
 
 const HandlersLive = Group.toLayer({
-  "non-retriable": ({ step }) =>
-    step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })), {
-      schema: Schema.Struct({ success: Schema.Boolean }),
-    }),
+  "non-retriable": ({ step }) => step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" }))),
 });
 
 export default defineExample({

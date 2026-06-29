@@ -14,7 +14,6 @@ const DemoSchemaStepResult = InngestEvent.make(
 
 const SchemaStepResultFn = InngestFunction.make("schema-step-result-demo", {
   trigger: { event: DemoSchemaStepResult },
-  success: Schema.Struct({ pathname: Schema.String }),
 });
 
 const Group = InngestGroup.make(SchemaStepResultFn);
@@ -22,11 +21,7 @@ const Group = InngestGroup.make(SchemaStepResultFn);
 const HandlersLive = Group.toLayer({
   "schema-step-result-demo": ({ step }) =>
     Effect.gen(function* () {
-      const page = yield* step.run(
-        "load-page",
-        Effect.succeed(new Page({ url: new URL("https://example.com/docs") })),
-        { schema: Page },
-      );
+      const page = yield* step.run("load-page", Effect.succeed(new Page({ url: new URL("https://example.com/docs") })));
       yield* step.sleep("force-replay", "1 second");
 
       return { pathname: page.url.pathname };

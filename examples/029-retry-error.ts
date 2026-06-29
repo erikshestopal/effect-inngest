@@ -10,7 +10,6 @@ const DemoRetryError = InngestEvent.make("examples/029-retry-error/demo/retry-er
 const RetryFn = InngestFunction.make("retry-demo", {
   trigger: { event: DemoRetryError },
   retries: 5,
-  success: Schema.Struct({ attempts: Schema.Number }),
 });
 
 const Group = InngestGroup.make(RetryFn);
@@ -35,7 +34,6 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`Success on attempt ${attempt}`);
           return attempt + 1;
         }),
-        { schema: Schema.Number },
       );
       return { attempts: result };
     }),

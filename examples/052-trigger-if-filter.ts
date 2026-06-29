@@ -17,7 +17,6 @@ const HighValueOrderFn = InngestFunction.make("process-high-value-order", {
     event: OrderPlaced,
     if: "event.data.amount > 100",
   },
-  success: Schema.Struct({ processed: Schema.Boolean, priority: Schema.String }),
 });
 
 const VipOrderFn = InngestFunction.make("process-vip-order", {
@@ -25,7 +24,6 @@ const VipOrderFn = InngestFunction.make("process-vip-order", {
     event: OrderPlaced,
     if: "event.data.amount > 500 && has(event.data.customerId)",
   },
-  success: Schema.Struct({ vip: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(HighValueOrderFn, VipOrderFn);

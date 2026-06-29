@@ -422,14 +422,12 @@ export interface FunctionRegistration {
 export interface InngestFunction<
   Tag extends string,
   Triggers extends Trigger,
-  Success extends Schema.Codec<unknown, unknown, never, never>,
   Options extends FunctionOptions = FunctionOptions,
 > extends Pipeable {
   readonly [TypeId]: TypeId;
   readonly _tag: Tag;
   readonly key: string;
   readonly triggers: ReadonlyArray<Triggers>;
-  readonly success: Success;
   readonly options: Options;
   readonly toRegistration: (config: RegistrationConfig) => FunctionRegistration;
 }
@@ -439,11 +437,11 @@ export interface InngestFunction<
  * @category models
  */
 export declare namespace InngestFunction {
-  export type Any = InngestFunction<string, Trigger, Schema.Codec<any, any, never, never>, FunctionOptions>;
-  export type Tag<F> = F extends InngestFunction<infer T, any, any, any> ? T : never;
-  export type Triggers<F> = F extends InngestFunction<any, infer T, any, any> ? T : never;
+  export type Any = InngestFunction<string, Trigger, FunctionOptions>;
+  export type Tag<F> = F extends InngestFunction<infer T, any, any> ? T : never;
+  export type Triggers<F> = F extends InngestFunction<any, infer T, any> ? T : never;
   export type Events<F> =
-    F extends InngestFunction<any, infer T, any, any> ? (T extends EventTrigger<infer E> ? E : never) : never;
+    F extends InngestFunction<any, infer T, any> ? (T extends EventTrigger<infer E> ? E : never) : never;
   export type EventPayload<F> = EventEnvelope<Events<F>>;
   export type HasBatchEvents<O> = O extends { readonly batchEvents: infer BatchEvents }
     ? Exclude<BatchEvents, undefined> extends BatchEventsOption
@@ -452,9 +450,7 @@ export declare namespace InngestFunction {
     : false;
   export type EventType<F> = HasBatchEvents<Options<F>> extends true ? ReadonlyArray<EventPayload<F>> : EventPayload<F>;
 
-  export type SuccessSchema<F> = F extends InngestFunction<any, any, infer S, any> ? S : never;
-  export type Success<F> = Schema.Schema.Type<SuccessSchema<F>>;
-  export type Options<F> = F extends InngestFunction<any, any, any, infer O> ? O : never;
+  export type Options<F> = F extends InngestFunction<any, any, infer O> ? O : never;
 }
 
 const isEventTrigger = (t: Trigger): t is EventTrigger => Predicate.hasProperty(t, "event");
@@ -607,19 +603,16 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
  * // Event trigger
  * const Fn1 = InngestFunction.make("Hello", {
  *   trigger: { event: HelloEvent },
- *   success: Schema.Void,
  * })
  *
  * // Event trigger with CEL filter
  * const Fn2 = InngestFunction.make("Hello", {
  *   trigger: { event: HelloEvent, if: "event.data.name != ''" },
- *   success: Schema.Void,
  * })
  *
  * // Cron trigger
  * const Fn3 = InngestFunction.make("Scheduled", {
  *   trigger: { cron: "0 * * * *" },
- *   success: Schema.Void,
  * })
  *
  * // Multiple triggers
@@ -628,24 +621,17 @@ type NormalizeTriggers<T extends TriggerInput> = T extends ReadonlyArray<Trigger
  *     { event: HelloEvent },
  *     { cron: "0 0 * * *" },
  *   ],
- *   success: Schema.Void,
  * })
  * ```
  */
-export function make<
-  const Tag extends string,
-  T extends TriggerInput,
-  S extends Schema.Codec<unknown, unknown, never, never>,
-  const O extends FunctionOptions = {},
->(
+export function make<const Tag extends string, T extends TriggerInput, const O extends FunctionOptions = {}>(
   tag: Tag,
-  options: { readonly trigger: T; readonly success: S } & O,
-): InngestFunction<Tag, NormalizeTriggers<T>, S, O> {
+  options: { readonly trigger: T } & O,
+): InngestFunction<Tag, NormalizeTriggers<T>, O> {
   const fn = Object.create(Proto);
   fn._tag = tag;
   fn.key = `effect-inngest/Function/${tag}`;
   fn.triggers = Arr.ensure(options.trigger);
-  fn.success = options.success;
   fn.options = options;
   return fn;
 }

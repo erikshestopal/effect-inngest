@@ -12,7 +12,6 @@ const DemoThrottleKeyed = InngestEvent.make(
 
 const ThrottleKeyedFn = InngestFunction.make("throttle-keyed", {
   trigger: { event: DemoThrottleKeyed },
-  success: Schema.Struct({ teamId: Schema.String, processedAt: Schema.String }),
   throttle: {
     limit: 1,
     period: "1 second",

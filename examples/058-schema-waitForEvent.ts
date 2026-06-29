@@ -16,7 +16,6 @@ const DemoPageReady = InngestEvent.make(
 
 const SchemaWaitForEventFn = InngestFunction.make("schema-waitForEvent-demo", {
   trigger: { event: DemoWaitStart },
-  success: Schema.Struct({ pathname: Schema.NullOr(Schema.String) }),
 });
 
 const Group = InngestGroup.make(SchemaWaitForEventFn);

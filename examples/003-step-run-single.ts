@@ -12,7 +12,6 @@ const DemoStepSingle = InngestEvent.make(
 
 const StepSingleFn = InngestFunction.make("step-single", {
   trigger: { event: DemoStepSingle },
-  success: Schema.Struct({ doubled: Schema.Number }),
 });
 
 const Group = InngestGroup.make(StepSingleFn);
@@ -27,7 +26,6 @@ const HandlersLive = Group.toLayer({
           yield* Effect.log(`doubling ${event.data.value}`);
           return event.data.value * 2;
         }),
-        { schema: Schema.Number },
       );
       yield* Effect.log(`step-single doubled: ${doubled}`);
       return { doubled };

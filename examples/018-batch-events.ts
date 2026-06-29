@@ -12,7 +12,6 @@ const DemoBatched = InngestEvent.make(
 
 const BatchedFn = InngestFunction.make("batched-fn", {
   trigger: { event: DemoBatched },
-  success: Schema.Struct({ count: Schema.Number, sum: Schema.Number }),
   batchEvents: { maxSize: 5, timeout: "1 second" },
 });
 

@@ -19,7 +19,6 @@ const UserCreated = InngestEvent.make(
 
 const ProcessUser = InngestFunction.make("process-user", {
   trigger: { event: UserCreated },
-  success: Schema.Struct({ received: Schema.String }),
 });
 
 const Group = InngestGroup.make(ProcessUser);

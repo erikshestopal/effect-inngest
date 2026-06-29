@@ -22,7 +22,6 @@ const DemoInvoicePaid = InngestEvent.make(
 
 const WaitMatchFn = InngestFunction.make("wait-for-invoice-payment", {
   trigger: { event: DemoWaitMatch },
-  success: Schema.Struct({ invoiceId: Schema.String, amount: Schema.NullOr(Schema.Number) }),
 });
 
 const Group = InngestGroup.make(WaitMatchFn);

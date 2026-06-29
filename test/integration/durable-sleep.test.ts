@@ -17,7 +17,6 @@ const JobStart = InngestEvent.make(
 describe("TB-003: Durable Sleep", () => {
   const DelayedProcess = InngestFunction.make("delayed-process", {
     trigger: { event: JobStart },
-    success: Schema.String,
   });
 
   const Group = InngestGroup.make(DelayedProcess);

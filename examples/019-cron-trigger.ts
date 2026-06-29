@@ -5,7 +5,6 @@ import { defineExample, invokeCase } from "./_support.ts";
 
 const CronFn = InngestFunction.make("cron-every-minute", {
   trigger: { cron: "* * * * *" },
-  success: Schema.Struct({ executedAt: Schema.String }),
 });
 
 const Group = InngestGroup.make(CronFn);

@@ -12,7 +12,7 @@ export default defineNativeExample((inngest) => {
         logger.info("Attempt failed - will retry");
         throw new Error("Intentional failure");
       });
-      return { success: true };
+      return {};
     },
   );
 

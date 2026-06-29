@@ -12,7 +12,6 @@ const DemoEcho = InngestEvent.make(
 
 const EchoFn = InngestFunction.make("echo-data", {
   trigger: { event: DemoEcho },
-  success: Schema.Struct({ received: Schema.String }),
 });
 
 const Group = InngestGroup.make(EchoFn);

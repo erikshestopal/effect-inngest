@@ -5,7 +5,7 @@
  * ensuring we don't regress on these issues.
  */
 import { describe, expect, it } from "@effect/vitest";
-import { Duration, Effect, Option, Schema } from "effect";
+import { Duration, Effect, Option, Predicate, Schema } from "effect";
 import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { NonRetriableError } from "../../src/index.js";
@@ -101,10 +101,6 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
    */
   const ParallelSleepFn = InngestFunction.make("parallel-sleep", {
     trigger: { event: TestParallelSleep },
-    success: Schema.Struct({
-      data: Schema.String,
-      sleepCompleted: Schema.Boolean,
-    }),
   });
 
   const Group = InngestGroup.make(ParallelSleepFn);
@@ -123,10 +119,7 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
         "parallel-sleep": ({ event, step }) =>
           Effect.gen(function* () {
             const [data, _] = yield* Effect.all(
-              [
-                step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`), { schema: Schema.String }),
-                step.sleep("wait", "5 seconds"),
-              ],
+              [step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`)), step.sleep("wait", "5 seconds")],
               { concurrency: "unbounded" },
             );
             return { data, sleepCompleted: true };
@@ -192,7 +185,6 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
    */
   const MultiStepFn = InngestFunction.make("multi-step", {
     trigger: { event: TestMultiStep },
-    success: Schema.Struct({ result: Schema.String }),
   });
 
   const Group = InngestGroup.make(MultiStepFn);
@@ -202,8 +194,8 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
       const HandlersLive = Group.toLayer({
         "multi-step": ({ step }) =>
           Effect.gen(function* () {
-            const a = yield* step.run("step-a", Effect.succeed("A"), { schema: Schema.String });
-            const b = yield* step.run("step-b", Effect.succeed("B"), { schema: Schema.String });
+            const a = yield* step.run("step-a", Effect.succeed("A"));
+            const b = yield* step.run("step-b", Effect.succeed("B"));
             return { result: `${a}-${b}` };
           }),
       });
@@ -305,12 +297,10 @@ describe("Regression: step.invoke payload must be event data directly", () => {
    */
   const ChildFn = InngestFunction.make("child-fn", {
     trigger: { event: TestChild },
-    success: Schema.Struct({ doubled: Schema.Number }),
   });
 
   const ParentFn = InngestFunction.make("parent-fn", {
     trigger: { event: TestParent },
-    success: Schema.Struct({ result: Schema.Number }),
   });
 
   const Group = InngestGroup.make(ParentFn, ChildFn);
@@ -324,11 +314,11 @@ describe("Regression: step.invoke payload must be event data directly", () => {
               function: ChildFn,
               data: TestChild.make({ value: event.data.value * 2 }),
             });
-            return { result: childResult.doubled };
+            return { result: Predicate.hasProperty(childResult, "doubled") ? childResult.doubled : null };
           }),
         "child-fn": ({ event, step }) =>
           Effect.gen(function* () {
-            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2), { schema: Schema.Number });
+            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
             return { doubled };
           }),
       });
@@ -418,7 +408,6 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
    */
   const NonRetriableFn = InngestFunction.make("non-retriable-fn", {
     trigger: { event: TestNonRetriable },
-    success: Schema.Struct({ result: Schema.String }),
   });
 
   const Group = InngestGroup.make(NonRetriableFn);
@@ -458,9 +447,7 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
         "non-retriable-fn": ({ step }) =>
-          step.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" })), {
-            schema: Schema.Struct({ result: Schema.String }),
-          }),
+          step.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" }))),
       });
 
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });
@@ -519,12 +506,7 @@ describe("Regression: Batch events handler receives array of event data", () => 
    * @see .research/048-batch-events-key.ts
    */
   const BatchFn = InngestFunction.make("batch-fn", {
-    trigger: { event: TestBatchEvent },
-    success: Schema.Struct({
-      items: Schema.Array(Schema.String),
-      count: Schema.Number,
-    }),
-    // Must have batchEvents configured to trigger batch mode
+    trigger: { event: TestBatchEvent }, // Must have batchEvents configured to trigger batch mode
     batchEvents: { maxSize: 10, timeout: Duration.seconds(1) },
   });
 
@@ -636,10 +618,6 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
    */
   const WaitFn = InngestFunction.make("wait-fn", {
     trigger: { event: TestWaitEvent },
-    success: Schema.Struct({
-      orderId: Schema.String,
-      approvedBy: Schema.String,
-    }),
   });
 
   const Group = InngestGroup.make(WaitFn);
@@ -798,7 +776,6 @@ describe("Regression: disable_immediate_execution must not block target step", (
    */
   const SequentialFn = InngestFunction.make("sequential", {
     trigger: { event: TestSequential },
-    success: Schema.Struct({ steps: Schema.Array(Schema.String) }),
   });
 
   const Group = InngestGroup.make(SequentialFn);
@@ -808,9 +785,9 @@ describe("Regression: disable_immediate_execution must not block target step", (
       const HandlersLive = Group.toLayer({
         sequential: ({ step }) =>
           Effect.gen(function* () {
-            const a = yield* step.run("first", Effect.succeed("first"), { schema: Schema.String });
-            const b = yield* step.run("second", Effect.succeed("second"), { schema: Schema.String });
-            const c = yield* step.run("third", Effect.succeed("third"), { schema: Schema.String });
+            const a = yield* step.run("first", Effect.succeed("first"));
+            const b = yield* step.run("second", Effect.succeed("second"));
+            const c = yield* step.run("third", Effect.succeed("third"));
             return { steps: [a, b, c] };
           }),
       });

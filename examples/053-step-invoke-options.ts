@@ -22,16 +22,10 @@ const DemoWorkerTask = InngestEvent.make(
 const WorkerFn = InngestFunction.make("worker-task", {
   trigger: { event: DemoWorkerTask },
   retries: 3,
-  success: Schema.Struct({ completed: Schema.Boolean, taskId: Schema.String }),
 });
 
 const OrchestratorFn = InngestFunction.make("orchestrator", {
   trigger: { event: DemoOrchestrate },
-  success: Schema.Struct({
-    orchestrated: Schema.Boolean,
-    workerResult: Schema.Unknown,
-    batchResult: Schema.Unknown,
-  }),
 });
 
 const Group = InngestGroup.make(WorkerFn, OrchestratorFn);

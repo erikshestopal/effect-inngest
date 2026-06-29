@@ -41,12 +41,10 @@ const TestEventB = InngestEvent.make(
 describe("TB-007A: Introspection", () => {
   const FunctionA = InngestFunction.make("function-a", {
     trigger: { event: TestEventA },
-    success: Schema.String,
   });
 
   const FunctionB = InngestFunction.make("function-b", {
     trigger: { event: TestEventB },
-    success: Schema.Number,
   });
 
   const Group = InngestGroup.make(FunctionA, FunctionB);

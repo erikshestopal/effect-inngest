@@ -16,7 +16,6 @@ const TestErrorStep = InngestEvent.make(
 describe("TB-010: Step Error Handling", () => {
   const FailingStepFn = InngestFunction.make("failing-step-fn", {
     trigger: { event: TestErrorStep },
-    success: Schema.Struct({ result: Schema.String }),
   });
 
   const Group = InngestGroup.make(FailingStepFn);
@@ -65,7 +64,7 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               // This step will receive memoized error
-              yield* step.run("will-fail", Effect.succeed("ok"), { schema: Schema.String });
+              yield* step.run("will-fail", Effect.succeed("ok"));
               return { result: "done" };
             }),
         });
@@ -118,9 +117,7 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               // This step fails intentionally - use failWith helper to avoid lint warning
-              const result = yield* step.run("will-fail", failWith(new Error("Intentional failure")), {
-                schema: Schema.String,
-              });
+              const result = yield* step.run("will-fail", failWith(new Error("Intentional failure")));
               return { result };
             }),
         });
@@ -171,7 +168,7 @@ describe("TB-010: Step Error Handling", () => {
           "failing-step-fn": ({ step }) =>
             Effect.gen(function* () {
               const customError = new Error("Error with stack");
-              const result = yield* step.run("step-with-stack", failWith(customError), { schema: Schema.String });
+              const result = yield* step.run("step-with-stack", failWith(customError));
               return { result };
             }),
         });
@@ -214,12 +211,10 @@ describe("TB-010: Step Error Handling", () => {
 
     const TargetFn = InngestFunction.make("target-fn", {
       trigger: { event: TestTarget },
-      success: Schema.Unknown,
     });
 
     const InvokerFn = InngestFunction.make("invoker-fn", {
       trigger: { event: TestInvoke },
-      success: Schema.Unknown,
     });
 
     const InvokeGroup = InngestGroup.make(TargetFn, InvokerFn);
@@ -373,7 +368,6 @@ describe("TB-010: Step Error Handling", () => {
                 Effect.sync(() => {
                   throw new RangeError("Sync thrown in step.run");
                 }),
-                { schema: Schema.Struct({ result: Schema.String }) },
               );
             }),
         });
@@ -412,7 +406,6 @@ describe("TB-010: Step Error Handling", () => {
                 Effect.sync(() => {
                   throw "string error thrown";
                 }),
-                { schema: Schema.Struct({ result: Schema.String }) },
               );
             }),
         });
@@ -464,12 +457,10 @@ describe("TB-010: Step Error Handling", () => {
 
       const FnA = InngestFunction.make("fn-a", {
         trigger: { event: TestA },
-        success: Schema.Unknown,
       });
 
       const FnB = InngestFunction.make("fn-b", {
         trigger: { event: TestB },
-        success: Schema.Unknown,
       });
 
       const MultiGroup = InngestGroup.make(FnA, FnB);

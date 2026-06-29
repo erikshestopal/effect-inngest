@@ -20,7 +20,6 @@ const OptOutEvent = InngestEvent.make(
 
 const Fn = InngestFunction.make("checkpoint-opt-out", {
   trigger: { event: OptOutEvent },
-  success: Schema.Struct({ tag: Schema.String }),
   checkpointing: false,
 });
 
@@ -29,8 +28,8 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-opt-out": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
-      yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
+      yield* step.run("a", Effect.succeed("A"));
+      yield* step.run("b", Effect.succeed("B"));
       return { tag: event.data.tag };
     }),
 });

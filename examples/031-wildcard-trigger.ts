@@ -19,7 +19,6 @@ const UserDeleted = InngestEvent.make(
 
 const UserEventsFn = InngestFunction.make("handle-user-events", {
   trigger: [{ event: UserCreated }, { event: UserDeleted }],
-  success: Schema.Struct({ eventType: Schema.String, userId: Schema.String }),
 });
 
 const Group = InngestGroup.make(UserEventsFn);

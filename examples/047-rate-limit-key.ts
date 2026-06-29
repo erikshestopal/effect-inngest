@@ -12,7 +12,6 @@ const DemoRateKeyed = InngestEvent.make(
 
 const RateLimitKeyedFn = InngestFunction.make("rate-limit-keyed", {
   trigger: { event: DemoRateKeyed },
-  success: Schema.Struct({ companyId: Schema.String, processedAt: Schema.String }),
   rateLimit: {
     limit: 2,
     period: "1 minute",

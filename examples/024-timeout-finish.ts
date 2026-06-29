@@ -9,7 +9,6 @@ const DemoLongRunning = InngestEvent.make("examples/024-timeout-finish/demo/long
 const LongRunningFn = InngestFunction.make("long-running-task", {
   trigger: { event: DemoLongRunning },
   timeouts: { finish: "2 seconds" },
-  success: Schema.Struct({ status: Schema.String }),
 });
 
 const Group = InngestGroup.make(LongRunningFn);
@@ -17,9 +16,9 @@ const Group = InngestGroup.make(LongRunningFn);
 const HandlersLive = Group.toLayer({
   "long-running-task": ({ step }) =>
     Effect.gen(function* () {
-      yield* step.run("work-1", Effect.succeed("Phase 1 done"), { schema: Schema.String });
+      yield* step.run("work-1", Effect.succeed("Phase 1 done"));
       yield* step.sleep("long-wait", Duration.seconds(5));
-      yield* step.run("work-2", Effect.succeed("Phase 2 done"), { schema: Schema.String });
+      yield* step.run("work-2", Effect.succeed("Phase 2 done"));
       return { status: "completed" };
     }),
 });

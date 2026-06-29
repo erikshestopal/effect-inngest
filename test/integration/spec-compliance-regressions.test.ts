@@ -16,7 +16,6 @@ const TestEvent = InngestEvent.make(
 
 const TestFn = InngestFunction.make("spec-test-fn", {
   trigger: { event: TestEvent },
-  success: Schema.Struct({ ok: Schema.Boolean }),
 });
 
 const TestGroup = InngestGroup.make(TestFn);

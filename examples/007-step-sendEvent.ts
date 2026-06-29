@@ -20,7 +20,6 @@ const DemoNotification = InngestEvent.make(
 
 const SendSingleFn = InngestFunction.make("send-single", {
   trigger: { event: DemoSendSingle },
-  success: Schema.Struct({ sent: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(SendSingleFn);

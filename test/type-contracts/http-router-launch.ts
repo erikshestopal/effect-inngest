@@ -7,7 +7,6 @@ const Start = InngestEvent.make("start", Schema.Struct({}));
 
 const Fn = InngestFunction.make("Fn", {
   trigger: { event: Start },
-  success: Schema.Struct({ ok: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(Fn);

@@ -11,7 +11,6 @@ const DemoStepCatch = InngestEvent.make("examples/026-step-error-catch/demo/step
 
 const StepCatchFn = InngestFunction.make("step-catch-handler", {
   trigger: { event: DemoStepCatch },
-  success: Schema.Struct({ result: Schema.String }),
 });
 
 const Group = InngestGroup.make(StepCatchFn);
@@ -20,9 +19,7 @@ const HandlersLive = Group.toLayer({
   "step-catch-handler": ({ step }) =>
     Effect.gen(function* () {
       const result = yield* step
-        .run("risky-step", Effect.fail(new StepError({ message: "Something went wrong" })), {
-          schema: Schema.String,
-        })
+        .run("risky-step", Effect.fail(new StepError({ message: "Something went wrong" })))
         .pipe(
           Effect.catch((error) =>
             Effect.succeed(`Caught error: ${error instanceof Error ? error.message : "unknown"}`),

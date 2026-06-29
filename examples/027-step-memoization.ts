@@ -8,10 +8,6 @@ const DemoMemoized = InngestEvent.make("examples/027-step-memoization/demo/memoi
 
 const MemoizedFn = InngestFunction.make("memoization-demo", {
   trigger: { event: DemoMemoized },
-  success: Schema.Struct({
-    timestamp: Schema.Number,
-    randomValue: Schema.Number,
-  }),
 });
 
 const Group = InngestGroup.make(MemoizedFn);
@@ -19,8 +15,8 @@ const Group = InngestGroup.make(MemoizedFn);
 const HandlersLive = Group.toLayer({
   "memoization-demo": ({ step }) =>
     Effect.gen(function* () {
-      const timestamp = yield* step.run("capture-time", Effect.succeed(Date.now()), { schema: Schema.Number });
-      const randomValue = yield* step.run("capture-random", Effect.succeed(Math.random()), { schema: Schema.Number });
+      const timestamp = yield* step.run("capture-time", Effect.succeed(Date.now()));
+      const randomValue = yield* step.run("capture-random", Effect.succeed(Math.random()));
 
       yield* step.sleep("checkpoint", Duration.seconds(1));
 

@@ -8,7 +8,6 @@ const DemoSleep = InngestEvent.make("examples/103-httpapi-step-sleep/demo/sleep"
 
 const SleepFn = InngestFunction.make("sleep-test", {
   trigger: { event: DemoSleep },
-  success: Schema.Struct({ slept: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(SleepFn);

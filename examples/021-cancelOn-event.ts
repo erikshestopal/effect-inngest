@@ -21,7 +21,6 @@ export const TaskCancelled = InngestEvent.make(
 const LongTaskFn = InngestFunction.make("long-task", {
   trigger: { event: TaskStarted },
   cancelOn: [{ event: TaskCancelled, if: "async.data.taskId == event.data.taskId" }],
-  success: Schema.Struct({ status: Schema.String }),
 });
 
 const Group = InngestGroup.make(LongTaskFn);
@@ -29,11 +28,11 @@ const Group = InngestGroup.make(LongTaskFn);
 const HandlersLive = Group.toLayer({
   "long-task": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("step-1", Effect.succeed(`Started task ${event.data.taskId}`), { schema: Schema.String });
+      yield* step.run("step-1", Effect.succeed(`Started task ${event.data.taskId}`));
       yield* step.sleep("wait-1", Duration.seconds(3));
-      yield* step.run("step-2", Effect.succeed("Still running..."), { schema: Schema.String });
+      yield* step.run("step-2", Effect.succeed("Still running..."));
       yield* step.sleep("wait-2", Duration.seconds(3));
-      yield* step.run("step-3", Effect.succeed("Almost done..."), { schema: Schema.String });
+      yield* step.run("step-3", Effect.succeed("Almost done..."));
       return { status: "completed" };
     }),
 });

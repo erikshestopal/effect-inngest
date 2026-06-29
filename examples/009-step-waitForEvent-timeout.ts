@@ -21,7 +21,6 @@ const DemoTimeoutSignal = InngestEvent.make(
 
 const WaitTimeoutFn = InngestFunction.make("wait-timeout", {
   trigger: { event: DemoWaitTimeout },
-  success: Schema.Struct({ timedOut: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(WaitTimeoutFn);

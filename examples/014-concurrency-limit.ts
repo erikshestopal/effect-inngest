@@ -12,7 +12,6 @@ const DemoConcurrent = InngestEvent.make(
 
 const ConcurrentFn = InngestFunction.make("concurrent-fn", {
   trigger: { event: DemoConcurrent },
-  success: Schema.Struct({ id: Schema.String, completedAt: Schema.String }),
   concurrency: { limit: 1 },
 });
 

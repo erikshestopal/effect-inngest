@@ -14,7 +14,6 @@ const DemoSchemaNotification = InngestEvent.make(
 
 const SchemaSendEventFn = InngestFunction.make("schema-sendEvent-demo", {
   trigger: { event: DemoSchemaSendStart },
-  success: Schema.Struct({ sent: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(SchemaSendEventFn);

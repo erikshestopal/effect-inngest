@@ -98,7 +98,6 @@ const EmailSend = InngestEvent.make(
 describe("TB-006: Send Event", () => {
   const ProcessSignup = InngestFunction.make("process-signup", {
     trigger: { event: UserSignup },
-    success: Schema.Struct({ userId: Schema.String, status: Schema.String }),
   });
 
   const Group = InngestGroup.make(ProcessSignup);
@@ -128,7 +127,7 @@ describe("TB-006: Send Event", () => {
       const HandlersLive = Group.toLayer({
         "process-signup": ({ event, step }) =>
           Effect.gen(function* () {
-            const userId = yield* step.run("create-user", Effect.succeed(`user_123`), { schema: Schema.String });
+            const userId = yield* step.run("create-user", Effect.succeed(`user_123`));
 
             yield* step.sendEvent(
               "send-welcome",

@@ -19,9 +19,7 @@ const OverrideEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-override", {
-  trigger: { event: OverrideEvent },
-  success: Schema.Struct({ key: Schema.String }),
-  // Overrides client-level `bufferedSteps: 5` → flush-per-step.
+  trigger: { event: OverrideEvent }, // Overrides client-level `bufferedSteps: 5` → flush-per-step.
   checkpointing: { bufferedSteps: 1 },
 });
 
@@ -30,9 +28,9 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-override": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"), { schema: Schema.String });
-      yield* step.run("b", Effect.succeed("B"), { schema: Schema.String });
-      yield* step.run("c", Effect.succeed("C"), { schema: Schema.String });
+      yield* step.run("a", Effect.succeed("A"));
+      yield* step.run("b", Effect.succeed("B"));
+      yield* step.run("c", Effect.succeed("C"));
       return { key: event.data.key };
     }),
 });

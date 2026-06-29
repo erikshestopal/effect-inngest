@@ -27,12 +27,10 @@ const DemoInvokeChild2 = InngestEvent.make(
 
 const ChildFn = InngestFunction.make("child-square", {
   trigger: [{ event: DemoInvokeChild }, { event: DemoInvokeChild2 }],
-  success: Schema.Struct({ squared: Schema.Number }),
 });
 
 const ParentFn = InngestFunction.make("parent-invoke", {
   trigger: { event: DemoInvokeParent },
-  success: Schema.Struct({ result: Schema.Number }),
 });
 
 const Group = InngestGroup.make(ChildFn, ParentFn);
@@ -51,7 +49,7 @@ const HandlersLive = Group.toLayer({
         function: ChildFn,
         data: DemoInvokeChild.make({ value: event.data.number }),
       });
-      return { result: childResult.squared };
+      return { result: Predicate.hasProperty(childResult, "squared") ? childResult.squared : null };
     }),
 });
 

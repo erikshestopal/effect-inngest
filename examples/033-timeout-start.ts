@@ -8,7 +8,6 @@ const DemoSlowStart = InngestEvent.make("examples/033-timeout-start/demo/slow-st
 const SlowStartFn = InngestFunction.make("slow-start-task", {
   trigger: { event: DemoSlowStart },
   timeouts: { start: "10 seconds" },
-  success: Schema.Struct({ status: Schema.String }),
 });
 
 const Group = InngestGroup.make(SlowStartFn);
@@ -16,7 +15,7 @@ const Group = InngestGroup.make(SlowStartFn);
 const HandlersLive = Group.toLayer({
   "slow-start-task": ({ step }) =>
     Effect.gen(function* () {
-      yield* step.run("quick-work", Effect.succeed("Started successfully"), { schema: Schema.String });
+      yield* step.run("quick-work", Effect.succeed("Started successfully"));
       return { status: "completed" };
     }),
 });

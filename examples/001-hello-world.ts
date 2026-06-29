@@ -9,7 +9,6 @@ const DemoBye = InngestEvent.make("examples/001-hello-world/demo/bye", Schema.St
 
 const HelloFn = InngestFunction.make("hello-world", {
   trigger: [{ event: DemoHello }, { event: DemoBye }],
-  success: Schema.Struct({ greeting: Schema.String }),
 });
 
 const Group = InngestGroup.make(HelloFn);

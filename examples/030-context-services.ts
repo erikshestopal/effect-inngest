@@ -28,7 +28,6 @@ const DemoWithServices = InngestEvent.make(
 
 const ServiceFn = InngestFunction.make("service-handler", {
   trigger: { event: DemoWithServices },
-  success: Schema.Struct({ sent: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(ServiceFn);

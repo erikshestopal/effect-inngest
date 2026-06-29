@@ -13,7 +13,6 @@ const DemoIdempotent = InngestEvent.make(
 const IdempotentFn = InngestFunction.make("checkout-handler", {
   trigger: { event: DemoIdempotent },
   idempotency: "event.data.cartId",
-  success: Schema.Struct({ checkoutId: Schema.String }),
 });
 
 const Group = InngestGroup.make(IdempotentFn);

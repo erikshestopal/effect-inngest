@@ -20,7 +20,6 @@ const BasicEvent = InngestEvent.make(
 
 const Fn = InngestFunction.make("checkpoint-basic", {
   trigger: { event: BasicEvent },
-  success: Schema.Struct({ doubled: Schema.Number, tripled: Schema.Number, total: Schema.Number }),
 });
 
 const Group = InngestGroup.make(Fn);
@@ -28,9 +27,9 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-basic": ({ event, step }) =>
     Effect.gen(function* () {
-      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2), { schema: Schema.Number });
-      const tripled = yield* step.run("triple", Effect.succeed(event.data.value * 3), { schema: Schema.Number });
-      const total = yield* step.run("sum", Effect.succeed(doubled + tripled), { schema: Schema.Number });
+      const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
+      const tripled = yield* step.run("triple", Effect.succeed(event.data.value * 3));
+      const total = yield* step.run("sum", Effect.succeed(doubled + tripled));
       return { doubled, tripled, total };
     }),
 });

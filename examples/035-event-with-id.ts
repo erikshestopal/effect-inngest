@@ -12,7 +12,6 @@ const DemoIdempotentEvent = InngestEvent.make(
 
 const IdempotentFn = InngestFunction.make("idempotent-handler", {
   trigger: { event: DemoIdempotentEvent },
-  success: Schema.Struct({ processed: Schema.Boolean, eventId: Schema.String }),
 });
 
 const Group = InngestGroup.make(IdempotentFn);

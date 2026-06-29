@@ -26,17 +26,11 @@ describe("TB-005: Invoke Function", () => {
   // Child function that will be invoked
   const ProcessPayment = InngestFunction.make("process-payment", {
     trigger: { event: PaymentProcess },
-    success: Schema.Struct({ transactionId: Schema.String, status: Schema.String }),
   });
 
   // Parent function that invokes child
   const OrderWorkflow = InngestFunction.make("order-workflow", {
     trigger: { event: OrderCreated },
-    success: Schema.Struct({
-      orderId: Schema.String,
-      payment: Schema.optional(Schema.Struct({ transactionId: Schema.String, status: Schema.String })),
-      status: Schema.optional(Schema.String),
-    }),
   });
 
   const Group = InngestGroup.make(ProcessPayment, OrderWorkflow);

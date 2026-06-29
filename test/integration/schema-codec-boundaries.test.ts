@@ -1,4 +1,5 @@
 import * as Effect from "effect/Effect";
+import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
@@ -19,7 +20,6 @@ const PageRequested = InngestEvent.make(
 
 const WorkflowStarted = InngestEvent.make("schema/workflow-started", Schema.Struct({}));
 
-const PathResult = Schema.Struct({ pathname: Schema.String });
 const pageJson = { url: "https://example.com/path" };
 
 const makePage = () => new Page({ url: new URL(pageJson.url) });
@@ -29,7 +29,6 @@ describe("Schema codec boundaries", () => {
     Effect.gen(function* () {
       const Fn = InngestFunction.make("schema-event-input", {
         trigger: { event: PageRequested },
-        success: PathResult,
       });
       const Group = InngestGroup.make(Fn);
       const HandlersLive = Group.toLayer({
@@ -60,20 +59,21 @@ describe("Schema codec boundaries", () => {
     }),
   );
 
-  it.effect("decodes schema-backed step.run memo data", () =>
+  it.effect("replays step.run memo data as raw JSON", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("schema-step-run-classic", {
         trigger: { event: WorkflowStarted },
-        success: PathResult,
         checkpointing: false,
       });
       const Group = InngestGroup.make(Fn);
       const HandlersLive = Group.toLayer({
         "schema-step-run-classic": ({ step }) =>
           Effect.gen(function* () {
-            const page = yield* step.run("make-page", Effect.succeed(makePage()), { schema: Page });
-            expect(page.url).toBeInstanceOf(URL);
-            return { pathname: page.url.pathname };
+            const page = yield* step.run("make-page", Effect.succeed(makePage()));
+            return {
+              pathname:
+                Predicate.hasProperty(page, "url") && typeof page.url === "string" ? new URL(page.url).pathname : null,
+            };
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });

@@ -11,7 +11,7 @@ export default defineNativeExample((inngest) => {
       await step.run("fail", () => {
         throw new NonRetriableError("No retry");
       });
-      return { success: true };
+      return {};
     },
   );
 

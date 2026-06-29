@@ -7,12 +7,6 @@ const DemoNested = InngestEvent.make("examples/037-nested-steps/demo/nested", Sc
 
 const NestedStepsFn = InngestFunction.make("nested-steps-demo", {
   trigger: { event: DemoNested },
-  success: Schema.Struct({
-    level1: Schema.Number,
-    level2: Schema.Number,
-    level3: Schema.Number,
-    final: Schema.Number,
-  }),
 });
 
 const Group = InngestGroup.make(NestedStepsFn);
@@ -20,15 +14,13 @@ const Group = InngestGroup.make(NestedStepsFn);
 const HandlersLive = Group.toLayer({
   "nested-steps-demo": ({ step }) =>
     Effect.gen(function* () {
-      const level1 = yield* step.run("level-1", Effect.succeed(10), { schema: Schema.Number });
+      const level1 = yield* step.run("level-1", Effect.succeed(10));
 
-      const level2 = yield* step.run("level-2", Effect.succeed(level1 * 2), { schema: Schema.Number });
+      const level2 = yield* step.run("level-2", Effect.succeed(level1 * 2));
 
-      const level3 = yield* step.run("level-3", Effect.succeed(level2 + 5), { schema: Schema.Number });
+      const level3 = yield* step.run("level-3", Effect.succeed(level2 + 5));
 
-      const final = yield* step.run("final-computation", Effect.succeed(level1 + level2 + level3), {
-        schema: Schema.Number,
-      });
+      const final = yield* step.run("final-computation", Effect.succeed(level1 + level2 + level3));
 
       return { level1, level2, level3, final };
     }),

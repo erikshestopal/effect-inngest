@@ -1,43 +1,19 @@
-import { Effect, Match, Option, Schema } from "effect";
+import { Effect, Match } from "effect";
 import type { StepError } from "../../errors.js";
 import * as StepResult from "../../codec/StepResult.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import { CurrentExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
+import * as SafeStringify from "../../utils/safe-stringify.js";
 import { HandlerFiberScope } from "../HandlerFiberScope.js";
-import type { JsonSchema, RunOptions } from "../StepTools.js";
 import { StepIdentity, type StepReservation } from "../StepIdentity.js";
 import { StepCommandBus } from "../StepCommandBus.js";
 
-export function run<Err, R>(args: {
+export function run<A, Err, R>(args: {
   readonly input: ExecutionInput;
   readonly id: StepReservation;
-  readonly effect: Effect.Effect<void, Err, R>;
-}): Effect.Effect<void, StepError | Err, R | StepIdentity | StepCommandBus | CurrentExecutionInput | HandlerFiberScope>;
-export function run<S extends JsonSchema, Err, R>(args: {
-  readonly input: ExecutionInput;
-  readonly id: StepReservation;
-  readonly effect: Effect.Effect<S["Type"], Err, R>;
-  readonly options: RunOptions<S>;
-}): Effect.Effect<
-  S["Type"],
-  StepError | Err,
-  R | StepIdentity | StepCommandBus | CurrentExecutionInput | HandlerFiberScope
->;
-export function run<S extends JsonSchema, Err, R>(args: {
-  readonly input: ExecutionInput;
-  readonly id: StepReservation;
-  readonly effect: Effect.Effect<S["Type"] | void, Err, R>;
-  readonly options?: RunOptions<S>;
-}): Effect.Effect<
-  void | S["Type"],
-  StepError | Err,
-  R | StepIdentity | StepCommandBus | CurrentExecutionInput | HandlerFiberScope
-> {
-  const memoCodec: StepResult.OptionalMemoCodec<S["Type"]> = args.options
-    ? Option.some(Schema.toCodecJson(args.options.schema))
-    : Option.none();
-
+  readonly effect: Effect.Effect<A, Err, R>;
+}): Effect.Effect<A, StepError | Err, R | StepIdentity | StepCommandBus | CurrentExecutionInput | HandlerFiberScope> {
   return Effect.gen(function* () {
     const identity = yield* StepIdentity;
     const bus = yield* StepCommandBus;
@@ -45,47 +21,55 @@ export function run<S extends JsonSchema, Err, R>(args: {
     const memo = args.input.memoForStep(info);
 
     return yield* Match.value(memo).pipe(
-      Match.tag("MemoData", ({ data }) => StepResult.decodeStepRunMemo(memoCodec, info.id)(data)),
+      Match.tag("MemoData", ({ data }) => Effect.succeed(data as A)),
       Match.tag("MemoError", ({ error }) => StepResult.failStepRunMemoError(info.id, error)),
       Match.tag("MemoTimeout", () => StepResult.failStepRunMemoTimeout(info.id)),
       Match.tag("MemoInput", ({ input }) => StepResult.failUnexpectedStepRunMemoInput(info.id, input)),
       Match.tag("MemoNone", () =>
         Effect.gen(function* () {
           if (!args.input.shouldExecuteStep(info)) {
-            return yield* Effect.void;
+            return yield* Effect.interrupt;
           }
 
           const planned = StepCommand.StepRunPlanned.make({ info, sequence: args.id.sequence });
 
           if (args.input.shouldPlanStep(info)) {
             yield* bus.plan(planned);
-            return yield* Effect.void;
+            return yield* Effect.interrupt;
           }
 
           if (yield* bus.planCheckpointedRunBoundary(planned)) {
-            return yield* Effect.void;
+            return yield* Effect.interrupt;
           }
 
           return yield* args.effect.pipe(
             Effect.matchEffect({
               onFailure: (error) =>
-                bus.fail(
-                  StepCommand.stepRunFailureForAttempt({
-                    info,
-                    error,
-                    attempt: args.input.run.attempt,
-                    maxAttempts: args.input.run.maxAttempts,
-                  }),
-                ),
+                Effect.gen(function* () {
+                  yield* bus.fail(
+                    StepCommand.stepRunFailureForAttempt({
+                      info,
+                      error,
+                      attempt: args.input.run.attempt,
+                      maxAttempts: args.input.run.maxAttempts,
+                    }),
+                  );
+                  return yield* Effect.interrupt;
+                }),
               onSuccess: (value) =>
                 Effect.gen(function* () {
-                  const data = yield* StepResult.encodeStepRunMemo(memoCodec, info.id)(value);
+                  const data = SafeStringify.normalize(value);
 
                   yield* bus.complete(StepCommand.StepRunResult.make({ info, data }));
-                  return yield* StepResult.decodeStepRunMemo(memoCodec, info.id)(data);
+                  return data as A;
                 }),
             }),
-            Effect.catchDefect((defect) => bus.fail(StepCommand.StepRunError.make({ info, error: defect }))),
+            Effect.catchDefect((defect) =>
+              Effect.gen(function* () {
+                yield* bus.fail(StepCommand.StepRunError.make({ info, error: defect }));
+                return yield* Effect.interrupt;
+              }),
+            ),
           );
         }),
       ),

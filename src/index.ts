@@ -2,8 +2,8 @@
  * This module provides types and functions for defining Inngest functions.
  *
  * Functions are the core building blocks of Inngest applications. Each function
- * defines what events trigger it, what it returns on success, and optional
- * configuration like retries, concurrency limits, rate limiting, and more.
+ * defines what events trigger it and optional configuration like retries,
+ * concurrency limits, rate limiting, and more.
  *
  * @example
  * ```ts
@@ -21,7 +21,6 @@
  * // Define functions
  * const SendWelcomeEmail = InngestFunction.make("send-welcome-email", {
  *   trigger: { event: UserCreated },
- *   success: Schema.Void,
  *   retries: 3,
  * })
  *
@@ -153,7 +152,6 @@ export * as InngestHttpApi from "./HttpApi.js";
  * // React to function failures
  * const HandleFailure = InngestFunction.make("handle-failure", {
  *   trigger: { event: InngestEvents.FunctionFailed },
- *   success: Schema.Void,
  * })
  * ```
  *

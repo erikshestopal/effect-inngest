@@ -20,12 +20,10 @@ const UserDeleted = InngestEvent.make(
 
 const OnUserCreated = InngestFunction.make("on-user-created", {
   trigger: { event: UserCreated },
-  success: Schema.Struct({ welcomed: Schema.Boolean }),
 });
 
 const OnUserDeleted = InngestFunction.make("on-user-deleted", {
   trigger: { event: UserDeleted },
-  success: Schema.Struct({ cleaned: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(OnUserCreated, OnUserDeleted);

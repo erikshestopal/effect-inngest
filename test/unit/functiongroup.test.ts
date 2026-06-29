@@ -37,51 +37,24 @@ describe("InngestFunction.make", () => {
   it("creates function with single event trigger", () => {
     const fn = InngestFunction.make("process-user", {
       trigger: { event: UserCreated },
-      success: Schema.Void,
     });
 
     expect(fn._tag).toBe("process-user");
     expect(fn.triggers).toHaveLength(1);
-    // Default success schema is Void
-    expect(Schema.isSchema(fn.success)).toBe(true);
   });
 
   it("creates function with multiple event triggers", () => {
     const fn = InngestFunction.make("multi-trigger", {
       trigger: [{ event: UserCreated }, { event: UserUpdated }],
-      success: Schema.Void,
     });
 
     expect(fn._tag).toBe("multi-trigger");
     expect(fn.triggers).toHaveLength(2);
   });
 
-  it("creates function with success schema as fields", () => {
-    const fn = InngestFunction.make("with-success", {
-      trigger: { event: UserCreated },
-      success: Schema.Struct({ processed: Schema.Boolean, count: Schema.Number }),
-    });
-
-    expect(fn._tag).toBe("with-success");
-    // Success should be normalized to a Schema.Struct
-    expect(Schema.isSchema(fn.success)).toBe(true);
-  });
-
-  it("creates function with success schema as Schema", () => {
-    const SuccessSchema = Schema.Struct({ result: Schema.String });
-    const fn = InngestFunction.make("with-schema-success", {
-      trigger: { event: OrderPlaced },
-      success: SuccessSchema,
-    });
-
-    expect(fn._tag).toBe("with-schema-success");
-    expect(fn.success).toBe(SuccessSchema);
-  });
-
   it("stores additional options", () => {
     const fn = InngestFunction.make("with-options", {
       trigger: { event: UserCreated },
-      success: Schema.Void,
       concurrency: { limit: 5 },
       retries: 3,
     });
@@ -103,12 +76,10 @@ describe("InngestFunction.make", () => {
 describe("InngestGroup.make", () => {
   const ProcessUser = InngestFunction.make("process-user", {
     trigger: { event: UserCreated },
-    success: Schema.Void,
   });
 
   const ProcessOrder = InngestFunction.make("process-order", {
     trigger: { event: OrderPlaced },
-    success: Schema.Void,
   });
 
   it("creates group from single function", () => {
@@ -227,7 +198,6 @@ describe("InngestGroup coverage", () => {
 
   const TestFn = InngestFunction.make("test-fn", {
     trigger: { event: TestEvent },
-    success: Schema.Struct({ result: Schema.String }),
   });
 
   describe("make", () => {
@@ -295,7 +265,6 @@ describe("InngestGroup.toLayerHandler coverage", () => {
 
   const coverageTestFn = InngestFunction.make("coverage-test-fn", {
     trigger: { event: CoverageTestEvent },
-    success: Schema.Struct({ count: Schema.Number }),
   });
 
   const coverageTestGroup = InngestGroup.make(coverageTestFn);

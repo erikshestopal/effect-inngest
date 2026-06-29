@@ -12,7 +12,6 @@ const DemoDebounced = InngestEvent.make(
 
 const DebouncedFn = InngestFunction.make("debounced-fn", {
   trigger: { event: DemoDebounced },
-  success: Schema.Struct({ seq: Schema.Number, processedAt: Schema.String }),
   debounce: { period: "1 second" },
 });
 

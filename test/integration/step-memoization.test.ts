@@ -20,7 +20,6 @@ const OrderPlaced = InngestEvent.make(
 describe("TB-002: Step Memoization", () => {
   const ProcessOrder = InngestFunction.make("process-order", {
     trigger: { event: OrderPlaced },
-    success: ProcessOrderResult,
   });
 
   const Group = InngestGroup.make(ProcessOrder);
@@ -38,9 +37,7 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity), {
-              schema: Schema.Number,
-            });
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
             return { orderId: event.data.orderId, total };
           }),
       });
@@ -84,9 +81,7 @@ describe("TB-002: Step Memoization", () => {
       const HandlersLive = Group.toLayer({
         "process-order": ({ event, step }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity), {
-              schema: Schema.Number,
-            });
+            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
             return { orderId: event.data.orderId, total };
           }),
       });

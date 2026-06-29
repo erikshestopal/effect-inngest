@@ -16,7 +16,6 @@ const Cancelled = InngestEvent.make(
 const CancellableTask = InngestFunction.make("cancellable-task", {
   trigger: { event: Started },
   cancelOn: [{ event: Cancelled, if: "async.data.taskId == event.data.taskId" }],
-  success: Schema.Struct({ taskId: Schema.String, status: Schema.String }),
 });
 
 const Group = InngestGroup.make(CancellableTask);
@@ -24,7 +23,7 @@ const Group = InngestGroup.make(CancellableTask);
 const HandlersLive = Group.toLayer({
   "cancellable-task": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("record-start", Effect.succeed(event.data.taskId), { schema: Schema.String });
+      yield* step.run("record-start", Effect.succeed(event.data.taskId));
       return { taskId: event.data.taskId, status: "completed" };
     }),
 });

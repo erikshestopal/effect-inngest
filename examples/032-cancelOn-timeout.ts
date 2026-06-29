@@ -27,7 +27,6 @@ const CancellableJobFn = InngestFunction.make("cancellable-job", {
       timeout: "60 seconds",
     },
   ],
-  success: Schema.Struct({ status: Schema.String, jobId: Schema.String }),
 });
 
 const Group = InngestGroup.make(CancellableJobFn);
@@ -35,11 +34,11 @@ const Group = InngestGroup.make(CancellableJobFn);
 const HandlersLive = Group.toLayer({
   "cancellable-job": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("start", Effect.succeed(`Starting job ${event.data.jobId}`), { schema: Schema.String });
+      yield* step.run("start", Effect.succeed(`Starting job ${event.data.jobId}`));
       yield* step.sleep("work-phase-1", Duration.seconds(2));
-      yield* step.run("progress", Effect.succeed("30% complete"), { schema: Schema.String });
+      yield* step.run("progress", Effect.succeed("30% complete"));
       yield* step.sleep("work-phase-2", Duration.seconds(2));
-      yield* step.run("almost-done", Effect.succeed("60% complete"), { schema: Schema.String });
+      yield* step.run("almost-done", Effect.succeed("60% complete"));
       yield* step.sleep("work-phase-3", Duration.seconds(2));
       return { status: "completed", jobId: event.data.jobId };
     }),

@@ -13,7 +13,6 @@ const DemoDebounceKeyed = InngestEvent.make(
 
 const DebounceKeyedFn = InngestFunction.make("debounce-keyed", {
   trigger: { event: DemoDebounceKeyed },
-  success: Schema.Struct({ userId: Schema.String, action: Schema.String, processedAt: Schema.String }),
   debounce: {
     period: "1 second",
     key: "event.data.userId",

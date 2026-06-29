@@ -15,7 +15,6 @@ const DemoNotification = InngestEvent.make(
 
 const SendBatchFn = InngestFunction.make("send-batch", {
   trigger: { event: DemoSendBatch },
-  success: Schema.Struct({ sentCount: Schema.Number }),
 });
 
 const Group = InngestGroup.make(SendBatchFn);

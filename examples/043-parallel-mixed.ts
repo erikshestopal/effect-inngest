@@ -15,7 +15,6 @@ const DemoSideEffect = InngestEvent.make(
 
 const ParallelMixedFn = InngestFunction.make("parallel-mixed", {
   trigger: { event: DemoParallelMixed },
-  success: Schema.Struct({ computed: Schema.Number, slept: Schema.Boolean, sent: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(ParallelMixedFn);
@@ -27,7 +26,7 @@ const HandlersLive = Group.toLayer({
 
       const [computed, _sleptResult, _sentResult] = yield* Effect.all(
         [
-          step.run("compute", Effect.succeed(42), { schema: Schema.Number }),
+          step.run("compute", Effect.succeed(42)),
           step.sleep("short-wait", Duration.seconds(2)),
           step.sendEvent("notify", DemoSideEffect.make({ source: "parallel-mixed-function" })),
         ],

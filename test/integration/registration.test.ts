@@ -101,7 +101,6 @@ const OrderPlaced = InngestEvent.make(
 describe("TB-007: Registration", () => {
   const ProcessUser = InngestFunction.make("process-user", {
     trigger: { event: UserCreated },
-    success: Schema.Void,
   });
 
   const Group = InngestGroup.make(ProcessUser);
@@ -176,7 +175,6 @@ describe("TB-007: Registration", () => {
   it("includes expression field for triggers with if condition", async () => {
     const ProcessOrder = InngestFunction.make("process-order", {
       trigger: { event: OrderPlaced, if: "event.data.total > 100" },
-      success: Schema.Void,
     });
 
     const OrderGroup = InngestGroup.make(ProcessOrder);
@@ -268,7 +266,6 @@ describe("TB-007: Registration", () => {
   it("includes checkpoint block for function with checkpointing: true (spec §10.1.1)", async () => {
     const CheckpointedFn = InngestFunction.make("checkpointed-fn", {
       trigger: { event: UserCreated },
-      success: Schema.Void,
       checkpointing: true,
     });
     const CheckpointedGroup = InngestGroup.make(CheckpointedFn);
@@ -314,7 +311,6 @@ describe("TB-007: Registration", () => {
   it("includes custom checkpoint block for function with tuned options", async () => {
     const CheckpointedFn = InngestFunction.make("tuned-ckpt-fn", {
       trigger: { event: UserCreated },
-      success: Schema.Void,
       checkpointing: { bufferedSteps: 5, maxInterval: "2 seconds", maxRuntime: "1 minute" },
     });
     const CheckpointedGroup = InngestGroup.make(CheckpointedFn);
@@ -360,7 +356,6 @@ describe("TB-007: Registration", () => {
   it("omits checkpoint block for function with checkpointing: false (opt-out)", async () => {
     const OptOutFn = InngestFunction.make("optout-ckpt-fn", {
       trigger: { event: UserCreated },
-      success: Schema.Void,
       checkpointing: false,
     });
     const OptOutGroup = InngestGroup.make(OptOutFn);

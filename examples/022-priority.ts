@@ -13,7 +13,6 @@ const DemoPriority = InngestEvent.make(
 const PriorityFn = InngestFunction.make("priority-handler", {
   trigger: { event: DemoPriority },
   priority: { run: "event.data.plan == 'enterprise' ? 100 : 0" },
-  success: Schema.Struct({ processed: Schema.String }),
 });
 
 const Group = InngestGroup.make(PriorityFn);

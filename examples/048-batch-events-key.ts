@@ -13,7 +13,6 @@ const DemoBatchKeyed = InngestEvent.make(
 
 const BatchKeyedFn = InngestFunction.make("batch-keyed", {
   trigger: { event: DemoBatchKeyed },
-  success: Schema.Struct({ userId: Schema.String, items: Schema.Array(Schema.String), count: Schema.Number }),
   batchEvents: {
     maxSize: 10,
     timeout: "1 second",

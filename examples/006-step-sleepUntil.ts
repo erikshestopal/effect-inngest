@@ -7,7 +7,6 @@ const DemoSleepUntil = InngestEvent.make("examples/006-step-sleepUntil/demo/slee
 
 const SleepUntilFn = InngestFunction.make("sleep-until", {
   trigger: { event: DemoSleepUntil },
-  success: Schema.Struct({ wokeAt: Schema.String }),
 });
 
 const Group = InngestGroup.make(SleepUntilFn);

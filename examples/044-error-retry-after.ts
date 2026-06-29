@@ -9,7 +9,6 @@ const DemoRetryAfter = InngestEvent.make("examples/044-error-retry-after/demo/re
 
 const RetryAfterFn = InngestFunction.make("retry-after-demo", {
   trigger: { event: DemoRetryAfter },
-  success: Schema.Struct({ attempt: Schema.Number, succeeded: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(RetryAfterFn);

@@ -12,7 +12,6 @@ const DemoThrottled = InngestEvent.make(
 
 const ThrottledFn = InngestFunction.make("throttled-fn", {
   trigger: { event: DemoThrottled },
-  success: Schema.Struct({ id: Schema.String, processedAt: Schema.String }),
   throttle: { limit: 1, period: "1 second" },
 });
 

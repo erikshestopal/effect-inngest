@@ -11,7 +11,6 @@ const DemoRetriesLimited = InngestEvent.make("examples/013-retries-config/demo/r
 
 const RetriesLimitedFn = InngestFunction.make("retries-limited", {
   trigger: { event: DemoRetriesLimited },
-  success: Schema.Struct({ success: Schema.Boolean }),
   retries: 1,
 });
 
@@ -25,7 +24,6 @@ const HandlersLive = Group.toLayer({
         yield* Effect.log("Attempt failed - will retry");
         return yield* new IntentionalFailure({ message: "Intentional failure" });
       }),
-      { schema: Schema.Struct({ success: Schema.Boolean }) },
     ),
 });
 

@@ -18,7 +18,6 @@ const TestRetryAfter = InngestEvent.make(
 describe("RetryAfterError Behavior", () => {
   const RetryAfterFn = InngestFunction.make("retry-after-fn", {
     trigger: { event: TestRetryAfter },
-    success: Schema.Struct({ result: Schema.String }),
   });
 
   const Group = InngestGroup.make(RetryAfterFn);
@@ -73,7 +72,6 @@ describe("RetryAfterError Behavior", () => {
                     retryAfter: Duration.seconds(5),
                   }),
                 ),
-                { schema: Schema.String },
               );
               return { result };
             }),
@@ -121,7 +119,6 @@ describe("RetryAfterError Behavior", () => {
                     retryAfter: Duration.seconds(5),
                   }),
                 ),
-                { schema: Schema.String },
               );
               return { result };
             }),

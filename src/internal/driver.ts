@@ -13,7 +13,7 @@ export { ExecutionResult };
 
 export const execute = <F extends InngestFunction.Any, R>(args: {
   readonly fn: F;
-  readonly handler: (ctx: HandlerContext<F>) => Effect.Effect<InngestFunction.Success<F>, unknown, R>;
+  readonly handler: (ctx: HandlerContext<F>) => Effect.Effect<unknown, unknown, R>;
   readonly request: Protocol.SDKRequestBody;
   readonly checkpointConfig?: Option.Option<CheckpointConfig>;
 }): Effect.Effect<ExecutionResult, never, R | InngestClient> =>

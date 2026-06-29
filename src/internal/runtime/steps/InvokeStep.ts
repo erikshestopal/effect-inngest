@@ -2,7 +2,6 @@ import { Duration, Effect, Match, Predicate, Schema } from "effect";
 import { InngestConfig } from "../../../Client.js";
 import type { InngestFunction } from "../../../Function.js";
 import { StepError } from "../../errors.js";
-import * as StepResult from "../../codec/StepResult.js";
 import { InngestDuration } from "../../wire/Duration.js";
 import type { ExecutionInput } from "../../domain/ExecutionInput.js";
 import * as StepCommand from "../../domain/StepCommand.js";
@@ -23,9 +22,7 @@ export const invoke = <F extends InngestFunction.Any>(args: {
     const memo = args.input.memoForStep(info);
 
     return yield* Match.value(memo).pipe(
-      Match.tag("MemoData", ({ data }) =>
-        StepResult.decodeMemo(Schema.toCodecJson(args.options.function.success), info.id)(data),
-      ),
+      Match.tag("MemoData", ({ data }) => Effect.succeed(data)),
       Match.tag("MemoError", ({ error }) =>
         Effect.fail(
           StepError.make({

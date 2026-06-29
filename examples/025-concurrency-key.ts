@@ -14,7 +14,6 @@ const DemoConcurrentKeyed = InngestEvent.make(
 const KeyedConcurrentFn = InngestFunction.make("user-processor", {
   trigger: { event: DemoConcurrentKeyed },
   concurrency: { limit: 1, key: "event.data.userId" },
-  success: Schema.Struct({ processed: Schema.String }),
 });
 
 const Group = InngestGroup.make(KeyedConcurrentFn);
@@ -22,7 +21,7 @@ const Group = InngestGroup.make(KeyedConcurrentFn);
 const HandlersLive = Group.toLayer({
   "user-processor": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("process", Effect.succeed(`Processing ${event.data.userId}`), { schema: Schema.String });
+      yield* step.run("process", Effect.succeed(`Processing ${event.data.userId}`));
       yield* step.sleep("simulate-work", Duration.seconds(1));
       return { processed: event.data.userId };
     }),

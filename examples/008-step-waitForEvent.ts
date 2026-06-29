@@ -22,7 +22,6 @@ const DemoWaitComplete = InngestEvent.make(
 
 const WaitForEventFn = InngestFunction.make("wait-for-event", {
   trigger: { event: DemoWaitStart },
-  success: Schema.Struct({ receivedStatus: Schema.NullOr(Schema.String) }),
 });
 
 const Group = InngestGroup.make(WaitForEventFn);

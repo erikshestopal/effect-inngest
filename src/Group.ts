@@ -34,7 +34,7 @@ export type TypeId = typeof TypeId;
  */
 export type HandlerFn<F extends InngestFunction.Any> = (
   context: HandlerContext<F>,
-) => Effect.Effect<InngestFunction.Success<F>, unknown, unknown>;
+) => Effect.Effect<unknown, unknown, unknown>;
 
 /**
  * @since 0.1.0
@@ -90,7 +90,7 @@ export interface Handler<Tag extends string> {
  * @category models
  */
 export type ToHandler<F extends InngestFunction.Any> =
-  F extends InngestFunction<infer Tag, infer _Triggers, infer _Success> ? Handler<Tag> : never;
+  F extends InngestFunction<infer Tag, infer _Triggers> ? Handler<Tag> : never;
 
 /**
  * @since 0.1.0
@@ -128,9 +128,7 @@ export interface InngestGroup<Fns extends InngestFunction.Any> {
   readonly accessHandler: <Tag extends InngestFunction.Tag<Fns>>(
     tag: Tag,
   ) => Effect.Effect<
-    (
-      context: HandlerContext<Extract<Fns, { readonly _tag: Tag }>>,
-    ) => Effect.Effect<InngestFunction.Success<Extract<Fns, { readonly _tag: Tag }>>, unknown>,
+    (context: HandlerContext<Extract<Fns, { readonly _tag: Tag }>>) => Effect.Effect<unknown, unknown>,
     never,
     Handler<Tag>
   >;

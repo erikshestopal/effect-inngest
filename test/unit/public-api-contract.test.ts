@@ -36,7 +36,6 @@ type IsReadonlyArray<T> = T extends ReadonlyArray<unknown> ? true : false;
 const NonBatchedHandlerEventFn = InngestFunction.make("non-batched-handler-event", {
   trigger: { event: UserCreated },
   retries: 0,
-  success: Schema.Void,
 });
 
 type NonBatchedHandlerEvent = InngestFunction.InngestFunction.EventType<typeof NonBatchedHandlerEventFn>;
@@ -45,7 +44,6 @@ type NonBatchedHandlerEventIsSingle = Expect<IsReadonlyArray<NonBatchedHandlerEv
 const BatchHandlerEventFn = InngestFunction.make("batched-handler-event", {
   trigger: { event: UserCreated },
   batchEvents: { maxSize: 10, timeout: Duration.seconds(1) },
-  success: Schema.Void,
 });
 
 type BatchHandlerEvent = InngestFunction.InngestFunction.EventType<typeof BatchHandlerEventFn>;
@@ -57,15 +55,12 @@ const readBatchedHandlerEvent = (events: BatchHandlerEvent) => events[0]?.data.u
 const StepRunItem = Schema.Struct({ id: Schema.String });
 const StepRunTypeContractFn = InngestFunction.make("step-run-type-contract", {
   trigger: { event: UserCreated },
-  success: Schema.Struct({ count: Schema.Number }),
 });
 const StepRunTypeContractGroup = InngestGroup.make(StepRunTypeContractFn);
 const StepRunTypeContractHandlers = StepRunTypeContractGroup.toLayer({
   "step-run-type-contract": ({ step }) =>
     Effect.gen(function* () {
-      const items = yield* step.run("load-items", Effect.succeed([{ id: "a" }]), {
-        schema: Schema.Array(StepRunItem),
-      });
+      const items = yield* step.run("load-items", Effect.succeed([{ id: "a" }]));
       const ids: ReadonlyArray<string> = items.map((item) => item.id);
       return { count: ids.length };
     }),
@@ -184,7 +179,6 @@ describe("Public handler contracts", () => {
       const TestService = Context.Service<{ readonly prefix: string }>("TestService");
       const ProcessUser = InngestFunction.make("process-user", {
         trigger: { event: UserCreated },
-        success: Schema.Struct({ received: Schema.String }),
       });
       const group = InngestGroup.make(ProcessUser);
 
@@ -220,11 +214,54 @@ describe("Public handler contracts", () => {
     }),
   );
 
+  it.effect("normalizes function return values through JSON wire semantics", () =>
+    Effect.gen(function* () {
+      const ProcessUser = InngestFunction.make("process-user", {
+        trigger: { event: UserCreated },
+      });
+      const group = InngestGroup.make(ProcessUser);
+      const handlers = group.toLayer({
+        "process-user": () =>
+          Effect.sync(() => {
+            const value: Record<string, unknown> = {
+              at: new Date("2026-02-03T00:00:00.000Z"),
+              nested: { big: 1n },
+            };
+            value.self = value;
+            return value;
+          }),
+      });
+
+      const fullLayer = Layer.mergeAll(handlers, makeClientLayer(), httpLayer);
+      const { handler, dispose } = InngestGroup.toWebHandler(group, { layer: fullLayer });
+
+      try {
+        const response = yield* Effect.tryPromise(() =>
+          handler(
+            makeExecutionRequest({
+              fnId: "test-app-process-user",
+              eventName: "user/created",
+              eventData: { userId: "u1" },
+            }),
+          ),
+        );
+
+        expect(response.status).toBe(200);
+        expect(yield* Effect.tryPromise(() => response.json())).toEqual({
+          at: "2026-02-03T00:00:00.000Z",
+          nested: {},
+          self: "[Circular ~]",
+        });
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
+  );
+
   it.effect("invoked executions expose only the user payload to handlers", () =>
     Effect.gen(function* () {
       const ProcessPayment = InngestFunction.make("process-payment", {
         trigger: { event: PaymentProcess },
-        success: Schema.Struct({ orderId: Schema.String }),
       });
       const group = InngestGroup.make(ProcessPayment);
       const handlers = group.toLayer({
@@ -260,7 +297,6 @@ describe("Public handler contracts", () => {
     Effect.gen(function* () {
       const ProcessUser = InngestFunction.make("process-user", {
         trigger: { event: UserCreated },
-        success: Schema.Void,
       });
       const group = InngestGroup.make(ProcessUser);
       const handlers = group.toLayer({
@@ -303,7 +339,6 @@ describe("Public handler contracts", () => {
     Effect.gen(function* () {
       const ProcessUser = InngestFunction.make("process-user", {
         trigger: { event: UserCreated },
-        success: Schema.Void,
       });
       const group = InngestGroup.make(ProcessUser);
       const handlers = group.toLayer({

@@ -27,7 +27,6 @@ const ProcessItemFn = InngestFunction.make("process-item", {
     scope: "fn",
     key: "event.data.userId",
   },
-  success: Schema.Struct({ processed: Schema.Boolean, itemId: Schema.String }),
 });
 
 const SendNotificationFn = InngestFunction.make("send-notification", {
@@ -37,7 +36,6 @@ const SendNotificationFn = InngestFunction.make("send-notification", {
     scope: "env",
     key: "event.data.userId",
   },
-  success: Schema.Struct({ sent: Schema.Boolean, channel: Schema.String }),
 });
 
 const ExternalApiCallFn = InngestFunction.make("external-api-call", {
@@ -47,7 +45,6 @@ const ExternalApiCallFn = InngestFunction.make("external-api-call", {
     scope: "account",
     key: "event.data.userId",
   },
-  success: Schema.Struct({ apiCallComplete: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(ProcessItemFn, SendNotificationFn, ExternalApiCallFn);

@@ -1,4 +1,5 @@
 import * as Effect from "effect/Effect";
+import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
@@ -12,12 +13,10 @@ const DemoInvokeChild = InngestEvent.make("examples/059-schema-invoke-result/dem
 
 const ChildFn = InngestFunction.make("schema-invoke-child", {
   trigger: { event: DemoInvokeChild },
-  success: Page,
 });
 
 const ParentFn = InngestFunction.make("schema-invoke-parent", {
   trigger: { event: DemoInvokeParent },
-  success: Schema.Struct({ pathname: Schema.String }),
 });
 
 const Group = InngestGroup.make(ChildFn, ParentFn);
@@ -31,7 +30,10 @@ const HandlersLive = Group.toLayer({
         data: DemoInvokeChild.make({}),
       });
 
-      return { pathname: page.url.pathname };
+      return {
+        pathname:
+          Predicate.hasProperty(page, "url") && typeof page.url === "string" ? new URL(page.url).pathname : null,
+      };
     }),
 });
 

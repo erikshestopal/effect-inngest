@@ -1,5 +1,6 @@
 import { FetchHttpClient } from "effect/unstable/http";
 import * as Effect from "effect/Effect";
+import * as Predicate from "effect/Predicate";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
@@ -16,25 +17,21 @@ const ChildInput = InngestEvent.make("examples/068-schema-decode-errors/child", 
 
 const StepRunFn = InngestFunction.make("schema-step-run-decode-error", {
   trigger: { event: Started },
-  success: Schema.Struct({ pathname: Schema.String }),
   checkpointing: false,
 });
 
 const WaitForEventFn = InngestFunction.make("schema-waitForEvent-decode-error", {
   trigger: { event: Started },
-  success: Schema.Struct({ pathname: Schema.String }),
   checkpointing: false,
 });
 
 const ChildFn = InngestFunction.make("schema-invoke-decode-error-child", {
   trigger: { event: ChildInput },
-  success: Page,
   checkpointing: false,
 });
 
 const InvokeFn = InngestFunction.make("schema-invoke-decode-error", {
   trigger: { event: Started },
-  success: Schema.Struct({ pathname: Schema.String }),
   checkpointing: false,
 });
 
@@ -46,7 +43,6 @@ const HandlersLive = Group.toLayer({
       const page = yield* step.run(
         "load-invalid-page",
         Effect.succeed(new Page({ url: new URL("https://example.com/valid") })),
-        { schema: Page },
       );
       return { pathname: page.url.pathname };
     }),
@@ -60,7 +56,10 @@ const HandlersLive = Group.toLayer({
   "schema-invoke-decode-error": ({ step }) =>
     Effect.gen(function* () {
       const page = yield* step.invoke("invoke-invalid-page", { function: ChildFn, data: ChildInput.make({}) });
-      return { pathname: page.url.pathname };
+      return {
+        pathname:
+          Predicate.hasProperty(page, "url") && typeof page.url === "string" ? new URL(page.url).pathname : null,
+      };
     }),
 });
 

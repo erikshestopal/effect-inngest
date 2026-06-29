@@ -13,7 +13,6 @@ const DemoParallel = InngestEvent.make(
 
 const ParallelFn = InngestFunction.make("parallel-test", {
   trigger: { event: DemoParallel },
-  success: Schema.Struct({ sum: Schema.Number, product: Schema.Number }),
 });
 
 const Group = InngestGroup.make(ParallelFn);
@@ -23,8 +22,8 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       const [sum, product] = yield* Effect.all(
         [
-          step.run("sum", Effect.succeed(event.data.a + event.data.b), { schema: Schema.Number }),
-          step.run("product", Effect.succeed(event.data.a * event.data.b), { schema: Schema.Number }),
+          step.run("sum", Effect.succeed(event.data.a + event.data.b)),
+          step.run("product", Effect.succeed(event.data.a * event.data.b)),
         ],
         { concurrency: "unbounded" },
       );

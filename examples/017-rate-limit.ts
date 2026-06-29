@@ -12,7 +12,6 @@ const DemoRateLimited = InngestEvent.make(
 
 const RateLimitedFn = InngestFunction.make("rate-limited-fn", {
   trigger: { event: DemoRateLimited },
-  success: Schema.Struct({ id: Schema.String, processedAt: Schema.String }),
   rateLimit: { limit: 1, period: "1 second" },
 });
 

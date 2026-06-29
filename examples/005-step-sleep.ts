@@ -7,7 +7,6 @@ const DemoSleep = InngestEvent.make("examples/005-step-sleep/demo/sleep", Schema
 
 const SleepFn = InngestFunction.make("sleep-test", {
   trigger: { event: DemoSleep },
-  success: Schema.Struct({ slept: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(SleepFn);

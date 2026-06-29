@@ -14,7 +14,6 @@ const DemoSchemaWorkflowResult = InngestEvent.make(
 
 const SchemaWorkflowResultFn = InngestFunction.make("schema-workflow-result-demo", {
   trigger: { event: DemoSchemaWorkflowResult },
-  success: Page,
 });
 
 const Group = InngestGroup.make(SchemaWorkflowResultFn);

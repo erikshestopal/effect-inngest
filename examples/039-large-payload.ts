@@ -22,11 +22,6 @@ const DemoLargePayload = InngestEvent.make(
 
 const LargePayloadFn = InngestFunction.make("process-large-payload", {
   trigger: { event: DemoLargePayload },
-  success: Schema.Struct({
-    itemCount: Schema.Number,
-    totalValue: Schema.Number,
-    processedIds: Schema.Array(Schema.String),
-  }),
 });
 
 const Group = InngestGroup.make(LargePayloadFn);
@@ -42,13 +37,11 @@ const HandlersLive = Group.toLayer({
             processedValue: item.value * 2,
           })),
         ),
-        { schema: Schema.Array(ProcessedItemSchema) },
       );
 
       const totalValue = yield* step.run(
         "calculate-total",
         Effect.succeed(event.data.items.reduce((sum, item) => sum + item.value, 0)),
-        { schema: Schema.Number },
       );
 
       return {

@@ -17,9 +17,7 @@ const SleepEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-sleep", {
-  trigger: { event: SleepEvent },
-  success: Schema.Struct({ tag: Schema.String }),
-  // bufferedSteps high enough that the sleep-flush is what actually triggers
+  trigger: { event: SleepEvent }, // bufferedSteps high enough that the sleep-flush is what actually triggers
   // the checkpoint POST.
   checkpointing: { bufferedSteps: 10 },
 });
@@ -29,8 +27,8 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-sleep": ({ event, step }) =>
     Effect.gen(function* () {
-      yield* step.run("prepare-a", Effect.succeed("a"), { schema: Schema.String });
-      yield* step.run("prepare-b", Effect.succeed("b"), { schema: Schema.String });
+      yield* step.run("prepare-a", Effect.succeed("a"));
+      yield* step.run("prepare-b", Effect.succeed("b"));
       yield* step.sleep("nap", "2 seconds");
       return { tag: event.data.tag };
     }),

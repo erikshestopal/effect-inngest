@@ -20,10 +20,6 @@ const CompletedEvent = InngestEvent.make(
 
 const Fn = InngestFunction.make("checkpoint-run-id-wait", {
   trigger: { event: StartEvent },
-  success: Schema.Struct({
-    finalizedRunId: Schema.String,
-    submittedRunId: Schema.String,
-  }),
   checkpointing: { bufferedSteps: 1 },
 });
 
@@ -32,9 +28,7 @@ const Group = InngestGroup.make(Fn);
 const HandlersLive = Group.toLayer({
   "checkpoint-run-id-wait": ({ event, step }) =>
     Effect.gen(function* () {
-      const runId = yield* step.run("submit-extraction", Effect.succeed(event.data.extractionId), {
-        schema: Schema.String,
-      });
+      const runId = yield* step.run("submit-extraction", Effect.succeed(event.data.extractionId));
       const completed = yield* step.waitForEvent("wait-for-extraction", CompletedEvent, {
         timeout: "30 seconds",
         if: `async.data.runId == ${JSON.stringify(runId)}`,
@@ -42,7 +36,6 @@ const HandlersLive = Group.toLayer({
       const finalizedRunId = yield* step.run(
         "finalize-extraction",
         Effect.succeed(Option.isSome(completed) ? completed.value.data.runId : "missing"),
-        { schema: Schema.String },
       );
       return { finalizedRunId, submittedRunId: runId };
     }),

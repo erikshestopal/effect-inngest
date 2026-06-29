@@ -19,7 +19,6 @@ const UserUpdated = InngestEvent.make(
 
 const UserHandlerFn = InngestFunction.make("user-handler", {
   trigger: [{ event: UserCreated }, { event: UserUpdated }],
-  success: Schema.Struct({ eventName: Schema.String, userId: Schema.String, action: Schema.String }),
 });
 
 const Group = InngestGroup.make(UserHandlerFn);

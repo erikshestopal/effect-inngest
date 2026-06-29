@@ -27,7 +27,6 @@ const CoverageTestEvent = InngestEvent.make(
 
 const coverageTestFn = InngestFunction.make("coverage-test-fn", {
   trigger: { event: CoverageTestEvent },
-  success: Schema.Struct({ count: Schema.Number }),
 });
 
 const coverageTestGroup = InngestGroup.make(coverageTestFn);

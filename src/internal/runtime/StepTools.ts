@@ -1,4 +1,4 @@
-import { Context, Duration, Effect, Layer, Option, Predicate, Schema, pipe } from "effect";
+import { Context, Duration, Effect, Layer, Option, pipe } from "effect";
 import { InngestClient, InngestConfig } from "../../Client.js";
 import type * as InngestEvent from "../../Event.js";
 import type { InngestFunction } from "../../Function.js";
@@ -17,12 +17,6 @@ import * as SleepUntilStep from "./steps/SleepUntilStep.js";
 import * as StepRun from "./steps/StepRun.js";
 import * as WaitForEventStep from "./steps/WaitForEventStep.js";
 
-export type JsonSchema<A = unknown> = Schema.Codec<A, unknown, never, never>;
-
-export interface RunOptions<S extends JsonSchema> {
-  readonly schema: S;
-}
-
 export interface WaitForEventOptions {
   readonly timeout: Duration.Input;
   readonly if?: string;
@@ -40,12 +34,7 @@ export type InvokeOptions<F extends InngestFunction.Any> = [InngestFunction.Even
   : InvokeOptionsBase<F> & { readonly data: InngestFunction.EventPayload<F> };
 
 export interface Run {
-  <Err, R>(id: StepInput, effect: Effect.Effect<void, Err, R>): Effect.Effect<void, StepError | Err, R>;
-  <S extends JsonSchema, Err, R>(
-    id: StepInput,
-    effect: Effect.Effect<Schema.Schema.Type<S>, Err, R>,
-    options: RunOptions<S>,
-  ): Effect.Effect<Schema.Schema.Type<S>, StepError | Err, R>;
+  <A, Err, R>(id: StepInput, effect: Effect.Effect<A, Err, R>): Effect.Effect<A, StepError | Err, R>;
 }
 
 export interface Sleep {
@@ -65,10 +54,7 @@ export interface WaitForEvent {
 }
 
 export interface Invoke {
-  <F extends InngestFunction.Any>(
-    id: StepInput,
-    options: InvokeOptions<F>,
-  ): Effect.Effect<InngestFunction.Success<F>, StepError>;
+  <F extends InngestFunction.Any>(id: StepInput, options: InvokeOptions<F>): Effect.Effect<unknown, StepError>;
 }
 
 export interface OutgoingEvent {
@@ -113,20 +99,7 @@ export class StepTools extends Context.Service<StepTools, StepTools.Service>()(
       Context.add(HandlerFiberScope, handlerFiberScope),
     );
 
-    function run<Err, R>(id: StepInput, effect: Effect.Effect<void, Err, R>): Effect.Effect<void, StepError | Err, R>;
-    function run<S extends JsonSchema, Err, R>(
-      id: StepInput,
-      effect: Effect.Effect<Schema.Schema.Type<S>, Err, R>,
-      options: RunOptions<S>,
-    ): Effect.Effect<Schema.Schema.Type<S>, StepError | Err, R>;
-    function run<S extends JsonSchema, Err, R>(
-      id: StepInput,
-      effect: Effect.Effect<void | Schema.Schema.Type<S>, Err, R>,
-      options?: RunOptions<S>,
-    ) {
-      if (Predicate.isNotUndefined(options)) {
-        return StepRun.run({ input, id: identity.reserve(id), effect, options }).pipe(Effect.provide(runtime));
-      }
+    function run<A, Err, R>(id: StepInput, effect: Effect.Effect<A, Err, R>) {
       return StepRun.run({ input, id: identity.reserve(id), effect }).pipe(Effect.provide(runtime));
     }
 

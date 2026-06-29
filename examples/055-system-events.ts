@@ -16,23 +16,19 @@ class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("
 
 const TriggerFailure = InngestFunction.make("trigger-failure", {
   trigger: { event: DemoTriggerFailure },
-  success: Schema.Void,
   retries: 0,
 });
 
 const HandleFailure = InngestFunction.make("handle-failure", {
   trigger: { event: InngestEvents.FunctionFailed },
-  success: Schema.Struct({ handled: Schema.Boolean, failedFunctionId: Schema.String }),
 });
 
 const TrackCompletion = InngestFunction.make("track-completion", {
   trigger: { event: InngestEvents.FunctionFinishedSuccess },
-  success: Schema.Struct({ tracked: Schema.Boolean }),
 });
 
 const HandleCancellation = InngestFunction.make("handle-cancellation", {
   trigger: { event: InngestEvents.FunctionCancelled },
-  success: Schema.Struct({ cleanedUp: Schema.Boolean }),
 });
 
 const Group = InngestGroup.make(TriggerFailure, HandleFailure, TrackCompletion, HandleCancellation);

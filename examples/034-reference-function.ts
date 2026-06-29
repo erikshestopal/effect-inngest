@@ -1,4 +1,5 @@
 import * as Effect from "effect/Effect";
+import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
@@ -17,12 +18,10 @@ const DemoHelperEvent = InngestEvent.make(
 
 const HelperFn = InngestFunction.make("helper-function", {
   trigger: { event: DemoHelperEvent },
-  success: Schema.Struct({ doubled: Schema.Number }),
 });
 
 const InvokerFn = InngestFunction.make("invoke-by-reference", {
   trigger: { event: DemoReferenceInvoke },
-  success: Schema.Struct({ result: Schema.Number }),
 });
 
 const Group = InngestGroup.make(HelperFn, InvokerFn);
@@ -33,9 +32,9 @@ const HandlersLive = Group.toLayer({
     Effect.gen(function* () {
       const helperResult = yield* step.invoke("call-helper", {
         function: HelperFn,
-        data: { input: 21 } as never,
+        data: DemoHelperEvent.make({ input: 21 }),
       });
-      return { result: helperResult.doubled };
+      return { result: Predicate.hasProperty(helperResult, "doubled") ? helperResult.doubled : null };
     }),
 });
 

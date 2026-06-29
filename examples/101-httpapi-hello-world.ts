@@ -12,7 +12,6 @@ const DemoHello = InngestEvent.make(
 
 const HelloFn = InngestFunction.make("hello-world", {
   trigger: { event: DemoHello },
-  success: Schema.Struct({ greeting: Schema.String }),
 });
 
 const Group = InngestGroup.make(HelloFn);

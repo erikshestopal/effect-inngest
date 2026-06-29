@@ -26,10 +26,6 @@ const OrderApproved = InngestEvent.make(
 describe("TB-004: Wait For Event", () => {
   const ApprovalFlow = InngestFunction.make("approval-flow", {
     trigger: { event: OrderPending },
-    success: Schema.Union([
-      Schema.Struct({ status: Schema.Literal("timeout"), orderId: Schema.String }),
-      Schema.Struct({ status: Schema.Literal("approved"), approvedBy: Schema.String }),
-    ]),
   });
 
   const Group = InngestGroup.make(ApprovalFlow);
