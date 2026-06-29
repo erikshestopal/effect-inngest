@@ -3,7 +3,7 @@ import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import * as Protocol from "../src/internal/protocol.ts";
 import { defineExample, effectCase } from "./_support.ts";
 
@@ -38,24 +38,24 @@ const InvokeFn = InngestFunction.make("schema-invoke-decode-error", {
 const Group = InngestGroup.make(StepRunFn, WaitForEventFn, ChildFn, InvokeFn);
 
 const HandlersLive = Group.toLayer({
-  "schema-step-run-decode-error": ({ step }) =>
+  "schema-step-run-decode-error": () =>
     Effect.gen(function* () {
-      const page = yield* step.run(
+      const page = yield* Inngest.run(
         "load-invalid-page",
         Effect.succeed(new Page({ url: new URL("https://example.com/valid") })),
       );
       return { pathname: page.url.pathname };
     }),
-  "schema-waitForEvent-decode-error": ({ step }) =>
+  "schema-waitForEvent-decode-error": () =>
     Effect.gen(function* () {
-      const page = yield* step.waitForEvent("wait-invalid-page", PageReady, { timeout: "5 minutes" });
+      const page = yield* Inngest.waitForEvent("wait-invalid-page", PageReady, { timeout: "5 minutes" });
       if (page._tag === "None") return { pathname: "none" };
       return { pathname: page.value.data.url.pathname };
     }),
   "schema-invoke-decode-error-child": () => Effect.succeed(new Page({ url: new URL("https://example.com/valid") })),
-  "schema-invoke-decode-error": ({ step }) =>
+  "schema-invoke-decode-error": () =>
     Effect.gen(function* () {
-      const page = yield* step.invoke("invoke-invalid-page", { function: ChildFn, data: ChildInput.make({}) });
+      const page = yield* Inngest.invoke("invoke-invalid-page", { function: ChildFn, data: ChildInput.make({}) });
       return {
         pathname:
           Predicate.hasProperty(page, "url") && typeof page.url === "string" ? new URL(page.url).pathname : null,

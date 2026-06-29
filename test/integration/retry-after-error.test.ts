@@ -2,7 +2,7 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { RetryAfterError } from "../../src/index.js";
+import { RetryAfterError, Inngest } from "../../src/index.js";
 import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { failWith, makeTestLayer } from "./_helpers.js";
@@ -58,13 +58,13 @@ describe("RetryAfterError Behavior", () => {
     });
   };
 
-  describe("RetryAfterError inside step.run", () => {
+  describe("RetryAfterError inside Inngest.run", () => {
     it.effect("emits StepError opcode (206) - NOT function-level retry", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "retry-after-fn": ({ step }) =>
+          "retry-after-fn": () =>
             Effect.gen(function* () {
-              const result = yield* step.run(
+              const result = yield* Inngest.run(
                 "retry-step",
                 failWith(
                   RetryAfterError.make({
@@ -83,7 +83,7 @@ describe("RetryAfterError Behavior", () => {
           const response = yield* Effect.tryPromise(() => handler(makeRequestWithContext({})));
 
           // Should be 206 with StepError opcode
-          // RetryAfterError inside step.run sets Retry-After header on 206 response
+          // RetryAfterError inside Inngest.run sets Retry-After header on 206 response
           expect(response.status).toBe(206);
 
           const body = yield* Effect.tryPromise(() => response.json()).pipe(
@@ -109,9 +109,9 @@ describe("RetryAfterError Behavior", () => {
     it.effect("step succeeds on retry when memoized with success data", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "retry-after-fn": ({ step }) =>
+          "retry-after-fn": () =>
             Effect.gen(function* () {
-              const result = yield* step.run(
+              const result = yield* Inngest.run(
                 "retry-step",
                 failWith(
                   RetryAfterError.make({

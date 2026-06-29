@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const TaskStarted = InngestEvent.make(
@@ -26,13 +26,13 @@ const LongTaskFn = InngestFunction.make("long-task", {
 const Group = InngestGroup.make(LongTaskFn);
 
 const HandlersLive = Group.toLayer({
-  "long-task": ({ event, step }) =>
+  "long-task": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("step-1", Effect.succeed(`Started task ${event.data.taskId}`));
-      yield* step.sleep("wait-1", Duration.seconds(3));
-      yield* step.run("step-2", Effect.succeed("Still running..."));
-      yield* step.sleep("wait-2", Duration.seconds(3));
-      yield* step.run("step-3", Effect.succeed("Almost done..."));
+      yield* Inngest.run("step-1", Effect.succeed(`Started task ${event.data.taskId}`));
+      yield* Inngest.sleep("wait-1", Duration.seconds(3));
+      yield* Inngest.run("step-2", Effect.succeed("Still running..."));
+      yield* Inngest.sleep("wait-2", Duration.seconds(3));
+      yield* Inngest.run("step-3", Effect.succeed("Almost done..."));
       return { status: "completed" };
     }),
 });

@@ -8,6 +8,7 @@ import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 import {
   InngestClient,
+  Inngest,
   InngestFunction,
   InngestGroup,
   NonRetriableError,
@@ -152,7 +153,7 @@ class TestProtocolError extends Schema.TaggedErrorClass<TestProtocolError>()("Te
 }) {}
 
 describe("native v4 protocol RED regressions", () => {
-  it.effect("parallel step.run root request returns StepPlanned ops, not checkpointed StepRun ops", () =>
+  it.effect("parallel Inngest.run root request returns StepPlanned ops, not checkpointed StepRun ops", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("parallel-root", {
         trigger: { event: DemoEvent },
@@ -160,13 +161,13 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "parallel-root": ({ step }) =>
+        "parallel-root": () =>
           Effect.gen(function* () {
             const results = yield* Effect.all(
               [
-                step.run("step-1", Effect.succeed(1)),
-                step.run("step-2", Effect.succeed(2)),
-                step.run("step-3", Effect.succeed(3)),
+                Inngest.run("step-1", Effect.succeed(1)),
+                Inngest.run("step-2", Effect.succeed(2)),
+                Inngest.run("step-3", Effect.succeed(3)),
               ],
               { concurrency: "unbounded" },
             );
@@ -201,13 +202,13 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "parallel-target": ({ step }) =>
+        "parallel-target": () =>
           Effect.gen(function* () {
             const results = yield* Effect.all(
               [
-                step.run("step-1", Effect.succeed(1)),
-                step.run("step-2", Effect.succeed(2)),
-                step.run("step-3", Effect.succeed(3)),
+                Inngest.run("step-1", Effect.succeed(1)),
+                Inngest.run("step-2", Effect.succeed(2)),
+                Inngest.run("step-3", Effect.succeed(3)),
               ],
               { concurrency: "unbounded" },
             );
@@ -276,7 +277,7 @@ describe("native v4 protocol RED regressions", () => {
     }),
   );
 
-  it.effect("mixed parallel root request plans step.run and sendEvent alongside Sleep", () =>
+  it.effect("mixed parallel root request plans Inngest.run and sendEvent alongside Sleep", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("parallel-mixed-native", {
         trigger: { event: DemoEvent },
@@ -284,13 +285,13 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "parallel-mixed-native": ({ step }) =>
+        "parallel-mixed-native": () =>
           Effect.gen(function* () {
             yield* Effect.all(
               [
-                step.run("compute", Effect.succeed("ok")),
-                step.sleep("wait", "2 seconds"),
-                step.sendEvent("notify", EmailSend.make({ to: "a@example.com" })),
+                Inngest.run("compute", Effect.succeed("ok")),
+                Inngest.sleep("wait", "2 seconds"),
+                Inngest.sendEvent("notify", EmailSend.make({ to: "a@example.com" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -323,9 +324,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "send-event-native": ({ step }) =>
+        "send-event-native": () =>
           Effect.gen(function* () {
-            yield* step.sendEvent("send-notification", EmailSend.make({ to: "a@example.com" }));
+            yield* Inngest.sendEvent("send-notification", EmailSend.make({ to: "a@example.com" }));
             return { ok: true };
           }),
       });
@@ -359,9 +360,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "send-event-batch-native": ({ step }) =>
+        "send-event-batch-native": () =>
           Effect.gen(function* () {
-            yield* step.sendEvent("send-notifications", [
+            yield* Inngest.sendEvent("send-notifications", [
               EmailSend.make({ to: "a@example.com" }),
               EmailSend.make({ to: "b@example.com" }),
             ]);
@@ -398,9 +399,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "wait-native": ({ step }) =>
+        "wait-native": () =>
           Effect.gen(function* () {
-            yield* step.waitForEvent("wait-for-payment", InvoicePaid, { timeout: "1 hour" });
+            yield* Inngest.waitForEvent("wait-for-payment", InvoicePaid, { timeout: "1 hour" });
             return { ok: true };
           }),
       });
@@ -437,9 +438,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Parent, Child);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "invoke-parent-native": ({ step }) =>
+        "invoke-parent-native": () =>
           Effect.gen(function* () {
-            const child = yield* step.invoke("call-child", {
+            const child = yield* Inngest.invoke("call-child", {
               function: Child,
               data: ChildInput.make({ value: 7 }),
             });
@@ -472,7 +473,7 @@ describe("native v4 protocol RED regressions", () => {
     }),
   );
 
-  it.effect("NonRetriableError inside step.run emits StepFailed with no-retry header", () =>
+  it.effect("NonRetriableError inside Inngest.run emits StepFailed with no-retry header", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("non-retriable-native", {
         trigger: { event: DemoEvent },
@@ -480,9 +481,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "non-retriable-native": ({ step }) =>
+        "non-retriable-native": () =>
           Effect.gen(function* () {
-            return yield* step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })));
+            return yield* Inngest.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" })));
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
@@ -511,9 +512,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "retry-final-native": ({ step }) =>
+        "retry-final-native": () =>
           Effect.gen(function* () {
-            return yield* step.run("always-fail", Effect.fail(new TestProtocolError({ message: "boom" })));
+            return yield* Inngest.run("always-fail", Effect.fail(new TestProtocolError({ message: "boom" })));
           }),
       });
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeLayer(handlers, captures) });
@@ -541,7 +542,7 @@ describe("native v4 protocol RED regressions", () => {
     }),
   );
 
-  it.effect("a caught step.run failure still yields StepError before user catch recovery", () =>
+  it.effect("a caught Inngest.run failure still yields StepError before user catch recovery", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("step-catch-native", {
         trigger: { event: DemoEvent },
@@ -549,11 +550,12 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "step-catch-native": ({ step }) =>
+        "step-catch-native": () =>
           Effect.gen(function* () {
-            const result = yield* step
-              .run("risky-step", Effect.fail(new TestProtocolError({ message: "Something went wrong" })))
-              .pipe(Effect.catch((error: unknown) => Effect.succeed(`Caught error: ${String(error)}`)));
+            const result = yield* Inngest.run(
+              "risky-step",
+              Effect.fail(new TestProtocolError({ message: "Something went wrong" })),
+            ).pipe(Effect.catch((error: unknown) => Effect.succeed(`Caught error: ${String(error)}`)));
             return { result };
           }),
       });
@@ -583,9 +585,9 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "retry-success-native": ({ run, step }) =>
+        "retry-success-native": ({ run }) =>
           Effect.gen(function* () {
-            const attempts = yield* step.run(
+            const attempts = yield* Inngest.run(
               "flaky-step",
               run.attempt < 1
                 ? Effect.fail(new RetryAfterError({ message: "Attempt 0 failed", retryAfter: Duration.seconds(1) }))
@@ -664,12 +666,12 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "buffered-native": ({ step }) =>
+        "buffered-native": () =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed(1));
-            yield* step.run("b", Effect.succeed(2));
-            yield* step.run("c", Effect.succeed(3));
-            yield* step.run("d", Effect.succeed(4));
+            yield* Inngest.run("a", Effect.succeed(1));
+            yield* Inngest.run("b", Effect.succeed(2));
+            yield* Inngest.run("c", Effect.succeed(3));
+            yield* Inngest.run("d", Effect.succeed(4));
             return { ok: true };
           }),
       });
@@ -705,11 +707,11 @@ describe("native v4 protocol RED regressions", () => {
       const Group = InngestGroup.make(Fn);
       const captures: Array<CapturedRequest> = [];
       const handlers = Group.toLayer({
-        "sleep-flush-native": ({ step }) =>
+        "sleep-flush-native": () =>
           Effect.gen(function* () {
-            yield* step.run("prepare-a", Effect.succeed(1));
-            yield* step.run("prepare-b", Effect.succeed(2));
-            yield* step.sleep("wait", "2 seconds");
+            yield* Inngest.run("prepare-a", Effect.succeed(1));
+            yield* Inngest.run("prepare-b", Effect.succeed(2));
+            yield* Inngest.sleep("wait", "2 seconds");
             return { ok: true };
           }),
       });

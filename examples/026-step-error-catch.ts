@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
@@ -16,15 +16,14 @@ const StepCatchFn = InngestFunction.make("step-catch-handler", {
 const Group = InngestGroup.make(StepCatchFn);
 
 const HandlersLive = Group.toLayer({
-  "step-catch-handler": ({ step }) =>
+  "step-catch-handler": () =>
     Effect.gen(function* () {
-      const result = yield* step
-        .run("risky-step", Effect.fail(new StepError({ message: "Something went wrong" })))
-        .pipe(
-          Effect.catch((error) =>
-            Effect.succeed(`Caught error: ${error instanceof Error ? error.message : "unknown"}`),
-          ),
-        );
+      const result = yield* Inngest.run(
+        "risky-step",
+        Effect.fail(new StepError({ message: "Something went wrong" })),
+      ).pipe(
+        Effect.catch((error) => Effect.succeed(`Caught error: ${error instanceof Error ? error.message : "unknown"}`)),
+      );
       return { result };
     }),
 });

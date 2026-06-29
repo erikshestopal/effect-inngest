@@ -3,7 +3,7 @@ import * as Duration from "effect/Duration";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { WaitForEventOpcodeResponse } from "./_schemas.js";
@@ -41,9 +41,9 @@ describe("TB-004: Wait For Event", () => {
   it.effect("returns 206 with WaitForEvent opcode on first invocation", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "approval-flow": ({ event, step }) =>
+        "approval-flow": ({ event }) =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
+            const approval = yield* Inngest.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
@@ -102,9 +102,9 @@ describe("TB-004: Wait For Event", () => {
   it.effect("returns approved result when event received", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "approval-flow": ({ event, step }) =>
+        "approval-flow": ({ event }) =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
+            const approval = yield* Inngest.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
@@ -150,9 +150,9 @@ describe("TB-004: Wait For Event", () => {
   it.effect("returns timeout result when null received", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "approval-flow": ({ event, step }) =>
+        "approval-flow": ({ event }) =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", OrderApproved, {
+            const approval = yield* Inngest.waitForEvent("wait-approval", OrderApproved, {
               timeout: Duration.hours(24),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
@@ -191,9 +191,9 @@ describe("TB-004: Wait For Event", () => {
   it.effect("waitForEvent without match expression", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "approval-flow": ({ step }) =>
+        "approval-flow": () =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-any-approval", OrderApproved, {
+            const approval = yield* Inngest.waitForEvent("wait-any-approval", OrderApproved, {
               timeout: Duration.minutes(30),
             });
 
@@ -228,9 +228,9 @@ describe("TB-004: Wait For Event", () => {
   it.effect("waitForEvent with various timeout durations", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "approval-flow": ({ step }) =>
+        "approval-flow": () =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-7d", OrderApproved, {
+            const approval = yield* Inngest.waitForEvent("wait-7d", OrderApproved, {
               timeout: Duration.days(7),
             });
 

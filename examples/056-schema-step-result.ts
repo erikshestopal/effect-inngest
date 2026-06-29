@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class Page extends Schema.Class<Page>("SchemaStepResultPage")({
@@ -19,10 +19,13 @@ const SchemaStepResultFn = InngestFunction.make("schema-step-result-demo", {
 const Group = InngestGroup.make(SchemaStepResultFn);
 
 const HandlersLive = Group.toLayer({
-  "schema-step-result-demo": ({ step }) =>
+  "schema-step-result-demo": () =>
     Effect.gen(function* () {
-      const page = yield* step.run("load-page", Effect.succeed(new Page({ url: new URL("https://example.com/docs") })));
-      yield* step.sleep("force-replay", "1 second");
+      const page = yield* Inngest.run(
+        "load-page",
+        Effect.succeed(new Page({ url: new URL("https://example.com/docs") })),
+      );
+      yield* Inngest.sleep("force-replay", "1 second");
 
       return { pathname: page.url.pathname };
     }),

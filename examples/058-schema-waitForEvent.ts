@@ -2,7 +2,7 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoWaitStart = InngestEvent.make("examples/058-schema-waitForEvent/demo/wait-start", Schema.Struct({}));
@@ -21,9 +21,9 @@ const SchemaWaitForEventFn = InngestFunction.make("schema-waitForEvent-demo", {
 const Group = InngestGroup.make(SchemaWaitForEventFn);
 
 const HandlersLive = Group.toLayer({
-  "schema-waitForEvent-demo": ({ step }) =>
+  "schema-waitForEvent-demo": () =>
     Effect.gen(function* () {
-      const page = yield* step.waitForEvent("wait-for-page", DemoPageReady, {
+      const page = yield* Inngest.waitForEvent("wait-for-page", DemoPageReady, {
         timeout: Duration.minutes(5),
       });
 

@@ -82,7 +82,7 @@ export const FunctionCancelled = InngestEvent.make(
 );
 
 /**
- * Sent when a function is invoked via step.invoke().
+ * Sent when a function is invoked via Inngest.invoke().
  * @since 0.1.0
  */
 export const FunctionInvoked = InngestEvent.make(

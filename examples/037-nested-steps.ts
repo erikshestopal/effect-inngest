@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoNested = InngestEvent.make("examples/037-nested-steps/demo/nested", Schema.Struct({}));
@@ -12,15 +12,15 @@ const NestedStepsFn = InngestFunction.make("nested-steps-demo", {
 const Group = InngestGroup.make(NestedStepsFn);
 
 const HandlersLive = Group.toLayer({
-  "nested-steps-demo": ({ step }) =>
+  "nested-steps-demo": () =>
     Effect.gen(function* () {
-      const level1 = yield* step.run("level-1", Effect.succeed(10));
+      const level1 = yield* Inngest.run("level-1", Effect.succeed(10));
 
-      const level2 = yield* step.run("level-2", Effect.succeed(level1 * 2));
+      const level2 = yield* Inngest.run("level-2", Effect.succeed(level1 * 2));
 
-      const level3 = yield* step.run("level-3", Effect.succeed(level2 + 5));
+      const level3 = yield* Inngest.run("level-3", Effect.succeed(level2 + 5));
 
-      const final = yield* step.run("final-computation", Effect.succeed(level1 + level2 + level3));
+      const final = yield* Inngest.run("final-computation", Effect.succeed(level1 + level2 + level3));
 
       return { level1, level2, level3, final };
     }),

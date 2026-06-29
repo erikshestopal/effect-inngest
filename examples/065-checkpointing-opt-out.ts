@@ -9,7 +9,7 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const OptOutEvent = InngestEvent.make(
   "examples/065-checkpointing-opt-out/demo/checkpoint-opt-out",
@@ -26,10 +26,10 @@ const Fn = InngestFunction.make("checkpoint-opt-out", {
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-opt-out": ({ event, step }) =>
+  "checkpoint-opt-out": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"));
-      yield* step.run("b", Effect.succeed("B"));
+      yield* Inngest.run("a", Effect.succeed("A"));
+      yield* Inngest.run("b", Effect.succeed("B"));
       return { tag: event.data.tag };
     }),
 });

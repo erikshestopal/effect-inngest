@@ -12,6 +12,7 @@ import {
   InngestEvents,
   InngestFunction,
   InngestGroup,
+  Inngest,
   NonRetriableError,
   RetryAfterError,
 } from "../../src/index.js";
@@ -58,9 +59,9 @@ const StepRunTypeContractFn = InngestFunction.make("step-run-type-contract", {
 });
 const StepRunTypeContractGroup = InngestGroup.make(StepRunTypeContractFn);
 const StepRunTypeContractHandlers = StepRunTypeContractGroup.toLayer({
-  "step-run-type-contract": ({ step }) =>
+  "step-run-type-contract": () =>
     Effect.gen(function* () {
-      const items = yield* step.run("load-items", Effect.succeed([{ id: "a" }]));
+      const items = yield* Inngest.run("load-items", Effect.succeed([{ id: "a" }]));
       const ids: ReadonlyArray<string> = items.map((item) => item.id);
       return { count: ids.length };
     }),

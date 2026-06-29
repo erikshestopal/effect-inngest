@@ -4,15 +4,15 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestRequest } from "./_helpers.js";
 
 // TB-006: Send Event
 //
-// Goal: Send events from within a function as a durable step.
+// Goal: Send events from within a function as a durable Inngest.
 //
-// In v2, step.sendEvent is a DURABLE STEP that:
+// In v2, Inngest.sendEvent is a DURABLE STEP that:
 // 1. Gets planned (returns 206) on first encounter
 // 2. Gets executed by Inngest and result is memoized
 // 3. Uses memoized result on re-invocation
@@ -125,11 +125,11 @@ describe("TB-006: Send Event", () => {
       }).pipe(Layer.provide(mockHttpClient));
 
       const HandlersLive = Group.toLayer({
-        "process-signup": ({ event, step }) =>
+        "process-signup": ({ event }) =>
           Effect.gen(function* () {
-            const userId = yield* step.run("create-user", Effect.succeed(`user_123`));
+            const userId = yield* Inngest.run("create-user", Effect.succeed(`user_123`));
 
-            yield* step.sendEvent(
+            yield* Inngest.sendEvent(
               "send-welcome",
               EmailSend.make({
                 to: event.data.email,
@@ -147,7 +147,7 @@ describe("TB-006: Send Event", () => {
       });
 
       try {
-        // First call: step.run gets planned → 206
+        // First call: Inngest.run gets planned → 206
         const response1 = yield* Effect.tryPromise(() => handler(makeRequest()));
         expect(response1.status).toBe(206);
 
@@ -156,7 +156,7 @@ describe("TB-006: Send Event", () => {
         expect(steps1).toHaveLength(1);
         const stepRunHash = steps1[0]!.id;
 
-        // Second call: step.run memoized, sendEvent gets planned → 206
+        // Second call: Inngest.run memoized, sendEvent gets planned → 206
         const response2 = yield* Effect.tryPromise(() => handler(makeRequest({ [stepRunHash]: { data: "user_123" } })));
         expect(response2.status).toBe(206);
 
@@ -201,10 +201,10 @@ describe("TB-006: Send Event", () => {
       }).pipe(Layer.provide(mockHttpClient));
 
       const HandlersLive = Group.toLayer({
-        "process-signup": ({ event, step }) =>
+        "process-signup": ({ event }) =>
           Effect.gen(function* () {
             // Send multiple events at once (array form)
-            yield* step.sendEvent("send-batch", [
+            yield* Inngest.sendEvent("send-batch", [
               EmailSend.make({ to: event.data.email, template: "welcome", userId: "u1" }),
               EmailSend.make({ to: event.data.email, template: "verify", userId: "u1" }),
             ]);
@@ -253,9 +253,9 @@ describe("TB-006: Send Event", () => {
       }).pipe(Layer.provide(mockHttpClient));
 
       const HandlersLive = Group.toLayer({
-        "process-signup": ({ step }) =>
+        "process-signup": () =>
           Effect.gen(function* () {
-            yield* step.sendEvent(
+            yield* Inngest.sendEvent(
               "send-welcome",
               EmailSend.make({
                 to: "test@example.com",
@@ -305,9 +305,9 @@ describe("TB-006: Send Event", () => {
       }).pipe(Layer.provide(mockHttpClient));
 
       const HandlersLive = Group.toLayer({
-        "process-signup": ({ step }) =>
+        "process-signup": () =>
           Effect.gen(function* () {
-            yield* step.sendEvent(
+            yield* Inngest.sendEvent(
               "send-welcome",
               EmailSend.make({
                 to: "test@example.com",

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSendBatch = InngestEvent.make("examples/042-sendEvent-batch/demo/send-batch", Schema.Struct({}));
@@ -20,11 +20,11 @@ const SendBatchFn = InngestFunction.make("send-batch", {
 const Group = InngestGroup.make(SendBatchFn);
 
 const HandlersLive = Group.toLayer({
-  "send-batch": ({ step }) =>
+  "send-batch": () =>
     Effect.gen(function* () {
       yield* Effect.log("Sending batch of notifications...");
 
-      yield* step.sendEvent("send-notifications", [
+      yield* Inngest.sendEvent("send-notifications", [
         DemoNotification.make({ userId: "u1", message: "First notification" }),
         DemoNotification.make({ userId: "u2", message: "Second notification" }),
         DemoNotification.make({ userId: "u3", message: "Third notification" }),

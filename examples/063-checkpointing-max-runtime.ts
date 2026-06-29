@@ -2,7 +2,7 @@ import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.4.1 #7 — `maxRuntime` deadline.
  *
- * Five `step.run` calls each taking ~200ms. With `maxRuntime: 150ms`, the
+ * Five `Inngest.run` calls each taking ~200ms. With `maxRuntime: 150ms`, the
  * driver interrupts the handler after the first step and emits `DiscoveryRequest`
  * so the executor re-invokes the function with the buffered results committed.
  * Verify in dev-server timeline that 5 step runs eventually complete across
@@ -10,7 +10,7 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const DeadlineEvent = InngestEvent.make(
   "examples/063-checkpointing-max-runtime/demo/checkpoint-deadline",
@@ -27,14 +27,14 @@ const Fn = InngestFunction.make("checkpoint-deadline", {
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-deadline": ({ step }) =>
+  "checkpoint-deadline": () =>
     Effect.gen(function* () {
       const slow = (label: string) => Effect.as(Effect.sleep("200 millis"), label);
-      yield* step.run("s1", slow("s1"));
-      yield* step.run("s2", slow("s2"));
-      yield* step.run("s3", slow("s3"));
-      yield* step.run("s4", slow("s4"));
-      yield* step.run("s5", slow("s5"));
+      yield* Inngest.run("s1", slow("s1"));
+      yield* Inngest.run("s2", slow("s2"));
+      yield* Inngest.run("s3", slow("s3"));
+      yield* Inngest.run("s4", slow("s4"));
+      yield* Inngest.run("s5", slow("s5"));
       return { count: 5 };
     }),
 });

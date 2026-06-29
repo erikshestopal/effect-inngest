@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import { Predicate } from "effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { NonRetriableError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
@@ -22,9 +22,9 @@ const Group = InngestGroup.make(FailingChildFn, ParentFn);
 const HandlersLive = Group.toLayer({
   "failing-child": () => Effect.fail(new NonRetriableError({ message: "Child always fails" })),
 
-  "parent-invoker": ({ step }) =>
+  "parent-invoker": () =>
     Effect.gen(function* () {
-      const result = yield* step.invoke("call-child", { function: FailingChildFn, data: {} as never }).pipe(
+      const result = yield* Inngest.invoke("call-child", { function: FailingChildFn, data: {} as never }).pipe(
         Effect.map(() => ({ status: "success" as const })),
         Effect.catch((error) =>
           Effect.succeed({

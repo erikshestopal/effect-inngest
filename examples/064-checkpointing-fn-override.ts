@@ -9,7 +9,7 @@ import { defineExample, eventCase } from "./_support.ts";
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const OverrideEvent = InngestEvent.make(
   "examples/064-checkpointing-fn-override/demo/checkpoint-override",
@@ -19,18 +19,18 @@ const OverrideEvent = InngestEvent.make(
 );
 
 const Fn = InngestFunction.make("checkpoint-override", {
-  trigger: { event: OverrideEvent }, // Overrides client-level `bufferedSteps: 5` → flush-per-step.
+  trigger: { event: OverrideEvent }, // Overrides client-level `bufferedSteps: 5` → flush-per-Inngest.
   checkpointing: { bufferedSteps: 1 },
 });
 
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-override": ({ event, step }) =>
+  "checkpoint-override": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("a", Effect.succeed("A"));
-      yield* step.run("b", Effect.succeed("B"));
-      yield* step.run("c", Effect.succeed("C"));
+      yield* Inngest.run("a", Effect.succeed("A"));
+      yield* Inngest.run("b", Effect.succeed("B"));
+      yield* Inngest.run("c", Effect.succeed("C"));
       return { key: event.data.key };
     }),
 });

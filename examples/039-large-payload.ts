@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const ItemSchema = Schema.Struct({
@@ -27,9 +27,9 @@ const LargePayloadFn = InngestFunction.make("process-large-payload", {
 const Group = InngestGroup.make(LargePayloadFn);
 
 const HandlersLive = Group.toLayer({
-  "process-large-payload": ({ event, step }) =>
+  "process-large-payload": ({ event }) =>
     Effect.gen(function* () {
-      const processedItems = yield* step.run(
+      const processedItems = yield* Inngest.run(
         "process-all-items",
         Effect.succeed(
           event.data.items.map((item) => ({
@@ -39,7 +39,7 @@ const HandlersLive = Group.toLayer({
         ),
       );
 
-      const totalValue = yield* step.run(
+      const totalValue = yield* Inngest.run(
         "calculate-total",
         Effect.succeed(event.data.items.reduce((sum, item) => sum + item.value, 0)),
       );

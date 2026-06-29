@@ -17,7 +17,7 @@ import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 
 interface CapturedCheckpoint {
@@ -146,11 +146,11 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
     () =>
       Effect.gen(function* () {
         const { captures, layer } = setup(
-          ({ step }) =>
+          () =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
+              yield* Inngest.run("a", Effect.succeed("A"));
               yield* Effect.sleep("75 millis");
-              yield* step.run("b", Effect.succeed("B"));
+              yield* Inngest.run("b", Effect.succeed("B"));
               return "done";
             }),
           { bufferedSteps: 10, maxRuntime: "25 millis" },
@@ -188,12 +188,12 @@ describe("Checkpoint maxRuntime + maxInterval (spec §10.4.1 #7, §10.1.2)", () 
         // Sequence: step "a" → start interval; sleep 120ms; step "b" sees
         // elapsed > 50ms → flush both.
         const { captures, layer } = setup(
-          ({ step }) =>
+          () =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
+              yield* Inngest.run("a", Effect.succeed("A"));
               yield* Effect.sleep("120 millis");
-              yield* step.run("b", Effect.succeed("B"));
-              yield* step.run("c", Effect.succeed("C"));
+              yield* Inngest.run("b", Effect.succeed("B"));
+              yield* Inngest.run("c", Effect.succeed("C"));
               return "done";
             }),
           { bufferedSteps: 10, maxInterval: "50 millis", maxRuntime: "30 seconds" },

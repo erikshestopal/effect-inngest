@@ -1,13 +1,13 @@
 import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.4.1 — async opcodes (Sleep, WaitForEvent, Invoke) force a buffer
- * flush before yielding. Here 2 buffered `step.run` results are checkpointed
- * prior to the `step.sleep` opcode, so the executor sees them durably before
+ * flush before yielding. Here 2 buffered `Inngest.run` results are checkpointed
+ * prior to the `Inngest.sleep` opcode, so the executor sees them durably before
  * the sleep schedule.
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const SleepEvent = InngestEvent.make(
   "examples/062-checkpointing-sleep-flush/demo/checkpoint-sleep",
@@ -25,11 +25,11 @@ const Fn = InngestFunction.make("checkpoint-sleep", {
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-sleep": ({ event, step }) =>
+  "checkpoint-sleep": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("prepare-a", Effect.succeed("a"));
-      yield* step.run("prepare-b", Effect.succeed("b"));
-      yield* step.sleep("nap", "2 seconds");
+      yield* Inngest.run("prepare-a", Effect.succeed("a"));
+      yield* Inngest.run("prepare-b", Effect.succeed("b"));
+      yield* Inngest.sleep("nap", "2 seconds");
       return { tag: event.data.tag };
     }),
 });

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoStepOptions = InngestEvent.make("examples/036-step-run-with-options/demo/step-options", Schema.Struct({}));
@@ -12,13 +12,13 @@ const StepOptionsFn = InngestFunction.make("step-options-demo", {
 const Group = InngestGroup.make(StepOptionsFn);
 
 const HandlersLive = Group.toLayer({
-  "step-options-demo": ({ step }) =>
+  "step-options-demo": () =>
     Effect.gen(function* () {
-      const result1 = yield* step.run("basic-step", Effect.succeed("basic"));
+      const result1 = yield* Inngest.run("basic-step", Effect.succeed("basic"));
 
-      const result2 = yield* step.run({ id: "named-step", name: "Named Step" }, Effect.succeed("with-name"));
+      const result2 = yield* Inngest.run({ id: "named-step", name: "Named Step" }, Effect.succeed("with-name"));
 
-      const result3 = yield* step.run("third-step", Effect.succeed("completed"));
+      const result3 = yield* Inngest.run("third-step", Effect.succeed("completed"));
 
       return { results: [result1, result2, result3] };
     }),

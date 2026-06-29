@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoMemoized = InngestEvent.make("examples/027-step-memoization/demo/memoized", Schema.Struct({}));
@@ -13,14 +13,14 @@ const MemoizedFn = InngestFunction.make("memoization-demo", {
 const Group = InngestGroup.make(MemoizedFn);
 
 const HandlersLive = Group.toLayer({
-  "memoization-demo": ({ step }) =>
+  "memoization-demo": () =>
     Effect.gen(function* () {
-      const timestamp = yield* step.run("capture-time", Effect.succeed(Date.now()));
-      const randomValue = yield* step.run("capture-random", Effect.succeed(Math.random()));
+      const timestamp = yield* Inngest.run("capture-time", Effect.succeed(Date.now()));
+      const randomValue = yield* Inngest.run("capture-random", Effect.succeed(Math.random()));
 
-      yield* step.sleep("checkpoint", Duration.seconds(1));
+      yield* Inngest.sleep("checkpoint", Duration.seconds(1));
 
-      yield* step.run(
+      yield* Inngest.run(
         "verify",
         Effect.sync(() => console.log(`Timestamp: ${timestamp}, Random: ${randomValue}`)),
       );

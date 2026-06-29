@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
+import { InngestEvent, InngestFunction, InngestGroup, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const Started = InngestEvent.make(
@@ -21,9 +21,9 @@ const CancellableTask = InngestFunction.make("cancellable-task", {
 const Group = InngestGroup.make(CancellableTask);
 
 const HandlersLive = Group.toLayer({
-  "cancellable-task": ({ event, step }) =>
+  "cancellable-task": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("record-start", Effect.succeed(event.data.taskId));
+      yield* Inngest.run("record-start", Effect.succeed(event.data.taskId));
       return { taskId: event.data.taskId, status: "completed" };
     }),
 });

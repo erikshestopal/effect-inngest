@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const JobStarted = InngestEvent.make(
@@ -32,14 +32,14 @@ const CancellableJobFn = InngestFunction.make("cancellable-job", {
 const Group = InngestGroup.make(CancellableJobFn);
 
 const HandlersLive = Group.toLayer({
-  "cancellable-job": ({ event, step }) =>
+  "cancellable-job": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("start", Effect.succeed(`Starting job ${event.data.jobId}`));
-      yield* step.sleep("work-phase-1", Duration.seconds(2));
-      yield* step.run("progress", Effect.succeed("30% complete"));
-      yield* step.sleep("work-phase-2", Duration.seconds(2));
-      yield* step.run("almost-done", Effect.succeed("60% complete"));
-      yield* step.sleep("work-phase-3", Duration.seconds(2));
+      yield* Inngest.run("start", Effect.succeed(`Starting job ${event.data.jobId}`));
+      yield* Inngest.sleep("work-phase-1", Duration.seconds(2));
+      yield* Inngest.run("progress", Effect.succeed("30% complete"));
+      yield* Inngest.sleep("work-phase-2", Duration.seconds(2));
+      yield* Inngest.run("almost-done", Effect.succeed("60% complete"));
+      yield* Inngest.sleep("work-phase-3", Duration.seconds(2));
       return { status: "completed", jobId: event.data.jobId };
     }),
 });

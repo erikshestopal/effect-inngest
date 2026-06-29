@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const UserCreated = InngestEvent.make(
@@ -29,14 +29,14 @@ const OnUserDeleted = InngestFunction.make("on-user-deleted", {
 const Group = InngestGroup.make(OnUserCreated, OnUserDeleted);
 
 const HandlersLive = Group.toLayer({
-  "on-user-created": ({ event, step }) =>
+  "on-user-created": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("send-welcome", Effect.log(`Sending welcome to ${event.data.email}`));
+      yield* Inngest.run("send-welcome", Effect.log(`Sending welcome to ${event.data.email}`));
       return { welcomed: true };
     }),
-  "on-user-deleted": ({ event, step }) =>
+  "on-user-deleted": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.run("cleanup", Effect.log(`Cleaning up data for ${event.data.userId}`));
+      yield* Inngest.run("cleanup", Effect.log(`Cleaning up data for ${event.data.userId}`));
       return { cleaned: true };
     }),
 });

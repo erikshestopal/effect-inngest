@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoOrchestrate = InngestEvent.make(
@@ -38,11 +38,11 @@ const HandlersLive = Group.toLayer({
       return { completed: true, taskId: event.data.taskId };
     }),
 
-  orchestrator: ({ event, step }) =>
+  orchestrator: ({ event }) =>
     Effect.gen(function* () {
       yield* Effect.log(`Orchestrating task: ${event.data.taskId}`);
 
-      const result = yield* step.invoke("invoke-worker", {
+      const result = yield* Inngest.invoke("invoke-worker", {
         function: WorkerFn,
         data: { taskId: event.data.taskId, priority: "high" as const } as never,
         timeout: Duration.seconds(30),
@@ -50,7 +50,7 @@ const HandlersLive = Group.toLayer({
 
       yield* Effect.log(`Worker completed: ${JSON.stringify(result)}`);
 
-      const batchResult = yield* step.invoke("invoke-batch-worker", {
+      const batchResult = yield* Inngest.invoke("invoke-batch-worker", {
         function: WorkerFn,
         data: { taskId: `${event.data.taskId}-batch`, priority: "low" as const } as never,
         timeout: Duration.minutes(5),

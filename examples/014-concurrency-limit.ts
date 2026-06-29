@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoConcurrent = InngestEvent.make(
@@ -18,10 +18,10 @@ const ConcurrentFn = InngestFunction.make("concurrent-fn", {
 const Group = InngestGroup.make(ConcurrentFn);
 
 const HandlersLive = Group.toLayer({
-  "concurrent-fn": ({ event, step }) =>
+  "concurrent-fn": ({ event }) =>
     Effect.gen(function* () {
       yield* Effect.log(`Starting execution for id: ${event.data.id}`);
-      yield* step.sleep("wait-1s", "1 second");
+      yield* Inngest.sleep("wait-1s", "1 second");
       yield* Effect.log(`Completed execution for id: ${event.data.id}`);
       return { id: event.data.id, completedAt: new Date().toISOString() };
     }),

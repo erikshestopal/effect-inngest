@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("IntentionalFailure", {
@@ -17,8 +17,8 @@ const RetriesLimitedFn = InngestFunction.make("retries-limited", {
 const Group = InngestGroup.make(RetriesLimitedFn);
 
 const HandlersLive = Group.toLayer({
-  "retries-limited": ({ step }) =>
-    step.run(
+  "retries-limited": () =>
+    Inngest.run(
       "always-fail",
       Effect.gen(function* () {
         yield* Effect.log("Attempt failed - will retry");

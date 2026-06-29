@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class Page extends Schema.Class<Page>("SchemaInvokeResultPage")({
@@ -23,9 +23,9 @@ const Group = InngestGroup.make(ChildFn, ParentFn);
 
 const HandlersLive = Group.toLayer({
   "schema-invoke-child": () => Effect.succeed(new Page({ url: new URL("https://example.com/invoke") })),
-  "schema-invoke-parent": ({ step }) =>
+  "schema-invoke-parent": () =>
     Effect.gen(function* () {
-      const page = yield* step.invoke("call-schema-child", {
+      const page = yield* Inngest.invoke("call-schema-child", {
         function: ChildFn,
         data: DemoInvokeChild.make({}),
       });

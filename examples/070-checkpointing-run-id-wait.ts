@@ -2,7 +2,7 @@ import { defineExample, eventCase } from "./_support.ts";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const StartEvent = InngestEvent.make(
   "examples/070-checkpointing-run-id-wait/demo/start",
@@ -26,14 +26,14 @@ const Fn = InngestFunction.make("checkpoint-run-id-wait", {
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-run-id-wait": ({ event, step }) =>
+  "checkpoint-run-id-wait": ({ event }) =>
     Effect.gen(function* () {
-      const runId = yield* step.run("submit-extraction", Effect.succeed(event.data.extractionId));
-      const completed = yield* step.waitForEvent("wait-for-extraction", CompletedEvent, {
+      const runId = yield* Inngest.run("submit-extraction", Effect.succeed(event.data.extractionId));
+      const completed = yield* Inngest.waitForEvent("wait-for-extraction", CompletedEvent, {
         timeout: "30 seconds",
         if: `async.data.runId == ${JSON.stringify(runId)}`,
       });
-      const finalizedRunId = yield* step.run(
+      const finalizedRunId = yield* Inngest.run(
         "finalize-extraction",
         Effect.succeed(Option.isSome(completed) ? completed.value.data.runId : "missing"),
       );

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSleep = InngestEvent.make("examples/005-step-sleep/demo/sleep", Schema.Struct({}));
@@ -12,10 +12,10 @@ const SleepFn = InngestFunction.make("sleep-test", {
 const Group = InngestGroup.make(SleepFn);
 
 const HandlersLive = Group.toLayer({
-  "sleep-test": ({ step }) =>
+  "sleep-test": () =>
     Effect.gen(function* () {
       yield* Effect.log("sleep-test starting");
-      yield* step.sleep("wait", "1 second");
+      yield* Inngest.sleep("wait", "1 second");
       yield* Effect.log("sleep-test completed");
       return { slept: true };
     }).pipe(Effect.withSpan("example/sleep-test")),

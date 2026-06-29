@@ -2,7 +2,7 @@ import * as Effect from "effect/Effect";
 import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { SleepOpcodeResponse } from "./_schemas.js";
@@ -32,9 +32,9 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("returns 206 with Sleep opcode on first invocation", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
-            yield* step.sleep("wait-5s", Duration.seconds(5));
+            yield* Inngest.sleep("wait-5s", Duration.seconds(5));
             return "completed after sleep";
           }),
       });
@@ -84,9 +84,9 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("returns 200 after sleep completes", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
-            yield* step.sleep("wait-5s", Duration.seconds(5));
+            yield* Inngest.sleep("wait-5s", Duration.seconds(5));
             return "completed after sleep";
           }),
       });
@@ -115,10 +115,10 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("sleepUntil emits Sleep opcode with ISO timestamp", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
             const targetDate = new Date("2025-12-31T23:59:59.000Z");
-            yield* step.sleepUntil("wait-until-new-year", targetDate);
+            yield* Inngest.sleepUntil("wait-until-new-year", targetDate);
             return "completed after sleepUntil";
           }),
       });
@@ -166,10 +166,10 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("sleepUntil with unix timestamp", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
             const targetTs = new Date("2025-06-15T12:00:00.000Z").getTime();
-            yield* step.sleepUntil("wait-until-summer", targetTs);
+            yield* Inngest.sleepUntil("wait-until-summer", targetTs);
             return "completed";
           }),
       });
@@ -195,9 +195,9 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("sleepUntil with ISO string", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
-            yield* step.sleepUntil("wait-until-date", "2025-03-15T09:30:00.000Z");
+            yield* Inngest.sleepUntil("wait-until-date", "2025-03-15T09:30:00.000Z");
             return "completed";
           }),
       });
@@ -223,9 +223,9 @@ describe("TB-003: Durable Sleep", () => {
   it.effect("various Duration formats", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "delayed-process": ({ step }) =>
+        "delayed-process": () =>
           Effect.gen(function* () {
-            yield* step.sleep("wait-1h", Duration.hours(1));
+            yield* Inngest.sleep("wait-1h", Duration.hours(1));
             return "completed";
           }),
       });

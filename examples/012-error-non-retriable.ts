@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { NonRetriableError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
@@ -13,7 +13,7 @@ const NonRetriableFn = InngestFunction.make("non-retriable", {
 const Group = InngestGroup.make(NonRetriableFn);
 
 const HandlersLive = Group.toLayer({
-  "non-retriable": ({ step }) => step.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" }))),
+  "non-retriable": () => Inngest.run("fail", Effect.fail(new NonRetriableError({ message: "No retry" }))),
 });
 
 export default defineExample({

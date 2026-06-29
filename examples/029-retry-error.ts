@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { RetryAfterError } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
@@ -15,10 +15,10 @@ const RetryFn = InngestFunction.make("retry-demo", {
 const Group = InngestGroup.make(RetryFn);
 
 const HandlersLive = Group.toLayer({
-  "retry-demo": ({ step, run }) =>
+  "retry-demo": ({ run }) =>
     Effect.gen(function* () {
       const attempt = run.attempt;
-      const result = yield* step.run(
+      const result = yield* Inngest.run(
         "flaky-step",
         Effect.gen(function* () {
           yield* Effect.log(`Flaky step running, attempt: ${attempt}`);

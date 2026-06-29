@@ -8,7 +8,7 @@
  * @example
  * ```ts
  * import { Effect, Schema } from "effect"
- * import { InngestEvent, InngestFunction, InngestGroup } from "effect-inngest"
+ * import { InngestEvent, InngestFunction, InngestGroup, Inngest } from "effect-inngest"
  *
  * const UserCreated = InngestEvent.make(
  *   "user/created",
@@ -107,6 +107,14 @@ export * as InngestGroup from "./Group.js";
  * @since 0.1.0
  */
 export * as InngestClient from "./Client.js";
+
+/**
+ * Durable workflow operations used inside handlers.
+ *
+ * @module Inngest
+ * @since 0.1.0
+ */
+export * as Inngest from "./Inngest.js";
 
 /**
  * This module provides integration with `@effect/platform` HttpApi.

@@ -4,7 +4,7 @@ import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestClient, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestClient, InngestEvent, Inngest } from "../../src/index.js";
 
 // TB-007: Registration
 //

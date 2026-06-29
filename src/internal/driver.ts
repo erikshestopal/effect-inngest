@@ -8,6 +8,12 @@ import * as ExecutionScope from "./execution/ExecutionScope.js";
 import * as HandlerRun from "./execution/HandlerRun.js";
 import * as ExecutionResponse from "./execution/ExecutionResponse.js";
 import { ExecutionResult } from "./execution/ExecutionResult.js";
+import { CurrentExecutionInput } from "./domain/ExecutionInput.js";
+import { InngestConfig } from "../Client.js";
+import { HandlerFiberScope } from "./runtime/HandlerFiberScope.js";
+import { StepCommandBus } from "./runtime/StepCommandBus.js";
+import { StepIdentity } from "./runtime/StepIdentity.js";
+import { StepTools } from "./runtime/StepTools.js";
 
 export { ExecutionResult };
 
@@ -16,7 +22,12 @@ export const execute = <F extends InngestFunction.Any, R>(args: {
   readonly handler: (ctx: HandlerContext<F>) => Effect.Effect<unknown, unknown, R>;
   readonly request: Protocol.SDKRequestBody;
   readonly checkpointConfig?: Option.Option<CheckpointConfig>;
-}): Effect.Effect<ExecutionResult, never, R | InngestClient> =>
+}): Effect.Effect<
+  ExecutionResult,
+  never,
+  | Exclude<R, CurrentExecutionInput | HandlerFiberScope | InngestConfig | StepCommandBus | StepIdentity | StepTools>
+  | InngestClient
+> =>
   HandlerRun.run({ fn: args.fn, handler: args.handler }).pipe(
     HandlerRun.withCheckpointDeadline,
     Effect.scoped,

@@ -2,7 +2,7 @@ import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoWaitMatch = InngestEvent.make(
@@ -27,11 +27,11 @@ const WaitMatchFn = InngestFunction.make("wait-for-invoice-payment", {
 const Group = InngestGroup.make(WaitMatchFn);
 
 const HandlersLive = Group.toLayer({
-  "wait-for-invoice-payment": ({ event, step }) =>
+  "wait-for-invoice-payment": ({ event }) =>
     Effect.gen(function* () {
       yield* Effect.log(`Waiting for payment on invoice: ${event.data.invoiceId}`);
 
-      const paidEvent = yield* step.waitForEvent("wait-for-payment", DemoInvoicePaid, {
+      const paidEvent = yield* Inngest.waitForEvent("wait-for-payment", DemoInvoicePaid, {
         timeout: Duration.seconds(30),
         if: `async.data.invoiceId == "${event.data.invoiceId}"`,
       });

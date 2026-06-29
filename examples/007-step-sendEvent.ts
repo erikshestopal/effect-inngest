@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSendSingle = InngestEvent.make(
@@ -25,11 +25,11 @@ const SendSingleFn = InngestFunction.make("send-single", {
 const Group = InngestGroup.make(SendSingleFn);
 
 const HandlersLive = Group.toLayer({
-  "send-single": ({ event, step }) =>
+  "send-single": ({ event }) =>
     Effect.gen(function* () {
-      yield* step.sendEvent(
+      yield* Inngest.sendEvent(
         "send-notification",
-        DemoNotification.make({ userId: event.data.userId, message: "Hello from step.sendEvent!" }),
+        DemoNotification.make({ userId: event.data.userId, message: "Hello from Inngest.sendEvent!" }),
       );
       return { sent: true };
     }),

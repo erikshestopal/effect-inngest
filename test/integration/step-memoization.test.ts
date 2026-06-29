@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
@@ -35,9 +35,9 @@ describe("TB-002: Step Memoization", () => {
   it.effect("returns 206 with StepPlanned on first invocation", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "process-order": ({ event, step }) =>
+        "process-order": ({ event }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            const total = yield* Inngest.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
             return { orderId: event.data.orderId, total };
           }),
       });
@@ -79,9 +79,9 @@ describe("TB-002: Step Memoization", () => {
   it.effect("returns 200 with final result when step is memoized", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "process-order": ({ event, step }) =>
+        "process-order": ({ event }) =>
           Effect.gen(function* () {
-            const total = yield* step.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
+            const total = yield* Inngest.run("calculate-total", Effect.succeed(event.data.price * event.data.quantity));
             return { orderId: event.data.orderId, total };
           }),
       });

@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSchemaSendStart = InngestEvent.make("examples/066-schema-sendEvent/demo/start", Schema.Struct({}));
@@ -19,9 +19,9 @@ const SchemaSendEventFn = InngestFunction.make("schema-sendEvent-demo", {
 const Group = InngestGroup.make(SchemaSendEventFn);
 
 const HandlersLive = Group.toLayer({
-  "schema-sendEvent-demo": ({ step }) =>
+  "schema-sendEvent-demo": () =>
     Effect.gen(function* () {
-      yield* step.sendEvent(
+      yield* Inngest.sendEvent(
         "send-schema-event",
         DemoSchemaNotification.make({ url: new URL("https://example.com/send-event") }),
       );

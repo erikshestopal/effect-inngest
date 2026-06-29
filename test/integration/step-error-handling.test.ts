@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { failWith, makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepErrorResponse } from "./_schemas.js";
@@ -61,10 +61,10 @@ describe("TB-010: Step Error Handling", () => {
     it.effect("re-raises error when memoized data has error property", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "failing-step-fn": ({ step }) =>
+          "failing-step-fn": () =>
             Effect.gen(function* () {
               // This step will receive memoized error
-              yield* step.run("will-fail", Effect.succeed("ok"));
+              yield* Inngest.run("will-fail", Effect.succeed("ok"));
               return { result: "done" };
             }),
         });
@@ -111,13 +111,13 @@ describe("TB-010: Step Error Handling", () => {
   });
 
   describe("TB-010.2 Step Failure emits StepError", () => {
-    it.effect("emits StepError opcode when step.run fails", () =>
+    it.effect("emits StepError opcode when Inngest.run fails", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "failing-step-fn": ({ step }) =>
+          "failing-step-fn": () =>
             Effect.gen(function* () {
               // This step fails intentionally - use failWith helper to avoid lint warning
-              const result = yield* step.run("will-fail", failWith(new Error("Intentional failure")));
+              const result = yield* Inngest.run("will-fail", failWith(new Error("Intentional failure")));
               return { result };
             }),
         });
@@ -165,10 +165,10 @@ describe("TB-010: Step Error Handling", () => {
     it.effect("includes error stack in StepError opcode", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "failing-step-fn": ({ step }) =>
+          "failing-step-fn": () =>
             Effect.gen(function* () {
               const customError = new Error("Error with stack");
-              const result = yield* step.run("step-with-stack", failWith(customError));
+              const result = yield* Inngest.run("step-with-stack", failWith(customError));
               return { result };
             }),
         });
@@ -223,9 +223,9 @@ describe("TB-010: Step Error Handling", () => {
       Effect.gen(function* () {
         const HandlersLive = InvokeGroup.toLayer({
           "target-fn": () => Effect.succeed({ computed: 42 }),
-          "invoker-fn": ({ event, step }) =>
+          "invoker-fn": ({ event }) =>
             Effect.gen(function* () {
-              const result = yield* step.invoke("call-target", {
+              const result = yield* Inngest.invoke("call-target", {
                 function: TargetFn,
                 data: TestTarget.make({ value: 100 }),
               });
@@ -358,15 +358,15 @@ describe("TB-010: Step Error Handling", () => {
       }),
     );
 
-    it.effect("catches sync thrown error in step.run and emits StepError opcode", () =>
+    it.effect("catches sync thrown error in Inngest.run and emits StepError opcode", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "failing-step-fn": ({ step }) =>
+          "failing-step-fn": () =>
             Effect.gen(function* () {
-              return yield* step.run(
+              return yield* Inngest.run(
                 "sync-throw-step",
                 Effect.sync(() => {
-                  throw new RangeError("Sync thrown in step.run");
+                  throw new RangeError("Sync thrown in Inngest.run");
                 }),
               );
             }),
@@ -389,19 +389,19 @@ describe("TB-010: Step Error Handling", () => {
           expect(opcode.op).toBe(Protocol.Opcode.StepError);
           expect(opcode.name).toBe("sync-throw-step");
           expect(opcode.error.name).toBe("RangeError");
-          expect(opcode.error.message).toBe("Sync thrown in step.run");
+          expect(opcode.error.message).toBe("Sync thrown in Inngest.run");
         } finally {
           yield* Effect.tryPromise(() => dispose());
         }
       }),
     );
 
-    it.effect("handles non-Error defects in step.run by converting to string", () =>
+    it.effect("handles non-Error defects in Inngest.run by converting to string", () =>
       Effect.gen(function* () {
         const HandlersLive = Group.toLayer({
-          "failing-step-fn": ({ step }) =>
+          "failing-step-fn": () =>
             Effect.gen(function* () {
-              return yield* step.run(
+              return yield* Inngest.run(
                 "non-error-defect",
                 Effect.sync(() => {
                   throw "string error thrown";

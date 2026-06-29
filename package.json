@@ -62,6 +62,10 @@
       "types": "./dist/HttpApi.d.ts",
       "import": "./src/HttpApi.ts"
     },
+    "./Inngest": {
+      "types": "./dist/Inngest.d.ts",
+      "import": "./src/Inngest.ts"
+    },
     "./internal/*": null
   },
   "publishConfig": {
@@ -94,6 +98,10 @@
       "./HttpApi": {
         "types": "./dist/HttpApi.d.ts",
         "import": "./dist/HttpApi.js"
+      },
+      "./Inngest": {
+        "types": "./dist/Inngest.d.ts",
+        "import": "./dist/Inngest.js"
       },
       "./internal/*": null
     }

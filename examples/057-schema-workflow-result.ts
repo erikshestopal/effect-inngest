@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 class Page extends Schema.Class<Page>("SchemaWorkflowResultPage")({
@@ -19,9 +19,9 @@ const SchemaWorkflowResultFn = InngestFunction.make("schema-workflow-result-demo
 const Group = InngestGroup.make(SchemaWorkflowResultFn);
 
 const HandlersLive = Group.toLayer({
-  "schema-workflow-result-demo": ({ step }) =>
+  "schema-workflow-result-demo": () =>
     Effect.gen(function* () {
-      yield* step.sleep("force-replay", "1 second");
+      yield* Inngest.sleep("force-replay", "1 second");
       return new Page({ url: new URL("https://example.com/workflow") });
     }),
 });

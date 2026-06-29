@@ -7,7 +7,7 @@ import * as Duration from "effect/Duration";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestEvent, Inngest } from "../../src/index.js";
 
 describe("InngestFunction coverage", () => {
   const TestEvent = InngestEvent.make(

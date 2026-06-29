@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from "@effect/vitest";
 import { Duration, Effect, Option, Predicate, Schema } from "effect";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { NonRetriableError } from "../../src/index.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
@@ -116,10 +116,13 @@ describe("Regression: Memoization handles null values (sleep in parallel)", () =
   it.effect("parallel sleep + run: completion with null sleep result returns 200", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "parallel-sleep": ({ event, step }) =>
+        "parallel-sleep": ({ event }) =>
           Effect.gen(function* () {
             const [data, _] = yield* Effect.all(
-              [step.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`)), step.sleep("wait", "5 seconds")],
+              [
+                Inngest.run("fetch-data", Effect.succeed(`Data: ${event.data.taskId}`)),
+                Inngest.sleep("wait", "5 seconds"),
+              ],
               { concurrency: "unbounded" },
             );
             return { data, sleepCompleted: true };
@@ -192,10 +195,10 @@ describe("Regression: URL stepId must override body.ctx.step_id", () => {
   it.effect("specific stepId in URL causes that step to execute", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "multi-step": ({ step }) =>
+        "multi-step": () =>
           Effect.gen(function* () {
-            const a = yield* step.run("step-a", Effect.succeed("A"));
-            const b = yield* step.run("step-b", Effect.succeed("B"));
+            const a = yield* Inngest.run("step-a", Effect.succeed("A"));
+            const b = yield* Inngest.run("step-b", Effect.succeed("B"));
             return { result: `${a}-${b}` };
           }),
       });
@@ -287,9 +290,9 @@ const TestChild = InngestEvent.make(
   }),
 );
 
-describe("Regression: step.invoke payload must be event data directly", () => {
+describe("Regression: Inngest.invoke payload must be event data directly", () => {
   /**
-   * Bug: step.invoke was sending opts.payload = { data, user, v } but Inngest
+   * Bug: Inngest.invoke was sending opts.payload = { data, user, v } but Inngest
    * expects opts.payload to be the event data directly (e.g., { value: 42 }).
    * This caused Inngest to not recognize the invoke and the parent function
    * would hang waiting for the child to complete.
@@ -308,17 +311,17 @@ describe("Regression: step.invoke payload must be event data directly", () => {
   it.effect("invoke opcode has payload wrapped in { data } per Inngest protocol", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "parent-fn": ({ event, step }) =>
+        "parent-fn": ({ event }) =>
           Effect.gen(function* () {
-            const childResult = yield* step.invoke("call-child", {
+            const childResult = yield* Inngest.invoke("call-child", {
               function: ChildFn,
               data: TestChild.make({ value: event.data.value * 2 }),
             });
             return { result: Predicate.hasProperty(childResult, "doubled") ? childResult.doubled : null };
           }),
-        "child-fn": ({ event, step }) =>
+        "child-fn": ({ event }) =>
           Effect.gen(function* () {
-            const doubled = yield* step.run("double", Effect.succeed(event.data.value * 2));
+            const doubled = yield* Inngest.run("double", Effect.succeed(event.data.value * 2));
             return { doubled };
           }),
       });
@@ -446,8 +449,8 @@ describe("Regression: NonRetriableError must set X-Inngest-No-Retry header", () 
   it.effect("step failure emits native StepFailed opcode and sets no-retry header", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "non-retriable-fn": ({ step }) =>
-          step.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" }))),
+        "non-retriable-fn": () =>
+          Inngest.run("fail-step", Effect.fail(new NonRetriableError({ message: "Step no retry" }))),
       });
 
       const { handler, dispose } = InngestGroup.toWebHandler(Group, { layer: makeTestLayer(HandlersLive) });
@@ -625,9 +628,9 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
   it.effect("waitForEvent result exposes typed event data", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "wait-fn": ({ event, step }) =>
+        "wait-fn": ({ event }) =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
+            const approval = yield* Inngest.waitForEvent("wait-approval", TestApprovalEvent, {
               timeout: Duration.hours(1),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
@@ -700,9 +703,9 @@ describe("Regression: waitForEvent returns typed event envelope", () => {
   it.effect("waitForEvent returns None when data is null (timeout)", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "wait-fn": ({ event, step }) =>
+        "wait-fn": ({ event }) =>
           Effect.gen(function* () {
-            const approval = yield* step.waitForEvent("wait-approval", TestApprovalEvent, {
+            const approval = yield* Inngest.waitForEvent("wait-approval", TestApprovalEvent, {
               timeout: Duration.hours(1),
               if: `async.data.orderId == "${event.data.orderId}"`,
             });
@@ -783,11 +786,11 @@ describe("Regression: disable_immediate_execution must not block target step", (
   it.effect("target step executes even when disable_immediate_execution is true", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        sequential: ({ step }) =>
+        sequential: () =>
           Effect.gen(function* () {
-            const a = yield* step.run("first", Effect.succeed("first"));
-            const b = yield* step.run("second", Effect.succeed("second"));
-            const c = yield* step.run("third", Effect.succeed("third"));
+            const a = yield* Inngest.run("first", Effect.succeed("first"));
+            const b = yield* Inngest.run("second", Effect.succeed("second"));
+            const c = yield* Inngest.run("third", Effect.succeed("third"));
             return { steps: [a, b, c] };
           }),
       });

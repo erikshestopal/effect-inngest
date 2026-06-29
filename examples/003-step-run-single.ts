@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoStepSingle = InngestEvent.make(
@@ -17,10 +17,10 @@ const StepSingleFn = InngestFunction.make("step-single", {
 const Group = InngestGroup.make(StepSingleFn);
 
 const HandlersLive = Group.toLayer({
-  "step-single": ({ event, step }) =>
+  "step-single": ({ event }) =>
     Effect.gen(function* () {
       yield* Effect.log(`step-single input: ${event.data.value}`);
-      const doubled = yield* step.run(
+      const doubled = yield* Inngest.run(
         "double",
         Effect.gen(function* () {
           yield* Effect.log(`doubling ${event.data.value}`);

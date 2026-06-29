@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoParallel = InngestEvent.make("examples/010-parallel-steps/demo/parallel", Schema.Struct({}));
@@ -12,13 +12,13 @@ const ParallelFn = InngestFunction.make("parallel-steps", {
 const Group = InngestGroup.make(ParallelFn);
 
 const HandlersLive = Group.toLayer({
-  "parallel-steps": ({ step }) =>
+  "parallel-steps": () =>
     Effect.gen(function* () {
       const results = yield* Effect.all(
         [
-          step.run("step-1", Effect.succeed(1)),
-          step.run("step-2", Effect.succeed(2)),
-          step.run("step-3", Effect.succeed(3)),
+          Inngest.run("step-1", Effect.succeed(1)),
+          Inngest.run("step-2", Effect.succeed(2)),
+          Inngest.run("step-3", Effect.succeed(3)),
         ],
         { concurrency: "unbounded" },
       );

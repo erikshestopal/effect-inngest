@@ -8,6 +8,7 @@ import type { InngestFunction } from "./Function.js";
 import * as ServeHttp from "./internal/serve/HttpApp.js";
 
 import { type HandlerContext } from "./internal/runtime/HandlerContext.js";
+import { StepTools } from "./internal/runtime/StepTools.js";
 
 /**
  * Re-export HandlerContext.
@@ -59,8 +60,12 @@ export type HandlerFrom<Fns extends InngestFunction.Any, Tag extends InngestFunc
  * @since 0.1.0
  * @category models
  */
+type RuntimeRequirements = InngestClient | StepTools;
+
 export type HandlersRequirements<H> =
-  H extends Record<string, (...args: ReadonlyArray<unknown>) => Effect.Effect<unknown, unknown, infer R>> ? R : never;
+  H extends Record<string, (...args: ReadonlyArray<unknown>) => Effect.Effect<unknown, unknown, infer R>>
+    ? Exclude<R, RuntimeRequirements>
+    : never;
 
 /**
  * @since 0.1.0
@@ -69,7 +74,7 @@ export type HandlersRequirements<H> =
 export type HandlerRequirements<Handler> = Handler extends (
   ...args: ReadonlyArray<unknown>
 ) => Effect.Effect<unknown, unknown, infer R>
-  ? R
+  ? Exclude<R, RuntimeRequirements>
   : never;
 
 /**

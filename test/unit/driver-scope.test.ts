@@ -13,7 +13,7 @@ import * as Ref from "effect/Ref";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
 
-import { InngestFunction, InngestClient, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestClient, InngestEvent, Inngest } from "../../src/index.js";
 import { execute } from "../../src/internal/driver.js";
 import {
   SDKRequestBody,
@@ -66,21 +66,21 @@ const clientLayer = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(La
 // --- Tests ---
 
 describe("Issue #3: acquireRelease finalizers should run after handler completes", () => {
-  it.effect("finalizer runs after step.run completes successfully", () =>
+  it.effect("finalizer runs after Inngest.run completes successfully", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
       const result = yield* execute({
         fn: testFn,
-        handler: ({ step }) =>
-          step.run(
+        handler: () =>
+          Inngest.run(
             "work",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)),
           ),
         request: makeRequest(),
       }).pipe(Effect.provide(clientLayer));
 
-      // The step.run always interrupts with a 206 on first execution
+      // The Inngest.run always interrupts with a 206 on first execution
       expect(result.status).toBe(206);
 
       const ran = yield* Ref.get(finalizerRan);
@@ -88,14 +88,14 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.effect("finalizer runs after step.run fails", () =>
+  it.effect("finalizer runs after Inngest.run fails", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
       const result = yield* execute({
         fn: testFn,
-        handler: ({ step }) =>
-          step.run(
+        handler: () =>
+          Inngest.run(
             "failing-step",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)).pipe(
               Effect.andThen(Effect.fail("boom")),
@@ -111,14 +111,14 @@ describe("Issue #3: acquireRelease finalizers should run after handler completes
     }),
   );
 
-  it.effect("finalizer runs after step.run dies (defect)", () =>
+  it.effect("finalizer runs after Inngest.run dies (defect)", () =>
     Effect.gen(function* () {
       const finalizerRan = yield* Ref.make(false);
 
       const result = yield* execute({
         fn: testFn,
-        handler: ({ step }) =>
-          step.run(
+        handler: () =>
+          Inngest.run(
             "defect-step",
             Effect.acquireRelease(Effect.succeed("resource"), () => Ref.set(finalizerRan, true)).pipe(
               Effect.andThen(Effect.die("unexpected defect")),

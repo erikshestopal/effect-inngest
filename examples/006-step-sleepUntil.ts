@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSleepUntil = InngestEvent.make("examples/006-step-sleepUntil/demo/sleep-until", Schema.Struct({}));
@@ -12,10 +12,10 @@ const SleepUntilFn = InngestFunction.make("sleep-until", {
 const Group = InngestGroup.make(SleepUntilFn);
 
 const HandlersLive = Group.toLayer({
-  "sleep-until": ({ step }) =>
+  "sleep-until": () =>
     Effect.gen(function* () {
       const target = new Date(Date.now() + 5000);
-      yield* step.sleepUntil("wait-until", target);
+      yield* Inngest.sleepUntil("wait-until", target);
       return { wokeAt: new Date().toISOString() };
     }),
 });

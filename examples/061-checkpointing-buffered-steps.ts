@@ -2,13 +2,13 @@ import { defineExample, eventCase } from "./_support.ts";
 /**
  * Spec §10.1.2 — `bufferedSteps: 2` batches 2 steps per checkpoint POST.
  *
- * Four sequential `step.run` calls. Steps 1+2 are flushed together, 3+4 are
+ * Four sequential `Inngest.run` calls. Steps 1+2 are flushed together, 3+4 are
  * flushed together. The final 206 ends with `RunComplete` (no buffered
  * remainder). Verify the dev-server timeline shows 2 checkpoint batches.
  */
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 
 const BufferedEvent = InngestEvent.make(
   "examples/061-checkpointing-buffered-steps/demo/checkpoint-buffered",
@@ -25,12 +25,12 @@ const Fn = InngestFunction.make("checkpoint-buffered", {
 const Group = InngestGroup.make(Fn);
 
 const HandlersLive = Group.toLayer({
-  "checkpoint-buffered": ({ event, step }) =>
+  "checkpoint-buffered": ({ event }) =>
     Effect.gen(function* () {
-      const a = yield* step.run("a", Effect.succeed(event.data.base + 1));
-      const b = yield* step.run("b", Effect.succeed(event.data.base + 2));
-      const c = yield* step.run("c", Effect.succeed(event.data.base + 3));
-      const d = yield* step.run("d", Effect.succeed(event.data.base + 4));
+      const a = yield* Inngest.run("a", Effect.succeed(event.data.base + 1));
+      const b = yield* Inngest.run("b", Effect.succeed(event.data.base + 2));
+      const c = yield* Inngest.run("c", Effect.succeed(event.data.base + 3));
+      const d = yield* Inngest.run("d", Effect.succeed(event.data.base + 4));
       return { total: a + b + c + d };
     }),
 });

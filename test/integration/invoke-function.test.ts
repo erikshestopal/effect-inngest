@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { InvokeFunctionResponse } from "./_schemas.js";
@@ -48,9 +48,9 @@ describe("TB-005: Invoke Function", () => {
       const HandlersLive = Group.toLayer({
         "process-payment": ({ event }) =>
           Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
-        "order-workflow": ({ event, step }) =>
+        "order-workflow": ({ event }) =>
           Effect.gen(function* () {
-            const paymentResult = yield* step.invoke("charge-customer", {
+            const paymentResult = yield* Inngest.invoke("charge-customer", {
               function: ProcessPayment,
               data: PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId }),
             });
@@ -114,10 +114,10 @@ describe("TB-005: Invoke Function", () => {
       const HandlersLive = Group.toLayer({
         "process-payment": ({ event }) =>
           Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
-        "order-workflow": ({ event, step }) =>
+        "order-workflow": ({ event }) =>
           Effect.gen(function* () {
             const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
-            const paymentResult = yield* (step.invoke as any)("charge-customer", {
+            const paymentResult = yield* (Inngest.invoke as any)("charge-customer", {
               function: ProcessPayment,
               data: paymentData,
             });
@@ -160,12 +160,12 @@ describe("TB-005: Invoke Function", () => {
       const HandlersLive = Group.toLayer({
         "process-payment": ({ event }) =>
           Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
-        "order-workflow": ({ event, step }) =>
+        "order-workflow": ({ event }) =>
           Effect.gen(function* () {
             // When memoized result has error, it may return undefined
             // This tests that behavior path
             const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
-            const paymentResult = yield* (step.invoke as any)("charge-customer", {
+            const paymentResult = yield* (Inngest.invoke as any)("charge-customer", {
               function: ProcessPayment,
               data: paymentData,
             });
@@ -185,7 +185,7 @@ describe("TB-005: Invoke Function", () => {
         const stepHash = "ed1c8e6090d4016334d5c49881153cf45c413dee";
 
         // Memoized result with neither 'data' nor 'error' property returns undefined
-        // This tests the defensive code path in step.invoke for edge cases
+        // This tests the defensive code path in Inngest.invoke for edge cases
         const response = yield* Effect.tryPromise(() =>
           handler(
             makeRequest({
@@ -218,10 +218,10 @@ describe("TB-005: Invoke Function", () => {
       const HandlersLive = DifferentAppClient.toLayer({
         "process-payment": ({ event }) =>
           Effect.succeed({ transactionId: `txn_${event.data.amount}`, status: "completed" }),
-        "order-workflow": ({ event, step }) =>
+        "order-workflow": ({ event }) =>
           Effect.gen(function* () {
             const paymentData = PaymentProcess.make({ amount: event.data.total, orderId: event.data.orderId });
-            const paymentResult = yield* (step.invoke as any)("charge", {
+            const paymentResult = yield* (Inngest.invoke as any)("charge", {
               function: ProcessPayment,
               data: paymentData,
             });

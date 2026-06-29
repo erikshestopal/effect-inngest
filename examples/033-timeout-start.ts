@@ -1,6 +1,6 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoSlowStart = InngestEvent.make("examples/033-timeout-start/demo/slow-start", Schema.Struct({}));
@@ -13,9 +13,9 @@ const SlowStartFn = InngestFunction.make("slow-start-task", {
 const Group = InngestGroup.make(SlowStartFn);
 
 const HandlersLive = Group.toLayer({
-  "slow-start-task": ({ step }) =>
+  "slow-start-task": () =>
     Effect.gen(function* () {
-      yield* step.run("quick-work", Effect.succeed("Started successfully"));
+      yield* Inngest.run("quick-work", Effect.succeed("Started successfully"));
       return { status: "completed" };
     }),
 });

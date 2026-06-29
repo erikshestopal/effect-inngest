@@ -1,7 +1,7 @@
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoLongRunning = InngestEvent.make("examples/024-timeout-finish/demo/long-running", Schema.Struct({}));
@@ -14,11 +14,11 @@ const LongRunningFn = InngestFunction.make("long-running-task", {
 const Group = InngestGroup.make(LongRunningFn);
 
 const HandlersLive = Group.toLayer({
-  "long-running-task": ({ step }) =>
+  "long-running-task": () =>
     Effect.gen(function* () {
-      yield* step.run("work-1", Effect.succeed("Phase 1 done"));
-      yield* step.sleep("long-wait", Duration.seconds(5));
-      yield* step.run("work-2", Effect.succeed("Phase 2 done"));
+      yield* Inngest.run("work-1", Effect.succeed("Phase 1 done"));
+      yield* Inngest.sleep("long-wait", Duration.seconds(5));
+      yield* Inngest.run("work-2", Effect.succeed("Phase 2 done"));
       return { status: "completed" };
     }),
 });

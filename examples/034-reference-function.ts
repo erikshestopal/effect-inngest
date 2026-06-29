@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
-import { InngestFunction, InngestGroup, InngestEvent } from "effect-inngest";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
 const DemoReferenceInvoke = InngestEvent.make(
@@ -28,9 +28,9 @@ const Group = InngestGroup.make(HelperFn, InvokerFn);
 
 const HandlersLive = Group.toLayer({
   "helper-function": ({ event }) => Effect.succeed({ doubled: event.data.input * 2 }),
-  "invoke-by-reference": ({ step }) =>
+  "invoke-by-reference": () =>
     Effect.gen(function* () {
-      const helperResult = yield* step.invoke("call-helper", {
+      const helperResult = yield* Inngest.invoke("call-helper", {
         function: HelperFn,
         data: DemoHelperEvent.make({ input: 21 }),
       });

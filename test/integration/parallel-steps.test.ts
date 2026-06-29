@@ -1,7 +1,7 @@
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
@@ -39,13 +39,13 @@ describe("TB-009: Parallel Step Execution", () => {
   it.effect("returns 206 with all parallel step opcodes on first invocation", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "fetch-user-data": ({ event, step }) =>
+        "fetch-user-data": ({ event }) =>
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                Inngest.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
+                Inngest.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
+                Inngest.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -103,13 +103,13 @@ describe("TB-009: Parallel Step Execution", () => {
   it.effect("returns 206 with remaining opcodes when partially memoized", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "fetch-user-data": ({ event, step }) =>
+        "fetch-user-data": ({ event }) =>
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                Inngest.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
+                Inngest.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
+                Inngest.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -172,13 +172,13 @@ describe("TB-009: Parallel Step Execution", () => {
   it.effect("returns 200 with final result when all steps memoized", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "fetch-user-data": ({ event, step }) =>
+        "fetch-user-data": ({ event }) =>
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                Inngest.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
+                Inngest.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
+                Inngest.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -242,13 +242,13 @@ describe("TB-009: Parallel Step Execution", () => {
   it.effect("handles memoization in any order", () =>
     Effect.gen(function* () {
       const HandlersLive = Group.toLayer({
-        "fetch-user-data": ({ event, step }) =>
+        "fetch-user-data": ({ event }) =>
           Effect.gen(function* () {
             const [user, orders, preferences] = yield* Effect.all(
               [
-                step.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
-                step.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
-                step.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
+                Inngest.run("fetch-user", Effect.succeed({ id: event.data.userId, name: "Alice" })),
+                Inngest.run("fetch-orders", Effect.succeed(["order_1", "order_2"])),
+                Inngest.run("fetch-preferences", Effect.succeed({ theme: "dark" })),
               ],
               { concurrency: "unbounded" },
             );
@@ -335,12 +335,12 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
   it.effect("returns 206 with both Step and Sleep opcodes", () =>
     Effect.gen(function* () {
       const MixedHandlersLive = MixedGroup.toLayer({
-        "mixed-steps": ({ event, step }) =>
+        "mixed-steps": ({ event }) =>
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
-                step.sleep("wait-briefly", "5 seconds"),
+                Inngest.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
+                Inngest.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },
             );
@@ -390,15 +390,15 @@ describe("TB-009: Mixed Parallel Steps (different opcodes)", () => {
     }),
   );
 
-  it.effect("completes when both step.run and step.sleep are memoized", () =>
+  it.effect("completes when both Inngest.run and Inngest.sleep are memoized", () =>
     Effect.gen(function* () {
       const MixedHandlersLive = MixedGroup.toLayer({
-        "mixed-steps": ({ event, step }) =>
+        "mixed-steps": ({ event }) =>
           Effect.gen(function* () {
             const [result, _] = yield* Effect.all(
               [
-                step.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
-                step.sleep("wait-briefly", "5 seconds"),
+                Inngest.run("compute", Effect.succeed(`processed-${event.data.taskId}`)),
+                Inngest.sleep("wait-briefly", "5 seconds"),
               ],
               { concurrency: "unbounded" },
             );

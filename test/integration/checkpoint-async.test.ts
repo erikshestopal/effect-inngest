@@ -4,7 +4,7 @@ import * as Layer from "effect/Layer";
 import * as Schedule from "effect/Schedule";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestClient, InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import type { CheckpointApiError } from "../../src/internal/checkpoint.js";
 
@@ -156,10 +156,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
 
   it.effect("default bufferedSteps=1 flushes after each step", () =>
     Effect.gen(function* () {
-      const { captures, layer } = setup(({ step }) =>
+      const { captures, layer } = setup(() =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
-          yield* step.run("b", Effect.succeed("B"));
+          yield* Inngest.run("a", Effect.succeed("A"));
+          yield* Inngest.run("b", Effect.succeed("B"));
           return "done";
         }),
       );
@@ -184,11 +184,11 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
   it.effect("bufferedSteps=2 flushes after every two steps", () =>
     Effect.gen(function* () {
       const { captures, layer } = setup(
-        ({ step }) =>
+        () =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed(1));
-            yield* step.run("b", Effect.succeed(2));
-            yield* step.run("c", Effect.succeed(3));
+            yield* Inngest.run("a", Effect.succeed(1));
+            yield* Inngest.run("b", Effect.succeed(2));
+            yield* Inngest.run("c", Effect.succeed(3));
             return "done";
           }),
         { checkpointing: { bufferedSteps: 2 } },
@@ -254,10 +254,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
   it.effect("flushes buffer before yielding on async opcode", () =>
     Effect.gen(function* () {
       const { captures, layer } = setup(
-        ({ step }) =>
+        () =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
-            yield* step.sleep("nap", "5 minutes");
+            yield* Inngest.run("a", Effect.succeed("A"));
+            yield* Inngest.sleep("nap", "5 minutes");
             return "x";
           }),
         { checkpointing: { bufferedSteps: 10, maxRuntime: "30 seconds" } },
@@ -268,7 +268,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
           handler(makeRequest({ fnId: "ckpt-fn", eventName: "ckpt/test", eventData: { value: "v" } })),
         );
         expect(response.status).toBe(206);
-        // step.sleep forces a flush before yielding.
+        // Inngest.sleep forces a flush before yielding.
         expect(captures.length).toBe(1);
         expect(captures[0]!.body.steps[0]!.op).toBe("StepRun");
 
@@ -284,10 +284,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
 
   it.effect("outbound body contains only StepRun opcodes", () =>
     Effect.gen(function* () {
-      const { captures, layer } = setup(({ step }) =>
+      const { captures, layer } = setup(() =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
-          yield* step.run("b", Effect.succeed("B"));
+          yield* Inngest.run("a", Effect.succeed("A"));
+          yield* Inngest.run("b", Effect.succeed("B"));
           return "done";
         }),
       );
@@ -309,10 +309,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
 
   it.effect("forwards request identity headers to async checkpoint API", () =>
     Effect.gen(function* () {
-      const { captures, layer } = setup(({ step }) =>
+      const { captures, layer } = setup(() =>
         Effect.gen(function* () {
-          yield* step.run("submit-extraction", Effect.succeed("exr_current"));
-          yield* step.waitForEvent("wait-for-extraction", TestEvent, { timeout: "5 minutes" });
+          yield* Inngest.run("submit-extraction", Effect.succeed("exr_current"));
+          yield* Inngest.waitForEvent("wait-for-extraction", TestEvent, { timeout: "5 minutes" });
           return "done";
         }),
       );
@@ -345,12 +345,12 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       // bufferedSteps=10 keeps step "a" in the buffer when "boom" fails, so
       // the driver's catchCause path drains it ahead of the StepError opcode.
       const { layer } = setup(
-        ({ step }) =>
+        () =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
+            yield* Inngest.run("a", Effect.succeed("A"));
             // Intentional global Error to test arbitrary user failure paths
             // eslint-disable-next-line effect-inngest/no-global-error-in-effect-fail
-            return yield* step.run("boom", Effect.fail(new Error("kaboom")));
+            return yield* Inngest.run("boom", Effect.fail(new Error("kaboom")));
           }),
         { checkpointing: { bufferedSteps: 10, maxRuntime: "30 seconds" } },
       );
@@ -377,10 +377,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
         // bufferedSteps=1 forces a flush after each step so the API actually
         // gets called (and fails) — exercising the buffer-restore fallback.
         const { captures, layer } = setup(
-          ({ step }) =>
+          () =>
             Effect.gen(function* () {
-              yield* step.run("a", Effect.succeed("A"));
-              yield* step.run("b", Effect.succeed("B"));
+              yield* Inngest.run("a", Effect.succeed("A"));
+              yield* Inngest.run("b", Effect.succeed("B"));
               return "done";
             }),
           {
@@ -401,7 +401,7 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
           const body = (yield* Effect.tryPromise(() => response.json())) as Array<{ op: string }>;
           expect(body.filter((o) => o.op === "StepRun")).toHaveLength(2);
           expect(body[body.length - 1]!.op).toBe("RunComplete");
-          // Each step.run with bufferedSteps=1 triggered a flush attempt;
+          // Each Inngest.run with bufferedSteps=1 triggered a flush attempt;
           // each attempt was retried up to 5 times before giving up.
           expect(captures.length).toBeGreaterThan(0);
         } finally {
@@ -414,10 +414,10 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
   it.effect("does not fall back to inline opcodes after stale async checkpoint dispatch", () =>
     Effect.gen(function* () {
       const { layer } = setup(
-        ({ step }) =>
+        () =>
           Effect.gen(function* () {
-            const runId = yield* step.run("submit-extraction", Effect.succeed("exr_current"));
-            yield* step.waitForEvent("wait-for-extraction", TestEvent, {
+            const runId = yield* Inngest.run("submit-extraction", Effect.succeed("exr_current"));
+            yield* Inngest.waitForEvent("wait-for-extraction", TestEvent, {
               timeout: "5 minutes",
               if: `async.data.runId == ${JSON.stringify(runId)}`,
             });
@@ -482,9 +482,9 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
 
   it.effect("targeted urlStepId disables checkpoint mode", () =>
     Effect.gen(function* () {
-      const { captures, layer } = setup(({ step }) =>
+      const { captures, layer } = setup(() =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
+          yield* Inngest.run("a", Effect.succeed("A"));
           return "done";
         }),
       );
@@ -513,9 +513,9 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
 
   it.effect("disable_immediate_execution disables checkpoint mode", () =>
     Effect.gen(function* () {
-      const { captures, layer } = setup(({ step }) =>
+      const { captures, layer } = setup(() =>
         Effect.gen(function* () {
-          yield* step.run("a", Effect.succeed("A"));
+          yield* Inngest.run("a", Effect.succeed("A"));
           return "done";
         }),
       );
@@ -549,9 +549,9 @@ describe("Checkpoint async integration (spec §10.4.1)", () => {
       const captures: Array<CapturedCheckpoint> = [];
       const httpLayer = makeCheckpointMock(captures);
       const HandlersLive = GroupOff.toLayer({
-        "ckpt-off": ({ step }) =>
+        "ckpt-off": () =>
           Effect.gen(function* () {
-            yield* step.run("a", Effect.succeed("A"));
+            yield* Inngest.run("a", Effect.succeed("A"));
             return "done";
           }),
       });

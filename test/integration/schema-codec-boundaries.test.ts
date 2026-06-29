@@ -2,7 +2,7 @@ import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Schema from "effect/Schema";
 import { describe, expect, it } from "@effect/vitest";
-import { InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
+import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "../../src/index.js";
 import * as Protocol from "../../src/internal/protocol.js";
 import { makeTestLayer, makeTestRequest } from "./_helpers.js";
 import { StepOpcodeResponse } from "./_schemas.js";
@@ -59,7 +59,7 @@ describe("Schema codec boundaries", () => {
     }),
   );
 
-  it.effect("replays step.run memo data as raw JSON", () =>
+  it.effect("replays Inngest.run memo data as raw JSON", () =>
     Effect.gen(function* () {
       const Fn = InngestFunction.make("schema-step-run-classic", {
         trigger: { event: WorkflowStarted },
@@ -67,9 +67,9 @@ describe("Schema codec boundaries", () => {
       });
       const Group = InngestGroup.make(Fn);
       const HandlersLive = Group.toLayer({
-        "schema-step-run-classic": ({ step }) =>
+        "schema-step-run-classic": () =>
           Effect.gen(function* () {
-            const page = yield* step.run("make-page", Effect.succeed(makePage()));
+            const page = yield* Inngest.run("make-page", Effect.succeed(makePage()));
             return {
               pathname:
                 Predicate.hasProperty(page, "url") && typeof page.url === "string" ? new URL(page.url).pathname : null,
