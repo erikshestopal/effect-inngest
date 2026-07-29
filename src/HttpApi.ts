@@ -7,6 +7,7 @@ import * as HttpApiEndpoint from "effect/unstable/httpapi/HttpApiEndpoint";
 import * as HttpApiGroup from "effect/unstable/httpapi/HttpApiGroup";
 import * as HttpClient from "effect/unstable/http/HttpClient";
 import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
 import { Effect, Layer, Option, Schema } from "effect";
 import { InngestClient } from "./Client.js";
 import type { InngestGroup } from "./Group.js";
@@ -64,16 +65,19 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
       onSome: (url) => url.toString(),
     });
 
+  const toResponse = (result: InternalHandler.HandlerResponse<unknown>) =>
+    HttpServerResponse.json(result.body, { status: result.status, headers: result.headers }).pipe(Effect.orDie);
+
   return HttpApiBuilder.group(
     api as unknown as HttpApi.HttpApi<ApiId, InngestApiGroupType>,
     "inngest",
     Effect.fn(function* (handlers) {
       return handlers
         .handle("introspect", ({ request }) =>
-          InternalHandler.handleIntrospection(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
+          InternalHandler.handleIntrospection(group, toUrl(request)).pipe(Effect.flatMap(toResponse)),
         )
         .handle("register", ({ request }) =>
-          InternalHandler.handleRegistration(group, toUrl(request)).pipe(Effect.map((r) => r.body)),
+          InternalHandler.handleRegistration(group, toUrl(request)).pipe(Effect.flatMap(toResponse)),
         )
         .handleRaw("execute", ({ query, request }) =>
           InternalHandler.verifyAndParseRequestBody(request).pipe(
@@ -86,7 +90,7 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
                 headers: request.headers,
               }),
             ),
-            Effect.map((r) => r.body),
+            Effect.flatMap(toResponse),
           ),
         );
     }),

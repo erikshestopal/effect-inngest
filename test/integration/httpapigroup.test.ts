@@ -1,4 +1,4 @@
-import { FetchHttpClient, HttpRouter, HttpServer } from "effect/unstable/http";
+import { FetchHttpClient, HttpClient, HttpClientResponse, HttpRouter, HttpServer } from "effect/unstable/http";
 import { HttpApi, HttpApiBuilder } from "effect/unstable/httpapi";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -13,6 +13,32 @@ const UserCreated = InngestEvent.make(
     userId: Schema.String,
   }),
 );
+
+/**
+ * Create a mock HttpClient layer standing in for the executor's /fn/register.
+ */
+const makeMockHttpClient = (
+  // Match the wire shape from the Inngest executor per spec §4.3.4:
+  // success → `{ ok: true, modified?: boolean }`, failure → `{ error?: string }`.
+  responseBody: { ok?: boolean; modified?: boolean; error?: string } = { ok: true, modified: true },
+  responseStatus = 200,
+) =>
+  Layer.effect(
+    HttpClient.HttpClient,
+    Effect.sync(() =>
+      HttpClient.make((request) =>
+        Effect.succeed(
+          HttpClientResponse.fromWeb(
+            request,
+            new Response(JSON.stringify(responseBody), {
+              status: responseStatus,
+              headers: { "Content-Type": "application/json" },
+            }),
+          ),
+        ),
+      ),
+    ),
+  );
 
 describe("TB-012: HttpApiGroup Integration", () => {
   const ProcessUser = InngestFunction.make("process-user", {
@@ -51,6 +77,9 @@ describe("TB-012: HttpApiGroup Integration", () => {
           handler(new Request("http://localhost/inngest", { method: "GET" })),
         );
         expect(getResponse.status).toBe(200);
+        expect(getResponse.headers.get(Protocol.Headers.SDK)).toBe("effect-inngest:v2.0.0");
+        expect(getResponse.headers.get(Protocol.Headers.SDKHandled)).toBe("true");
+        expect(getResponse.headers.get(Protocol.Headers.RequestVersion)).toBe("2");
         const getBody = (yield* Effect.tryPromise(() => getResponse.json())) as {
           function_count: number;
         };
@@ -98,7 +127,12 @@ describe("TB-012: HttpApiGroup Integration", () => {
             }),
           ),
         );
-        expect(postResponse.status).toBe(200);
+        // Checkpointing reports the run through opcodes, so the executor
+        // expects 206 here (spec §4.4.2) rather than 200.
+        expect(postResponse.status).toBe(206);
+        expect(postResponse.headers.get(Protocol.Headers.SDK)).toBe("effect-inngest:v2.0.0");
+        expect(postResponse.headers.get(Protocol.Headers.SDKHandled)).toBe("true");
+        expect(postResponse.headers.get(Protocol.Headers.RequestVersion)).toBe("2");
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
@@ -145,11 +179,11 @@ describe("TB-012: HttpApiGroup Integration", () => {
     Effect.gen(function* () {
       class MyApi extends HttpApi.make("test-api").add(InngestHttpApi.InngestApiGroup.prefix("/inngest")) {}
 
-      const ClientLive = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(
-        Layer.provide(FetchHttpClient.layer),
-      );
+      const mockHttpClient = makeMockHttpClient();
 
-      const DependenciesLive = Layer.mergeAll(HandlersLive, ClientLive, FetchHttpClient.layer);
+      const ClientLive = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(Layer.provide(mockHttpClient));
+
+      const DependenciesLive = Layer.mergeAll(HandlersLive, ClientLive, mockHttpClient);
 
       const InngestLive = InngestHttpApi.layerGroup(MyApi, Group).pipe(Layer.provide(DependenciesLive));
 
@@ -162,8 +196,41 @@ describe("TB-012: HttpApiGroup Integration", () => {
           handler(new Request("http://localhost/inngest", { method: "PUT" })),
         );
         expect(response.status).toBe(200);
+        expect(response.headers.get(Protocol.Headers.SyncKind)).toBe("out_of_band");
         const body = yield* Effect.tryPromise(() => response.json());
-        expect(body).toBeDefined();
+        expect(body).toEqual({ message: "Successfully registered", modified: true });
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
+  );
+
+  it.effect("PUT /inngest returns 500 when registration fails", () =>
+    Effect.gen(function* () {
+      class MyApi extends HttpApi.make("test-api").add(InngestHttpApi.InngestApiGroup.prefix("/inngest")) {}
+
+      const mockHttpClient = makeMockHttpClient({ error: "sync rejected" }, 500);
+
+      const ClientLive = InngestClient.layer({ id: "test-app", mode: "dev" }).pipe(Layer.provide(mockHttpClient));
+
+      const DependenciesLive = Layer.mergeAll(HandlersLive, ClientLive, mockHttpClient);
+
+      const InngestLive = InngestHttpApi.layerGroup(MyApi, Group).pipe(Layer.provide(DependenciesLive));
+
+      const ApiLive = HttpApiBuilder.layer(MyApi).pipe(Layer.provide(InngestLive));
+
+      const { handler, dispose } = HttpRouter.toWebHandler(ApiLive.pipe(Layer.provide(HttpServer.layerServices)));
+
+      try {
+        const response = yield* Effect.tryPromise(() =>
+          handler(new Request("http://localhost/inngest", { method: "PUT" })),
+        );
+        // Spec §4.3.4: a failed sync must not be reported to the caller as 200.
+        expect(response.status).toBe(500);
+        expect(yield* Effect.tryPromise(() => response.json())).toEqual({
+          message: "sync rejected",
+          modified: false,
+        });
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
