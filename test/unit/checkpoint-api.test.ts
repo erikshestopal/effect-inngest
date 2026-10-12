@@ -1,5 +1,4 @@
 import { HttpClient, HttpClientResponse } from "effect/http";
-import * as Crypto from "node:crypto";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -66,8 +65,6 @@ const makeMockHttpClient = (
     ),
   );
 
-const sha256Hex = (input: string): string => Crypto.createHash("sha256").update(input).digest("hex");
-
 const okResponse = () => new Response("{}", { status: 200, headers: { "Content-Type": "application/json" } });
 
 const sampleSteps: ReadonlyArray<typeof Protocol.GeneratorOpcode.Type> = [
@@ -128,7 +125,7 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
       const captures: Array<CapturedReq> = [];
       const httpLayer = makeMockHttpClient(captures, () => okResponse());
       const signingKey = "signkey-prod-deadbeef";
-      const expectedHash = sha256Hex("deadbeef");
+      const expectedHash = "signkey-prod-5f78c33274e43fa9de5659265c1d917e25c03722dcb0b8d27db8d5feaa813953";
       const clientLayer = InngestClient.layer({
         id: "app",
         signingKey,
@@ -216,10 +213,10 @@ describe("InngestClient.checkpointAsync (spec §10.3.1)", () => {
   it.effect("401 triggers fallback signing key + Ref flip", () =>
     Effect.gen(function* () {
       const captures: Array<CapturedReq> = [];
-      const primary = "signkey-prod-primary123";
-      const fallback = "signkey-prod-fallback456";
-      const primaryHash = sha256Hex("primary123");
-      const fallbackHash = sha256Hex("fallback456");
+      const primary = "signkey-prod-0a1b2c3d";
+      const fallback = "signkey-prod-4e5f6a7b";
+      const primaryHash = "signkey-prod-afafc56fafa11067811a11ab7beaf96b3a40bf7009300356a7f2c4cd7bcbc088";
+      const fallbackHash = "signkey-prod-12ce5e9687eec57fc63069489353d8ece622ecf25d7c1afdb06ad4d8bf07e21a";
 
       // First call with primary → 401. Second (fallback retry) → 200.
       // Then a SECOND checkpoint request: should use fallback first → 200.

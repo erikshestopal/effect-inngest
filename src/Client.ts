@@ -430,6 +430,22 @@ export const layerConfig = (
     }),
   );
 
+type DevTarget = Pick<ClientConfig, "mode" | "apiBaseUrl" | "eventBaseUrl">;
+
+const cloudTarget: DevTarget = { mode: "cloud" };
+
+const parseDevEnv = (value: string): DevTarget => {
+  const flag = value.trim().toLowerCase();
+  if (flag === "true" || flag === "1") {
+    return { mode: "dev" };
+  }
+  if (flag === "false" || flag === "0" || flag === "" || flag === "undefined") {
+    return cloudTarget;
+  }
+  const url = URL.parse(value.includes("://") ? value : `http://${value}`);
+  return url ? { mode: "dev", apiBaseUrl: url.href, eventBaseUrl: url.href } : cloudTarget;
+};
+
 /**
  * Create an InngestClient layer from environment variables.
  *
@@ -437,8 +453,9 @@ export const layerConfig = (
  * - INNGEST_APP_ID or "app" as id
  * - INNGEST_EVENT_KEY for event key
  * - INNGEST_SIGNING_KEY for signing key
- *
- * Mode is inferred from environment (INNGEST_DEV, NODE_ENV, etc.)
+ * - INNGEST_ENV for the Inngest environment
+ * - INNGEST_DEV: `1`/`true` for the local dev server, a URL for a dev server
+ *   at that URL, unset or `0`/`false` for Inngest Cloud
  *
  * @since 0.1.0
  * @category layers
@@ -453,5 +470,7 @@ export const layerFromEnv: Layer.Layer<InngestClient | InngestConfig, Config.Con
         Config.option,
         Config.map(Option.getOrUndefined),
       ),
-    }),
+      env: Config.String("INNGEST_ENV").pipe(Config.option, Config.map(Option.getOrUndefined)),
+      dev: Config.String("INNGEST_DEV").pipe(Config.map(parseDevEnv), Config.withDefault(cloudTarget)),
+    }).pipe(Config.map(({ dev, ...config }): ClientConfig => ({ ...config, ...dev }))),
   );
