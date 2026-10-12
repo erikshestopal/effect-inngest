@@ -2,7 +2,7 @@ import * as Context from "effect/Context";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import { describe, expect, it } from "@effect/vitest";
 import { InngestClient, InngestFunction, InngestGroup, InngestEvent } from "../../src/index.js";
 
@@ -118,7 +118,7 @@ describe("InngestGroup.make", () => {
     });
 
     it("toWebHandler returns handler and dispose functions", async () => {
-      const FetchHttpClient = await import("effect/unstable/http/FetchHttpClient");
+      const FetchHttpClient = await import("effect/http/FetchHttpClient");
       const { InngestClient } = await import("../../src/index.js");
       const group = InngestGroup.make(ProcessUser);
       // Create a minimal layer for testing

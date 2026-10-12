@@ -1,13 +1,13 @@
 /**
  * @since 0.1.0
  */
-import * as HttpApi from "effect/unstable/httpapi/HttpApi";
-import * as HttpApiBuilder from "effect/unstable/httpapi/HttpApiBuilder";
-import * as HttpApiEndpoint from "effect/unstable/httpapi/HttpApiEndpoint";
-import * as HttpApiGroup from "effect/unstable/httpapi/HttpApiGroup";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
+import * as HttpApi from "effect/http-api/HttpApi";
+import * as HttpApiBuilder from "effect/http-api/HttpApiBuilder";
+import * as HttpApiEndpoint from "effect/http-api/HttpApiEndpoint";
+import * as HttpApiGroup from "effect/http-api/HttpApiGroup";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
 import { Effect, Layer, Option, Schema } from "effect";
 import { InngestClient } from "./Client.js";
 import type { InngestGroup } from "./Group.js";
@@ -20,7 +20,7 @@ const ExecuteParams = Schema.Struct({
   stepId: Schema.optional(Schema.String),
 });
 
-class FunctionNotFoundError extends Schema.TaggedErrorClass<FunctionNotFoundError>()("FunctionNotFoundError", {
+class FunctionNotFoundError extends Schema.TaggedError<FunctionNotFoundError>()("FunctionNotFoundError", {
   message: Schema.String,
 }) {}
 
@@ -55,10 +55,10 @@ type InngestApiGroupType = typeof InngestApiGroup;
  * @since 0.1.0
  * @category layers
  */
-export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any>(
+export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Constraint>(
   api: HttpApi.HttpApi<ApiId, Groups>,
   group: InngestGroup.Any,
-): Layer.Layer<HttpApiGroup.ApiGroup<ApiId, "inngest">, never, InngestClient | HttpClient.HttpClient> => {
+): Layer.Layer<HttpApiGroup.Service<ApiId, "inngest">, never, InngestClient | HttpClient.HttpClient> => {
   const toUrl = (req: HttpServerRequest.HttpServerRequest) =>
     Option.match(HttpServerRequest.toURL(req), {
       onNone: () => req.url,
@@ -95,7 +95,7 @@ export const layerGroup = <ApiId extends string, Groups extends HttpApiGroup.Any
         );
     }),
   ).pipe(Layer.provide(SignatureLive)) as unknown as Layer.Layer<
-    HttpApiGroup.ApiGroup<ApiId, "inngest">,
+    HttpApiGroup.Service<ApiId, "inngest">,
     never,
     InngestClient | HttpClient.HttpClient
   >;

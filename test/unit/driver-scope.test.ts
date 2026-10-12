@@ -6,7 +6,7 @@
  * @see https://github.com/erikshestopal/effect-inngest/issues/3
  */
 
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Ref from "effect/Ref";

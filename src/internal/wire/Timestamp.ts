@@ -1,6 +1,6 @@
 import { DateTime, Predicate, Schema, identity, SchemaTransformation } from "effect";
 
-const TimestampInput = Schema.Union([Schema.String, Schema.Number, Schema.DateValid]);
+const TimestampInput = Schema.Union([Schema.String, Schema.Number, Schema.Date]);
 type TimestampInput = typeof TimestampInput.Type;
 
 const decode = (value: TimestampInput) =>

@@ -1,4 +1,4 @@
-import { FetchHttpClient } from "effect/unstable/http";
+import { FetchHttpClient } from "effect/http";
 import * as Effect from "effect/Effect";
 import * as Predicate from "effect/Predicate";
 import * as Layer from "effect/Layer";

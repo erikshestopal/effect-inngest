@@ -10,7 +10,7 @@ const DemoTriggerFailure = InngestEvent.make(
   }),
 );
 
-class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("IntentionalFailure", {
+class IntentionalFailure extends Schema.TaggedError<IntentionalFailure>()("IntentionalFailure", {
   message: Schema.String,
 }) {}
 

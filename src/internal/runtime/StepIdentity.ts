@@ -1,15 +1,5 @@
-import {
-  Context,
-  Effect,
-  Option,
-  Predicate,
-  Layer,
-  Number,
-  Encoding,
-  MutableHashMap,
-  MutableRef,
-  Schema,
-} from "effect";
+import { Context, Effect, Option, Predicate, Layer, Number, MutableHashMap, MutableRef, Schema } from "effect";
+import { Hex } from "effect/encoding";
 import type { StepInput } from "../domain/StepInput.js";
 import { StepInfo } from "../domain/StepInfo.js";
 
@@ -49,7 +39,7 @@ export class StepIdentity extends Context.Service<
         const buffer = yield* Effect.promise(() =>
           globalThis.crypto.subtle.digest("SHA-1", textEncoder.encode(reservation.effectiveId)),
         );
-        const hash = Encoding.encodeHex(new Uint8Array(buffer));
+        const hash = Hex.encode(new Uint8Array(buffer));
 
         return StepInfo.make({
           id: reservation.id,

@@ -1,4 +1,4 @@
-import * as Headers from "effect/unstable/http/Headers";
+import * as Headers from "effect/http/Headers";
 import { Duration, Option, Schema } from "effect";
 import type { ClientConfig } from "../../Client.js";
 import type { ExecutionSuspension } from "../domain/ExecutionSuspension.js";

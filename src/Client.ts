@@ -1,9 +1,9 @@
 /**
  * @since 0.1.0
  */
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import { Clock, Config, Context, Effect, Layer, Option, Predicate, Ref, Schedule, Schema } from "effect";
 import { CheckpointApiError, type CheckpointingOption } from "./internal/checkpoint.js";
 import * as Protocol from "./internal/protocol.js";
@@ -150,7 +150,7 @@ const SendEventResponse = Schema.Struct({
 export type EventPayload = typeof EventPayload.Type;
 export type SendEventResponse = typeof SendEventResponse.Type;
 
-export class SendEventError extends Schema.TaggedErrorClass<SendEventError>()("SendEventError", {
+export class SendEventError extends Schema.TaggedError<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
 }) {}
@@ -220,7 +220,7 @@ const defaultCheckpointRetrySchedule: Schedule.Schedule<unknown, CheckpointApiEr
   2.0,
 ).pipe(
   Schedule.jittered,
-  Schedule.both(Schedule.recurs(5)),
+  (schedule) => Schedule.max([schedule, Schedule.recurs(5)]),
   Schedule.while((m: Schedule.Metadata<unknown, CheckpointApiError>) => isRetriable(m.input)),
 );
 
@@ -446,10 +446,10 @@ export const layerConfig = (
 export const layerFromEnv: Layer.Layer<InngestClient | InngestConfig, Config.ConfigError, HttpClient.HttpClient> =
   layerConfig(
     Config.all({
-      id: Config.string("INNGEST_APP_ID").pipe(Config.withDefault("app")),
-      eventKey: Config.string("INNGEST_EVENT_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
-      signingKey: Config.string("INNGEST_SIGNING_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
-      signingKeyFallback: Config.string("INNGEST_SIGNING_KEY_FALLBACK").pipe(
+      id: Config.String("INNGEST_APP_ID").pipe(Config.withDefault("app")),
+      eventKey: Config.String("INNGEST_EVENT_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
+      signingKey: Config.String("INNGEST_SIGNING_KEY").pipe(Config.option, Config.map(Option.getOrUndefined)),
+      signingKeyFallback: Config.String("INNGEST_SIGNING_KEY_FALLBACK").pipe(
         Config.option,
         Config.map(Option.getOrUndefined),
       ),

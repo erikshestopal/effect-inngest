@@ -1,8 +1,8 @@
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpEffect from "effect/unstable/http/HttpEffect";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
-import * as HttpServerResponse from "effect/unstable/http/HttpServerResponse";
-import * as UrlParams from "effect/unstable/http/UrlParams";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpEffect from "effect/http/HttpEffect";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
+import * as HttpServerResponse from "effect/http/HttpServerResponse";
+import * as UrlParams from "effect/http/UrlParams";
 import { Context, Effect, Layer, Option, Predicate, Schema } from "effect";
 import { InngestClient } from "../../Client.js";
 import type { InngestGroup } from "../../Group.js";
@@ -10,11 +10,11 @@ import * as InternalHandler from "../handler.js";
 import * as Protocol from "../protocol.js";
 import { SignatureLive } from "./Signature.js";
 
-export class MethodNotAllowed extends Schema.TaggedErrorClass<MethodNotAllowed>()("MethodNotAllowed", {
+export class MethodNotAllowed extends Schema.TaggedError<MethodNotAllowed>()("MethodNotAllowed", {
   method: Schema.String,
 }) {}
 
-export class InvalidQueryParams extends Schema.TaggedErrorClass<InvalidQueryParams>()("InvalidQueryParams", {
+export class InvalidQueryParams extends Schema.TaggedError<InvalidQueryParams>()("InvalidQueryParams", {
   message: Schema.String,
 }) {}
 
@@ -55,7 +55,7 @@ export const toHttpApp = (group: InngestGroup.Any) =>
         onSome: (u) => Effect.succeed(u),
       });
 
-      const ExecuteParamsSchema = UrlParams.schemaRecord.pipe(
+      const ExecuteParamsSchema = Schema.RecordFromUrlParams.pipe(
         Schema.decodeTo(
           Schema.Struct({
             fnId: Schema.String,

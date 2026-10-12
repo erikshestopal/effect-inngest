@@ -1,8 +1,8 @@
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
-import * as Headers from "effect/unstable/http/Headers";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
+import * as Headers from "effect/http/Headers";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import { Cause, Context, Effect, Option, Predicate, Schema } from "effect";
 import { InngestClient } from "../Client.js";
 import type { InngestFunction } from "../Function.js";
@@ -13,7 +13,7 @@ import * as Protocol from "./protocol.js";
 export { SignatureError } from "./serve/Signature.js";
 import { execute } from "./driver.js";
 
-export class InvalidRequestError extends Schema.TaggedErrorClass<InvalidRequestError>()("InvalidRequestError", {
+export class InvalidRequestError extends Schema.TaggedError<InvalidRequestError>()("InvalidRequestError", {
   message: Schema.String,
 }) {}
 

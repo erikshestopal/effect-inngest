@@ -1,4 +1,4 @@
-import type * as Headers from "effect/unstable/http/Headers";
+import type * as Headers from "effect/http/Headers";
 import { Cause, Effect, Exit, Match, Option } from "effect";
 import { InngestConfig } from "../../Client.js";
 import type * as CheckpointAbort from "../checkpoint/Abort.js";

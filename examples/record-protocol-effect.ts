@@ -3,9 +3,9 @@
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { BunHttpClient, BunRuntime, BunServices } from "@effect/platform-bun";
-import { Command, Flag } from "effect/unstable/cli";
-import { HttpClient, HttpClientRequest, HttpMethod } from "effect/unstable/http";
-import { ChildProcess, ChildProcessSpawner } from "effect/unstable/process";
+import { Command, Flag } from "effect/cli";
+import { HttpClient, HttpClientRequest, HttpMethod } from "effect/http";
+import { ChildProcess, ChildProcessSpawner } from "effect/process";
 import * as Deferred from "effect/Deferred";
 import * as Effect from "effect/Effect";
 import * as FileSystem from "effect/FileSystem";
@@ -436,6 +436,8 @@ const requestWithMethod = (method: HttpMethod.HttpMethod, url: string) => {
       return HttpClientRequest.post(url);
     case "PUT":
       return HttpClientRequest.put(url);
+    case "QUERY":
+      return HttpClientRequest.query(url);
     case "TRACE":
       return HttpClientRequest.trace(url);
     default:
@@ -1104,9 +1106,9 @@ const program = (input: {
 const command = Command.make(
   "record-protocol-effect",
   {
-    concurrency: Flag.integer("concurrency").pipe(Flag.withDefault(4)),
-    runtime: Flag.choice("runtime", ["both", "native", "effect"] as const).pipe(Flag.withDefault("both" as const)),
-    only: Flag.string("only").pipe(
+    concurrency: Flag.Int("concurrency").pipe(Flag.withDefault(4)),
+    runtime: Flag.Literals("runtime", ["both", "native", "effect"] as const).pipe(Flag.withDefault("both" as const)),
+    only: Flag.String("only").pipe(
       Flag.between(0, Number.MAX_SAFE_INTEGER),
       Flag.withDefault([] as ReadonlyArray<string>),
     ),

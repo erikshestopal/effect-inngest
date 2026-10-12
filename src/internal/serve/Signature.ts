@@ -1,8 +1,9 @@
 import * as NodeCrypto from "node:crypto";
-import { Array as Arr, Context, DateTime, Encoding, Effect, Layer, Option, Schema } from "effect";
+import { Array as Arr, Context, DateTime, Effect, Layer, Option, Schema } from "effect";
+import { Hex } from "effect/encoding";
 import { InngestClient } from "../../Client.js";
 
-export class SignatureError extends Schema.TaggedErrorClass<SignatureError>()("SignatureError", {
+export class SignatureError extends Schema.TaggedError<SignatureError>()("SignatureError", {
   reason: Schema.Literals(["missing_header", "invalid_format", "expired", "invalid_signature", "missing_signing_key"]),
   message: Schema.String,
 }) {}
@@ -91,7 +92,7 @@ const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(
 const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: Schema.Uint8ArrayFromHex });
 
 export const hashSigningKey = (signingKey: string): string =>
-  Encoding.encodeHex(
+  Hex.encode(
     NodeCrypto.createHash("sha256")
       .update(signingKey.replace(/^signkey-\w+-/, ""))
       .digest(),
@@ -158,7 +159,7 @@ export class Signature extends Context.Service<Signature, SignatureService>()("e
 
         const now = yield* DateTime.now;
         const timestampSeconds = Math.floor(now.epochMilliseconds / 1000);
-        return `t=${timestampSeconds}&s=${Encoding.encodeHex(key.sign(body, timestampSeconds))}`;
+        return `t=${timestampSeconds}&s=${Hex.encode(key.sign(body, timestampSeconds))}`;
       });
 
       return { verify, sign };

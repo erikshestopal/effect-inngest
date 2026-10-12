@@ -1,4 +1,4 @@
-import * as Headers from "effect/unstable/http/Headers";
+import * as Headers from "effect/http/Headers";
 import { Schema } from "effect";
 import * as Protocol from "../protocol.js";
 import * as ExecutionHeaders from "./ExecutionHeaders.js";
@@ -8,7 +8,7 @@ type GeneratorOpcode = typeof Protocol.GeneratorOpcode.Type;
 export class ExecutionResult extends Schema.Class<ExecutionResult>("ExecutionResult")({
   status: Schema.Literals([200, 206, 400, 500]),
   body: Schema.Unknown,
-  headers: Headers.HeadersSchema,
+  headers: Schema.Headers,
 }) {
   static success(args: { readonly body: unknown; readonly headers: Headers.Headers }) {
     return ExecutionResult.make({ status: 200, body: args.body, headers: args.headers });

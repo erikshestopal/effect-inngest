@@ -1,5 +1,5 @@
-import { FetchHttpClient, HttpClient, HttpClientResponse, HttpRouter, HttpServer } from "effect/unstable/http";
-import { HttpApi, HttpApiBuilder } from "effect/unstable/httpapi";
+import { FetchHttpClient, HttpClient, HttpClientResponse, HttpRouter, HttpServer } from "effect/http";
+import { HttpApi, HttpApiBuilder } from "effect/http-api";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";
