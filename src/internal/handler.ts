@@ -105,12 +105,17 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
     fn.toRegistration({ appId: config.id, url: url.href }),
   );
   const framework = config.framework;
+  const queryDeployId = new URL(requestUrl).searchParams.get("deployId");
+  const deployId = queryDeployId && queryDeployId !== "undefined" ? queryDeployId : undefined;
 
-  const registerUrl = new URL("fn/register", client.apiBaseUrl).toString();
+  const registerUrl = new URL("fn/register", client.apiBaseUrl);
+  if (deployId) {
+    registerUrl.searchParams.set("deployId", deployId);
+  }
   const registerHeaders = baseHeaders(framework);
   delete registerHeaders[Protocol.Headers.RequestVersion];
 
-  const request = HttpClientRequest.post(registerUrl).pipe(
+  const request = HttpClientRequest.post(registerUrl.toString()).pipe(
     HttpClientRequest.setHeaders({
       ...registerHeaders,
       Authorization: `Bearer ${config.signingKey ? hashSigningKey(config.signingKey) : ""}`,
@@ -125,6 +130,7 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
       functions,
       sdk: `effect-inngest:v${SDK_VERSION}`,
       v: "0.1",
+      ...(deployId ? { deployId } : {}),
       capabilities: {
         trust_probe: "v1",
         connect: "v1",

@@ -223,6 +223,55 @@ describe("TB-007: Registration", () => {
     }
   });
 
+  it("forwards the sync's deployId to fn/register in the query and the body", async () => {
+    const received: Array<{ url: string | undefined; body: unknown }> = [];
+    const inngestApi = Http.createServer((req, res) => {
+      const chunks: Array<Buffer> = [];
+      req.on("data", (chunk: Buffer) => chunks.push(chunk));
+      req.on("end", () => {
+        received.push({ url: req.url, body: JSON.parse(Buffer.concat(chunks).toString("utf8")) });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true, modified: true }));
+      });
+    });
+    await new Promise<void>((resolve) => inngestApi.listen(0, "127.0.0.1", resolve));
+    const address = inngestApi.address();
+    if (address === null || typeof address === "string") {
+      throw new Error("Inngest API stub has no TCP port");
+    }
+    const { port } = address;
+
+    const clientLayer = InngestClient.layer({
+      id: "test-app",
+      mode: "cloud",
+      eventKey: "test-key",
+      signingKey: "signkey-branch-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      env: "pr-531",
+      apiBaseUrl: `http://127.0.0.1:${port}/`,
+    }).pipe(Layer.provide(FetchHttpClient.layer));
+
+    const { handler, dispose } = InngestGroup.toWebHandler(Group, {
+      layer: Layer.mergeAll(HandlersLive, clientLayer, FetchHttpClient.layer),
+    });
+
+    try {
+      const response = await handler(
+        new Request("http://localhost:3000/api/inngest?deployId=3aa21d96-5c1e-4f0a-9d7b-2e8c41f0b6a1", {
+          method: "PUT",
+          headers: { host: "localhost:3000", "x-inngest-sync-kind": "in_band" },
+        }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(received).toHaveLength(1);
+      expect(received[0]!.url).toBe("/fn/register?deployId=3aa21d96-5c1e-4f0a-9d7b-2e8c41f0b6a1");
+      expect(received[0]!.body).toMatchObject({ deployId: "3aa21d96-5c1e-4f0a-9d7b-2e8c41f0b6a1" });
+    } finally {
+      await dispose();
+      await new Promise<void>((resolve) => inngestApi.close(() => resolve()));
+    }
+  });
+
   it("includes expression field for triggers with if condition", async () => {
     const ProcessOrder = InngestFunction.make("process-order", {
       trigger: { event: OrderPlaced, if: "event.data.total > 100" },
