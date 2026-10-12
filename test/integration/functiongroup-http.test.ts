@@ -311,7 +311,7 @@ describe("InngestGroup.toWebHandler POST /", () => {
     }),
   );
 
-  it.effect("returns 500 for invalid JSON body", () =>
+  it.effect("returns 400 for invalid JSON body", () =>
     Effect.gen(function* () {
       const { handler, dispose } = InngestGroup.toWebHandler(testGroup, { layer: TestLayer });
       try {
@@ -319,16 +319,18 @@ describe("InngestGroup.toWebHandler POST /", () => {
           handler(makeRequest("POST", "http://localhost:9999/?fnId=test-fn", "not valid json")),
         );
 
-        expect(response.status).toBe(500);
-        const body = yield* Effect.tryPromise(() => response.json() as Promise<{ error: string }>);
-        expect(body.error).toBe("Internal server error");
+        expect(response.status).toBe(400);
+        expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
+        const body = yield* Effect.tryPromise(() => response.json() as Promise<Record<string, unknown>>);
+        expect(Object.keys(body)).toEqual(["error"]);
+        expect(body.error).toMatch(/^Invalid request body: /);
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
     }),
   );
 
-  it.effect("returns 500 for invalid request body schema", () =>
+  it.effect("returns 400 for invalid request body schema", () =>
     Effect.gen(function* () {
       const { handler, dispose } = InngestGroup.toWebHandler(testGroup, { layer: TestLayer });
       try {
@@ -336,7 +338,41 @@ describe("InngestGroup.toWebHandler POST /", () => {
           handler(makeRequest("POST", "http://localhost:9999/?fnId=test-fn", JSON.stringify({ invalid: "body" }))),
         );
 
-        expect(response.status).toBe(500);
+        expect(response.status).toBe(400);
+        expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
+      } finally {
+        yield* Effect.tryPromise(() => dispose());
+      }
+    }),
+  );
+
+  it.effect("returns 401 without the failure cause for a bad signature in cloud mode", () =>
+    Effect.gen(function* () {
+      const cloudLayer = Layer.mergeAll(
+        HandlersLayer,
+        InngestClient.layer({
+          id: "test-app",
+          mode: "cloud",
+          signingKey: "signkey-test-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+          checkpointing: false,
+        }).pipe(Layer.provide(FetchHttpClient.layer)),
+        FetchHttpClient.layer,
+      );
+      const { handler, dispose } = InngestGroup.toWebHandler(testGroup, { layer: cloudLayer });
+      try {
+        const request = makeRequest(
+          "POST",
+          "http://localhost:9999/?fnId=test-fn",
+          JSON.stringify(
+            makeRequestBody({ fnId: "test-fn", eventName: "test/event", eventData: { userId: "user-1" } }),
+          ),
+        );
+        request.headers.set(Protocol.Headers.Signature, `t=${Math.floor(Date.now() / 1000)}&s=${"0".repeat(64)}`);
+        const response = yield* Effect.tryPromise(() => handler(request));
+
+        expect(response.status).toBe(401);
+        expect(response.headers.get(Protocol.Headers.NoRetry)).toBe("true");
+        expect(yield* Effect.tryPromise(() => response.json())).toEqual({ error: "Invalid signature" });
       } finally {
         yield* Effect.tryPromise(() => dispose());
       }
