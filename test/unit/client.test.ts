@@ -3,11 +3,11 @@
  * @description Unit tests for InngestClient module.
  */
 
-import * as FetchHttpClient from "effect/unstable/http/FetchHttpClient";
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientRequest from "effect/unstable/http/HttpClientRequest";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
-import * as HttpClientError from "effect/unstable/http/HttpClientError";
+import * as FetchHttpClient from "effect/http/FetchHttpClient";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientRequest from "effect/http/HttpClientRequest";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
+import * as HttpClientError from "effect/http/HttpClientError";
 import * as Config from "effect/Config";
 import * as ConfigProvider from "effect/ConfigProvider";
 import * as Effect from "effect/Effect";
@@ -40,7 +40,7 @@ describe("InngestClient coverage", () => {
 
       const layer = InngestClient.layerConfig(
         Config.all({
-          id: Config.string("TEST_APP_ID"),
+          id: Config.String("TEST_APP_ID"),
         }),
       ).pipe(Layer.provide(FetchHttpClient.layer));
 

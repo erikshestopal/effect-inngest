@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class StepError extends Schema.TaggedErrorClass<StepError>()("StepError", {
+class StepError extends Schema.TaggedError<StepError>()("StepError", {
   message: Schema.String,
 }) {}
 

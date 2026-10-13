@@ -1,5 +1,5 @@
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
 import { it } from "@effect/vitest";
 import { Effect, Layer, Option } from "effect";
 import { describe, expect } from "@effect/vitest";

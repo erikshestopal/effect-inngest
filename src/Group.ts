@@ -1,7 +1,7 @@
 /**
  * @since 0.1.0
  */
-import * as HttpClient from "effect/unstable/http/HttpClient";
+import * as HttpClient from "effect/http/HttpClient";
 import { Context, Effect, Layer } from "effect";
 import { InngestClient } from "./Client.js";
 import type { InngestFunction } from "./Function.js";

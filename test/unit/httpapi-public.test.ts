@@ -1,9 +1,9 @@
 // @ts-nocheck
-import * as HttpClient from "effect/unstable/http/HttpClient";
-import * as HttpClientResponse from "effect/unstable/http/HttpClientResponse";
-import * as HttpEffect from "effect/unstable/http/HttpEffect";
-import * as HttpRouter from "effect/unstable/http/HttpRouter";
-import { HttpApi, HttpApiBuilder } from "effect/unstable/httpapi";
+import * as HttpClient from "effect/http/HttpClient";
+import * as HttpClientResponse from "effect/http/HttpClientResponse";
+import * as HttpEffect from "effect/http/HttpEffect";
+import * as HttpRouter from "effect/http/HttpRouter";
+import { HttpApi, HttpApiBuilder } from "effect/http-api";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Schema from "effect/Schema";

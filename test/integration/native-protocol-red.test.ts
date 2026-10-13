@@ -1,5 +1,5 @@
 import * as Crypto from "node:crypto";
-import { HttpClient, HttpClientResponse } from "effect/unstable/http";
+import { HttpClient, HttpClientResponse } from "effect/http";
 import * as Duration from "effect/Duration";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
@@ -148,7 +148,7 @@ const DemoEvent = InngestEvent.make("demo/event", Schema.Struct({ value: Schema.
 const EmailSend = InngestEvent.make("email/send", Schema.Struct({ to: Schema.String }));
 const InvoicePaid = InngestEvent.make("demo/invoice-paid", Schema.Struct({ invoiceId: Schema.String }));
 const ChildInput = InngestEvent.make("demo/child", Schema.Struct({ value: Schema.Number }));
-class TestProtocolError extends Schema.TaggedErrorClass<TestProtocolError>()("TestProtocolError", {
+class TestProtocolError extends Schema.TaggedError<TestProtocolError>()("TestProtocolError", {
   message: Schema.String,
 }) {}
 

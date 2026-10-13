@@ -3,7 +3,7 @@
 import { readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { FetchHttpClient } from "effect/unstable/http";
+import { FetchHttpClient } from "effect/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { InngestClient, InngestGroup } from "effect-inngest";

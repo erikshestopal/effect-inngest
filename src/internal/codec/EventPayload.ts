@@ -7,7 +7,7 @@ import { eventSchemaFor, eventSchemas } from "../domain/FunctionDefinition.js";
 
 export type EventSchema = InngestEvent.EventDefinition;
 
-export class EventDecodeError extends Schema.TaggedErrorClass<EventDecodeError>()("EventDecodeError", {
+export class EventDecodeError extends Schema.TaggedError<EventDecodeError>()("EventDecodeError", {
   eventName: Schema.String,
   cause: Schema.Unknown,
 }) {}

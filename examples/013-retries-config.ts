@@ -3,7 +3,7 @@ import * as Schema from "effect/Schema";
 import { InngestFunction, InngestGroup, InngestEvent, Inngest } from "effect-inngest";
 import { defineExample, eventCase } from "./_support.ts";
 
-class IntentionalFailure extends Schema.TaggedErrorClass<IntentionalFailure>()("IntentionalFailure", {
+class IntentionalFailure extends Schema.TaggedError<IntentionalFailure>()("IntentionalFailure", {
   message: Schema.String,
 }) {}
 

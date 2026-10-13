@@ -7,7 +7,7 @@ const parseStringified = (...args: Parameters<typeof stringify>): unknown =>
   pipe(
     stringify(...args),
     Option.fromUndefinedOr,
-    Option.map(Schema.decodeUnknownSync(Schema.UnknownFromJsonString)),
+    Option.map(Schema.decodeUnknownSync(Schema.fromJsonString(Schema.Unknown))),
     Option.getOrNull,
   );
 

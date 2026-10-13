@@ -1,5 +1,5 @@
-import * as Headers from "effect/unstable/http/Headers";
-import * as HttpServerRequest from "effect/unstable/http/HttpServerRequest";
+import * as Headers from "effect/http/Headers";
+import * as HttpServerRequest from "effect/http/HttpServerRequest";
 import { Effect, Function, Option, Schema } from "effect";
 import * as Protocol from "../protocol.js";
 import { Signature, SignatureError, SignatureHeader, SignedPayload } from "./Signature.js";

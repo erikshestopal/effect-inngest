@@ -1,6 +1,6 @@
 import { BunHttpServer, BunServices } from "@effect/platform-bun";
 import { Config, Effect, Layer, Schema } from "effect";
-import { FetchHttpClient, HttpRouter } from "effect/unstable/http";
+import { FetchHttpClient, HttpRouter } from "effect/http";
 import { InngestClient, InngestEvent, InngestFunction, InngestGroup } from "effect-inngest";
 
 const Start = InngestEvent.make("start", Schema.Struct({}));
