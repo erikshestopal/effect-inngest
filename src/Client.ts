@@ -4,6 +4,7 @@
 import * as HttpClient from "effect/http/HttpClient";
 import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/http/HttpClientResponse";
+import * as HttpClientError from "effect/http/HttpClientError";
 import { Clock, Config, Context, Effect, Layer, Option, Predicate, Ref, Schedule, Schema } from "effect";
 import { CheckpointApiError, type CheckpointingOption } from "./internal/checkpoint.js";
 import * as Protocol from "./internal/protocol.js";
@@ -153,6 +154,7 @@ export type SendEventResponse = typeof SendEventResponse.Type;
 export class SendEventError extends Schema.TaggedError<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
+  status: Schema.optional(Schema.Number),
 }) {}
 
 export interface InngestClientService {
@@ -276,6 +278,7 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Ef
 
       return yield* HttpClientRequest.schemaBodyJson(Schema.Array(EventPayload))(request, payloads).pipe(
         Effect.flatMap(httpClient.execute),
+        Effect.flatMap(HttpClientResponse.filterStatusOk),
         Effect.flatMap(HttpClientResponse.schemaBodyJson(SendEventResponse)),
         Effect.map((response) => ({ ids: response.ids, status: response.status })),
         Effect.scoped,
@@ -284,6 +287,7 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Ef
             new SendEventError({
               message: `Failed to send events: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
               events: eventNames,
+              status: HttpClientError.isHttpClientError(error) ? error.response?.status : undefined,
             }),
           ),
         ),

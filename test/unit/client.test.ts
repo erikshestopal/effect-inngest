@@ -3,6 +3,7 @@
  * @description Unit tests for InngestClient module.
  */
 
+import * as Http from "node:http";
 import * as FetchHttpClient from "effect/http/FetchHttpClient";
 import * as HttpClient from "effect/http/HttpClient";
 import * as HttpClientRequest from "effect/http/HttpClientRequest";
@@ -123,6 +124,45 @@ describe("InngestClient coverage", () => {
   });
 
   describe("sendEvent", () => {
+    const inngestEventApi = (status: number, body: string) =>
+      Effect.acquireRelease(
+        Effect.promise(async () => {
+          const server = Http.createServer((_req, res) => {
+            res.writeHead(status, { "Content-Type": "application/json" }).end(body);
+          });
+          await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+          const address = server.address();
+          return { server, url: `http://127.0.0.1:${typeof address === "object" && address ? address.port : 0}/` };
+        }),
+        ({ server }) => Effect.promise(() => new Promise<void>((resolve) => server.close(() => resolve()))),
+      );
+
+    for (const [status, body] of [
+      [401, '{ "ids": [], "status": 401, "error": "Event key not found" }'],
+      [401, '{ "error": "boom" }'],
+      [500, '{ "ids": [], "status": 401, "error": "Event key not found" }'],
+      [500, '{ "error": "boom" }'],
+    ] as const) {
+      it.effect(`fails with the HTTP status on a ${status} answering ${body}`, () =>
+        Effect.gen(function* () {
+          const api = yield* inngestEventApi(status, body);
+          const layer = InngestClient.layer({
+            id: "test-app",
+            eventKey: "test-key",
+            mode: "cloud",
+            eventBaseUrl: api.url,
+          }).pipe(Layer.provide(FetchHttpClient.layer));
+
+          const error = yield* Effect.gen(function* () {
+            const client = yield* InngestClient.InngestClient;
+            return yield* client.sendEvent([{ name: "test/event", data: {} }]);
+          }).pipe(Effect.provide(layer), Effect.flip);
+
+          expect(error).toMatchObject({ _tag: "SendEventError", status, events: ["test/event"] });
+        }),
+      );
+    }
+
     it.effect("sends events successfully", () =>
       Effect.gen(function* () {
         const mockHttpClient = HttpClient.make((req) =>
