@@ -11,6 +11,7 @@ import * as Checkpoint from "./checkpoint.js";
 import * as SdkRequest from "./serve/Request.js";
 import * as Protocol from "./protocol.js";
 export { SignatureError } from "./serve/Signature.js";
+import { hashSigningKey } from "./serve/Signature.js";
 import { execute } from "./driver.js";
 
 export class InvalidRequestError extends Schema.TaggedError<InvalidRequestError>()("InvalidRequestError", {
@@ -112,8 +113,9 @@ export const handleRegistration = Effect.fn("effect-inngest/handler/handleRegist
   const request = HttpClientRequest.post(registerUrl).pipe(
     HttpClientRequest.setHeaders({
       ...registerHeaders,
-      Authorization: `Bearer ${config.signingKey ?? ""}`,
+      Authorization: `Bearer ${config.signingKey ? hashSigningKey(config.signingKey) : ""}`,
       [Protocol.Headers.SyncKind]: "out_of_band",
+      ...(config.env ? { [Protocol.Headers.Env]: config.env } : {}),
     }),
     HttpClientRequest.bodyJsonUnsafe({
       url: url.href,

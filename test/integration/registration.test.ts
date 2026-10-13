@@ -1,4 +1,5 @@
-import { HttpClient, HttpClientResponse } from "effect/http";
+import * as Http from "node:http";
+import { FetchHttpClient, HttpClient, HttpClientResponse } from "effect/http";
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import * as Option from "effect/Option";
@@ -169,6 +170,56 @@ describe("TB-007: Registration", () => {
       expect(body).not.toHaveProperty("framework");
     } finally {
       await dispose();
+    }
+  });
+
+  it("authenticates Cloud registration with the hashed signing key and the branch environment", async () => {
+    const received: Array<Http.IncomingHttpHeaders> = [];
+    const inngestApi = Http.createServer((req, res) => {
+      received.push(req.headers);
+      req.resume();
+      req.on("end", () => {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ ok: true, modified: true }));
+      });
+    });
+    await new Promise<void>((resolve) => inngestApi.listen(0, "127.0.0.1", resolve));
+    const address = inngestApi.address();
+    if (address === null || typeof address === "string") {
+      throw new Error("Inngest API stub has no TCP port");
+    }
+    const { port } = address;
+
+    const clientLayer = InngestClient.layer({
+      id: "test-app",
+      mode: "cloud",
+      eventKey: "test-key",
+      signingKey: "signkey-branch-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+      env: "pr-561",
+      apiBaseUrl: `http://127.0.0.1:${port}/`,
+    }).pipe(Layer.provide(FetchHttpClient.layer));
+
+    const { handler, dispose } = InngestGroup.toWebHandler(Group, {
+      layer: Layer.mergeAll(HandlersLive, clientLayer, FetchHttpClient.layer),
+    });
+
+    try {
+      const response = await handler(
+        new Request("http://localhost:3000/api/inngest", {
+          method: "PUT",
+          headers: { host: "localhost:3000" },
+        }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(received).toHaveLength(1);
+      expect(received[0]!.authorization).toBe(
+        "Bearer signkey-branch-4884fdaafea47c29fea7159d0daddd9c085d6200e1359e85bb81736af6b7c837",
+      );
+      expect(received[0]!["x-inngest-env"]).toBe("pr-561");
+    } finally {
+      await dispose();
+      await new Promise<void>((resolve) => inngestApi.close(() => resolve()));
     }
   });
 

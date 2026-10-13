@@ -93,12 +93,18 @@ const SIGNATURE_VALIDITY_WINDOW_MS = 5 * 60 * 1000;
 const TimestampSeconds = Schema.NumberFromString.pipe(Schema.check(Schema.isInt(), Schema.isGreaterThan(0)));
 const SignatureParams = Schema.Struct({ t: TimestampSeconds, s: Schema.Uint8ArrayFromHex });
 
-export const hashSigningKey = (signingKey: string): string =>
-  Hex.encode(
-    NodeCrypto.createHash("sha256")
-      .update(signingKey.replace(/^signkey-\w+-/, ""))
-      .digest(),
+export const hashSigningKey = (signingKey: string): string => {
+  const prefix = signingKey.match(/^signkey-\w+-/)?.[0] ?? "";
+  const key = signingKey.slice(prefix.length);
+  return (
+    prefix +
+    Hex.encode(
+      NodeCrypto.createHash("sha256")
+        .update(key.padStart(key.length + (key.length % 2), "0"), "hex")
+        .digest(),
+    )
   );
+};
 
 export class Signature extends Context.Service<Signature, SignatureService>()("effect-inngest/Signature", {
   make: (config: SignatureConfig) =>

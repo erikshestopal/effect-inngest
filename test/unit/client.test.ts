@@ -72,6 +72,54 @@ describe("InngestClient coverage", () => {
 
       expect(result).toBe("env-app");
     });
+
+    const resolveFromEnv = (env: Record<string, string>) =>
+      Effect.runPromise(
+        Effect.gen(function* () {
+          const client = yield* InngestClient.InngestClient;
+          return {
+            mode: client.mode,
+            apiBaseUrl: client.apiBaseUrl,
+            eventBaseUrl: client.eventBaseUrl,
+            env: client.config.env,
+          };
+        }).pipe(
+          Effect.provide(InngestClient.layerFromEnv),
+          Effect.provide(FetchHttpClient.layer),
+          Effect.provide(ConfigProvider.layer(ConfigProvider.fromEnv({ env }))),
+        ),
+      );
+
+    it("targets Inngest Cloud when INNGEST_DEV is unset", async () => {
+      expect(await resolveFromEnv({ INNGEST_ENV: "pr-561" })).toEqual({
+        mode: "cloud",
+        apiBaseUrl: "https://api.inngest.com/",
+        eventBaseUrl: "https://inn.gs/",
+        env: "pr-561",
+      });
+    });
+
+    it("targets the local dev server when INNGEST_DEV is 1", async () => {
+      expect(await resolveFromEnv({ INNGEST_DEV: "1" })).toEqual({
+        mode: "dev",
+        apiBaseUrl: "http://localhost:8288/",
+        eventBaseUrl: "http://localhost:8288/",
+        env: undefined,
+      });
+    });
+
+    it("targets Inngest Cloud when INNGEST_DEV is false", async () => {
+      expect((await resolveFromEnv({ INNGEST_DEV: "false" })).mode).toBe("cloud");
+    });
+
+    it("targets the dev server at INNGEST_DEV when it is a URL", async () => {
+      expect(await resolveFromEnv({ INNGEST_DEV: "http://inngest:8288" })).toEqual({
+        mode: "dev",
+        apiBaseUrl: "http://inngest:8288/",
+        eventBaseUrl: "http://inngest:8288/",
+        env: undefined,
+      });
+    });
   });
 
   describe("sendEvent", () => {
