@@ -137,31 +137,56 @@ describe("InngestClient coverage", () => {
         ({ server }) => Effect.promise(() => new Promise<void>((resolve) => server.close(() => resolve()))),
       );
 
-    for (const [status, body] of [
-      [401, '{ "ids": [], "status": 401, "error": "Event key not found" }'],
-      [401, '{ "error": "boom" }'],
-      [500, '{ "ids": [], "status": 401, "error": "Event key not found" }'],
-      [500, '{ "error": "boom" }'],
+    const sendThrough = (eventBaseUrl: string) =>
+      Effect.gen(function* () {
+        const client = yield* InngestClient.InngestClient;
+        return yield* client.sendEvent([{ name: "test/event", data: {} }]);
+      }).pipe(
+        Effect.provide(
+          InngestClient.layer({ id: "test-app", eventKey: "test-key", mode: "cloud", eventBaseUrl }).pipe(
+            Layer.provide(FetchHttpClient.layer),
+          ),
+        ),
+        Effect.flip,
+      );
+
+    for (const [status, body, message] of [
+      [
+        401,
+        '{ "ids": [], "status": 401, "error": "Event key not found" }',
+        "Failed to send events: StatusCodeError 401: Event key not found",
+      ],
+      [401, '{ "error": "boom" }', "Failed to send events: StatusCodeError 401: boom"],
+      [
+        500,
+        '{ "ids": [], "status": 401, "error": "Event key not found" }',
+        "Failed to send events: StatusCodeError 500: Event key not found",
+      ],
+      [500, '{ "error": "boom" }', "Failed to send events: StatusCodeError 500: boom"],
+      [502, "<html>Bad Gateway</html>", "Failed to send events: StatusCodeError 502"],
     ] as const) {
       it.effect(`fails with the HTTP status on a ${status} answering ${body}`, () =>
         Effect.gen(function* () {
           const api = yield* inngestEventApi(status, body);
-          const layer = InngestClient.layer({
-            id: "test-app",
-            eventKey: "test-key",
-            mode: "cloud",
-            eventBaseUrl: api.url,
-          }).pipe(Layer.provide(FetchHttpClient.layer));
 
-          const error = yield* Effect.gen(function* () {
-            const client = yield* InngestClient.InngestClient;
-            return yield* client.sendEvent([{ name: "test/event", data: {} }]);
-          }).pipe(Effect.provide(layer), Effect.flip);
+          const error = yield* sendThrough(api.url);
 
+          expect(error.message).toBe(message);
           expect(error).toMatchObject({ _tag: "SendEventError", status, events: ["test/event"] });
         }),
       );
     }
+
+    it.effect("fails without the URL when the event API is unreachable", () =>
+      Effect.gen(function* () {
+        const { url } = yield* Effect.scoped(inngestEventApi(200, "{}"));
+
+        const error = yield* sendThrough(url);
+
+        expect(error.message).toBe("Failed to send events: TransportError");
+        expect(error).toMatchObject({ _tag: "SendEventError", status: undefined, events: ["test/event"] });
+      }),
+    );
 
     it.effect("sends events successfully", () =>
       Effect.gen(function* () {

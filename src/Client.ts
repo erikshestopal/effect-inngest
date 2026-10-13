@@ -148,6 +148,8 @@ const SendEventResponse = Schema.Struct({
   status: Schema.optional(Schema.Number),
 });
 
+const InngestErrorBody = Schema.Struct({ error: Schema.String });
+
 export type EventPayload = typeof EventPayload.Type;
 export type SendEventResponse = typeof SendEventResponse.Type;
 
@@ -281,16 +283,30 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Ef
         Effect.flatMap(HttpClientResponse.filterStatusOk),
         Effect.flatMap(HttpClientResponse.schemaBodyJson(SendEventResponse)),
         Effect.map((response) => ({ ids: response.ids, status: response.status })),
-        Effect.scoped,
         Effect.catch((error) =>
-          Effect.fail(
-            new SendEventError({
-              message: `Failed to send events: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
+          Effect.gen(function* () {
+            if (!HttpClientError.isHttpClientError(error)) {
+              return yield* new SendEventError({
+                message: `Failed to send events: ${error.message}`,
+                events: eventNames,
+              });
+            }
+            const status = error.response?.status;
+            const inngestError =
+              error.reason._tag === "StatusCodeError"
+                ? yield* HttpClientResponse.schemaBodyJson(InngestErrorBody)(error.reason.response).pipe(
+                    Effect.map((body) => `: ${body.error}`),
+                    Effect.orElseSucceed(() => ""),
+                  )
+                : "";
+            return yield* new SendEventError({
+              message: `Failed to send events: ${error.reason._tag}${Predicate.isUndefined(status) ? "" : ` ${status}`}${inngestError}`,
               events: eventNames,
-              status: HttpClientError.isHttpClientError(error) ? error.response?.status : undefined,
-            }),
-          ),
+              status,
+            });
+          }),
         ),
+        Effect.scoped,
       );
     });
 
