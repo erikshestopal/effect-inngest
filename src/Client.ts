@@ -4,6 +4,7 @@
 import * as HttpClient from "effect/http/HttpClient";
 import * as HttpClientRequest from "effect/http/HttpClientRequest";
 import * as HttpClientResponse from "effect/http/HttpClientResponse";
+import * as HttpClientError from "effect/http/HttpClientError";
 import { Clock, Config, Context, Effect, Layer, Option, Predicate, Ref, Schedule, Schema } from "effect";
 import { CheckpointApiError, type CheckpointingOption } from "./internal/checkpoint.js";
 import * as Protocol from "./internal/protocol.js";
@@ -147,12 +148,15 @@ const SendEventResponse = Schema.Struct({
   status: Schema.optional(Schema.Number),
 });
 
+const InngestErrorBody = Schema.Struct({ error: Schema.String });
+
 export type EventPayload = typeof EventPayload.Type;
 export type SendEventResponse = typeof SendEventResponse.Type;
 
 export class SendEventError extends Schema.TaggedError<SendEventError>()("SendEventError", {
   message: Schema.String,
   events: Schema.Array(Schema.String),
+  status: Schema.optional(Schema.Number),
 }) {}
 
 export interface InngestClientService {
@@ -276,17 +280,33 @@ const makeClient = (config: ClientConfig, httpClient: HttpClient.HttpClient): Ef
 
       return yield* HttpClientRequest.schemaBodyJson(Schema.Array(EventPayload))(request, payloads).pipe(
         Effect.flatMap(httpClient.execute),
+        Effect.flatMap(HttpClientResponse.filterStatusOk),
         Effect.flatMap(HttpClientResponse.schemaBodyJson(SendEventResponse)),
         Effect.map((response) => ({ ids: response.ids, status: response.status })),
-        Effect.scoped,
         Effect.catch((error) =>
-          Effect.fail(
-            new SendEventError({
-              message: `Failed to send events: ${Predicate.hasProperty(error, "message") ? (error.message as string) : "Unknown error"}`,
+          Effect.gen(function* () {
+            if (!HttpClientError.isHttpClientError(error)) {
+              return yield* new SendEventError({
+                message: `Failed to send events: ${error.message}`,
+                events: eventNames,
+              });
+            }
+            const status = error.response?.status;
+            const inngestError =
+              error.reason._tag === "StatusCodeError"
+                ? yield* HttpClientResponse.schemaBodyJson(InngestErrorBody)(error.reason.response).pipe(
+                    Effect.map((body) => `: ${body.error}`),
+                    Effect.orElseSucceed(() => ""),
+                  )
+                : "";
+            return yield* new SendEventError({
+              message: `Failed to send events: ${error.reason._tag}${Predicate.isUndefined(status) ? "" : ` ${status}`}${inngestError}`,
               events: eventNames,
-            }),
-          ),
+              status,
+            });
+          }),
         ),
+        Effect.scoped,
       );
     });
 
