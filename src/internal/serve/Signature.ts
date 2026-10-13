@@ -17,10 +17,12 @@ export class SignatureConfig extends Schema.Class<SignatureConfig>("effect-innge
 export class PreparedSigningKey extends Schema.Class<PreparedSigningKey>("effect-inngest/PreparedSigningKey")({
   bytes: Schema.Uint8Array,
 }) {
-  static readonly decode = (signingKey: string) =>
-    Schema.decodeUnknownOption(Schema.Uint8ArrayFromHex)(signingKey.replace(/^signkey-\w+-/, "")).pipe(
-      Option.map((bytes) => PreparedSigningKey.make({ bytes })),
+  static readonly decode = (signingKey: string) => {
+    const key = signingKey.replace(/^signkey-\w+-/, "");
+    return Schema.decodeUnknownOption(Schema.Uint8ArrayFromHex)(key).pipe(
+      Option.map(() => PreparedSigningKey.make({ bytes: new TextEncoder().encode(key) })),
     );
+  };
 
   readonly sign = (body: Uint8Array, timestampSeconds: number) =>
     NodeCrypto.createHmac("sha256", this.bytes).update(body).update(String(timestampSeconds)).digest();

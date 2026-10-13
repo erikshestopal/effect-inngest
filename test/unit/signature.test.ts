@@ -3,10 +3,10 @@
  * @description Tests for signature verification (I6.1)
  */
 
-import * as Crypto from "node:crypto";
 import * as Effect from "effect/Effect";
 import * as Option from "effect/Option";
 import * as Result from "effect/Result";
+import * as TestClock from "effect/testing/TestClock";
 import { describe, expect, it } from "@effect/vitest";
 import {
   Signature,
@@ -16,17 +16,15 @@ import {
   SignedPayload,
 } from "../../src/internal/serve/Signature.js";
 
-const TEST_SIGNING_KEY = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
-const TEST_SIGNING_KEY_FALLBACK = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
+const TEST_SIGNING_KEY = "signkey-test-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+const TEST_SIGNING_KEY_FALLBACK = "signkey-test-fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210";
 const TEST_BODY = new TextEncoder().encode('{"event":"test"}');
+const TEST_TIMESTAMP = 1760000000;
 
-const createValidSignature = (body: Uint8Array, signingKey: string, timestampOverride?: number): string => {
-  const timestamp = timestampOverride ?? Math.floor(Date.now() / 1000);
-  const keyBytes = Buffer.from(signingKey.replace(/^signkey-\w+-/, ""), "hex");
-  const signature = Crypto.createHmac("sha256", keyBytes).update(body).update(String(timestamp)).digest("hex");
+const NATIVE_SIGNATURE = `t=${TEST_TIMESTAMP}&s=ee30fdb49e6d49a36d344b0a17b53b56ffa8aaca20fcc916a7b8eb61dc5d7426`;
+const NATIVE_FALLBACK_SIGNATURE = `t=${TEST_TIMESTAMP}&s=581372ae5556fd23f8b3521d1a153b9cbe36f2990a94117ca463fcac180b7053`;
 
-  return `t=${timestamp}&s=${signature}`;
-};
+const atSignatureTime = (offsetSeconds = 0) => TestClock.setTime((TEST_TIMESTAMP + offsetSeconds) * 1000);
 
 const layer = (config: {
   readonly verification: "disabled" | "required";
@@ -75,19 +73,18 @@ describe("Signature.verify", () => {
   });
 
   describe("required verification", () => {
-    it.live("succeeds with valid signature", () =>
+    it.effect("accepts the signature the native SDK computes", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime();
         const sig = yield* Signature;
-        yield* sig.verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)));
+        yield* sig.verify(yield* payload(TEST_BODY, NATIVE_SIGNATURE));
       }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
     it.live("fails with missing signing key", () =>
       Effect.gen(function* () {
         const sig = yield* Signature;
-        const result = yield* sig
-          .verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)))
-          .pipe(Effect.result);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, NATIVE_SIGNATURE)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
@@ -121,11 +118,11 @@ describe("Signature.verify", () => {
       }),
     );
 
-    it.live("fails with expired signature", () =>
+    it.effect("fails with expired signature", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime(600);
         const sig = yield* Signature;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, Math.floor(Date.now() / 1000) - 600);
-        const result = yield* sig.verify(yield* payload(TEST_BODY, signature)).pipe(Effect.result);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, NATIVE_SIGNATURE)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
@@ -134,11 +131,11 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with future signature", () =>
+    it.effect("fails with future signature", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime(-600);
         const sig = yield* Signature;
-        const signature = createValidSignature(TEST_BODY, TEST_SIGNING_KEY, Math.floor(Date.now() / 1000) + 600);
-        const result = yield* sig.verify(yield* payload(TEST_BODY, signature)).pipe(Effect.result);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, NATIVE_SIGNATURE)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
@@ -147,13 +144,11 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with wrong key", () =>
+    it.effect("fails with wrong key", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime();
         const sig = yield* Signature;
-        const differentKey = "signkey-test-" + Crypto.randomBytes(32).toString("hex");
-        const result = yield* sig
-          .verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, differentKey)))
-          .pipe(Effect.result);
+        const result = yield* sig.verify(yield* payload(TEST_BODY, NATIVE_FALLBACK_SIGNATURE)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
@@ -162,13 +157,12 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("fails with tampered body", () =>
+    it.effect("fails with tampered body", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime();
         const sig = yield* Signature;
         const tamperedBody = new TextEncoder().encode('{"event":"tampered"}');
-        const result = yield* sig
-          .verify(yield* payload(tamperedBody, createValidSignature(TEST_BODY, TEST_SIGNING_KEY)))
-          .pipe(Effect.result);
+        const result = yield* sig.verify(yield* payload(tamperedBody, NATIVE_SIGNATURE)).pipe(Effect.result);
 
         expect(Result.isFailure(result)).toBe(true);
         if (Result.isFailure(result)) {
@@ -177,10 +171,11 @@ describe("Signature.verify", () => {
       }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
     );
 
-    it.live("succeeds when fallback key matches", () =>
+    it.effect("succeeds when fallback key matches", () =>
       Effect.gen(function* () {
+        yield* atSignatureTime();
         const sig = yield* Signature;
-        yield* sig.verify(yield* payload(TEST_BODY, createValidSignature(TEST_BODY, TEST_SIGNING_KEY_FALLBACK)));
+        yield* sig.verify(yield* payload(TEST_BODY, NATIVE_FALLBACK_SIGNATURE));
       }).pipe(
         Effect.provide(
           layer({
@@ -195,12 +190,13 @@ describe("Signature.verify", () => {
 });
 
 describe("Signature.sign", () => {
-  it.live("creates valid signature header format", () =>
+  it.effect("signs like the native SDK", () =>
     Effect.gen(function* () {
+      yield* atSignatureTime();
       const sig = yield* Signature;
       const header = yield* sig.sign(TEST_BODY);
 
-      expect(header).toMatch(/^t=\d+&s=[a-f0-9]{64}$/);
+      expect(header).toBe(NATIVE_SIGNATURE);
     }).pipe(Effect.provide(layer({ verification: "required", signingKey: TEST_SIGNING_KEY }))),
   );
 

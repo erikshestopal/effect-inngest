@@ -106,9 +106,10 @@ export const toHttpApp = (group: InngestGroup.Any) =>
 
     return yield* HttpServerResponse.json({ error: `Method ${method} not allowed` }, { status: 405 });
   }).pipe(
+    Effect.catchIf(HttpServerResponse.isHttpServerResponse, Effect.succeed),
     Effect.catchCause((cause) =>
-      HttpServerResponse.json({ error: "Internal server error", cause: String(cause) }, { status: 500 }).pipe(
-        Effect.orDie,
+      Effect.logError("effect-inngest request failed", cause).pipe(
+        Effect.as(HttpServerResponse.jsonUnsafe({ error: "Internal server error" }, { status: 500 })),
       ),
     ),
   );
